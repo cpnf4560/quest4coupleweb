@@ -9,15 +9,12 @@
   command = ""
 
 # Redirects e Rewrites
-[[redirects]]
-  # Suporte para SPA - todas as páginas funcionam
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = false
-  
-  # Exceções - não redirecionar ficheiros estáticos
-  conditions = {path = ["!*.html", "!*.css", "!*.js", "!*.png", "!*.jpg", "!*.ico", "!*.json"]}
+# Comentado - deixar o site carregar ficheiros HTML diretamente
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+#   force = false
 
 # Headers de Segurança
 [[headers]]
