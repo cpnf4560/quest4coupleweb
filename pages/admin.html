@@ -716,10 +716,16 @@ body {
         </div>
       </div>
     </div>
-    
-  </div>
+      </div>
 </div>
 
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- App Scripts -->
+<script src="../js/firebase-config.js"></script>
 <script src="../auth.js"></script>
 <script>
 // ========================================
@@ -817,197 +823,430 @@ function showSection(sectionName) {
 // DATA MANAGEMENT
 // ========================================
 
-function loadDashboardData() {
-  // Get all users from localStorage (excluindo admin)
-  const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  const users = allUsers.filter(u => u.email !== 'carlos.sousacorreia');
-  
-  // Update stats
-  document.getElementById('totalUsers').textContent = users.length;
-  
-  // Count total reports
-  let totalReports = 0;
-  users.forEach(user => {
-    if (user.reports) {
-      totalReports += user.reports.length;
+async function loadDashboardData() {
+  try {
+    console.log('📊 Carregando dados do dashboard...');
+    
+    // Get all users from Firestore
+    const usersSnapshot = await db.collection('users').get();
+    const users = [];
+    
+    usersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      // Excluir admin (se tiver campo isAdmin ou email específico)
+      if (!userData.isAdmin && userData.email !== 'user') {
+        users.push(userData);
+      }
+    });
+    
+    console.log('👥 Utilizadores encontrados:', users.length);
+    
+    // Update stats
+    document.getElementById('totalUsers').textContent = users.length;
+    
+    // Count total reports (se houver campo reports)
+    let totalReports = 0;
+    users.forEach(user => {
+      if (user.reports) {
+        totalReports += user.reports.length;
+      }
+    });
+    document.getElementById('totalReports').textContent = totalReports;
+    
+    // Count active today
+    const today = new Date().toDateString();
+    const activeToday = users.filter(user => {
+      if (user.lastLoginAt) {
+        // lastLoginAt é timestamp do Firestore
+        const lastLogin = user.lastLoginAt.toDate ? user.lastLoginAt.toDate() : new Date(user.lastLoginAt);
+        return lastLogin.toDateString() === today;
+      }
+      return false;
+    }).length;
+    document.getElementById('activeToday').textContent = activeToday;
+    
+    // Load recent activity
+    loadRecentActivity();
+    
+    console.log('✅ Dashboard carregado com sucesso!');
+  } catch (error) {
+    console.error('❌ Erro ao carregar dashboard:', error);
+    // Fallback para localStorage se Firestore falhar
+    const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+    const users = allUsers.filter(u => u.email !== 'user');
+    document.getElementById('totalUsers').textContent = users.length;
+  }
+}
+
+async function loadUsers() {
+  try {
+    console.log('👥 Carregando utilizadores do Firestore...');
+    
+    // Get all users from Firestore
+    const usersSnapshot = await db.collection('users').get();
+    const users = [];
+    
+    usersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      // Excluir admin
+      if (!userData.isAdmin && userData.email !== 'user') {
+        users.push(userData);
+      }
+    });
+    
+    const tbody = document.getElementById('usersTableBody');
+    
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
+      return;
     }
-  });
-  document.getElementById('totalReports').textContent = totalReports;
-  
-  // Count active today (users with activity today)
-  const today = new Date().toDateString();
-  const activeToday = users.filter(user => {
-    return user.lastLogin && new Date(user.lastLogin).toDateString() === today;
-  }).length;
-  document.getElementById('activeToday').textContent = activeToday;
-  
-  // Load recent activity
-  loadRecentActivity();
-}
-
-function loadUsers() {
-  const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  const users = allUsers.filter(u => u.email !== 'carlos.sousacorreia');
-  const tbody = document.getElementById('usersTableBody');
-  
-  if (users.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
-    return;
+    
+    tbody.innerHTML = users.map(user => {
+      const createdAt = user.createdAt ? 
+        (user.createdAt.toDate ? user.createdAt.toDate() : new Date(user.createdAt)) : null;
+      
+      return `
+        <tr>
+          <td>${user.displayName || user.name || 'N/A'}</td>
+          <td>${user.email}</td>
+          <td>${user.reports ? user.reports.length : 0}</td>
+          <td>${createdAt ? createdAt.toLocaleDateString('pt-PT') : 'N/A'}</td>
+          <td><span class="badge badge-success">Ativo</span></td>
+          <td>
+            <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    
+    console.log('✅ Utilizadores carregados:', users.length);
+  } catch (error) {
+    console.error('❌ Erro ao carregar utilizadores:', error);
+    // Fallback para localStorage
+    const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+    const users = allUsers.filter(u => u.email !== 'user');
+    const tbody = document.getElementById('usersTableBody');
+    
+    if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = users.map(user => `
+      <tr>
+        <td>${user.name || 'N/A'}</td>
+        <td>${user.email}</td>
+        <td>${user.reports ? user.reports.length : 0}</td>
+        <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
+        <td><span class="badge badge-success">Ativo</span></td>
+        <td>
+          <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
+        </td>
+      </tr>
+    `).join('');
   }
-  
-  tbody.innerHTML = users.map(user => `
-    <tr>
-      <td>${user.name || 'N/A'}</td>
-      <td>${user.email}</td>
-      <td>${user.reports ? user.reports.length : 0}</td>
-      <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
-      <td><span class="badge badge-success">Ativo</span></td>
-      <td>
-        <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
-      </td>
-    </tr>
-  `).join('');
 }
 
-function filterUsers() {
-  const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  
-  const filtered = users.filter(user => 
-    user.name.toLowerCase().includes(searchTerm) || 
-    user.email.toLowerCase().includes(searchTerm)
-  );
-  
-  const tbody = document.getElementById('usersTableBody');
-  
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
-    return;
+async function filterUsers() {
+  try {
+    const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
+    
+    // Get all users from Firestore
+    const usersSnapshot = await db.collection('users').get();
+    const users = [];
+    
+    usersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      if (!userData.isAdmin && userData.email !== 'user') {
+        users.push(userData);
+      }
+    });
+    
+    const filtered = users.filter(user => {
+      const name = (user.displayName || user.name || '').toLowerCase();
+      const email = (user.email || '').toLowerCase();
+      return name.includes(searchTerm) || email.includes(searchTerm);
+    });
+    
+    const tbody = document.getElementById('usersTableBody');
+    
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = filtered.map(user => {
+      const createdAt = user.createdAt ? 
+        (user.createdAt.toDate ? user.createdAt.toDate() : new Date(user.createdAt)) : null;
+      
+      return `
+        <tr>
+          <td>${user.displayName || user.name || 'N/A'}</td>
+          <td>${user.email}</td>
+          <td>${user.reports ? user.reports.length : 0}</td>
+          <td>${createdAt ? createdAt.toLocaleDateString('pt-PT') : 'N/A'}</td>
+          <td><span class="badge badge-success">Ativo</span></td>
+          <td>
+            <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch (error) {
+    console.error('❌ Erro ao filtrar utilizadores:', error);
   }
-  
-  tbody.innerHTML = filtered.map(user => `
-    <tr>
-      <td>${user.name || 'N/A'}</td>
-      <td>${user.email}</td>
-      <td>${user.reports ? user.reports.length : 0}</td>
-      <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
-      <td><span class="badge badge-success">Ativo</span></td>
-      <td>
-        <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
-      </td>
-    </tr>
-  `).join('');
 }
 
-function viewUser(email) {
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  const user = users.find(u => u.email === email);
-  
-  if (user) {
+async function viewUser(email) {
+  try {
+    // Get user from Firestore
+    const usersSnapshot = await db.collection('users').where('email', '==', email).get();
+    
+    if (usersSnapshot.empty) {
+      alert('❌ Utilizador não encontrado');
+      return;
+    }
+    
+    const userData = usersSnapshot.docs[0].data();
+    
+    const createdAt = userData.createdAt ? 
+      (userData.createdAt.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt)) : null;
+    const lastLogin = userData.lastLoginAt ? 
+      (userData.lastLoginAt.toDate ? userData.lastLoginAt.toDate() : new Date(userData.lastLoginAt)) : null;
+    
     alert(`Detalhes do Utilizador:\n\n` +
-          `Nome: ${user.name}\n` +
-          `Email: ${user.email}\n` +
-          `Relatórios: ${user.reports ? user.reports.length : 0}\n` +
-          `Registo: ${user.createdAt ? new Date(user.createdAt).toLocaleString('pt-PT') : 'N/A'}\n` +
-          `Último login: ${user.lastLogin ? new Date(user.lastLogin).toLocaleString('pt-PT') : 'N/A'}`);
+          `Nome: ${userData.displayName || userData.name || 'N/A'}\n` +
+          `Email: ${userData.email}\n` +
+          `Método: ${userData.authProvider || 'Email'}\n` +
+          `Relatórios: ${userData.reports ? userData.reports.length : 0}\n` +
+          `Registo: ${createdAt ? createdAt.toLocaleString('pt-PT') : 'N/A'}\n` +
+          `Último login: ${lastLogin ? lastLogin.toLocaleString('pt-PT') : 'N/A'}`);
+  } catch (error) {
+    console.error('❌ Erro ao carregar utilizador:', error);
+    alert('❌ Erro ao carregar dados do utilizador');
   }
 }
 
-function loadReports() {
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  const tbody = document.getElementById('reportsTableBody');
-  
-  let allReports = [];
-  users.forEach(user => {
-    if (user.reports && user.reports.length > 0) {
-      user.reports.forEach(report => {
-        allReports.push({
-          ...report,
-          userName: user.name,
-          userEmail: user.email
+async function loadReports() {
+  try {
+    console.log('📊 Carregando relatórios do Firestore...');
+    
+    // Get all users from Firestore
+    const usersSnapshot = await db.collection('users').get();
+    const tbody = document.getElementById('reportsTableBody');
+    
+    let allReports = [];
+    usersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      if (!userData.isAdmin && userData.email !== 'user') {
+        if (userData.reports && userData.reports.length > 0) {
+          userData.reports.forEach(report => {
+            allReports.push({
+              ...report,
+              userName: userData.displayName || userData.name,
+              userEmail: userData.email
+            });
+          });
+        }
+      }
+    });
+    
+    if (allReports.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6c757d;">Nenhum relatório gerado</td></tr>';
+      return;
+    }
+    
+    // Sort by date (most recent first)
+    allReports.sort((a, b) => {
+      const dateA = a.date ? (a.date.toDate ? a.date.toDate() : new Date(a.date)) : new Date(0);
+      const dateB = b.date ? (b.date.toDate ? b.date.toDate() : new Date(b.date)) : new Date(0);
+      return dateB - dateA;
+    });
+    
+    tbody.innerHTML = allReports.map(report => {
+      const reportDate = report.date ? 
+        (report.date.toDate ? report.date.toDate() : new Date(report.date)) : null;
+      
+      return `
+        <tr>
+          <td>${reportDate ? reportDate.toLocaleString('pt-PT') : 'N/A'}</td>
+          <td>${report.userName || 'N/A'}</td>
+          <td>${report.packName || 'N/A'}</td>
+          <td><span class="badge badge-success">${report.compatibility || 'N/A'}%</span></td>
+          <td><span class="badge badge-info">Completo</span></td>
+        </tr>
+      `;
+    }).join('');
+    
+    console.log('✅ Relatórios carregados:', allReports.length);
+  } catch (error) {
+    console.error('❌ Erro ao carregar relatórios:', error);
+    // Fallback para localStorage
+    const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+    const tbody = document.getElementById('reportsTableBody');
+    
+    let allReports = [];
+    users.forEach(user => {
+      if (user.reports && user.reports.length > 0) {
+        user.reports.forEach(report => {
+          allReports.push({
+            ...report,
+            userName: user.name,
+            userEmail: user.email
+          });
         });
-      });
+      }
+    });
+    
+    if (allReports.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6c757d;">Nenhum relatório gerado</td></tr>';
+      return;
     }
-  });
-  
-  if (allReports.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6c757d;">Nenhum relatório gerado</td></tr>';
-    return;
+    
+    allReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    tbody.innerHTML = allReports.map(report => `
+      <tr>
+        <td>${new Date(report.date).toLocaleString('pt-PT')}</td>
+        <td>${report.userName}</td>
+        <td>${report.packName || 'N/A'}</td>
+        <td><span class="badge badge-success">${report.compatibility || 'N/A'}%</span></td>
+        <td><span class="badge badge-info">Completo</span></td>
+      </tr>
+    `).join('');
   }
-  
-  // Sort by date (most recent first)
-  allReports.sort((a, b) => new Date(b.date) - new Date(a.date));
-  
-  tbody.innerHTML = allReports.map(report => `
-    <tr>
-      <td>${new Date(report.date).toLocaleString('pt-PT')}</td>
-      <td>${report.userName}</td>
-      <td>${report.packName || 'N/A'}</td>
-      <td><span class="badge badge-success">${report.compatibility || 'N/A'}%</span></td>
-      <td><span class="badge badge-info">Completo</span></td>
-    </tr>
-  `).join('');
 }
 
-function loadRecentActivity() {
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-  const tbody = document.getElementById('activityTableBody');
-  
-  let activities = [];
-  
-  users.forEach(user => {
-    // Add registration activity
-    if (user.createdAt) {
-      activities.push({
-        time: user.createdAt,
-        user: user.name,
-        action: 'Novo registo',
-        details: `Criou conta`
-      });
+async function loadRecentActivity() {
+  try {
+    console.log('📝 Carregando atividade recente do Firestore...');
+    
+    // Get all users from Firestore
+    const usersSnapshot = await db.collection('users').get();
+    const tbody = document.getElementById('activityTableBody');
+    
+    let activities = [];
+    
+    usersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      if (!userData.isAdmin && userData.email !== 'user') {
+        const userName = userData.displayName || userData.name || 'Utilizador';
+        
+        // Add registration activity
+        if (userData.createdAt) {
+          const createdAt = userData.createdAt.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt);
+          activities.push({
+            time: createdAt,
+            user: userName,
+            action: 'Novo registo',
+            details: `Criou conta com ${userData.authProvider || 'email'}`
+          });
+        }
+        
+        // Add login activity
+        if (userData.lastLoginAt) {
+          const lastLogin = userData.lastLoginAt.toDate ? userData.lastLoginAt.toDate() : new Date(userData.lastLoginAt);
+          activities.push({
+            time: lastLogin,
+            user: userName,
+            action: 'Login',
+            details: `Acedeu à plataforma`
+          });
+        }
+        
+        // Add report activity
+        if (userData.reports) {
+          userData.reports.forEach(report => {
+            const reportDate = report.date ? 
+              (report.date.toDate ? report.date.toDate() : new Date(report.date)) : new Date();
+            activities.push({
+              time: reportDate,
+              user: userName,
+              action: 'Relatório gerado',
+              details: report.packName || 'Pack desconhecido'
+            });
+          });
+        }
+      }
+    });
+    
+    // Sort by time (most recent first)
+    activities.sort((a, b) => b.time - a.time);
+    
+    // Show only last 10
+    activities = activities.slice(0, 10);
+    
+    if (activities.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6c757d;">Sem atividade recente</td></tr>';
+      return;
     }
     
-    // Add login activity
-    if (user.lastLogin) {
-      activities.push({
-        time: user.lastLogin,
-        user: user.name,
-        action: 'Login',
-        details: `Acedeu à plataforma`
-      });
-    }
+    tbody.innerHTML = activities.map(activity => `
+      <tr>
+        <td>${activity.time.toLocaleTimeString('pt-PT')}</td>
+        <td>${activity.user}</td>
+        <td>${activity.action}</td>
+        <td>${activity.details}</td>
+      </tr>
+    `).join('');
     
-    // Add report activity
-    if (user.reports) {
-      user.reports.forEach(report => {
+    console.log('✅ Atividade recente carregada:', activities.length);
+  } catch (error) {
+    console.error('❌ Erro ao carregar atividade:', error);
+    // Fallback para localStorage
+    const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+    const tbody = document.getElementById('activityTableBody');
+    
+    let activities = [];
+    
+    users.forEach(user => {
+      if (user.createdAt) {
         activities.push({
-          time: report.date,
+          time: user.createdAt,
           user: user.name,
-          action: 'Relatório gerado',
-          details: report.packName || 'Pack desconhecido'
+          action: 'Novo registo',
+          details: `Criou conta`
         });
-      });
+      }
+      
+      if (user.lastLogin) {
+        activities.push({
+          time: user.lastLogin,
+          user: user.name,
+          action: 'Login',
+          details: `Acedeu à plataforma`
+        });
+      }
+      
+      if (user.reports) {
+        user.reports.forEach(report => {
+          activities.push({
+            time: report.date,
+            user: user.name,
+            action: 'Relatório gerado',
+            details: report.packName || 'Pack desconhecido'
+          });
+        });
+      }
+    });
+    
+    activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+    activities = activities.slice(0, 10);
+    
+    if (activities.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6c757d;">Sem atividade recente</td></tr>';
+      return;
     }
-  });
-  
-  // Sort by time (most recent first)
-  activities.sort((a, b) => new Date(b.time) - new Date(a.time));
-  
-  // Show only last 10
-  activities = activities.slice(0, 10);
-  
-  if (activities.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6c757d;">Sem atividade recente</td></tr>';
-    return;
+    
+    tbody.innerHTML = activities.map(activity => `
+      <tr>
+        <td>${new Date(activity.time).toLocaleTimeString('pt-PT')}</td>
+        <td>${activity.user}</td>
+        <td>${activity.action}</td>
+        <td>${activity.details}</td>
+      </tr>
+    `).join('');
   }
-  
-  tbody.innerHTML = activities.map(activity => `
-    <tr>
-      <td>${new Date(activity.time).toLocaleTimeString('pt-PT')}</td>
-      <td>${activity.user}</td>
-      <td>${activity.action}</td>
-      <td>${activity.details}</td>
-    </tr>
-  `).join('');
 }
 
 function loadActivityLog() {
