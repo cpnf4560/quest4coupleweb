@@ -68,7 +68,9 @@ googleLoginBtn.addEventListener('click', async () => {
     console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google login success:', result);
+    console.log('✅ Aguardando onAuthStateChanged para redirecionar...');
     // onAuthStateChanged vai redirecionar automaticamente
+    // Não escondemos o loading aqui - deixamos o redirect acontecer
   } catch (error) {
     console.error('❌ Google login error:', error);
     hideLoading();
@@ -96,7 +98,9 @@ googleSignupBtn.addEventListener('click', async () => {
     console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google signup success:', result);
+    console.log('✅ Aguardando onAuthStateChanged para redirecionar...');
     // onAuthStateChanged vai redirecionar automaticamente
+    // Não escondemos o loading aqui - deixamos o redirect acontecer
   } catch (error) {
     console.error('❌ Google signup error:', error);
     hideLoading();

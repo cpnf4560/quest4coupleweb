@@ -5,6 +5,7 @@
 
 // Estado global do user
 let currentUser = null;
+let isRedirecting = false; // Flag para evitar múltiplos redirects
 
 // ========================================
 // AUTH STATE OBSERVER
@@ -15,28 +16,46 @@ auth.onAuthStateChanged(async (user) => {
     currentUser = user;
     
     // Criar/Atualizar perfil no Firestore
-    await createOrUpdateUserProfile(user);
+    try {
+      await createOrUpdateUserProfile(user);
+      console.log('✅ Perfil criado/atualizado no Firestore');
+    } catch (error) {
+      console.error('❌ Erro ao criar perfil:', error);
+    }
     
-    // Redirecionar para dashboard se estiver em auth page
-    if (window.location.pathname.includes('auth.html')) {
-      window.location.href = 'dashboard.html';
+    // Redirecionar para dashboard se estiver em auth page (APENAS UMA VEZ)
+    if (window.location.pathname.includes('auth.html') && !isRedirecting) {
+      console.log('🔄 Redirecionando para dashboard...');
+      isRedirecting = true;
+      
+      // Pequeno delay para garantir que tudo foi processado
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
     }
     
     // Mostrar conteúdo protegido
-    showAuthenticatedContent();
+    if (!isRedirecting) {
+      showAuthenticatedContent();
+    }
   } else {
     console.log('❌ User não autenticado');
     currentUser = null;
+    isRedirecting = false; // Reset flag
     
     // Redirecionar para auth se estiver em página protegida
     const protectedPages = ['dashboard.html', 'app.html'];
     const currentPage = window.location.pathname.split('/').pop();
     
-    if (protectedPages.includes(currentPage)) {
+    if (protectedPages.includes(currentPage) && !isRedirecting) {
+      console.log('🔄 Redirecionando para auth...');
+      isRedirecting = true;
       window.location.href = 'auth.html';
     }
     
-    showUnauthenticatedContent();
+    if (!isRedirecting) {
+      showUnauthenticatedContent();
+    }
   }
 });
 
@@ -130,11 +149,14 @@ async function resetPassword(email) {
 // ========================================
 async function createOrUpdateUserProfile(user) {
   try {
+    console.log('🔵 Criando/atualizando perfil para:', user.email);
+    
     const userRef = db.collection('users').doc(user.uid);
     const doc = await userRef.get();
     
     if (!doc.exists) {
       // Criar novo perfil
+      console.log('🔵 Perfil não existe, criando novo...');
       const username = await generateUniqueUsername(user.displayName || user.email);
       
       await userRef.set({
@@ -154,14 +176,19 @@ async function createOrUpdateUserProfile(user) {
       console.log('✅ Perfil criado:', username);
     } else {
       // Atualizar last login
+      console.log('🔵 Perfil existe, atualizando last login...');
       await userRef.update({
         lastLoginAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       
       console.log('✅ Perfil atualizado');
     }
+    
+    return true; // Retorna sucesso
   } catch (error) {
     console.error('❌ Erro ao criar/atualizar perfil:', error);
+    // NÃO bloquear o redirect mesmo se houver erro no Firestore
+    return false;
   }
 }
 
