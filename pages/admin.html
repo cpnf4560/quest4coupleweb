@@ -428,11 +428,10 @@ body {
     
     <div class="error-message" id="loginError">
       ❌ Credenciais inválidas. Tente novamente.
-    </div>
-      <form onsubmit="handleLogin(event)">
+    </div>      <form onsubmit="handleLogin(event)">
       <div class="form-group">
         <label for="adminEmail">Username de Administrador</label>
-        <input type="text" id="adminEmail" placeholder="carlos.sousacorreia" required>
+        <input type="text" id="adminEmail" placeholder="user" required>
       </div>
       
       <div class="form-group">
@@ -442,11 +441,10 @@ body {
       
       <button type="submit" class="btn-login">Entrar no BackOffice</button>
     </form>
-    
-    <div style="margin-top: 20px; text-align: center; font-size: 0.9em; color: #6c757d;">
+      <div style="margin-top: 20px; text-align: center; font-size: 0.9em; color: #6c757d;">
       <p>🔒 Área restrita a administradores</p>
       <p style="margin-top: 10px;">
-        <a href="index.html" style="color: #667eea; text-decoration: none;">← Voltar ao site</a>
+        <a href="../index.html" style="color: #667eea; text-decoration: none;">← Voltar ao site</a>
       </p>
     </div>
   </div>
@@ -728,17 +726,22 @@ body {
 // AUTHENTICATION
 // ========================================
 
-async function handleLogin(event) {
+function handleLogin(event) {
   event.preventDefault();
   
   const email = document.getElementById('adminEmail').value;
   const password = document.getElementById('adminPassword').value;
   const errorDiv = document.getElementById('loginError');
   
-  // Verificar credenciais usando auth.js
-  const isValid = await verifyAdminLogin(email, password);
+  console.log('🔐 Tentando login com:', email);
+  
+  // Verificar credenciais usando auth.js (versão síncrona)
+  const isValid = window.verifyAdminLogin ? window.verifyAdminLogin(email, password) : false;
+  
+  console.log('🔐 Login válido?', isValid);
   
   if (isValid) {
+    console.log('✅ Login bem-sucedido!');
     // Store session
     sessionStorage.setItem('admin_logged_in', 'true');
     sessionStorage.setItem('admin_email', email);
@@ -750,6 +753,7 @@ async function handleLogin(event) {
     // Load data
     loadDashboardData();
   } else {
+    console.log('❌ Login falhou!');
     // Show error
     errorDiv.style.display = 'block';
     setTimeout(() => {
@@ -814,12 +818,12 @@ function showSection(sectionName) {
 // ========================================
 
 function loadDashboardData() {
-  // Get all users from localStorage
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  // Get all users from localStorage (excluindo admin)
+  const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const users = allUsers.filter(u => u.email !== 'carlos.sousacorreia');
   
-  // Update stats (excluindo admin da contagem)
-  const regularUsers = users.filter(u => u.email !== 'carlos.sousacorreia');
-  document.getElementById('totalUsers').textContent = regularUsers.length;
+  // Update stats
+  document.getElementById('totalUsers').textContent = users.length;
   
   // Count total reports
   let totalReports = 0;
@@ -842,21 +846,18 @@ function loadDashboardData() {
 }
 
 function loadUsers() {
-  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const users = allUsers.filter(u => u.email !== 'carlos.sousacorreia');
   const tbody = document.getElementById('usersTableBody');
   
   if (users.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
     return;
   }
-    tbody.innerHTML = users.map(user => {
-    const isAdmin = user.email === 'carlos.sousacorreia';
-    return `
-    <tr ${isAdmin ? 'style="background: #fff3cd;"' : ''}>
-      <td>
-        ${user.name || 'N/A'} 
-        ${isAdmin ? '<span class="badge badge-warning">👑 Admin</span>' : ''}
-      </td>
+  
+  tbody.innerHTML = users.map(user => `
+    <tr>
+      <td>${user.name || 'N/A'}</td>
       <td>${user.email}</td>
       <td>${user.reports ? user.reports.length : 0}</td>
       <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
@@ -865,7 +866,7 @@ function loadUsers() {
         <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
       </td>
     </tr>
-  `}).join('');
+  `).join('');
 }
 
 function filterUsers() {
@@ -883,14 +884,10 @@ function filterUsers() {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
     return;
   }
-    tbody.innerHTML = filtered.map(user => {
-    const isAdmin = user.email === 'carlos.sousacorreia';
-    return `
-    <tr ${isAdmin ? 'style="background: #fff3cd;"' : ''}>
-      <td>
-        ${user.name || 'N/A'} 
-        ${isAdmin ? '<span class="badge badge-warning">👑 Admin</span>' : ''}
-      </td>
+  
+  tbody.innerHTML = filtered.map(user => `
+    <tr>
+      <td>${user.name || 'N/A'}</td>
       <td>${user.email}</td>
       <td>${user.reports ? user.reports.length : 0}</td>
       <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
@@ -899,7 +896,7 @@ function filterUsers() {
         <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
       </td>
     </tr>
-  `}).join('');
+  `).join('');
 }
 
 function viewUser(email) {
@@ -1182,8 +1179,9 @@ function exportAnalytics() {
     alert('⚠️ Não há dados para exportar neste pack');
     return;
   }
-    // Criar CSV
-  let csv = 'Questão,Pergunta,Total Respostas,Por favor!,Por favor! %,Yup,Yup %,Meh...,Meh... %,Talvez,Talvez %,Comentários\n';
+  
+  // Criar CSV
+  let csv = 'Questão,Pergunta,Total Respostas,Sim,Sim %,Talvez,Talvez %,Não,Não %,Comentários\n';
   
   const questions = packData.questions || {};
   Object.keys(questions).sort((a, b) => {
@@ -1193,16 +1191,15 @@ function exportAnalytics() {
   }).forEach(qKey => {
     const q = questions[qKey];
     const qNum = qKey.replace('q', '');
-    const total = (q.porfavor || 0) + (q.yup || 0) + (q.meh || 0) + (q.talvez || 0);
+    const total = (q.sim || 0) + (q.talvez || 0) + (q.nao || 0);
     
-    const porfavorPercent = total > 0 ? Math.round((q.porfavor || 0) / total * 100) : 0;
-    const yupPercent = total > 0 ? Math.round((q.yup || 0) / total * 100) : 0;
-    const mehPercent = total > 0 ? Math.round((q.meh || 0) / total * 100) : 0;
+    const simPercent = total > 0 ? Math.round((q.sim || 0) / total * 100) : 0;
     const talvezPercent = total > 0 ? Math.round((q.talvez || 0) / total * 100) : 0;
+    const naoPercent = total > 0 ? Math.round((q.nao || 0) / total * 100) : 0;
     
     const questionText = (q.text || `Pergunta ${qNum}`).replace(/"/g, '""');
     
-    csv += `${qNum},"${questionText}",${total},${q.porfavor || 0},${porfavorPercent}%,${q.yup || 0},${yupPercent}%,${q.meh || 0},${mehPercent}%,${q.talvez || 0},${talvezPercent}%,${q.comments || 0}\n`;
+    csv += `${qNum},"${questionText}",${total},${q.sim || 0},${simPercent}%,${q.talvez || 0},${talvezPercent}%,${q.nao || 0},${naoPercent}%,${q.comments || 0}\n`;
   });
   
   // Download
