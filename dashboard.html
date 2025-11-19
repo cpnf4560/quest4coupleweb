@@ -115,9 +115,17 @@
       <div class="modal-header">
         <h3>Adicionar Parceiro</h3>
         <button class="modal-close" id="closeModalBtn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>Procura pelo username do teu parceiro:</p>
+      </div>      <div class="modal-body">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+          <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 O teu username para partilhar:</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
+            <button type="button" onclick="copyMyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; white-space: nowrap;">📋 Copiar</button>
+          </div>
+          <small style="color: #6c757d; display: block; margin-top: 8px;">Partilha este username com o teu parceiro</small>
+        </div>
+        
+        <p style="font-weight: 500; margin-bottom: 10px;">🔍 Procura pelo username do teu parceiro:</p>
         <form id="searchUserForm">
           <div class="form-group">
             <input type="text" id="searchUsername" placeholder="@username" required>
@@ -154,8 +162,7 @@
       <div class="modal-header">
         <h3>⚙️ Editar Perfil</h3>
         <button class="modal-close" onclick="closeEditProfileModal()">&times;</button>
-      </div>
-      <div class="modal-body">
+      </div>      <div class="modal-body">
         <form id="editProfileForm" onsubmit="saveProfileChanges(event)">
           <div class="form-group">
             <label for="editProfileName">Nome</label>
@@ -164,22 +171,42 @@
           
           <div class="form-group">
             <label for="editProfileEmail">Email (não editável)</label>
-            <input type="email" id="editProfileEmail" class="form-control" readonly disabled>
+            <input type="email" id="editProfileEmail" class="form-control" readonly disabled style="background: #e9ecef; cursor: not-allowed;">
           </div>
           
           <div class="form-group">
-            <label>User ID</label>
-            <input type="text" id="editProfileUserId" class="form-control" readonly disabled>
+            <label for="editProfileGender">Sexo</label>
+            <select id="editProfileGender" class="form-control" required>
+              <option value="">Selecione o sexo</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="editProfileAgeRange">Faixa Etária</label>
+            <select id="editProfileAgeRange" class="form-control" required>
+              <option value="">Selecione a faixa etária</option>
+              <option value="18-23">18-23 anos</option>
+              <option value="24-29">24-29 anos</option>
+              <option value="30-35">30-35 anos</option>
+              <option value="36-40">36-40 anos</option>
+              <option value="41-49">41-49 anos</option>
+              <option value="50+">+50 anos</option>
+            </select>
           </div>
           
           <div class="form-group">
             <label for="editProfileCountry">País</label>
-            <input type="text" id="editProfileCountry" class="form-control" placeholder="Ex: Portugal">
+            <select id="editProfileCountry" class="form-control" required>
+              <option value="">Selecione o país</option>
+            </select>
           </div>
           
           <div class="form-group">
             <label for="editProfileCity">Cidade</label>
-            <input type="text" id="editProfileCity" class="form-control" placeholder="Ex: Lisboa">
+            <input type="text" id="editProfileCity" class="form-control" placeholder="Ex: Lisboa" required>
           </div>
           
           <button type="submit" class="btn-primary btn-full">💾 Guardar Alterações</button>

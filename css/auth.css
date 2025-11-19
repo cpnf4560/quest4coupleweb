@@ -417,3 +417,57 @@ body {
     padding: 12px;
   }
 }
+
+/* ============================================
+   LOCATION MODAL
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-box {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-box h2 {
+  color: #667eea;
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.modal-box p {
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-box .form-group {
+  margin-bottom: 20px;
+}
+
+.modal-box .btn-primary {
+  width: 100%;
+  margin-top: 10px;
+}

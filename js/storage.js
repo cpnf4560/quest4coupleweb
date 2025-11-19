@@ -101,14 +101,14 @@ function saveAnonymousAnalytics(data) {
     const packAnswers = data.answers[packId];
     Object.keys(packAnswers).forEach(qKey => {
       const answer = packAnswers[qKey];
-        // Inicializar questão se não existir
+      
+      // Inicializar questão se não existir
       if (!analytics[packId].questions[qKey]) {
         analytics[packId].questions[qKey] = {
           text: getQuestionText(packId, qKey),
-          porfavor: 0,
-          yup: 0,
-          meh: 0,
+          sim: 0,
           talvez: 0,
+          nao: 0,
           comments: 0
         };
       }
@@ -116,11 +116,9 @@ function saveAnonymousAnalytics(data) {
       const q = analytics[packId].questions[qKey];
       
       // Contar resposta (SEM salvar a resposta em si)
-      // Mapear valores antigos se existirem
-      if (answer.answer === 'porfavor' || answer.answer === 'por-favor') q.porfavor++;
-      else if (answer.answer === 'yup' || answer.answer === 'sim') q.yup++;
-      else if (answer.answer === 'meh') q.meh++;
+      if (answer.answer === 'sim') q.sim++;
       else if (answer.answer === 'talvez') q.talvez++;
+      else if (answer.answer === 'nao') q.nao++;
       
       // Contar se tem comentário (SEM salvar o comentário)
       if (answer.comment && answer.comment.trim() !== '') {

@@ -347,7 +347,7 @@
                 </a>
             </div>
             
-            <div class="donation-card">
+            <div class="donation-card" id="feedback-form">
                 <div class="donation-title">
                     <span>💬</span>
                     <span>Partilhar Feedback</span>
@@ -473,6 +473,22 @@
             // Aqui você pode adicionar código para enviar para um servidor
             // Por exemplo: fetch('/api/feedback', { method: 'POST', body: JSON.stringify(feedbackData) })
         }
+    </script>
+    
+    <!-- Support Banner Script -->
+    <script src="../support-banner.js"></script>
+    <script>
+        // Adicionar banner de suporte no final da página
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof SupportBanner !== 'undefined') {
+                const container = document.querySelector('.container');
+                const bannerDiv = document.createElement('div');
+                bannerDiv.id = 'supportBannerDynamic';
+                bannerDiv.style.marginTop = '50px';
+                container.appendChild(bannerDiv);
+                SupportBanner.render('supportBannerDynamic', false);
+            }
+        });
     </script>
 </body>
 </html>

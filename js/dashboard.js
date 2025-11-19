@@ -315,7 +315,61 @@ addConnectionBtn.addEventListener('click', () => {
   addConnectionModal.classList.add('active');
   searchResults.innerHTML = '';
   document.getElementById('searchUsername').value = '';
+  
+  // Mostrar o username do utilizador atual
+  updateMyUsernameDisplay();
 });
+
+// Função para atualizar o username no modal
+function updateMyUsernameDisplay() {
+  const usernameDisplay = document.getElementById('myUsernameDisplay');
+  if (usernameDisplay && userProfile) {
+    const username = userProfile.username || userProfile.email?.split('@')[0] || 'user';
+    usernameDisplay.textContent = `@${username}`;
+  }
+}
+
+// Função para copiar o username
+function copyMyUsername() {
+  const username = userProfile?.username || userProfile?.email?.split('@')[0] || 'user';
+  const textToCopy = `@${username}`;
+  
+  // Usar a API moderna do clipboard
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert('✅ Username copiado para a área de transferência!');
+    }).catch(err => {
+      console.error('Erro ao copiar:', err);
+      fallbackCopyToClipboard(textToCopy);
+    });
+  } else {
+    fallbackCopyToClipboard(textToCopy);
+  }
+}
+
+// Fallback para browsers mais antigos
+function fallbackCopyToClipboard(text) {
+  const textArea = document.createElement('textarea');
+  textArea.value = text;
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    document.execCommand('copy');
+    alert('✅ Username copiado para a área de transferência!');
+  } catch (err) {
+    console.error('Erro ao copiar:', err);
+    alert('❌ Não foi possível copiar. Por favor, copia manualmente: ' + text);
+  }
+  
+  document.body.removeChild(textArea);
+}
+
+// Tornar a função global para o onclick
+window.copyMyUsername = copyMyUsername;
 
 closeModalBtn.addEventListener('click', () => {
   addConnectionModal.classList.remove('active');
@@ -516,12 +570,69 @@ function openEditProfileModal() {
   // Preencher formulário com dados atuais
   document.getElementById('editProfileName').value = userProfile.name || '';
   document.getElementById('editProfileEmail').value = auth.currentUser.email || '';
-  document.getElementById('editProfileUserId').value = auth.currentUser.uid || '';
-  document.getElementById('editProfileCountry').value = userProfile.country || '';
-  document.getElementById('editProfileCity').value = userProfile.city || '';
+  document.getElementById('editProfileGender').value = userProfile.gender || '';
+  document.getElementById('editProfileAgeRange').value = userProfile.ageRange || '';
+  
+  // Carregar países no select
+  loadCountriesInEditModal();
+  
+  // Definir país e cidade após carregar países
+  setTimeout(() => {
+    document.getElementById('editProfileCountry').value = userProfile.country || '';
+    document.getElementById('editProfileCity').value = userProfile.city || '';
+  }, 100);
   
   // Mostrar modal
   editProfileModal.classList.add('active');
+}
+
+// Função para carregar países no modal de edição
+function loadCountriesInEditModal() {
+  const COUNTRIES = [
+    { code: 'PT', name: 'Portugal' },
+    { code: 'BR', name: 'Brasil' },
+    { code: 'AO', name: 'Angola' },
+    { code: 'MZ', name: 'Moçambique' },
+    { code: 'CV', name: 'Cabo Verde' },
+    { code: 'GW', name: 'Guiné-Bissau' },
+    { code: 'ST', name: 'São Tomé e Príncipe' },
+    { code: 'TL', name: 'Timor-Leste' },
+    { code: 'MO', name: 'Macau' },
+    { code: 'ES', name: 'Espanha' },
+    { code: 'FR', name: 'França' },
+    { code: 'GB', name: 'Reino Unido' },
+    { code: 'DE', name: 'Alemanha' },
+    { code: 'IT', name: 'Itália' },
+    { code: 'NL', name: 'Países Baixos' },
+    { code: 'BE', name: 'Bélgica' },
+    { code: 'CH', name: 'Suíça' },
+    { code: 'LU', name: 'Luxemburgo' },
+    { code: 'AT', name: 'Áustria' },
+    { code: 'US', name: 'Estados Unidos' },
+    { code: 'CA', name: 'Canadá' },
+    { code: 'MX', name: 'México' },
+    { code: 'AR', name: 'Argentina' },
+    { code: 'CL', name: 'Chile' },
+    { code: 'CO', name: 'Colômbia' },
+    { code: 'PE', name: 'Peru' },
+    { code: 'VE', name: 'Venezuela' }
+  ].sort((a, b) => a.name.localeCompare(b.name));
+  
+  const select = document.getElementById('editProfileCountry');
+  if (!select) return;
+  
+  // Limpar opções existentes (exceto a primeira)
+  while (select.options.length > 1) {
+    select.remove(1);
+  }
+  
+  // Adicionar países
+  COUNTRIES.forEach(country => {
+    const option = document.createElement('option');
+    option.value = country.code;
+    option.textContent = country.name;
+    select.appendChild(option);
+  });
 }
 
 function closeEditProfileModal() {
@@ -532,11 +643,20 @@ async function saveProfileChanges(event) {
   event.preventDefault();
   
   const newName = document.getElementById('editProfileName').value.trim();
-  const newCountry = document.getElementById('editProfileCountry').value.trim();
+  const newGender = document.getElementById('editProfileGender').value;
+  const newAgeRange = document.getElementById('editProfileAgeRange').value;
+  const countrySelect = document.getElementById('editProfileCountry');
+  const newCountry = countrySelect.value;
+  const newCountryName = countrySelect.options[countrySelect.selectedIndex]?.text || '';
   const newCity = document.getElementById('editProfileCity').value.trim();
   
   if (!newName) {
     alert('❌ O nome não pode estar vazio!');
+    return;
+  }
+  
+  if (!newGender || !newAgeRange || !newCountry || !newCity) {
+    alert('❌ Por favor, preenche todos os campos obrigatórios!');
     return;
   }
   
@@ -545,9 +665,13 @@ async function saveProfileChanges(event) {
     
     // Atualizar no Firestore
     await db.collection('users').doc(auth.currentUser.uid).update({
+      displayName: newName,
       name: newName,
-      country: newCountry || 'Não especificado',
-      city: newCity || 'Não especificado',
+      gender: newGender,
+      ageRange: newAgeRange,
+      country: newCountry,
+      countryName: newCountryName,
+      city: newCity,
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     
@@ -558,8 +682,12 @@ async function saveProfileChanges(event) {
     
     // Atualizar variável local
     userProfile.name = newName;
-    userProfile.country = newCountry || 'Não especificado';
-    userProfile.city = newCity || 'Não especificado';
+    userProfile.displayName = newName;
+    userProfile.gender = newGender;
+    userProfile.ageRange = newAgeRange;
+    userProfile.country = newCountry;
+    userProfile.countryName = newCountryName;
+    userProfile.city = newCity;
     
     // Atualizar UI
     userName.textContent = newName;

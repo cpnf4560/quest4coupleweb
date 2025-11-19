@@ -29,8 +29,7 @@
         <h2>Bem-vindo de volta!</h2>
           <!-- Social Login Buttons -->
         <div class="social-buttons">
-          <!-- Google Sign-In -->
-          <button class="btn-google" id="googleLoginBtn">
+          <!-- Google Sign-In -->          <button class="btn-google" id="googleLoginBtn">
             <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
@@ -39,14 +38,6 @@
               <path fill="none" d="M0 0h48v48H0z"></path>
             </svg>
             Continuar com Google
-          </button>
-
-          <!-- Reddit Sign-In -->
-          <button class="btn-reddit" id="redditLoginBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.01 16.697c-.084.084-.252.084-.336 0-1.092-1.092-3.192-1.68-4.674-1.68s-3.582.588-4.674 1.68c-.084.084-.252.084-.336 0-.084-.084-.084-.252 0-.336 1.26-1.26 3.528-1.848 5.01-1.848s3.75.588 5.01 1.848c.084.084.084.252 0 .336zM8.5 10.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5zm5 0c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5z"/>
-            </svg>
-            Continuar com Reddit
           </button>
         </div>
 
@@ -80,8 +71,7 @@
         
         <!-- Social Login Buttons -->
         <div class="social-buttons">
-          <!-- Google Sign-In -->
-          <button class="btn-google" id="googleSignupBtn">
+          <!-- Google Sign-In -->          <button class="btn-google" id="googleSignupBtn">
             <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
               <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
@@ -91,22 +81,13 @@
             </svg>
             Continuar com Google
           </button>
-
-          <!-- Reddit Sign-In -->
-          <button class="btn-reddit" id="redditSignupBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#FF4500" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.01 16.697c-.084.084-.252.084-.336 0-1.092-1.092-3.192-1.68-4.674-1.68s-3.582.588-4.674 1.68c-.084.084-.252.084-.336 0-.084-.084-.084-.252 0-.336 1.26-1.26 3.528-1.848 5.01-1.848s3.75.588 5.01 1.848c.084.084.084.252 0 .336zM8.5 10.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5zm5 0c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5-.672 1.5-1.5 1.5-1.5-.672-1.5-1.5z"/>
-            </svg>
-            Continuar com Reddit
-          </button>
         </div>
 
         <div class="divider">
           <span>ou</span>
         </div>
 
-        <!-- Email/Password -->
-        <form id="emailSignupForm">
+        <!-- Email/Password -->        <form id="emailSignupForm">
           <div class="form-group">
             <label for="signupName">Nome</label>
             <input type="text" id="signupName" required placeholder="O teu nome">
@@ -115,12 +96,47 @@
           <div class="form-group">
             <label for="signupEmail">Email</label>
             <input type="email" id="signupEmail" required placeholder="teu@email.com">
-          </div>
-
-          <div class="form-group">
+          </div>          <div class="form-group">
             <label for="signupPassword">Password</label>
             <input type="password" id="signupPassword" required placeholder="••••••••" minlength="6">
             <small>Mínimo 6 caracteres</small>
+          </div>
+
+          <div class="form-group">
+            <label for="signupGender">Sexo *</label>
+            <select id="signupGender" required>
+              <option value="">Selecione o sexo</option>
+              <option value="M">Masculino</option>
+              <option value="F">Feminino</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="signupAgeRange">Faixa Etária *</label>
+            <select id="signupAgeRange" required>
+              <option value="">Selecione a faixa etária</option>
+              <option value="18-23">18-23 anos</option>
+              <option value="24-29">24-29 anos</option>
+              <option value="30-35">30-35 anos</option>
+              <option value="36-40">36-40 anos</option>
+              <option value="41-49">41-49 anos</option>
+              <option value="50+">+50 anos</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="signupCountry">País *</label>
+            <select id="signupCountry" required>
+              <option value="">Selecione o país</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="signupCity">Cidade *</label>
+            <input type="text" id="signupCity" list="citySuggestions" required placeholder="Escolha ou escreva a cidade" autocomplete="off">
+            <datalist id="citySuggestions"></datalist>
+            <small>Escreva para pesquisar cidades</small>
           </div>
 
           <div class="form-group">
@@ -156,20 +172,67 @@
       </div>
     </div>
   </div>
-
   <!-- Loading Overlay -->
   <div class="loading-overlay hidden" id="loadingOverlay">
     <div class="spinner"></div>
     <p>A processar...</p>
   </div>
 
+  <!-- Location Modal (for Google/Reddit signup) -->
+  <div class="modal-overlay hidden" id="locationModal">
+    <div class="modal-box">      <h2>📍 Complete o teu Perfil</h2>
+      <p>Para melhorar a tua experiência, precisamos de alguns dados:</p>
+      
+      <form id="locationForm">
+        <div class="form-group">
+          <label for="modalGender">Sexo *</label>
+          <select id="modalGender" required>
+            <option value="">Selecione o sexo</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalAgeRange">Faixa Etária *</label>
+          <select id="modalAgeRange" required>
+            <option value="">Selecione a faixa etária</option>
+            <option value="18-23">18-23 anos</option>
+            <option value="24-29">24-29 anos</option>
+            <option value="30-35">30-35 anos</option>
+            <option value="36-40">36-40 anos</option>
+            <option value="41-49">41-49 anos</option>
+            <option value="50+">+50 anos</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalCountry">País *</label>
+          <select id="modalCountry" required>
+            <option value="">Selecione o país</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalCity">Cidade *</label>
+          <input type="text" id="modalCity" list="modalCitySuggestions" required placeholder="Escolha ou escreva a cidade" autocomplete="off">
+          <datalist id="modalCitySuggestions"></datalist>
+          <small>Escreva para pesquisar cidades</small>
+        </div>
+
+        <button type="submit" class="btn-primary">Continuar</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  
-  <!-- App Scripts -->
+    <!-- App Scripts -->
   <script src="js/firebase-config.js"></script>
+  <script src="js/geonames.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/auth-ui.js"></script>
 </body>

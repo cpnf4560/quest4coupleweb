@@ -62,13 +62,33 @@ auth.onAuthStateChanged(async (user) => {
 // ========================================
 // SIGN UP COM EMAIL/PASSWORD
 // ========================================
-async function signUpWithEmail(email, password, displayName) {
+async function signUpWithEmail(email, password, displayName, additionalData = {}) {
   try {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
     
     // Update profile
     await user.updateProfile({ displayName });
+    
+    // Store additional data in Firestore
+    if (Object.keys(additionalData).length > 0) {
+      const userRef = db.collection('users').doc(user.uid);
+      await userRef.set({
+        uid: user.uid,
+        email: user.email,
+        displayName: displayName,
+        gender: additionalData.gender || null,
+        ageRange: additionalData.ageRange || null,
+        country: additionalData.country || null,
+        countryName: additionalData.countryName || null,
+        city: additionalData.city || null,
+        photoURL: user.photoURL || null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+        authProvider: 'email',
+        isAdmin: false
+      });
+    }
     
     console.log('✅ Conta criada:', user.email);
     return { success: true, user };
@@ -147,7 +167,7 @@ async function resetPassword(email) {
 // ========================================
 // CRIAR/ATUALIZAR PERFIL NO FIRESTORE
 // ========================================
-async function createOrUpdateUserProfile(user) {
+async function createOrUpdateUserProfile(user, additionalData = {}) {
   try {
     console.log('🔵 Criando/atualizando perfil para:', user.email);
     
@@ -157,23 +177,24 @@ async function createOrUpdateUserProfile(user) {
     if (!doc.exists) {
       // Criar novo perfil
       console.log('🔵 Perfil não existe, criando novo...');
-      const username = await generateUniqueUsername(user.displayName || user.email);
       
       await userRef.set({
         uid: user.uid,
         email: user.email,
         displayName: user.displayName || 'User',
-        username: username,
         photoURL: user.photoURL || null,
+        gender: additionalData.gender || null,
+        ageRange: additionalData.ageRange || null,
+        country: additionalData.country || null,
+        countryName: additionalData.countryName || null,
+        city: additionalData.city || null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-        plan: 'free',
-        answers: {},
-        customQuestions: {},
-        connections: []
+        authProvider: user.providerData[0]?.providerId || 'email',
+        isAdmin: false
       });
       
-      console.log('✅ Perfil criado:', username);
+      console.log('✅ Perfil criado');
     } else {
       // Atualizar last login
       console.log('🔵 Perfil existe, atualizando last login...');
@@ -189,6 +210,21 @@ async function createOrUpdateUserProfile(user) {
     console.error('❌ Erro ao criar/atualizar perfil:', error);
     // NÃO bloquear o redirect mesmo se houver erro no Firestore
     return false;
+  }
+}
+
+// ========================================
+// ATUALIZAR DADOS DO UTILIZADOR
+// ========================================
+async function updateUserData(userId, data) {
+  try {
+    const userRef = db.collection('users').doc(userId);
+    await userRef.update(data);
+    console.log('✅ Dados do utilizador atualizados');
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Erro ao atualizar dados:', error);
+    return { success: false, error: error.message };
   }
 }
 
@@ -302,7 +338,8 @@ window.authFunctions = {
   resetPassword,
   getUserProfile,
   getCurrentUser,
-  isUserAuthenticated
+  isUserAuthenticated,
+  updateUserData
 };
 
 console.log('🔐 Auth module carregado!');

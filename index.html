@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quest4Couple - Descubram juntos </title>
+    
+    <!-- Meta Description -->
+    <meta name="description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita, privada e segura. 5 packs temáticos, 250+ perguntas.">
+    <meta name="keywords" content="casal, relacionamento, compatibilidade, intimidade, fantasias, privacidade">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quest4couple.pt/">
+    <meta property="og:title" content="Quest4Couple - Descubram-se melhor 💑">
+    <meta property="og:description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita, privada e segura. 5 packs temáticos, 250+ perguntas.">
+    <meta property="og:image" content="https://quest4couple.pt/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://quest4couple.pt/">
+    <meta property="twitter:title" content="Quest4Couple - Descubram-se melhor 💑">
+    <meta property="twitter:description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita e privada.">
+    <meta property="twitter:image" content="https://quest4couple.pt/assets/og-image.jpg">
+    
     <style>
         * {
             margin: 0;
@@ -24,87 +45,115 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-        }
-        
-        .header {
+        }          .header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 15px 40px;
+            box-shadow: 0 2px 15px rgba(214, 51, 132, 0.1);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(214, 51, 132, 0.08);
         }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+          .logo-container {
             text-decoration: none;
             color: inherit;
+            transition: opacity 0.3s ease;
         }
         
-        .logo-container img {
-            height: 40px;
-            width: auto;
+        .logo-container:hover {
+            opacity: 0.85;
         }
         
         .logo-text {
             font-size: 1.5em;
-            font-weight: bold;
+            font-weight: 800;
             background: linear-gradient(135deg, #d63384, #6f42c1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: -0.5px;
         }
         
         .auth-buttons {
             display: flex;
             gap: 10px;
         }
-        
-        .header-btn {
-            padding: 10px 20px;
-            border-radius: 8px;
+          .header-btn {
+            padding: 10px 22px;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: 0.9em;
-            font-weight: 500;
-            transition: all 0.3s;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         
         .btn-login {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             color: #d63384;
-            border: 1px solid rgba(214, 51, 132, 0.3);
+            border: 2px solid rgba(214, 51, 132, 0.3);
         }
         
         .btn-login:hover {
-            background: white;
+            background: rgba(214, 51, 132, 0.05);
+            border-color: #d63384;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.2);
         }
         
         .btn-register {
             background: linear-gradient(135deg, #d63384, #e83e8c);
             color: white;
+            border: 2px solid transparent;
         }
         
         .btn-register:hover {
             background: linear-gradient(135deg, #c1296d, #d63384);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.4);
         }
-        
-        .container {
+          .container {
             max-width: 900px;
             text-align: center;
-            margin-top: 80px;
+            margin-top: 100px;
             animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .hero-logo img {
+            height: 160px;
+            width: auto;
+            filter: drop-shadow(0 4px 12px rgba(214, 51, 132, 0.3));
+            animation: fadeInScale 0.8s ease-out;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-logo img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 16px rgba(214, 51, 132, 0.4));
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         
         @keyframes fadeInUp {
@@ -414,32 +463,57 @@
         
         .btn-logout:hover {
             background: #c82333 !important;
-        }
-        
-        @media (max-width: 768px) {
+        }          @media (max-width: 768px) {
             h1 { font-size: 2em; }
             .subtitle { font-size: 1.1em; }
             .features { grid-template-columns: 1fr; }
             .modal-content {
                 padding: 30px 20px;
             }
+            
+            .container {
+                margin-top: 90px;
+            }
+            
+            .hero-logo img {
+                height: 120px;
+            }
+              /* Header mobile */
+            .header {
+                padding: 10px 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo-text {
+                font-size: 1.3em;
+            }
+            
+            .auth-buttons {
+                gap: 8px;
+            }
+            
+            .header-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
 <body>    <header class="header">
         <a href="index.html" class="logo-container">
-            <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
-            <span class="logo-text">Quest4Couple</span>        </a>
+            <span class="logo-text">Quest4Couple</span>
+        </a>
         <div class="auth-buttons">
             <a href="auth.html" class="header-btn btn-login">Entrar</a>
             <a href="auth.html" class="header-btn btn-register">Criar Conta</a>
         </div>
-    </header>
-      <div class="container">
-        <div style="text-align: center; margin-bottom: 30px;">
-            <img src="./assets/logo.png" alt="Quest4Couple Logo" style="height: 240px; width: auto; filter: drop-shadow(0 6px 20px rgba(214, 51, 132, 0.4));" onerror="this.src='./logo.png'; this.onerror=null;">
+    </header>      <div class="container">
+        <div class="hero-logo">
+            <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
         </div>
-        <h1>Descubram-se juntos 💕</h1>        <p class="subtitle">
+        <h1>Descubram-se juntos 💕</h1><p class="subtitle">
             Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>
             De forma <strong>privada, segura</strong> e sem julgamentos.
         </p>        <div style="text-align: center; margin-top: 30px;">            <a href="app.html" class="cta-button" id="ctaButton" style="display: inline-block;">👀 Ver Questionários</a>
@@ -453,11 +527,11 @@
             </a>
         </div>
         
-        <div style="margin-top: 25px; font-size: 0.9em; color: #777;">
+       <!-- <div style="margin-top: 25px; font-size: 0.9em; color: #777;">
             <span style="margin: 0 10px;">✓ Respostas encriptadas</span>
             <span style="margin: 0 10px;">✓ 5 packs temáticos</span>
             <span style="margin: 0 10px;">✓ Comparação automática</span>
-        </div>
+        </div>-->
         
         <div class="features">
             <div class="feature-card">
@@ -551,7 +625,11 @@
                     Já tem conta? <a href="#" onclick="switchToLogin()">Entrar</a>
                 </p>
             </form>
-        </div>
+        </div>    </div>
+
+    <!-- Support Banner -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div id="supportBanner"></div>
     </div>
       <footer>
         <p>&copy; 2025 Quest4Couple - Todos os direitos reservados</p>
@@ -564,6 +642,9 @@
             <a href="pages/admin.html" style="opacity: 0.5;">Admin</a>
         </div>    </footer>
     
+    <!-- Support Banner Script -->
+    <script src="support-banner.js"></script>
+    
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -575,9 +656,13 @@
     <!-- Local Auth (fallback) -->
     <script src="auth.js"></script>
     
-    <script>
-        // Check if user is logged in on page load (Firebase Auth)
+    <script>        // Check if user is logged in on page load (Firebase Auth)
         document.addEventListener('DOMContentLoaded', function() {
+            // Renderizar support banner
+            if (typeof SupportBanner !== 'undefined') {
+                SupportBanner.render('supportBanner', false);
+            }
+            
             // Tentar Firebase Auth primeiro
             if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
                 auth.onAuthStateChanged((user) => {
@@ -725,12 +810,17 @@
                 freeBadge.innerHTML = '✅ Login efetuado • Pode responder';
             }
         }
-        
-        // Handle Logout
-        function handleLogout() {
+          // Handle Logout
+        async function handleLogout() {
             if (confirm('Tem certeza que deseja sair?')) {
-                auth.logoutUser();
-                location.reload();
+                try {
+                    await firebase.auth().signOut();
+                    console.log('✅ Logout bem-sucedido');
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('❌ Erro no logout:', error);
+                    alert('Erro ao sair. Tenta novamente.');
+                }
             }
         }
         

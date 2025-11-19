@@ -26,9 +26,9 @@ async function sha256(message) {
 // ========================================
 
 // Admin credentials - Updated 19/11/2025
-const ADMIN_EMAIL = 'user';
-// Password: admin (SHA-256 hash)
-const ADMIN_PASSWORD_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+const ADMIN_EMAIL = 'carlos';
+// Password: rzq7xgq8 (SHA-256 hash)
+const ADMIN_PASSWORD_HASH = '4effc02996e897cf24f0869b35d39ccff710cd90fcc9c0820ec52803b07aa382';
 
 /**
  * Verify admin login
@@ -47,11 +47,16 @@ async function verifyAdminLogin(email, password) {
 
 // For synchronous use in admin.html
 function verifyAdminLoginSync(email, password) {
-  // Simple check - in production use async version
+  // Simple check - for production use async version with proper hash
   console.log('🔐 Verificando credenciais:', email);
-  if (email === ADMIN_EMAIL && password === 'admin') {
+  
+  // Check email and password
+  if (email === ADMIN_EMAIL && password === 'rzq7xgq8') {
+    console.log('✅ Credenciais válidas!');
     return true;
   }
+  
+  console.log('❌ Credenciais inválidas');
   return false;
 }
 

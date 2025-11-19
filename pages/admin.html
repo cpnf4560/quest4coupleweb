@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -428,10 +428,9 @@ body {
     
     <div class="error-message" id="loginError">
       ❌ Credenciais inválidas. Tente novamente.
-    </div>      <form onsubmit="handleLogin(event)">
-      <div class="form-group">
+    </div>      <form onsubmit="handleLogin(event)">      <div class="form-group">
         <label for="adminEmail">Username de Administrador</label>
-        <input type="text" id="adminEmail" placeholder="user" required>
+        <input type="text" id="adminEmail" placeholder="carlos" required>
       </div>
       
       <div class="form-group">
@@ -582,12 +581,14 @@ body {
           <input type="text" class="filter-input" id="userSearchInput" placeholder="Pesquisar por nome ou email..." onkeyup="filterUsers()">
           <button class="btn-filter" onclick="loadUsers()">🔄 Atualizar</button>
         </div>
-        
-        <table class="data-table">
-          <thead>
+          <table class="data-table">          <thead>
             <tr>
               <th>Nome</th>
               <th>Email</th>
+              <th>Sexo</th>
+              <th>Idade</th>
+              <th>País</th>
+              <th>Cidade</th>
               <th>Relatórios</th>
               <th>Registo</th>
               <th>Status</th>
@@ -596,7 +597,7 @@ body {
           </thead>
           <tbody id="usersTableBody">
             <tr>
-              <td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td>
+              <td colspan="10" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td>
             </tr>
           </tbody>
         </table>
@@ -830,11 +831,10 @@ async function loadDashboardData() {
     // Get all users from Firestore
     const usersSnapshot = await db.collection('users').get();
     const users = [];
-    
-    usersSnapshot.forEach(doc => {
+      usersSnapshot.forEach(doc => {
       const userData = doc.data();
       // Excluir admin (se tiver campo isAdmin ou email específico)
-      if (!userData.isAdmin && userData.email !== 'user') {
+      if (!userData.isAdmin && userData.email !== 'carlos') {
         users.push(userData);
       }
     });
@@ -873,7 +873,7 @@ async function loadDashboardData() {
     console.error('❌ Erro ao carregar dashboard:', error);
     // Fallback para localStorage se Firestore falhar
     const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-    const users = allUsers.filter(u => u.email !== 'user');
+    const users = allUsers.filter(u => u.email !== 'carlos');
     document.getElementById('totalUsers').textContent = users.length;
   }
 }
@@ -889,26 +889,33 @@ async function loadUsers() {
     usersSnapshot.forEach(doc => {
       const userData = doc.data();
       // Excluir admin
-      if (!userData.isAdmin && userData.email !== 'user') {
+      if (!userData.isAdmin && userData.email !== 'carlos') {
         users.push(userData);
       }
     });
     
     const tbody = document.getElementById('usersTableBody');
-    
-    if (users.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
+      if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
       return;
-    }
-    
-    tbody.innerHTML = users.map(user => {
+    }    tbody.innerHTML = users.map(user => {
       const createdAt = user.createdAt ? 
         (user.createdAt.toDate ? user.createdAt.toDate() : new Date(user.createdAt)) : null;
+      
+      // Buscar dados demográficos
+      const countryName = user.countryName || user.country || 'N/A';
+      const cityName = user.city || 'N/A';
+      const gender = user.gender === 'M' ? '♂️ M' : user.gender === 'F' ? '♀️ F' : user.gender === 'outro' ? '⚧ Outro' : 'N/A';
+      const ageRange = user.ageRange || 'N/A';
       
       return `
         <tr>
           <td>${user.displayName || user.name || 'N/A'}</td>
           <td>${user.email}</td>
+          <td>${gender}</td>
+          <td>${ageRange}</td>
+          <td>${countryName}</td>
+          <td>${cityName}</td>
           <td>${user.reports ? user.reports.length : 0}</td>
           <td>${createdAt ? createdAt.toLocaleDateString('pt-PT') : 'N/A'}</td>
           <td><span class="badge badge-success">Ativo</span></td>
@@ -924,18 +931,24 @@ async function loadUsers() {
     console.error('❌ Erro ao carregar utilizadores:', error);
     // Fallback para localStorage
     const allUsers = JSON.parse(localStorage.getItem('q4c_users') || '[]');
-    const users = allUsers.filter(u => u.email !== 'user');
-    const tbody = document.getElementById('usersTableBody');
-    
-    if (users.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
+    const users = allUsers.filter(u => u.email !== 'carlos');
+    const tbody = document.getElementById('usersTableBody');      if (users.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
       return;
     }
     
-    tbody.innerHTML = users.map(user => `
+    tbody.innerHTML = users.map(user => {
+      const gender = user.gender === 'M' ? '♂️ M' : user.gender === 'F' ? '♀️ F' : user.gender === 'outro' ? '⚧ Outro' : 'N/A';
+      const ageRange = user.ageRange || 'N/A';
+      
+      return `
       <tr>
         <td>${user.name || 'N/A'}</td>
         <td>${user.email}</td>
+        <td>${gender}</td>
+        <td>${ageRange}</td>
+        <td>${user.countryName || user.country || 'N/A'}</td>
+        <td>${user.city || 'N/A'}</td>
         <td>${user.reports ? user.reports.length : 0}</td>
         <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
         <td><span class="badge badge-success">Ativo</span></td>
@@ -943,7 +956,8 @@ async function loadUsers() {
           <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
         </td>
       </tr>
-    `).join('');
+      `;
+    }).join('');
   }
 }
 
@@ -957,32 +971,41 @@ async function filterUsers() {
     
     usersSnapshot.forEach(doc => {
       const userData = doc.data();
-      if (!userData.isAdmin && userData.email !== 'user') {
+      if (!userData.isAdmin && userData.email !== 'carlos') {
         users.push(userData);
       }
     });
-    
-    const filtered = users.filter(user => {
+      const filtered = users.filter(user => {
       const name = (user.displayName || user.name || '').toLowerCase();
       const email = (user.email || '').toLowerCase();
-      return name.includes(searchTerm) || email.includes(searchTerm);
+      const country = (user.countryName || user.country || '').toLowerCase();
+      const city = (user.city || '').toLowerCase();
+      return name.includes(searchTerm) || email.includes(searchTerm) || 
+             country.includes(searchTerm) || city.includes(searchTerm);
     });
     
     const tbody = document.getElementById('usersTableBody');
-    
-    if (filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
+      if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
       return;
     }
-    
-    tbody.innerHTML = filtered.map(user => {
+      tbody.innerHTML = filtered.map(user => {
       const createdAt = user.createdAt ? 
         (user.createdAt.toDate ? user.createdAt.toDate() : new Date(user.createdAt)) : null;
+      
+      const countryName = user.countryName || user.country || 'N/A';
+      const cityName = user.city || 'N/A';
+      const gender = user.gender === 'M' ? '♂️ M' : user.gender === 'F' ? '♀️ F' : user.gender === 'outro' ? '⚧ Outro' : 'N/A';
+      const ageRange = user.ageRange || 'N/A';
       
       return `
         <tr>
           <td>${user.displayName || user.name || 'N/A'}</td>
           <td>${user.email}</td>
+          <td>${gender}</td>
+          <td>${ageRange}</td>
+          <td>${countryName}</td>
+          <td>${cityName}</td>
           <td>${user.reports ? user.reports.length : 0}</td>
           <td>${createdAt ? createdAt.toLocaleDateString('pt-PT') : 'N/A'}</td>
           <td><span class="badge badge-success">Ativo</span></td>
@@ -1012,11 +1035,15 @@ async function viewUser(email) {
     const createdAt = userData.createdAt ? 
       (userData.createdAt.toDate ? userData.createdAt.toDate() : new Date(userData.createdAt)) : null;
     const lastLogin = userData.lastLoginAt ? 
-      (userData.lastLoginAt.toDate ? userData.lastLoginAt.toDate() : new Date(userData.lastLoginAt)) : null;
-    
-    alert(`Detalhes do Utilizador:\n\n` +
+      (userData.lastLoginAt.toDate ? userData.lastLoginAt.toDate() : new Date(userData.lastLoginAt)) : null;      const genderText = userData.gender === 'M' ? 'Masculino' : userData.gender === 'F' ? 'Feminino' : userData.gender === 'outro' ? 'Outro' : 'N/A';
+      
+      alert(`Detalhes do Utilizador:\n\n` +
           `Nome: ${userData.displayName || userData.name || 'N/A'}\n` +
           `Email: ${userData.email}\n` +
+          `Sexo: ${genderText}\n` +
+          `Faixa Etária: ${userData.ageRange || 'N/A'}\n` +
+          `País: ${userData.countryName || userData.country || 'N/A'}\n` +
+          `Cidade: ${userData.city || 'N/A'}\n` +
           `Método: ${userData.authProvider || 'Email'}\n` +
           `Relatórios: ${userData.reports ? userData.reports.length : 0}\n` +
           `Registo: ${createdAt ? createdAt.toLocaleString('pt-PT') : 'N/A'}\n` +
@@ -1038,7 +1065,7 @@ async function loadReports() {
     let allReports = [];
     usersSnapshot.forEach(doc => {
       const userData = doc.data();
-      if (!userData.isAdmin && userData.email !== 'user') {
+      if (!userData.isAdmin && userData.email !== 'carlos') {
         if (userData.reports && userData.reports.length > 0) {
           userData.reports.forEach(report => {
             allReports.push({
@@ -1129,7 +1156,7 @@ async function loadRecentActivity() {
     
     usersSnapshot.forEach(doc => {
       const userData = doc.data();
-      if (!userData.isAdmin && userData.email !== 'user') {
+      if (!userData.isAdmin && userData.email !== 'carlos') {
         const userName = userData.displayName || userData.name || 'Utilizador';
         
         // Add registration activity

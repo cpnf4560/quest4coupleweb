@@ -14,8 +14,6 @@ const loadingOverlay = document.getElementById('loadingOverlay');
 // Buttons
 const googleLoginBtn = document.getElementById('googleLoginBtn');
 const googleSignupBtn = document.getElementById('googleSignupBtn');
-const redditLoginBtn = document.getElementById('redditLoginBtn');
-const redditSignupBtn = document.getElementById('redditSignupBtn');
 const emailLoginForm = document.getElementById('emailLoginForm');
 const emailSignupForm = document.getElementById('emailSignupForm');
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
@@ -68,9 +66,20 @@ googleLoginBtn.addEventListener('click', async () => {
     console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google login success:', result);
-    console.log('✅ Aguardando onAuthStateChanged para redirecionar...');
-    // onAuthStateChanged vai redirecionar automaticamente
-    // Não escondemos o loading aqui - deixamos o redirect acontecer
+    
+    // Verificar se o utilizador tem dados completos
+    const userDoc = await db.collection('users').doc(result.user.uid).get();
+    
+    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender) {
+      // Utilizador precisa completar dados - mostrar modal
+      console.log('🔵 Dados incompletos - mostrar modal');
+      hideLoading();
+      showLocationModal(result.user);
+    } else {
+      // Dados completos - redirecionar
+      console.log('✅ Dados completos - redirecionando...');
+      // onAuthStateChanged vai redirecionar automaticamente
+    }
   } catch (error) {
     console.error('❌ Google login error:', error);
     hideLoading();
@@ -98,9 +107,20 @@ googleSignupBtn.addEventListener('click', async () => {
     console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google signup success:', result);
-    console.log('✅ Aguardando onAuthStateChanged para redirecionar...');
-    // onAuthStateChanged vai redirecionar automaticamente
-    // Não escondemos o loading aqui - deixamos o redirect acontecer
+    
+    // Verificar se é um novo utilizador
+    const userDoc = await db.collection('users').doc(result.user.uid).get();
+    
+    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender) {
+      // Novo utilizador ou dados incompletos - mostrar modal
+      console.log('🔵 Novo utilizador ou dados incompletos - mostrar modal');
+      hideLoading();
+      showLocationModal(result.user);
+    } else {
+      // Utilizador já tem dados completos - redirecionar
+      console.log('✅ Dados completos - redirecionando...');
+      // onAuthStateChanged vai redirecionar automaticamente
+    }
   } catch (error) {
     console.error('❌ Google signup error:', error);
     hideLoading();
@@ -112,31 +132,6 @@ googleSignupBtn.addEventListener('click', async () => {
     
     showMessage('error', errorMsg);
   }
-});
-
-// ========================================
-// REDDIT AUTH (Informativo)
-// ========================================
-redditLoginBtn.addEventListener('click', () => {
-  alert('🚀 Login com Reddit\n\n' +
-        '❌ Esta funcionalidade requer um backend para funcionar.\n\n' +
-        'O Reddit OAuth2 não suporta autenticação apenas no cliente (frontend).\n\n' +
-        '📝 Para implementar:\n' +
-        '1. Configure uma aplicação no Reddit (https://www.reddit.com/prefs/apps)\n' +
-        '2. Implemente um servidor backend (Node.js, Python, etc.)\n' +
-        '3. Use o fluxo OAuth2 para obter tokens\n\n' +
-        '💡 Por agora, use login com Google ou Email/Password.');
-});
-
-redditSignupBtn.addEventListener('click', () => {
-  alert('🚀 Registo com Reddit\n\n' +
-        '❌ Esta funcionalidade requer um backend para funcionar.\n\n' +
-        'O Reddit OAuth2 não suporta autenticação apenas no cliente (frontend).\n\n' +
-        '📝 Para implementar:\n' +
-        '1. Configure uma aplicação no Reddit (https://www.reddit.com/prefs/apps)\n' +
-        '2. Implemente um servidor backend (Node.js, Python, etc.)\n' +
-        '3. Use o fluxo OAuth2 para obter tokens\n\n' +
-        '💡 Por agora, use registo com Google ou Email/Password.');
 });
 
 // ========================================
@@ -210,11 +205,21 @@ emailSignupForm.addEventListener('submit', async (e) => {
   const name = document.getElementById('signupName').value.trim();
   const email = document.getElementById('signupEmail').value.trim();
   const password = document.getElementById('signupPassword').value;
-  const confirmPassword = document.getElementById('signupConfirmPassword').value;
+  const gender = document.getElementById('signupGender').value;
+  const ageRange = document.getElementById('signupAgeRange').value;
+  const countrySelect = document.getElementById('signupCountry');
+  const country = countrySelect.value;
+  const countryName = countrySelect.options[countrySelect.selectedIndex]?.text || '';
+  const city = document.getElementById('signupCity').value.trim();
 
   // Validation
-  if (!name || !email || !password || !confirmPassword) {
-    showMessage('error', 'Por favor preenche todos os campos.');
+  if (!name || !email || !password) {
+    showMessage('error', 'Por favor preenche todos os campos obrigatórios.');
+    return;
+  }
+
+  if (!gender || !ageRange || !country || !city) {
+    showMessage('error', 'Por favor preenche todos os campos obrigatórios (sexo, faixa etária, país e cidade).');
     return;
   }
 
@@ -223,16 +228,19 @@ emailSignupForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  if (password !== confirmPassword) {
-    showMessage('error', 'As passwords não coincidem.');
-    return;
-  }
-
   showLoading();
   clearMessages();
 
   try {
-    await signUpWithEmail(email, password, name);
+    const additionalData = {
+      gender,
+      ageRange,
+      country,
+      countryName,
+      city
+    };
+    
+    await signUpWithEmail(email, password, name, additionalData);
     // onAuthStateChanged vai redirecionar automaticamente
   } catch (error) {
     hideLoading();
@@ -283,6 +291,142 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
     showMessage('error', error.message);
   }
 });
+
+// ========================================
+// LOCATION MODAL (Google/Reddit Signup)
+// ========================================
+let pendingUserForLocation = null;
+
+// Lista de países
+const COUNTRIES_LIST = [
+  { code: 'PT', name: 'Portugal' },
+  { code: 'BR', name: 'Brasil' },
+  { code: 'AO', name: 'Angola' },
+  { code: 'MZ', name: 'Moçambique' },
+  { code: 'CV', name: 'Cabo Verde' },
+  { code: 'GW', name: 'Guiné-Bissau' },
+  { code: 'ST', name: 'São Tomé e Príncipe' },
+  { code: 'TL', name: 'Timor-Leste' },
+  { code: 'MO', name: 'Macau' },
+  { code: 'ES', name: 'Espanha' },
+  { code: 'FR', name: 'França' },
+  { code: 'GB', name: 'Reino Unido' },
+  { code: 'DE', name: 'Alemanha' },
+  { code: 'IT', name: 'Itália' },
+  { code: 'NL', name: 'Países Baixos' },
+  { code: 'BE', name: 'Bélgica' },
+  { code: 'CH', name: 'Suíça' },
+  { code: 'LU', name: 'Luxemburgo' },
+  { code: 'AT', name: 'Áustria' },
+  { code: 'US', name: 'Estados Unidos' },
+  { code: 'CA', name: 'Canadá' },
+  { code: 'MX', name: 'México' },
+  { code: 'AR', name: 'Argentina' },
+  { code: 'CL', name: 'Chile' },
+  { code: 'CO', name: 'Colômbia' },
+  { code: 'PE', name: 'Peru' },
+  { code: 'VE', name: 'Venezuela' }
+].sort((a, b) => a.name.localeCompare(b.name));
+
+// Função para carregar países em um select
+function loadCountriesIntoSelect(selectId) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  
+  // Limpar opções existentes (exceto a primeira)
+  while (select.options.length > 1) {
+    select.remove(1);
+  }
+  
+  // Adicionar países
+  COUNTRIES_LIST.forEach(country => {
+    const option = document.createElement('option');
+    option.value = country.code;
+    option.textContent = country.name;
+    select.appendChild(option);
+  });
+}
+
+// Carregar países nos selects quando a página carrega
+document.addEventListener('DOMContentLoaded', () => {
+  loadCountriesIntoSelect('signupCountry');
+  loadCountriesIntoSelect('modalCountry');
+});
+
+// Handler do modal de localização
+const locationModal = document.getElementById('locationModal');
+const locationForm = document.getElementById('locationForm');
+
+if (locationForm) {
+  locationForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!pendingUserForLocation) {
+      console.error('❌ Nenhum utilizador pendente');
+      return;
+    }
+    
+    const gender = document.getElementById('modalGender').value;
+    const ageRange = document.getElementById('modalAgeRange').value;
+    const countrySelect = document.getElementById('modalCountry');
+    const country = countrySelect.value;
+    const countryName = countrySelect.options[countrySelect.selectedIndex]?.text || '';
+    const city = document.getElementById('modalCity').value.trim();
+    
+    // Validação
+    if (!gender || !ageRange || !country || !city) {
+      alert('Por favor preenche todos os campos obrigatórios.');
+      return;
+    }
+    
+    showLoading();
+    
+    try {
+      // Atualizar dados do utilizador no Firestore
+      await updateUserData(pendingUserForLocation.uid, {
+        gender,
+        ageRange,
+        country,
+        countryName,
+        city
+      });
+      
+      console.log('✅ Dados demográficos salvos');
+      
+      // Esconder modal
+      hideLocationModal();
+      
+      // Redirecionar para dashboard
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
+    } catch (error) {
+      console.error('❌ Erro ao salvar dados:', error);
+      hideLoading();
+      alert('Erro ao salvar dados. Por favor tenta novamente.');
+    }
+  });
+}
+
+function showLocationModal(user) {
+  pendingUserForLocation = user;
+  if (locationModal) {
+    locationModal.classList.remove('hidden');
+    
+    // Carregar países no modal se ainda não foram carregados
+    const modalCountrySelect = document.getElementById('modalCountry');
+    if (modalCountrySelect && modalCountrySelect.options.length <= 1) {
+      loadCountriesIntoSelect('modalCountry');
+    }
+  }
+}
+
+function hideLocationModal() {
+  if (locationModal) {
+    locationModal.classList.add('hidden');
+  }
+  pendingUserForLocation = null;
+}
 
 // ========================================
 // UI HELPERS

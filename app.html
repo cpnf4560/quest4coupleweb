@@ -42,7 +42,16 @@
 
 <!-- Header -->
 <div class="header">
-  <!-- User Section - Canto Superior Direito -->
+  <!-- Logo e Título (Centro) -->
+  <div class="logo-section">
+    <a href="index.html">
+      <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
+    </a>
+    <h1>Quest4Couple</h1>
+    <p class="tagline">Descubram-se juntos 💕</p>
+  </div>
+  
+  <!-- User Section (Canto Superior Direito) -->
   <div class="user-section-top">
     <span class="user-info" id="userInfo">
       👤 <span id="currentUserName">Carregando...</span>
@@ -53,13 +62,6 @@
     <button class="btn btn-logout" onclick="logout()" title="Sair">
       🚪 Sair
     </button>
-  </div>
-  
-  <div class="logo-section">
-    <a href="index.html">
-      <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
-    </a>    <h1>Quest4Couple</h1>
-    <p class="tagline">Descubram-se juntos 💕</p>
   </div>
   
   <div class="free-badge-small">
@@ -229,12 +231,12 @@
 
 <!-- Controls - Moved below themes -->
 <div class="controls-bottom" id="mainControls">
-  <button class="btn" onclick="saveAnswers()">💾 Guardar Respostas</button>
-  <button class="btn btn-load" onclick="showLoadModal()">📂 Carregar Respostas</button>
-  <button class="btn btn-import" onclick="showImportModal()">📥 Importar Perguntas do Parceiro</button>
-  <button class="btn" onclick="showCompareSection()">🔀 Comparar com Parceiro/a</button>
-  <button class="btn btn-secondary" onclick="generatePDF()">📄 Gerar PDF</button>
-  <button class="btn btn-secondary" onclick="sendByEmail()">📧 Enviar por E-mail</button>
+  <button class="btn" onclick="saveAnswers()">💾 Guardar</button>
+  <button class="btn btn-load" onclick="showLoadModal()">📂 Carregar</button>
+  <button class="btn btn-import" onclick="showImportModal()">📥 Importar</button>
+  <button class="btn" onclick="showCompareSection()">🔀 Comparar</button>
+  <button class="btn btn-secondary" onclick="generatePDF()">📄 PDF</button>
+  <button class="btn btn-secondary" onclick="sendByEmail()">📧 E-mail</button>
 </div>
 
 <!-- Pack Navigation Sidebar -->
@@ -469,8 +471,13 @@
   </div>
 </div>
 
+<!-- Support Banner -->
+<div style="max-width: 1200px; margin: 40px auto 20px; padding: 0 20px;">
+  <div id="supportBanner"></div>
+</div>
+
 <!-- Footer -->
-<footer style="margin-top: 50px; padding: 30px 20px; background: rgba(255,255,255,0.9); border-top: 2px solid #d63384; text-align: center;">
+<footer style="margin-top: 30px; padding: 30px 20px; background: rgba(255,255,255,0.9); border-top: 2px solid #d63384; text-align: center;">
   <div style="max-width: 1200px; margin: 0 auto;">
     <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
       <a href="pages/sobre.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Sobre</a>
@@ -484,9 +491,11 @@
     </p>
     <p style="color: #999; font-size: 0.8em;">
       © 2025 Quest4Couple. Todos os direitos reservados.
-    </p>
-  </div>
+    </p>  </div>
 </footer>
+
+<!-- Support Banner Script -->
+<script src="support-banner.js"></script>
 
 <!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -699,6 +708,14 @@
 <script src="js/rendering.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/comparison.js"></script>
+
+<!-- Renderizar Support Banner -->
+<script>
+  // Renderizar banner de apoio
+  if (typeof SupportBanner !== 'undefined') {
+    SupportBanner.render('supportBanner', false);
+  }
+</script>
 
 </body>
 </html>
