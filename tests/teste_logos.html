@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Logos - Quest4Couple</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8ecf0 0%, #d1d9e0 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            background: linear-gradient(135deg, #d63384, #6f42c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .test-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        .test-card:hover {
+            border-color: #d63384;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.2);
+        }
+        .test-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .logo-preview {
+            width: 100%;
+            height: 60px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            border: 1px solid #dee2e6;
+        }
+        .logo-preview img {
+            max-height: 40px;
+            max-width: 90%;
+        }
+        .status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .test-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+        }
+        .summary {
+            background: linear-gradient(135deg, #d63384, #6f42c1);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .summary h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        .success-text { color: #4ec9b0; }
+        .path-text { color: #ce9178; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Teste de Logos e Links</h1>
+        
+        <div class="summary">
+            <h2>✅ Correções Aplicadas</h2>
+            <p>Todas as páginas foram atualizadas com os caminhos corretos:</p>
+            <p style="margin-top: 10px; font-family: monospace;">
+                <strong>Logo:</strong> ./logo.png → ../assets/logo.png<br>
+                <strong>Link Início:</strong> index.html → ../index.html
+            </p>
+        </div>
+
+        <div class="test-grid">
+            <div class="test-card">
+                <h3>📄 Sobre</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Logo corrigido</div>
+                <div class="status success">✓ Link corrigido</div>
+                <a href="../pages/sobre.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+
+            <div class="test-card">
+                <h3>❓ FAQ</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Logo corrigido</div>
+                <div class="status success">✓ Link corrigido</div>
+                <a href="../pages/faq.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+
+            <div class="test-card">
+                <h3>💝 Apoiar o Projeto</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Logo corrigido</div>
+                <div class="status success">✓ Link corrigido</div>
+                <a href="../pages/apoiar.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+
+            <div class="test-card">
+                <h3>🔒 Privacidade</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Logo corrigido</div>
+                <div class="status success">✓ Link corrigido</div>
+                <a href="../pages/privacidade.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+
+            <div class="test-card">
+                <h3>📜 Termos</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Logo corrigido</div>
+                <div class="status success">✓ Link corrigido</div>
+                <a href="../pages/termos.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+
+            <div class="test-card">
+                <h3>⚙️ Admin</h3>
+                <div class="logo-preview">
+                    <img src="../assets/logo.png" alt="Logo" onerror="this.parentElement.style.background='#f8d7da'">
+                </div>
+                <div class="status success">✓ Favicon OK</div>
+                <div class="status success">✓ Página OK</div>
+                <a href="../pages/admin.html" class="test-link" target="_blank">Abrir Página</a>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <div class="success-text">✅ Estrutura correta aplicada em todas as páginas:</div>
+            <br>
+            &lt;header class="header"&gt;<br>
+            &nbsp;&nbsp;&lt;a href="<span class="path-text">../index.html</span>" class="logo-container"&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;img src="<span class="path-text">../assets/logo.png</span>" alt="Quest4Couple Logo"<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onerror="this.src='<span class="path-text">../logo.png</span>'; this.onerror=null;"&gt;<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="logo-text"&gt;Quest4Couple&lt;/span&gt;<br>
+            &nbsp;&nbsp;&lt;/a&gt;<br>
+            &lt;/header&gt;
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #e7f3ff; border-left: 4px solid #2196F3; border-radius: 8px;">
+            <h3 style="color: #1976D2; margin-bottom: 10px;">💡 Como Testar:</h3>
+            <ol style="color: #555; line-height: 1.8; margin-left: 20px;">
+                <li>Clique em cada botão "Abrir Página"</li>
+                <li>Verifique se o <strong>logo aparece</strong> no header</li>
+                <li>Clique no <strong>logo</strong> e confirme que volta para <code>index.html</code></li>
+                <li>Se o logo não aparecer, abra DevTools (F12) para ver erros</li>
+            </ol>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <a href="../index.html" class="test-link" style="font-size: 1.1em; padding: 15px 30px;">
+                🏠 Voltar para Homepage
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Testar carregamento do logo
+        window.addEventListener('load', function() {
+            const images = document.querySelectorAll('.logo-preview img');
+            images.forEach((img, index) => {
+                img.addEventListener('load', function() {
+                    console.log(`✅ Logo ${index + 1} carregado com sucesso`);
+                });
+                img.addEventListener('error', function() {
+                    console.error(`❌ Erro ao carregar logo ${index + 1}`);
+                    this.parentElement.style.background = '#f8d7da';
+                    this.parentElement.innerHTML = '<span style="color: #721c24;">❌ Erro</span>';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

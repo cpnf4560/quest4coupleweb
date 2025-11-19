@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Debug Quest4Couple</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/questions.css">
+  <style>
+    #debug { 
+      position: fixed; 
+      top: 10px; 
+      right: 10px; 
+      background: white; 
+      border: 2px solid #333; 
+      padding: 15px; 
+      max-width: 400px;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 9999;
+      font-size: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .debug-section { margin: 10px 0; padding: 5px; border-left: 3px solid #d63384; }
+    .debug-ok { color: green; }
+    .debug-error { color: red; }
+  </style>
+</head>
+<body>
+  <div id="debug">
+    <h3>🔍 Debug Console</h3>
+    <div id="debugLog"></div>
+  </div>
+
+  <div class="header">
+    <h1>Quest4Couple - Debug Mode</h1>
+  </div>
+
+  <div id="themesView" class="themes-grid">
+    <div class="theme-card" onclick="testShowTheme('romantico')">
+      <div class="theme-card-header romantico">
+        <span class="theme-icon">❤️</span>
+        <h3>Romântico</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="pack romantico" id="pack-romantico">
+    <div class="pack-header">
+      <h2>💖 Pack Romântico</h2>
+      <button class="back-btn" onclick="testBackToThemes()">← Voltar</button>
+    </div>
+    <div class="pack-content" id="pack-romantico-questions">
+      <!-- As perguntas serão renderizadas aqui -->
+    </div>
+  </div>
+
+  <script src="js/rendering.js"></script>
+  <script>
+    let debugLog = document.getElementById('debugLog');
+    
+    function log(msg, type = 'info') {
+      const div = document.createElement('div');
+      div.className = 'debug-section';
+      div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${msg}`;
+      if (type === 'ok') div.classList.add('debug-ok');
+      if (type === 'error') div.classList.add('debug-error');
+      debugLog.appendChild(div);
+      console.log(msg);
+    }
+
+    function testShowTheme(themeName) {
+      log('🎯 Clique em tema: ' + themeName);
+      
+      // Passo 1: Carregar perguntas
+      if (!window.questionsLoaded) {
+        log('📥 Carregando perguntas pela primeira vez...');
+        loadAndRenderAllPacks();
+        window.questionsLoaded = true;
+      } else {
+        log('✅ Perguntas já carregadas', 'ok');
+      }
+      
+      // Passo 2: Esconder grid de temas
+      const themesView = document.getElementById('themesView');
+      themesView.style.display = 'none';
+      log('👁️ Grid de temas escondido');
+      
+      // Passo 3: Mostrar pack
+      document.querySelectorAll('.pack').forEach(pack => {
+        pack.classList.remove('active');
+      });
+      
+      const selectedPack = document.querySelector('.pack.' + themeName);
+      if (selectedPack) {
+        selectedPack.classList.add('active');
+        log('✅ Pack ativado: ' + themeName, 'ok');
+        
+        // Verificar conteúdo
+        setTimeout(() => {
+          const content = document.getElementById('pack-' + themeName + '-questions');
+          if (content) {
+            const questions = content.querySelectorAll('.question');
+            log(`📝 Perguntas renderizadas: ${questions.length}`, questions.length > 0 ? 'ok' : 'error');
+            log(`📄 HTML length: ${content.innerHTML.length} chars`);
+          } else {
+            log('❌ Contentor não encontrado!', 'error');
+          }
+        }, 500);
+      } else {
+        log('❌ Pack não encontrado: ' + themeName, 'error');
+      }
+    }
+
+    function testBackToThemes() {
+      log('🔙 Voltar para temas');
+      document.querySelectorAll('.pack').forEach(pack => {
+        pack.classList.remove('active');
+      });
+      document.getElementById('themesView').style.display = 'grid';
+    }
+
+    // Auto-load ao iniciar
+    window.addEventListener('DOMContentLoaded', () => {
+      log('🚀 Página carregada');
+      log('📍 Verificando funções...');
+      log(`loadAndRenderAllPacks: ${typeof loadAndRenderAllPacks}`, typeof loadAndRenderAllPacks === 'function' ? 'ok' : 'error');
+      log(`renderPackQuestions: ${typeof renderPackQuestions}`, typeof renderPackQuestions === 'function' ? 'ok' : 'error');
+      
+      // Teste automático após 1 segundo
+      setTimeout(() => {
+        log('🤖 Iniciando teste automático...');
+        testShowTheme('romantico');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

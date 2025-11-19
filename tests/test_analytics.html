@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧪 Teste Analytics - Quest4Couple</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+h1 {
+  color: #667eea;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.subtitle {
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+.section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.section h2 {
+  color: #495057;
+  margin-bottom: 15px;
+  font-size: 1.3em;
+}
+
+.btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin: 5px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+}
+
+.output {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid #dee2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.status {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.status.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.status.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.link-box {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e7f3ff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.link-box a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.link-box a:hover {
+  text-decoration: underline;
+}
+
+code {
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #e83e8c;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🧪 Teste do Sistema de Analytics</h1>
+  <p class="subtitle">Ferramenta para popular dados de teste e validar o sistema</p>
+
+  <!-- Seção 1: Popular Dados -->
+  <div class="section">
+    <h2>1️⃣ Popular Dados de Teste</h2>
+    <p style="margin-bottom: 15px;">Clique para adicionar respostas anónimas simuladas ao sistema:</p>
+    
+    <button class="btn" onclick="populateTestData(10)">📊 Adicionar 10 Respostas</button>
+    <button class="btn" onclick="populateTestData(50)">📊 Adicionar 50 Respostas</button>
+    <button class="btn" onclick="populateTestData(100)">📊 Adicionar 100 Respostas</button>
+    
+    <div id="populateStatus"></div>
+  </div>
+
+  <!-- Seção 2: Ver Dados -->
+  <div class="section">
+    <h2>2️⃣ Visualizar Dados</h2>
+    <p style="margin-bottom: 15px;">Ver os dados de analytics armazenados:</p>
+    
+    <button class="btn btn-info" onclick="viewAnalytics()">👁️ Ver Analytics</button>
+    <button class="btn btn-info" onclick="viewStats()">📈 Ver Estatísticas</button>
+    
+    <div id="viewOutput"></div>
+  </div>
+
+  <!-- Seção 3: Limpar Dados -->
+  <div class="section">
+    <h2>3️⃣ Limpar Dados</h2>
+    <p style="margin-bottom: 15px;">Remover dados de teste do sistema:</p>
+    
+    <button class="btn btn-danger" onclick="clearAnalytics()">🗑️ Limpar Analytics</button>
+    <button class="btn btn-danger" onclick="clearAll()">⚠️ Limpar TUDO</button>
+    
+    <div id="clearStatus"></div>
+  </div>
+
+  <!-- Seção 4: Links -->
+  <div class="section">
+    <h2>4️⃣ Acesso Rápido</h2>
+    
+    <div class="link-box">
+      <p style="margin-bottom: 10px;">Após popular os dados, aceda ao BackOffice:</p>
+      <a href="admin.html" target="_blank">🔐 Abrir BackOffice Admin →</a>
+      <p style="margin-top: 10px; font-size: 0.9em; color: #6c757d;">
+        Login: <code>carlos.sousacorreia</code> / <code>rzq7xgq8</code>
+      </p>
+    </div>
+  </div>
+
+  <!-- Seção 5: Instruções -->
+  <div class="section">
+    <h2>ℹ️ Instruções</h2>
+    <ol style="margin-left: 20px; color: #495057; line-height: 1.8;">
+      <li>Clique em <strong>"Adicionar 10 Respostas"</strong> para popular dados de teste</li>
+      <li>Clique em <strong>"Ver Analytics"</strong> para verificar os dados</li>
+      <li>Aceda ao <strong>BackOffice Admin</strong> e vá para <strong>"📊 Analytics Anónimo"</strong></li>
+      <li>Selecione um pack no dropdown para ver as estatísticas</li>
+      <li>Teste a exportação para CSV</li>
+      <li>Quando terminar, use <strong>"Limpar Analytics"</strong> para remover os dados de teste</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+// ========================================
+// POPULAR DADOS DE TESTE
+// ========================================
+
+function populateTestData(count) {
+  const statusDiv = document.getElementById('populateStatus');
+  statusDiv.innerHTML = '<div class="status info">⏳ Gerando dados de teste...</div>';
+  
+  try {
+    const packs = ['romantico', 'experiencia', 'pimentinha', 'poliamor', 'kinks'];
+    const answers = ['porfavor', 'yup', 'meh', 'talvez'];
+    
+    // Questões por pack (aproximado)
+    const questionsPerPack = {
+      'romantico': 30,
+      'experiencia': 25,
+      'pimentinha': 20,
+      'poliamor': 15,
+      'kinks': 35
+    };
+    
+    // Obter analytics existente
+    const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+    
+    // Gerar respostas aleatórias
+    for (let i = 0; i < count; i++) {
+      packs.forEach(packId => {
+        // Inicializar pack
+        if (!analytics[packId]) {
+          analytics[packId] = {
+            totalResponses: 0,
+            questions: {}
+          };
+        }
+        
+        analytics[packId].totalResponses++;
+        
+        const numQuestions = questionsPerPack[packId];
+        
+        // Gerar respostas para cada questão
+        for (let q = 1; q <= numQuestions; q++) {
+          const qKey = `q${q}`;
+            if (!analytics[packId].questions[qKey]) {
+            analytics[packId].questions[qKey] = {
+              text: `Pergunta ${q} do pack ${packId}`,
+              porfavor: 0,
+              yup: 0,
+              meh: 0,
+              talvez: 0,
+              comments: 0
+            };
+          }
+          
+          // Resposta aleatória com pesos realistas
+          const rand = Math.random();
+          if (rand < 0.3) {
+            analytics[packId].questions[qKey].porfavor++;  // 30% - Por favor!
+          } else if (rand < 0.65) {
+            analytics[packId].questions[qKey].yup++;  // 35% - Yup
+          } else if (rand < 0.85) {
+            analytics[packId].questions[qKey].talvez++;  // 20% - Talvez
+          } else {
+            analytics[packId].questions[qKey].meh++;  // 15% - Meh...
+          }
+          
+          // 30% de chance de ter comentário
+          if (Math.random() < 0.3) {
+            analytics[packId].questions[qKey].comments++;
+          }
+        }
+      });
+    }
+    
+    // Salvar
+    localStorage.setItem('q4c_analytics', JSON.stringify(analytics));
+    
+    statusDiv.innerHTML = `
+      <div class="status success">
+        ✅ ${count} respostas adicionadas com sucesso!<br>
+        <small>Total de respostas por pack: ${count}</small>
+      </div>
+    `;
+    
+  } catch (error) {
+    statusDiv.innerHTML = `
+      <div class="status error">
+        ❌ Erro ao gerar dados: ${error.message}
+      </div>
+    `;
+  }
+}
+
+// ========================================
+// VISUALIZAR DADOS
+// ========================================
+
+function viewAnalytics() {
+  const outputDiv = document.getElementById('viewOutput');
+  
+  try {
+    const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+    
+    if (Object.keys(analytics).length === 0) {
+      outputDiv.innerHTML = `
+        <div class="status info">
+          ℹ️ Nenhum dado de analytics encontrado. Popule dados primeiro!
+        </div>
+      `;
+      return;
+    }
+    
+    outputDiv.innerHTML = `
+      <div class="output">
+        ${JSON.stringify(analytics, null, 2)}
+      </div>
+    `;
+    
+  } catch (error) {
+    outputDiv.innerHTML = `
+      <div class="status error">
+        ❌ Erro ao carregar analytics: ${error.message}
+      </div>
+    `;
+  }
+}
+
+function viewStats() {
+  const outputDiv = document.getElementById('viewOutput');
+  
+  try {
+    const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+    
+    if (Object.keys(analytics).length === 0) {
+      outputDiv.innerHTML = `
+        <div class="status info">
+          ℹ️ Nenhum dado de analytics encontrado.
+        </div>
+      `;
+      return;
+    }
+    
+    const packNames = {
+      'romantico': '❤️ Pack Romântico',
+      'experiencia': '🎭 Exploração e Aventura',
+      'pimentinha': '🌶️ Pimentinha',
+      'poliamor': '💑 Poliamor',
+      'kinks': '🔥 Fetiches'
+    };
+    
+    let stats = '<div class="output"><strong>📊 Estatísticas Resumidas:</strong><br><br>';
+    
+    Object.keys(analytics).forEach(packId => {
+      const pack = analytics[packId];
+      const numQuestions = Object.keys(pack.questions || {}).length;
+        let totalPorfavor = 0, totalYup = 0, totalMeh = 0, totalTalvez = 0, totalComments = 0;
+      
+      Object.values(pack.questions || {}).forEach(q => {
+        totalPorfavor += q.porfavor || 0;
+        totalYup += q.yup || 0;
+        totalMeh += q.meh || 0;
+        totalTalvez += q.talvez || 0;
+        totalComments += q.comments || 0;
+      });
+      
+      const totalAnswers = totalPorfavor + totalYup + totalMeh + totalTalvez;
+      
+      stats += `
+        <strong>${packNames[packId] || packId}</strong><br>
+        • Respostas totais: ${pack.totalResponses || 0}<br>
+        • Questões: ${numQuestions}<br>
+        • 💕 Por favor!: ${totalPorfavor} (${totalAnswers > 0 ? Math.round(totalPorfavor/totalAnswers*100) : 0}%)<br>
+        • 👍 Yup: ${totalYup} (${totalAnswers > 0 ? Math.round(totalYup/totalAnswers*100) : 0}%)<br>
+        • 😐 Meh...: ${totalMeh} (${totalAnswers > 0 ? Math.round(totalMeh/totalAnswers*100) : 0}%)<br>
+        • 🤔 Talvez: ${totalTalvez} (${totalAnswers > 0 ? Math.round(totalTalvez/totalAnswers*100) : 0}%)<br>
+        • 📝 Comentários: ${totalComments}<br><br>
+      `;
+    });
+    
+    stats += '</div>';
+    outputDiv.innerHTML = stats;
+    
+  } catch (error) {
+    outputDiv.innerHTML = `
+      <div class="status error">
+        ❌ Erro ao calcular estatísticas: ${error.message}
+      </div>
+    `;
+  }
+}
+
+// ========================================
+// LIMPAR DADOS
+// ========================================
+
+function clearAnalytics() {
+  const statusDiv = document.getElementById('clearStatus');
+  
+  if (!confirm('⚠️ Tem certeza que deseja limpar os analytics?\n\nEsta ação não pode ser desfeita!')) {
+    return;
+  }
+  
+  try {
+    localStorage.removeItem('q4c_analytics');
+    
+    statusDiv.innerHTML = `
+      <div class="status success">
+        ✅ Analytics limpos com sucesso!
+      </div>
+    `;
+    
+    // Limpar também os outputs
+    document.getElementById('viewOutput').innerHTML = '';
+    
+  } catch (error) {
+    statusDiv.innerHTML = `
+      <div class="status error">
+        ❌ Erro ao limpar analytics: ${error.message}
+      </div>
+    `;
+  }
+}
+
+function clearAll() {
+  const statusDiv = document.getElementById('clearStatus');
+  
+  if (!confirm('⚠️⚠️⚠️ ATENÇÃO! ⚠️⚠️⚠️\n\nIsto vai LIMPAR TODOS OS DADOS do localStorage:\n• Analytics\n• Utilizadores\n• Respostas\n• Tudo!\n\nTem CERTEZA ABSOLUTA?')) {
+    return;
+  }
+  
+  try {
+    localStorage.clear();
+    
+    statusDiv.innerHTML = `
+      <div class="status success">
+        ✅ Todos os dados foram limpos!
+      </div>
+    `;
+    
+    // Limpar todos os outputs
+    document.getElementById('viewOutput').innerHTML = '';
+    document.getElementById('populateStatus').innerHTML = '';
+    
+  } catch (error) {
+    statusDiv.innerHTML = `
+      <div class="status error">
+        ❌ Erro ao limpar dados: ${error.message}
+      </div>
+    `;
+  }
+}
+</script>
+
+</body>
+</html>

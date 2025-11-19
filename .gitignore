@@ -1,0 +1,23 @@
+﻿# Pastas temporárias
+deploy_temp/
+node_modules/
+.vscode/
+
+# Ficheiros temporários
+*.tmp
+*.log
+*.zip
+quest4couple_deploy.zip
+
+# Documentação excessiva (manter só os importantes)
+docs/CORRECAO_*.md
+docs/DEBUG_*.md
+docs/DIAGNOSTICO_*.md
+docs/MISSAO_*.md
+
+# Old files
+old_files/
+
+# OS
+.DS_Store
+Thumbs.db

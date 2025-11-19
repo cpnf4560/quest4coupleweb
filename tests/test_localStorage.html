@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔍 Verificar localStorage</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+h1 {
+  color: #667eea;
+  margin-bottom: 10px;
+  font-size: 2em;
+}
+
+.section {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.section h2 {
+  color: #495057;
+  margin-bottom: 15px;
+}
+
+.btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin: 5px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #218838);
+}
+
+.output {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid #dee2e6;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  max-height: 500px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.status {
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.status.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status.info {
+  background: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.status.warning {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🔍 Verificador de localStorage</h1>
+  <p style="color: #6c757d; margin-bottom: 30px;">Ferramenta para diagnosticar problemas com utilizadores</p>
+
+  <!-- Ver Utilizadores -->
+  <div class="section">
+    <h2>👥 Utilizadores Registados</h2>
+    <button class="btn" onclick="viewUsers()">👁️ Ver Utilizadores</button>
+    <button class="btn btn-success" onclick="addTestUser()">➕ Adicionar Utilizador Teste</button>
+    <div id="usersOutput"></div>
+  </div>
+
+  <!-- Ver Utilizador Atual -->
+  <div class="section">
+    <h2>👤 Utilizador Atual (Sessão)</h2>
+    <button class="btn" onclick="viewCurrentUser()">👁️ Ver Utilizador Atual</button>
+    <div id="currentUserOutput"></div>
+  </div>
+
+  <!-- Ver Analytics -->
+  <div class="section">
+    <h2>📊 Analytics Armazenados</h2>
+    <button class="btn" onclick="viewAnalytics()">👁️ Ver Analytics</button>
+    <div id="analyticsOutput"></div>
+  </div>
+
+  <!-- Ver TUDO -->
+  <div class="section">
+    <h2>💾 TODO o localStorage</h2>
+    <button class="btn" onclick="viewAll()">👁️ Ver Tudo</button>
+    <div id="allOutput"></div>
+  </div>
+</div>
+
+<script>
+function viewUsers() {
+  const output = document.getElementById('usersOutput');
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  
+  if (users.length === 0) {
+    output.innerHTML = `
+      <div class="status warning">
+        ⚠️ Nenhum utilizador encontrado no localStorage!<br>
+        <small>Chave: q4c_users</small>
+      </div>
+    `;
+    return;
+  }
+  
+  output.innerHTML = `
+    <div class="status success">
+      ✅ ${users.length} utilizador(es) encontrado(s)
+    </div>
+    <div class="output">${JSON.stringify(users, null, 2)}</div>
+  `;
+}
+
+function viewCurrentUser() {
+  const output = document.getElementById('currentUserOutput');
+  const currentUser = localStorage.getItem('q4c_current_user');
+  
+  if (!currentUser) {
+    output.innerHTML = `
+      <div class="status info">
+        ℹ️ Nenhum utilizador em sessão<br>
+        <small>Chave: q4c_current_user</small>
+      </div>
+    `;
+    return;
+  }
+  
+  const user = JSON.parse(currentUser);
+  output.innerHTML = `
+    <div class="status success">
+      ✅ Utilizador em sessão encontrado
+    </div>
+    <div class="output">${JSON.stringify(user, null, 2)}</div>
+  `;
+}
+
+function viewAnalytics() {
+  const output = document.getElementById('analyticsOutput');
+  const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+  
+  if (Object.keys(analytics).length === 0) {
+    output.innerHTML = `
+      <div class="status info">
+        ℹ️ Nenhum analytics encontrado<br>
+        <small>Chave: q4c_analytics</small>
+      </div>
+    `;
+    return;
+  }
+  
+  let summary = `<div class="status success">✅ Analytics encontrados</div>`;
+  summary += `<div class="output"><strong>Resumo:</strong>\n\n`;
+  
+  Object.keys(analytics).forEach(packId => {
+    const pack = analytics[packId];
+    const numQuestions = Object.keys(pack.questions || {}).length;
+    summary += `Pack: ${packId}\n`;
+    summary += `  Total Respostas: ${pack.totalResponses || 0}\n`;
+    summary += `  Questões: ${numQuestions}\n\n`;
+  });
+  
+  summary += `\n<strong>Dados completos:</strong>\n\n`;
+  summary += JSON.stringify(analytics, null, 2);
+  summary += `</div>`;
+  
+  output.innerHTML = summary;
+}
+
+function viewAll() {
+  const output = document.getElementById('allOutput');
+  const allData = {};
+  
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    try {
+      allData[key] = JSON.parse(localStorage.getItem(key));
+    } catch (e) {
+      allData[key] = localStorage.getItem(key);
+    }
+  }
+  
+  if (Object.keys(allData).length === 0) {
+    output.innerHTML = `
+      <div class="status warning">
+        ⚠️ localStorage está completamente vazio!
+      </div>
+    `;
+    return;
+  }
+  
+  output.innerHTML = `
+    <div class="status success">
+      ✅ ${Object.keys(allData).length} chaves encontradas
+    </div>
+    <div class="output">${JSON.stringify(allData, null, 2)}</div>
+  `;
+}
+
+function addTestUser() {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  
+  const testUser = {
+    id: Date.now(),
+    name: 'Utilizador Teste',
+    email: 'teste@quest4couple.com',
+    password: 'hash_fake_12345',
+    country: 'Portugal',
+    city: 'Lisboa',
+    createdAt: new Date().toISOString(),
+    lastLogin: new Date().toISOString(),
+    reports: [],
+    savedAnswers: {}
+  };
+  
+  users.push(testUser);
+  localStorage.setItem('q4c_users', JSON.stringify(users));
+  
+  alert('✅ Utilizador teste adicionado!\nEmail: teste@quest4couple.com');
+  viewUsers();
+}
+</script>
+
+</body>
+</html>

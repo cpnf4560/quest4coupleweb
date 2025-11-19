@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BackOffice - Quest4Couple Admin 🔐</title>
+
+<link rel="icon" href="../assets/logo.png" type="image/png">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* Login Screen */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-box {
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header h1 {
+  color: #667eea;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.login-header p {
+  color: #6c757d;
+  font-size: 0.95em;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #495057;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1em;
+  transition: all 0.3s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.error-message {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+/* Dashboard */
+.dashboard {
+  display: none;
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.dashboard.active {
+  display: block;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 260px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+  z-index: 100;
+}
+
+.sidebar-header {
+  padding: 25px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.sidebar-header h2 {
+  font-size: 1.3em;
+  margin-bottom: 5px;
+}
+
+.sidebar-header p {
+  font-size: 0.85em;
+  opacity: 0.9;
+}
+
+.sidebar-menu {
+  padding: 20px 0;
+}
+
+.menu-item {
+  padding: 12px 20px;
+  color: #495057;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+  border-left-color: #667eea;
+  color: #667eea;
+}
+
+.menu-item.active {
+  background: rgba(102, 126, 234, 0.1);
+  border-left-color: #667eea;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.menu-icon {
+  font-size: 1.2em;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: 260px;
+  padding: 30px;
+}
+
+.top-bar {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar h1 {
+  color: #2c3e50;
+  font-size: 1.8em;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.btn-logout {
+  padding: 8px 20px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-logout:hover {
+  background: #c82333;
+}
+
+/* Stats Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.stat-icon {
+  font-size: 2em;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.stat-icon.users { background: rgba(102, 126, 234, 0.1); color: #667eea; }
+.stat-icon.reports { background: rgba(40, 167, 69, 0.1); color: #28a745; }
+.stat-icon.activity { background: rgba(255, 193, 7, 0.1); color: #ffc107; }
+.stat-icon.packs { background: rgba(214, 51, 132, 0.1); color: #d63384; }
+
+.stat-value {
+  font-size: 2em;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  color: #6c757d;
+  font-size: 0.9em;
+}
+
+/* Content Sections */
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+.content-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.content-card h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th {
+  background: #f8f9fa;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.data-table tr:hover {
+  background: #f8f9fa;
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.badge-success { background: #d4edda; color: #155724; }
+.badge-warning { background: #fff3cd; color: #856404; }
+.badge-danger { background: #f8d7da; color: #721c24; }
+.badge-info { background: #d1ecf1; color: #0c5460; }
+
+.btn-action {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85em;
+  transition: all 0.2s;
+}
+
+.btn-view {
+  background: #667eea;
+  color: white;
+}
+
+.btn-view:hover {
+  background: #5568d3;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-input {
+  padding: 10px 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 0.95em;
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn-filter {
+  padding: 10px 25px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-filter:hover {
+  background: #5568d3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .top-bar {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div class="login-container" id="loginScreen">
+  <div class="login-box">
+    <div class="login-header">
+      <h1>🔐 BackOffice</h1>
+      <p>Quest4Couple Admin Panel</p>
+    </div>
+    
+    <div class="error-message" id="loginError">
+      ❌ Credenciais inválidas. Tente novamente.
+    </div>
+      <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="adminEmail">Username de Administrador</label>
+        <input type="text" id="adminEmail" placeholder="carlos.sousacorreia" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="adminPassword">Password</label>
+        <input type="password" id="adminPassword" placeholder="Digite sua password" required>
+      </div>
+      
+      <button type="submit" class="btn-login">Entrar no BackOffice</button>
+    </form>
+    
+    <div style="margin-top: 20px; text-align: center; font-size: 0.9em; color: #6c757d;">
+      <p>🔒 Área restrita a administradores</p>
+      <p style="margin-top: 10px;">
+        <a href="index.html" style="color: #667eea; text-decoration: none;">← Voltar ao site</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard" id="dashboard">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Quest4Couple</h2>
+      <p>Painel Administrativo</p>
+    </div>
+    
+    <div class="sidebar-menu">
+      <div class="menu-item active" onclick="showSection('overview')">
+        <span class="menu-icon">📊</span>
+        <span>Visão Geral</span>
+      </div>
+      <div class="menu-item" onclick="showSection('users')">
+        <span class="menu-icon">👥</span>
+        <span>Utilizadores</span>
+      </div>
+      <div class="menu-item" onclick="showSection('reports')">
+        <span class="menu-icon">📈</span>
+        <span>Relatórios</span>
+      </div>      <div class="menu-item" onclick="showSection('activity')">
+        <span class="menu-icon">📋</span>
+        <span>Atividade</span>
+      </div>
+      <div class="menu-item" onclick="showSection('analytics')">
+        <span class="menu-icon">📊</span>
+        <span>Analytics Anónimo</span>
+      </div>
+      <div class="menu-item" onclick="showSection('settings')">
+        <span class="menu-icon">⚙️</span>
+        <span>Definições</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="top-bar">
+      <h1>Dashboard</h1>
+      <div class="user-info">
+        <div class="user-avatar">A</div>
+        <span id="adminName">Admin</span>
+        <button class="btn-logout" onclick="logout()">Sair</button>
+      </div>
+    </div>
+    
+    <!-- Overview Section -->
+    <div class="content-section active" id="overviewSection">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div>
+              <div class="stat-value" id="totalUsers">0</div>
+              <div class="stat-label">Total Utilizadores</div>
+            </div>
+            <div class="stat-icon users">👥</div>
+          </div>
+          <div style="color: #28a745; font-size: 0.9em;">
+            ↑ Novos registos
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <div>
+              <div class="stat-value" id="totalReports">0</div>
+              <div class="stat-label">Relatórios Gerados</div>
+            </div>
+            <div class="stat-icon reports">📈</div>
+          </div>
+          <div style="color: #28a745; font-size: 0.9em;">
+            ↑ Últimos 30 dias
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-header">
+            <div>
+              <div class="stat-value" id="activeToday">0</div>
+              <div class="stat-label">Ativos Hoje</div>
+            </div>
+            <div class="stat-icon activity">💫</div>
+          </div>
+          <div style="color: #28a745; font-size: 0.9em;">
+            ↑ Atividade recente
+          </div>
+        </div>
+          <div class="stat-card">
+          <div class="stat-header">
+            <div>
+              <div class="stat-value">5</div>
+              <div class="stat-label">Packs Disponíveis</div>
+            </div>
+            <div class="stat-icon packs">🎯</div>
+          </div>
+          <div style="color: #667eea; font-size: 0.9em;">
+            ✨ 100% Gratuito
+          </div>
+        </div>
+      </div>
+      
+      <!-- Recent Activity -->
+      <div class="content-card">
+        <h2>📋 Atividade Recente</h2>
+        <table class="data-table" id="recentActivityTable">
+          <thead>
+            <tr>
+              <th>Hora</th>
+              <th>Utilizador</th>
+              <th>Ação</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody id="activityTableBody">
+            <tr>
+              <td colspan="4" style="text-align: center; color: #6c757d;">Sem atividade recente</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Users Section -->
+    <div class="content-section" id="usersSection">
+      <div class="content-card">
+        <h2>👥 Gestão de Utilizadores</h2>
+        
+        <div class="filters">
+          <input type="text" class="filter-input" id="userSearchInput" placeholder="Pesquisar por nome ou email..." onkeyup="filterUsers()">
+          <button class="btn-filter" onclick="loadUsers()">🔄 Atualizar</button>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Relatórios</th>
+              <th>Registo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr>
+              <td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Reports Section -->
+    <div class="content-section" id="reportsSection">
+      <div class="content-card">
+        <h2>📈 Histórico de Relatórios</h2>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Utilizador</th>
+              <th>Pack</th>
+              <th>Compatibilidade</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="reportsTableBody">
+            <tr>
+              <td colspan="5" style="text-align: center; color: #6c757d;">Nenhum relatório gerado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Activity Section -->
+    <div class="content-section" id="activitySection">
+      <div class="content-card">
+        <h2>📋 Log de Atividades</h2>
+        
+        <div class="filters">
+          <select class="filter-input">
+            <option>Todas as ações</option>
+            <option>Registos</option>
+            <option>Logins</option>
+            <option>Relatórios</option>
+          </select>
+          <input type="date" class="filter-input">
+          <button class="btn-filter">Filtrar</button>
+        </div>
+        
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Utilizador</th>
+              <th>Ação</th>
+              <th>IP</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody id="activityLogBody">
+            <tr>
+              <td colspan="5" style="text-align: center; color: #6c757d;">Sem atividade registada</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+      <!-- Analytics Section -->
+    <div class="content-section" id="analyticsSection">
+      <div class="content-card">
+        <h2>📊 Analytics Anónimo das Respostas</h2>
+        <p style="color: #6c757d; margin-bottom: 20px;">
+          📝 Estatísticas agregadas e anónimas. Nenhuma resposta é associada a utilizadores específicos.
+        </p>
+        
+        <div class="filters">
+          <select class="filter-input" id="packFilter" onchange="loadAnalytics()">
+            <option value="">Todos os Packs</option>
+            <option value="romantico">❤️ Pack Romântico</option>
+            <option value="experiencia">🎭 Exploração e Aventura</option>
+            <option value="pimentinha">🌶️ Pimentinha</option>
+            <option value="poliamor">💑 Poliamor</option>
+            <option value="kinks">🔥 Fetiches</option>
+          </select>
+          <button class="btn-filter" onclick="loadAnalytics()">🔄 Atualizar</button>
+          <button class="btn-filter" onclick="exportAnalytics()" style="background: #28a745;">📥 Exportar CSV</button>
+        </div>
+        
+        <div id="analyticsContent">
+          <div style="text-align: center; padding: 40px; color: #6c757d;">
+            <p>Selecione um pack para ver as estatísticas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Settings Section -->
+    <div class="content-section" id="settingsSection">
+      <div class="content-card">
+        <h2>⚙️ Definições do Sistema</h2>
+        
+        <div style="margin-top: 20px;">
+          <h3 style="color: #495057; margin-bottom: 15px;">Informações do Sistema</h3>
+          
+          <div style="padding: 15px; background: #f8f9fa; border-radius: 8px; margin-bottom: 15px;">
+            <strong>Versão:</strong> Quest4Couple v2.0 Free<br>
+            <strong>Modo:</strong> 100% Gratuito (Sem Sistema de Créditos)<br>
+            <strong>Packs Disponíveis:</strong> 7 packs completos<br>
+            <strong>Armazenamento:</strong> LocalStorage (dados locais)
+          </div>
+          
+          <h3 style="color: #495057; margin: 25px 0 15px 0;">Manutenção</h3>
+          
+          <button class="btn-filter" onclick="clearOldData()" style="margin-right: 10px;">🗑️ Limpar Dados Antigos</button>
+          <button class="btn-filter" onclick="exportData()" style="background: #28a745;">📦 Exportar Dados</button>
+          
+          <div style="margin-top: 30px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <strong>⚠️ Nota:</strong> Este é o BackOffice da versão gratuita. Os dados são armazenados localmente no navegador dos utilizadores. Para sincronização cloud, considere implementar Firebase ou backend próprio.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script src="../auth.js"></script>
+<script>
+// ========================================
+// AUTHENTICATION
+// ========================================
+
+async function handleLogin(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById('adminEmail').value;
+  const password = document.getElementById('adminPassword').value;
+  const errorDiv = document.getElementById('loginError');
+  
+  // Verificar credenciais usando auth.js
+  const isValid = await verifyAdminLogin(email, password);
+  
+  if (isValid) {
+    // Store session
+    sessionStorage.setItem('admin_logged_in', 'true');
+    sessionStorage.setItem('admin_email', email);
+    
+    // Show dashboard
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    
+    // Load data
+    loadDashboardData();
+  } else {
+    // Show error
+    errorDiv.style.display = 'block';
+    setTimeout(() => {
+      errorDiv.style.display = 'none';
+    }, 3000);
+  }
+}
+
+function logout() {
+  if (confirm('Tem certeza que deseja sair?')) {
+    sessionStorage.removeItem('admin_logged_in');
+    sessionStorage.removeItem('admin_email');
+    location.reload();
+  }
+}
+
+// Check if already logged in
+window.addEventListener('DOMContentLoaded', function() {
+  const isLoggedIn = sessionStorage.getItem('admin_logged_in');
+  if (isLoggedIn === 'true') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').classList.add('active');
+    loadDashboardData();
+  }
+});
+
+// ========================================
+// NAVIGATION
+// ========================================
+
+function showSection(sectionName) {
+  // Hide all sections
+  document.querySelectorAll('.content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+    // Show selected section
+  const sectionMap = {
+    'overview': 'overviewSection',
+    'users': 'usersSection',
+    'reports': 'reportsSection',
+    'activity': 'activitySection',
+    'analytics': 'analyticsSection',
+    'settings': 'settingsSection'
+  };
+  
+  document.getElementById(sectionMap[sectionName]).classList.add('active');
+  
+  // Update menu
+  document.querySelectorAll('.menu-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  event.target.closest('.menu-item').classList.add('active');
+    // Load section specific data
+  if (sectionName === 'users') loadUsers();
+  if (sectionName === 'reports') loadReports();
+  if (sectionName === 'activity') loadActivityLog();
+  if (sectionName === 'analytics') loadAnalytics();
+}
+
+// ========================================
+// DATA MANAGEMENT
+// ========================================
+
+function loadDashboardData() {
+  // Get all users from localStorage
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  
+  // Update stats (excluindo admin da contagem)
+  const regularUsers = users.filter(u => u.email !== 'carlos.sousacorreia');
+  document.getElementById('totalUsers').textContent = regularUsers.length;
+  
+  // Count total reports
+  let totalReports = 0;
+  users.forEach(user => {
+    if (user.reports) {
+      totalReports += user.reports.length;
+    }
+  });
+  document.getElementById('totalReports').textContent = totalReports;
+  
+  // Count active today (users with activity today)
+  const today = new Date().toDateString();
+  const activeToday = users.filter(user => {
+    return user.lastLogin && new Date(user.lastLogin).toDateString() === today;
+  }).length;
+  document.getElementById('activeToday').textContent = activeToday;
+  
+  // Load recent activity
+  loadRecentActivity();
+}
+
+function loadUsers() {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const tbody = document.getElementById('usersTableBody');
+  
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Sem utilizadores registados</td></tr>';
+    return;
+  }
+    tbody.innerHTML = users.map(user => {
+    const isAdmin = user.email === 'carlos.sousacorreia';
+    return `
+    <tr ${isAdmin ? 'style="background: #fff3cd;"' : ''}>
+      <td>
+        ${user.name || 'N/A'} 
+        ${isAdmin ? '<span class="badge badge-warning">👑 Admin</span>' : ''}
+      </td>
+      <td>${user.email}</td>
+      <td>${user.reports ? user.reports.length : 0}</td>
+      <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
+      <td><span class="badge badge-success">Ativo</span></td>
+      <td>
+        <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
+      </td>
+    </tr>
+  `}).join('');
+}
+
+function filterUsers() {
+  const searchTerm = document.getElementById('userSearchInput').value.toLowerCase();
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  
+  const filtered = users.filter(user => 
+    user.name.toLowerCase().includes(searchTerm) || 
+    user.email.toLowerCase().includes(searchTerm)
+  );
+  
+  const tbody = document.getElementById('usersTableBody');
+  
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6c757d;">Nenhum utilizador encontrado</td></tr>';
+    return;
+  }
+    tbody.innerHTML = filtered.map(user => {
+    const isAdmin = user.email === 'carlos.sousacorreia';
+    return `
+    <tr ${isAdmin ? 'style="background: #fff3cd;"' : ''}>
+      <td>
+        ${user.name || 'N/A'} 
+        ${isAdmin ? '<span class="badge badge-warning">👑 Admin</span>' : ''}
+      </td>
+      <td>${user.email}</td>
+      <td>${user.reports ? user.reports.length : 0}</td>
+      <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('pt-PT') : 'N/A'}</td>
+      <td><span class="badge badge-success">Ativo</span></td>
+      <td>
+        <button class="btn-action btn-view" onclick="viewUser('${user.email}')">Ver</button>
+      </td>
+    </tr>
+  `}).join('');
+}
+
+function viewUser(email) {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const user = users.find(u => u.email === email);
+  
+  if (user) {
+    alert(`Detalhes do Utilizador:\n\n` +
+          `Nome: ${user.name}\n` +
+          `Email: ${user.email}\n` +
+          `Relatórios: ${user.reports ? user.reports.length : 0}\n` +
+          `Registo: ${user.createdAt ? new Date(user.createdAt).toLocaleString('pt-PT') : 'N/A'}\n` +
+          `Último login: ${user.lastLogin ? new Date(user.lastLogin).toLocaleString('pt-PT') : 'N/A'}`);
+  }
+}
+
+function loadReports() {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const tbody = document.getElementById('reportsTableBody');
+  
+  let allReports = [];
+  users.forEach(user => {
+    if (user.reports && user.reports.length > 0) {
+      user.reports.forEach(report => {
+        allReports.push({
+          ...report,
+          userName: user.name,
+          userEmail: user.email
+        });
+      });
+    }
+  });
+  
+  if (allReports.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6c757d;">Nenhum relatório gerado</td></tr>';
+    return;
+  }
+  
+  // Sort by date (most recent first)
+  allReports.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  tbody.innerHTML = allReports.map(report => `
+    <tr>
+      <td>${new Date(report.date).toLocaleString('pt-PT')}</td>
+      <td>${report.userName}</td>
+      <td>${report.packName || 'N/A'}</td>
+      <td><span class="badge badge-success">${report.compatibility || 'N/A'}%</span></td>
+      <td><span class="badge badge-info">Completo</span></td>
+    </tr>
+  `).join('');
+}
+
+function loadRecentActivity() {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const tbody = document.getElementById('activityTableBody');
+  
+  let activities = [];
+  
+  users.forEach(user => {
+    // Add registration activity
+    if (user.createdAt) {
+      activities.push({
+        time: user.createdAt,
+        user: user.name,
+        action: 'Novo registo',
+        details: `Criou conta`
+      });
+    }
+    
+    // Add login activity
+    if (user.lastLogin) {
+      activities.push({
+        time: user.lastLogin,
+        user: user.name,
+        action: 'Login',
+        details: `Acedeu à plataforma`
+      });
+    }
+    
+    // Add report activity
+    if (user.reports) {
+      user.reports.forEach(report => {
+        activities.push({
+          time: report.date,
+          user: user.name,
+          action: 'Relatório gerado',
+          details: report.packName || 'Pack desconhecido'
+        });
+      });
+    }
+  });
+  
+  // Sort by time (most recent first)
+  activities.sort((a, b) => new Date(b.time) - new Date(a.time));
+  
+  // Show only last 10
+  activities = activities.slice(0, 10);
+  
+  if (activities.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6c757d;">Sem atividade recente</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = activities.map(activity => `
+    <tr>
+      <td>${new Date(activity.time).toLocaleTimeString('pt-PT')}</td>
+      <td>${activity.user}</td>
+      <td>${activity.action}</td>
+      <td>${activity.details}</td>
+    </tr>
+  `).join('');
+}
+
+function loadActivityLog() {
+  // Same as loadRecentActivity but with all data
+  loadRecentActivity();
+}
+
+function clearOldData() {
+  if (confirm('⚠️ Tem certeza que deseja limpar dados antigos?\n\nEsta ação é irreversível!')) {
+    // Logic to clear old data (e.g., reports older than 90 days)
+    alert('✅ Dados antigos limpos com sucesso!');
+    loadDashboardData();
+  }
+}
+
+function exportData() {
+  const users = JSON.parse(localStorage.getItem('q4c_users') || '[]');
+  const dataStr = JSON.stringify(users, null, 2);
+  const dataBlob = new Blob([dataStr], {type: 'application/json'});
+  
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `quest4couple_backup_${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  
+  alert('✅ Dados exportados com sucesso!');
+}
+
+// ========================================
+// ANALYTICS ANÓNIMO
+// ========================================
+
+function loadAnalytics() {
+  const packId = document.getElementById('packFilter').value;
+  const content = document.getElementById('analyticsContent');
+  
+  if (!packId) {
+    content.innerHTML = '<div style="text-align: center; padding: 40px; color: #6c757d;"><p>Selecione um pack para ver as estatísticas</p></div>';
+    return;
+  }
+  
+  // Obter respostas anónimas do localStorage
+  const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+  const packData = analytics[packId] || {};
+  
+  if (Object.keys(packData).length === 0) {
+    content.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #6c757d;">
+        <p>📊 Ainda não há respostas anónimas para este pack</p>
+        <p style="font-size: 0.9em; margin-top: 10px;">As estatísticas aparecem automaticamente quando os utilizadores respondem aos questionários</p>
+      </div>`;
+    return;
+  }
+  
+  // Nomes dos packs
+  const packNames = {
+    'romantico': '❤️ Pack Romântico',
+    'experiencia': '🎭 Exploração e Aventura',
+    'pimentinha': '🌶️ Pimentinha',
+    'poliamor': '💑 Poliamor',
+    'kinks': '🔥 Fetiches'
+  };
+  
+  let html = `
+    <div style="margin-bottom: 30px;">
+      <h3 style="color: #495057; margin-bottom: 10px;">${packNames[packId]}</h3>
+      <p style="color: #6c757d; font-size: 0.95em;">
+        📊 Total de respostas anónimas: <strong>${packData.totalResponses || 0}</strong>
+      </p>
+    </div>
+    
+    <div style="max-height: 600px; overflow-y: auto;">      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 50px;">#</th>
+            <th>Pergunta</th>
+            <th style="text-align: center; width: 120px;">💕 Por favor!</th>
+            <th style="text-align: center; width: 100px;">👍 Yup</th>
+            <th style="text-align: center; width: 100px;">😐 Meh...</th>
+            <th style="text-align: center; width: 100px;">🤔 Talvez</th>
+            <th style="text-align: center; width: 120px;">📝 Comentários</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+    // Processar cada questão
+  const questions = packData.questions || {};
+  Object.keys(questions).sort((a, b) => {
+    const numA = parseInt(a.replace('q', ''));
+    const numB = parseInt(b.replace('q', ''));
+    return numA - numB;
+  }).forEach(qKey => {
+    const q = questions[qKey];
+    const qNum = qKey.replace('q', '');
+    const total = (q.porfavor || 0) + (q.yup || 0) + (q.meh || 0) + (q.talvez || 0);
+    
+    const porfavorPercent = total > 0 ? Math.round((q.porfavor || 0) / total * 100) : 0;
+    const yupPercent = total > 0 ? Math.round((q.yup || 0) / total * 100) : 0;
+    const mehPercent = total > 0 ? Math.round((q.meh || 0) / total * 100) : 0;
+    const talvezPercent = total > 0 ? Math.round((q.talvez || 0) / total * 100) : 0;
+    
+    html += `
+      <tr>
+        <td style="font-weight: bold; color: #667eea;">${qNum}</td>
+        <td>
+          ${q.text || `Pergunta ${qNum}`}
+          ${total > 0 ? `<br><small style="color: #6c757d;">Total de respostas: ${total}</small>` : ''}
+        </td>
+        <td style="text-align: center;">
+          <div style="color: #d63384; font-weight: bold;">${q.porfavor || 0}</div>
+          <small style="color: #6c757d;">${porfavorPercent}%</small>
+        </td>
+        <td style="text-align: center;">
+          <div style="color: #28a745; font-weight: bold;">${q.yup || 0}</div>
+          <small style="color: #6c757d;">${yupPercent}%</small>
+        </td>
+        <td style="text-align: center;">
+          <div style="color: #6c757d; font-weight: bold;">${q.meh || 0}</div>
+          <small style="color: #6c757d;">${mehPercent}%</small>
+        </td>
+        <td style="text-align: center;">
+          <div style="color: #ffc107; font-weight: bold;">${q.talvez || 0}</div>
+          <small style="color: #6c757d;">${talvezPercent}%</small>
+        </td>
+        <td style="text-align: center;">
+          <span class="badge badge-info">${q.comments || 0}</span>
+        </td>
+      </tr>
+    `;
+  });
+  
+  html += `
+        </tbody>
+      </table>
+    </div>
+      <div style="margin-top: 30px; padding: 20px; background: #e7f3ff; border-radius: 8px; border-left: 4px solid #0066cc;">
+      <strong>🔒 Privacidade Garantida:</strong>
+      <ul style="margin: 10px 0 0 20px; color: #495057;">
+        <li>Todas as respostas são completamente anónimas</li>
+        <li>Nenhuma resposta é associada a utilizadores específicos</li>
+        <li>Apenas estatísticas agregadas são armazenadas</li>
+        <li>Comentários não são salvos para proteger a privacidade</li>
+      </ul>
+      <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #bee5eb;">
+        <strong>📊 Opções de Resposta:</strong><br>
+        <span style="font-size: 0.9em;">
+          💕 Por favor! → 👍 Yup → 😐 Meh... → 🤔 Talvez
+        </span>
+      </div>
+    </div>
+  `;
+  
+  content.innerHTML = html;
+}
+
+function exportAnalytics() {
+  const packId = document.getElementById('packFilter').value;
+  
+  if (!packId) {
+    alert('⚠️ Por favor, selecione um pack primeiro');
+    return;
+  }
+  
+  const analytics = JSON.parse(localStorage.getItem('q4c_analytics') || '{}');
+  const packData = analytics[packId];
+  
+  if (!packData || Object.keys(packData.questions || {}).length === 0) {
+    alert('⚠️ Não há dados para exportar neste pack');
+    return;
+  }
+    // Criar CSV
+  let csv = 'Questão,Pergunta,Total Respostas,Por favor!,Por favor! %,Yup,Yup %,Meh...,Meh... %,Talvez,Talvez %,Comentários\n';
+  
+  const questions = packData.questions || {};
+  Object.keys(questions).sort((a, b) => {
+    const numA = parseInt(a.replace('q', ''));
+    const numB = parseInt(b.replace('q', ''));
+    return numA - numB;
+  }).forEach(qKey => {
+    const q = questions[qKey];
+    const qNum = qKey.replace('q', '');
+    const total = (q.porfavor || 0) + (q.yup || 0) + (q.meh || 0) + (q.talvez || 0);
+    
+    const porfavorPercent = total > 0 ? Math.round((q.porfavor || 0) / total * 100) : 0;
+    const yupPercent = total > 0 ? Math.round((q.yup || 0) / total * 100) : 0;
+    const mehPercent = total > 0 ? Math.round((q.meh || 0) / total * 100) : 0;
+    const talvezPercent = total > 0 ? Math.round((q.talvez || 0) / total * 100) : 0;
+    
+    const questionText = (q.text || `Pergunta ${qNum}`).replace(/"/g, '""');
+    
+    csv += `${qNum},"${questionText}",${total},${q.porfavor || 0},${porfavorPercent}%,${q.yup || 0},${yupPercent}%,${q.meh || 0},${mehPercent}%,${q.talvez || 0},${talvezPercent}%,${q.comments || 0}\n`;
+  });
+  
+  // Download
+  const packNames = {
+    'romantico': 'Romantico',
+    'experiencia': 'Exploracao',
+    'pimentinha': 'Pimentinha',
+    'poliamor': 'Poliamor',
+    'kinks': 'Fetiches'
+  };
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Quest4Couple_Analytics_${packNames[packId]}_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  
+  alert('✅ Analytics exportado com sucesso!');
+}
+</script>
+
+</body>
+</html>

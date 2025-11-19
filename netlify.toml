@@ -1,0 +1,95 @@
+# Netlify Configuration - Quest4Couple
+# Configuração para deploy no quest4couple.pt
+
+[build]
+  # Pasta raiz para publicar
+  publish = "."
+  
+  # Comando de build (não necessário para site estático)
+  command = ""
+
+# Redirects e Rewrites
+[[redirects]]
+  # Suporte para SPA - todas as páginas funcionam
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  
+  # Exceções - não redirecionar ficheiros estáticos
+  conditions = {path = ["!*.html", "!*.css", "!*.js", "!*.png", "!*.jpg", "!*.ico", "!*.json"]}
+
+# Headers de Segurança
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Segurança básica
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Permissões
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    
+    # HTTPS
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+# Cache para assets estáticos
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache para imagens
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Páginas HTML - cache curto
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Redirect www para não-www (ou vice-versa)
+[[redirects]]
+  from = "https://www.quest4couple.pt/*"
+  to = "https://quest4couple.pt/:splat"
+  status = 301
+  force = true
+
+# Custom 404
+[[redirects]]
+  from = "/404"
+  to = "/index.html"
+  status = 404
+
+# Funcionalidades do Netlify
+[build.environment]
+  NODE_VERSION = "18"
+
+# Forms do Netlify (se necessário no futuro)
+# [functions]
+#   directory = "functions"
