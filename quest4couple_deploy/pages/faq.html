@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Quest4Couple</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e8ecf0 0%, #d1d9e0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .logo-container img { height: 40px; }
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #d63384, #6f42c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .container {
+            max-width: 800px;
+            margin: 100px auto 40px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 { font-size: 2.5em; color: #d63384; margin-bottom: 30px; }
+        .faq-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #eee;
+        }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-question {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .faq-answer {
+            color: #666;
+            line-height: 1.8;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        footer a {
+            color: #d63384;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="../index.html" class="logo-container">
+            <img src="../assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='../logo.png'; this.onerror=null;">
+            <span class="logo-text">Quest4Couple</span>
+        </a>
+    </header>
+    
+    <div class="container">
+        <h1> Perguntas Frequentes</h1>
+        
+        <div class="faq-item">
+            <div class="faq-question">É realmente gratuito?</div>
+            <div class="faq-answer">
+                Sim! Neste momento, todo o conteúdo do Quest4Couple é gratuito. 
+                No futuro, poderemos adicionar funcionalidades premium opcionais, 
+                mas o core do serviço continuará acessível a todos.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">As minhas respostas são privadas?</div>
+            <div class="faq-answer">
+                Absolutamente! As vossas respostas são armazenadas localmente no vosso navegador. 
+                Não vendemos dados, não partilhamos informações com terceiros, e não temos acesso 
+                ao que respondem. A vossa privacidade é a nossa prioridade #1.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Como funciona o matching?</div>
+            <div class="faq-answer">
+                Cada pessoa responde ao questionário individualmente. No final, 
+                apenas veem o que têm em comum - as respostas em que ambos disseram "sim". 
+                Se um disser "não", essa pergunta não aparece no resultado final.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Quantos packs existem?</div>
+            <div class="faq-answer">
+                Temos 5 packs temáticos:
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><strong>Pack Romântico</strong> - 30 perguntas sobre sensualidade e conexão</li>
+                    <li><strong>Exploração e Aventura a Dois</strong> - 30 perguntas sobre experimentar coisas novas</li>
+                    <li><strong>Pimentinha</strong> - 32 perguntas para apimentar a relação</li>
+                    <li><strong>Poliamor</strong> - 50 perguntas sobre abertura e não-monogamia</li>
+                    <li><strong>Fetiches</strong> - 100 perguntas sobre kinks e práticas avançadas</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Preciso de criar conta?</div>
+            <div class="faq-answer">
+                Neste momento, sim. Criar conta permite-vos guardar as respostas, 
+                comparar resultados com o vosso parceiro/a, e aceder ao histórico. 
+                Mas não se preocupem - só pedimos o essencial (email e password).
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Posso fazer os questionários sozinho/a?</div>
+            <div class="faq-answer">
+                Sim! Podes fazer os questionários sozinho/a para explorares os teus próprios desejos. 
+                Mas a magia acontece quando comparam resultados com o/a parceiro/a! 
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Como posso apoiar o projeto?</div>
+            <div class="faq-answer">
+                Adoramos apoio! Podem fazer um donativo, partilhar feedback, 
+                ou simplesmente recomendar a outros casais. Vejam a página 
+                <a href="apoiar.html" style="color: #d63384;">Apoiar o Projeto</a> para mais detalhes.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">Têm uma app móvel?</div>
+            <div class="faq-answer">
+                Ainda não, mas o site é totalmente responsivo e funciona perfeitamente 
+                em telemóveis! Uma app nativa pode vir no futuro. 
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Quest4Couple</p>
+        <div>
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="apoiar.html">Apoiar</a>
+            <a href="privacidade.html">Privacidade</a>
+            <a href="termos.html">Termos</a>
+        </div>
+    </footer>
+</body>
+</html>
