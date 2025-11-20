@@ -533,40 +533,46 @@ function toggleAllCategories() {
    CLOUD REPORT - Opção C (Híbrido Suave)
    ============================================ */
 
-// Verifica se o usuário está autenticado ao carregar a página
-window.addEventListener('DOMContentLoaded', () => {
-  checkCloudAuthentication();
-});
-
 /**
  * Verifica se o usuário está autenticado e mostra a seção apropriada
  */
 async function checkCloudAuthentication() {
+  console.log('🔍 checkCloudAuthentication() chamada');
+  const cloudNotAuth = document.getElementById('cloudNotAuth');
+  const cloudAuth = document.getElementById('cloudAuth');
+  
   // Verifica se o Firebase está configurado
-  if (typeof firebase === 'undefined' || !firebase.apps.length) {
+  if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
     // Firebase não inicializado - manter seção de login visível
     console.log('Firebase não inicializado. Usando método tradicional.');
+    if (cloudNotAuth) cloudNotAuth.style.display = 'block';
+    if (cloudAuth) cloudAuth.style.display = 'none';
     return;
   }
 
-  // Ouvir mudanças no estado de autenticação
-  firebase.auth().onAuthStateChanged(async (user) => {
-    const cloudNotAuth = document.getElementById('cloudNotAuth');
-    const cloudAuth = document.getElementById('cloudAuth');
-    
-    if (user) {
-      // Usuário autenticado - mostrar seção cloud
-      cloudNotAuth.style.display = 'none';
-      cloudAuth.style.display = 'block';
+  try {
+    // Ouvir mudanças no estado de autenticação
+    firebase.auth().onAuthStateChanged(async (user) => {
+      console.log('Estado de autenticação:', user ? `Autenticado: ${user.email}` : 'Não autenticado');
       
-      // Carregar parceiros conectados
-      await loadConnectedPartners(user.uid);
-    } else {
-      // Não autenticado - mostrar botão de login
-      cloudNotAuth.style.display = 'block';
-      cloudAuth.style.display = 'none';
-    }
-  });
+      if (user) {
+        // Usuário autenticado - mostrar seção cloud
+        if (cloudNotAuth) cloudNotAuth.style.display = 'none';
+        if (cloudAuth) cloudAuth.style.display = 'block';
+        
+        // Carregar parceiros conectados
+        await loadConnectedPartners(user.uid);
+      } else {
+        // Não autenticado - mostrar botão de login
+        if (cloudNotAuth) cloudNotAuth.style.display = 'block';
+        if (cloudAuth) cloudAuth.style.display = 'none';
+      }
+    });
+  } catch (error) {
+    console.error('Erro ao verificar autenticação:', error);
+    if (cloudNotAuth) cloudNotAuth.style.display = 'block';
+    if (cloudAuth) cloudAuth.style.display = 'none';
+  }
 }
 
 /**

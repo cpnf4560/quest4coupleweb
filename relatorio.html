@@ -587,6 +587,14 @@
 <!-- CryptoJS Library (necessário para desencriptar) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Configuration -->
+<script src="js/firebase-config.js"></script>
+
 <!-- JavaScript Modules -->
 <script src="js/invertMatching.js"></script>
 <script src="js/comparison.js"></script>
@@ -601,6 +609,20 @@
       document.getElementById('uploadSection').style.display = 'none';
     };
   }
+  
+  // Verificar autenticação ao carregar a página
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔍 Verificando autenticação na página relatório...');
+    
+    // Aguardar Firebase inicializar
+    setTimeout(() => {
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        checkCloudAuthentication();
+      } else {
+        console.warn('⚠️ Firebase não carregado - funcionalidade cloud desativada');
+      }
+    }, 500);
+  });
 </script>
 
 </body>
