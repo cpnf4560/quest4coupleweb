@@ -2,7 +2,14 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Quest4Couple - Sistema para Casais 💕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- ✅ Cache Busting - Força refresh no Chrome mobile -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Quest4Couple - Sistema para Casais 💕</title>
   
   <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3">
@@ -11,9 +18,9 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
   <link rel="manifest" href="/site.webmanifest?v=3">
     <!-- CSS Modules -->
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/themes.css">
-  <link rel="stylesheet" href="css/questions.css">
+  <link rel="stylesheet" href="css/main.css?v=20241120">
+  <link rel="stylesheet" href="css/themes.css?v=20241120">
+  <link rel="stylesheet" href="css/questions.css?v=20241120">
   
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
@@ -731,15 +738,48 @@
   });
 </script>
 
-<!-- JavaScript Modules -->
-<script src="js/customQuestions.js"></script>
-<script src="js/invertMatching.js"></script>
-<script src="js/loadAnswers.js"></script>
-<script src="js/pack-collapse.js"></script>
-<script src="js/app.js"></script>
-<script src="js/rendering.js"></script>
-<script src="js/storage.js"></script>
-<script src="js/comparison.js"></script>
+<!-- ✅ Service Worker Cleanup - Força atualização no Chrome mobile -->
+<script>
+  // Verificar e limpar service workers antigos que podem estar a causar problemas de cache
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      if (registrations.length > 0) {
+        console.log('🧹 Service Workers encontrados:', registrations.length);
+        
+        // Desregistar todos os service workers
+        for(let registration of registrations) {
+          registration.unregister().then(function(success) {
+            if (success) {
+              console.log('✅ Service Worker desregistado com sucesso');
+              // Recarregar página para aplicar mudanças
+              if (window.location.search.indexOf('sw_cleared=1') === -1) {
+                window.location.href = window.location.href + (window.location.search ? '&' : '?') + 'sw_cleared=1';
+              }
+            }
+          });
+        }
+      } else {
+        console.log('✅ Nenhum Service Worker ativo');
+      }
+    });
+  }
+  
+  // Limpar cache do browser programaticamente
+  if ('caches' in window) {
+    caches.keys().then(function(names) {
+      if (names.length > 0) {
+        console.log('🧹 Cache encontrado:', names);
+        for (let name of names) {
+          caches.delete(name).then(function(success) {
+            if (success) {
+              console.log('✅ Cache limpo:', name);
+            }
+          });
+        }
+      }
+    });
+  }
+</script>
 
 <!-- Renderizar Support Banner -->
 <script>
