@@ -289,6 +289,15 @@ async function saveAnswer(packId, questionId, answer) {
     
     localStorage.setItem(key, JSON.stringify(data));
   }
+  
+  // Log analytics (não bloqueia se falhar)
+  try {
+    if (typeof logAnswer === 'function') {
+      await logAnswer(packId, questionId, answer);
+    }
+  } catch (error) {
+    console.log('Analytics error (ignorado):', error);
+  }
 }
 
 async function loadPackAnswers(packId) {

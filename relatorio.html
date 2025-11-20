@@ -447,10 +447,21 @@
       .action-buttons {
         flex-direction: column;
       }
-      
-      .btn-action {
+          .btn-action {
         width: 100%;
         justify-content: center;
+      }
+    }
+    
+    /* Modal Animation */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
       }
     }
   </style>
@@ -514,14 +525,18 @@
             🔐 Fazer Login para Usar Cloud
           </button>
         </div>
-        
-        <!-- Estado: Autenticado (escondido por padrão) -->
+          <!-- Estado: Autenticado (escondido por padrão) -->
         <div id="cloudAuth" style="display: none;">
           <div style="margin-bottom: 15px;">
             <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">👥 Escolher parceiro/a:</label>
-            <select id="partnerSelect" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 1em; cursor: pointer;">
-              <option value="">Carregando parceiros...</option>
-            </select>
+            <div style="display: flex; gap: 10px;">
+              <select id="partnerSelect" style="flex: 1; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 1em; cursor: pointer;">
+                <option value="">Carregando parceiros...</option>
+              </select>
+              <button onclick="showAddPartnerModal()" style="padding: 12px 20px; background: white; color: #667eea; border: 2px solid #667eea; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; white-space: nowrap;">
+                ➕ Adicionar
+              </button>
+            </div>
           </div>
           
           <button onclick="generateCloudReport()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00bcd4 0%, #667eea 100%); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 700; cursor: pointer; transition: all 0.3s;">
@@ -563,7 +578,37 @@
       🏠 Voltar ao Início
     </a>
   </div>
-  
+  </div>
+
+<!-- Add Partner Modal -->
+<div id="addPartnerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+  <div style="background: white; border-radius: 20px; padding: 30px; max-width: 500px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.3); animation: slideIn 0.3s ease-out;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef;">
+      <h3 style="margin: 0; color: #667eea; font-size: 1.5em;">Adicionar Parceiro</h3>
+      <button onclick="closeAddPartnerModal()" style="background: none; border: none; font-size: 2em; color: #aaa; cursor: pointer; line-height: 1; transition: color 0.2s;">×</button>
+    </div>
+    
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+      <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 O teu username para partilhar:</p>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
+        <button type="button" onclick="copyMyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; white-space: nowrap; font-weight: 600;">📋 Copiar</button>
+      </div>
+      <small style="color: #6c757d; display: block; margin-top: 8px;">Partilha este username com o teu parceiro</small>
+    </div>
+    
+    <p style="font-weight: 500; margin-bottom: 10px; color: #495057;">🔍 Procura pelo username do teu parceiro:</p>
+    <form id="searchUserForm" onsubmit="searchPartnerByUsername(event)" style="margin-bottom: 20px;">
+      <div style="display: flex; gap: 10px;">
+        <input type="text" id="searchUsername" placeholder="@username" required style="flex: 1; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em; transition: border-color 0.3s;">
+        <button type="submit" style="padding: 12px 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; white-space: nowrap;">Procurar</button>
+      </div>
+    </form>
+    
+    <div id="searchResults" style="margin-top: 15px;">
+      <!-- Results will appear here -->
+    </div>
+  </div>
 </div>
 
 <!-- Footer -->
@@ -596,6 +641,7 @@
 <script src="js/firebase-config.js"></script>
 
 <!-- JavaScript Modules -->
+<script src="js/analytics.js"></script>
 <script src="js/invertMatching.js"></script>
 <script src="js/comparison.js"></script>
 
@@ -609,8 +655,7 @@
       document.getElementById('uploadSection').style.display = 'none';
     };
   }
-  
-  // Verificar autenticação ao carregar a página
+    // Verificar autenticação ao carregar a página
   document.addEventListener('DOMContentLoaded', () => {
     console.log('🔍 Verificando autenticação na página relatório...');
     
@@ -622,6 +667,176 @@
         console.warn('⚠️ Firebase não carregado - funcionalidade cloud desativada');
       }
     }, 500);
+  });
+
+  // ===================================
+  // FUNÇÕES DO MODAL DE ADICIONAR PARCEIRO
+  // ===================================
+  
+  function showAddPartnerModal() {
+    const modal = document.getElementById('addPartnerModal');
+    if (modal) {
+      modal.style.display = 'flex';
+      loadMyUsername();
+    }
+  }
+  
+  function closeAddPartnerModal() {
+    const modal = document.getElementById('addPartnerModal');
+    if (modal) {
+      modal.style.display = 'none';
+      document.getElementById('searchUsername').value = '';
+      document.getElementById('searchResults').innerHTML = '';
+    }
+  }
+  
+  async function loadMyUsername() {
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      document.getElementById('myUsernameDisplay').textContent = '@erro';
+      return;
+    }
+    
+    try {
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        const username = userDoc.data().username || user.email.split('@')[0];
+        document.getElementById('myUsernameDisplay').textContent = '@' + username;
+      }
+    } catch (error) {
+      console.error('Erro ao carregar username:', error);
+      document.getElementById('myUsernameDisplay').textContent = '@' + user.email.split('@')[0];
+    }
+  }
+  
+  function copyMyUsername() {
+    const usernameText = document.getElementById('myUsernameDisplay').textContent;
+    navigator.clipboard.writeText(usernameText).then(() => {
+      alert('✅ Username copiado!\n\n' + usernameText + '\n\nPartilha com o teu parceiro.');
+    }).catch(() => {
+      alert('❌ Erro ao copiar. Tenta selecionar e copiar manualmente: ' + usernameText);
+    });
+  }
+  
+  async function searchPartnerByUsername(event) {
+    event.preventDefault();
+    
+    const searchInput = document.getElementById('searchUsername');
+    const searchResults = document.getElementById('searchResults');
+    const searchUsername = searchInput.value.trim().replace('@', '').toLowerCase();
+    
+    if (!searchUsername) {
+      alert('❌ Por favor, insere um username válido!');
+      return;
+    }
+    
+    searchResults.innerHTML = '<div style="text-align: center; padding: 20px; color: #6c757d;">🔍 Procurando...</div>';
+    
+    try {
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        throw new Error('Utilizador não autenticado');
+      }
+      
+      // Buscar utilizador pelo username
+      const usersSnapshot = await db.collection('users')
+        .where('username', '==', searchUsername)
+        .limit(1)
+        .get();
+      
+      if (usersSnapshot.empty) {
+        searchResults.innerHTML = `
+          <div style="text-align: center; padding: 20px; background: #fff3cd; border-radius: 8px; color: #856404;">
+            <p style="margin: 0; font-weight: 500;">❌ Username não encontrado</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.9em;">Verifica se o username está correto</p>
+          </div>
+        `;
+        return;
+      }
+      
+      const partnerDoc = usersSnapshot.docs[0];
+      const partnerData = partnerDoc.data();
+      const partnerId = partnerDoc.id;
+      
+      // Verificar se já está conectado
+      const connectionSnapshot = await db.collection('connections')
+        .where('userId', '==', currentUser.uid)
+        .where('partnerId', '==', partnerId)
+        .get();
+      
+      if (!connectionSnapshot.empty) {
+        searchResults.innerHTML = `
+          <div style="text-align: center; padding: 20px; background: #d1ecf1; border-radius: 8px; color: #0c5460;">
+            <p style="margin: 0; font-weight: 500;">ℹ️ Já estás conectado com este utilizador</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Mostrar resultado e botão para adicionar
+      searchResults.innerHTML = `
+        <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 2px solid #667eea;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em;">
+              ${partnerData.gender === 'M' ? '👨' : partnerData.gender === 'F' ? '👩' : '👤'}
+            </div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; color: #495057; font-size: 1.1em;">${partnerData.name || 'Utilizador'}</div>
+              <div style="color: #6c757d; font-size: 0.9em;">@${partnerData.username}</div>
+            </div>
+          </div>
+          <button onclick="addPartnerConnection('${partnerId}', '${partnerData.name}', '${partnerData.username}')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
+            ➕ Adicionar como Parceiro
+          </button>
+        </div>
+      `;
+    } catch (error) {
+      console.error('Erro ao procurar utilizador:', error);
+      searchResults.innerHTML = `
+        <div style="text-align: center; padding: 20px; background: #f8d7da; border-radius: 8px; color: #721c24;">
+          <p style="margin: 0; font-weight: 500;">❌ Erro ao procurar</p>
+          <p style="margin: 5px 0 0 0; font-size: 0.9em;">${error.message}</p>
+        </div>
+      `;
+    }
+  }
+  
+  async function addPartnerConnection(partnerId, partnerName, partnerUsername) {
+    try {
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        throw new Error('Utilizador não autenticado');
+      }
+      
+      // Criar conexão
+      await db.collection('connections').add({
+        userId: currentUser.uid,
+        partnerId: partnerId,
+        partnerName: partnerName,
+        partnerUsername: partnerUsername,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      alert('✅ Parceiro adicionado com sucesso!\n\n' + partnerName + ' foi adicionado à tua lista de parceiros.');
+      
+      closeAddPartnerModal();
+      
+      // Recarregar lista de parceiros
+      if (typeof loadPartnersList === 'function') {
+        loadPartnersList();
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar parceiro:', error);
+      alert('❌ Erro ao adicionar parceiro:\n\n' + error.message);
+    }
+  }
+  
+  // Fechar modal ao clicar fora
+  document.getElementById('addPartnerModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'addPartnerModal') {
+      closeAddPartnerModal();
+    }
   });
 </script>
 
