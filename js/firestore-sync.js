@@ -49,14 +49,19 @@ function updateSyncStatus(status, message) {
 // SAVE ANSWERS TO FIRESTORE
 // ========================================
 async function saveAnswerToFirestore(packId, questionId, answerData) {
+  console.log('🔥 saveAnswerToFirestore CHAMADO:', { packId, questionId, answerData });
+  
   try {
     const user = auth.currentUser;
+    console.log('👤 User atual:', user ? user.email : 'NÃO AUTENTICADO');
+    
     if (!user) {
-      console.warn('User não autenticado - usando localStorage');
+      console.warn('⚠️ User não autenticado - usando localStorage');
       updateSyncStatus('offline', 'Sem login');
       return false;
     }
 
+    console.log('💾 Tentando guardar no Firestore...');
     // Mostrar "A guardar..."
     updateSyncStatus('saving');
 

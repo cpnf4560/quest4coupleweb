@@ -235,8 +235,12 @@ function sendByEmail() {
 // AUTOSAVE TO FIRESTORE
 // ========================================
 function setupAutosave() {
+  console.log('🔧 setupAutosave() chamado - Configurando event listeners');
+  
   // Função auxiliar para salvar resposta de rádio
   async function saveRadioAnswer(target) {
+    console.log('📝 saveRadioAnswer chamado:', target.type, target.name, target.value);
+    
     if (target.type === 'radio' && target.name) {
       const name = target.name;
       const value = target.value;
@@ -247,17 +251,26 @@ function setupAutosave() {
         const packId = match[1];
         const questionId = `q${match[2]}`;
         
-        // Salvar no Firestore (se funções existirem)
+        console.log('🎯 Tentando salvar:', packId, questionId, value);
+        
+        // Verificar se função existe
         if (typeof saveAnswerToFirestore === 'function') {
+          console.log('✅ saveAnswerToFirestore existe, chamando...');
           const saved = await saveAnswerToFirestore(packId, questionId, {
             answer: value,
             comment: ''
           });
           
           if (saved) {
-            console.log(`💾 Autosave: ${packId}/${questionId} = ${value}`);
+            console.log(`💾 Autosave SUCESSO: ${packId}/${questionId} = ${value}`);
+          } else {
+            console.error(`❌ Autosave FALHOU: ${packId}/${questionId}`);
           }
+        } else {
+          console.error('❌ saveAnswerToFirestore NÃO existe!');
         }
+      } else {
+        console.warn('⚠️ Nome do input não corresponde ao padrão esperado:', name);
       }
     }
   }
@@ -291,14 +304,17 @@ function setupAutosave() {
       }
     }
   }
-  
-  // Listener para desktop (change)
+    // Listener para desktop (change)
+  console.log('📡 Registando listener: change');
   document.addEventListener('change', async function(e) {
+    console.log('🔔 Event change disparado:', e.target.type, e.target.name);
     await saveRadioAnswer(e.target);
   });
   
   // ✅ NOVO: Listener adicional para mobile (click/touchend)
+  console.log('📡 Registando listener: click');
   document.addEventListener('click', async function(e) {
+    console.log('🔔 Event click disparado:', e.target.type, e.target.checked);
     if (e.target.type === 'radio' && e.target.checked) {
       console.log('📱 Mobile click detectado no radio:', e.target.name, '=', e.target.value);
       await saveRadioAnswer(e.target);
@@ -306,7 +322,9 @@ function setupAutosave() {
   });
   
   // ✅ NOVO: Fallback para touchend (dispositivos touch)
+  console.log('📡 Registando listener: touchend');
   document.addEventListener('touchend', async function(e) {
+    console.log('🔔 Event touchend disparado');
     const target = e.target;
     if (target.type === 'radio') {
       // Aguardar um pouco para garantir que o checked foi aplicado
@@ -318,6 +336,8 @@ function setupAutosave() {
       }, 50);
     }
   });
+  
+  console.log('✅ Todos os event listeners registados com sucesso!');
   
   // Listener para comentários (com debounce)
   let commentTimeout = null;
