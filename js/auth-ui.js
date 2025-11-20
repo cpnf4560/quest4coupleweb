@@ -70,7 +70,7 @@ googleLoginBtn.addEventListener('click', async () => {
     // Verificar se o utilizador tem dados completos
     const userDoc = await db.collection('users').doc(result.user.uid).get();
     
-    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender) {
+    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender || !userDoc.data().username) {
       // Utilizador precisa completar dados - mostrar modal
       console.log('🔵 Dados incompletos - mostrar modal');
       hideLoading();
@@ -111,7 +111,7 @@ googleSignupBtn.addEventListener('click', async () => {
     // Verificar se é um novo utilizador
     const userDoc = await db.collection('users').doc(result.user.uid).get();
     
-    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender) {
+    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender || !userDoc.data().username) {
       // Novo utilizador ou dados incompletos - mostrar modal
       console.log('🔵 Novo utilizador ou dados incompletos - mostrar modal');
       hideLoading();
@@ -203,6 +203,7 @@ emailSignupForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   
   const name = document.getElementById('signupName').value.trim();
+  const username = document.getElementById('signupUsername').value.trim().toLowerCase();
   const email = document.getElementById('signupEmail').value.trim();
   const password = document.getElementById('signupPassword').value;
   const gender = document.getElementById('signupGender').value;
@@ -213,8 +214,19 @@ emailSignupForm.addEventListener('submit', async (e) => {
   const city = document.getElementById('signupCity').value.trim();
 
   // Validation
-  if (!name || !email || !password) {
+  if (!name || !username || !email || !password) {
     showMessage('error', 'Por favor preenche todos os campos obrigatórios.');
+    return;
+  }
+
+  // Validate username format
+  if (!/^[a-z0-9._]+$/.test(username)) {
+    showMessage('error', 'Username inválido. Use apenas letras minúsculas, números, ponto (.) e underscore (_).');
+    return;
+  }
+
+  if (username.length < 3) {
+    showMessage('error', 'O username deve ter pelo menos 3 caracteres.');
     return;
   }
 
@@ -232,7 +244,16 @@ emailSignupForm.addEventListener('submit', async (e) => {
   clearMessages();
 
   try {
+    // Verificar se o username já existe
+    const usernameCheck = await db.collection('users').where('username', '==', username).limit(1).get();
+    if (!usernameCheck.empty) {
+      hideLoading();
+      showMessage('error', `Username "@${username}" já está em uso. Por favor escolhe outro.`);
+      return;
+    }
+    
     const additionalData = {
+      username,
       gender,
       ageRange,
       country,
@@ -366,6 +387,7 @@ if (locationForm) {
       return;
     }
     
+    const username = document.getElementById('modalUsername').value.trim().toLowerCase();
     const gender = document.getElementById('modalGender').value;
     const ageRange = document.getElementById('modalAgeRange').value;
     const countrySelect = document.getElementById('modalCountry');
@@ -374,16 +396,36 @@ if (locationForm) {
     const city = document.getElementById('modalCity').value.trim();
     
     // Validação
-    if (!gender || !ageRange || !country || !city) {
+    if (!username || !gender || !ageRange || !country || !city) {
       alert('Por favor preenche todos os campos obrigatórios.');
+      return;
+    }
+    
+    // Validate username format
+    if (!/^[a-z0-9._]+$/.test(username)) {
+      alert('Username inválido. Use apenas letras minúsculas, números, ponto (.) e underscore (_).');
+      return;
+    }
+
+    if (username.length < 3) {
+      alert('O username deve ter pelo menos 3 caracteres.');
       return;
     }
     
     showLoading();
     
     try {
+      // Verificar se o username já existe
+      const usernameCheck = await db.collection('users').where('username', '==', username).limit(1).get();
+      if (!usernameCheck.empty) {
+        hideLoading();
+        alert(`Username "@${username}" já está em uso. Por favor escolhe outro.`);
+        return;
+      }
+      
       // Atualizar dados do utilizador no Firestore
       await updateUserData(pendingUserForLocation.uid, {
+        username,
         gender,
         ageRange,
         country,

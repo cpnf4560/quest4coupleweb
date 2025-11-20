@@ -751,15 +751,29 @@
       </div>
     </div>
     
-    <!-- TAB: USERS -->
-    <div id="tab-users" class="tab-content">
+    <!-- TAB: USERS -->    <div id="tab-users" class="tab-content">
       <div class="content-card">
         <h2>
           👥 Utilizadores Registados
           <button class="btn-export" onclick="exportUsers()">
             📥 Exportar CSV
           </button>
+          <button class="btn-export" onclick="migrateUsernames()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            🔧 Migrar Usernames
+          </button>
         </h2>
+        
+        <div id="migrationAlert" style="display: none; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.5em;">⚠️</span>
+            <div style="flex: 1;">
+              <strong>Utilizadores sem username:</strong> <span id="usersWithoutUsername">0</span>
+              <p style="margin: 5px 0 0 0; font-size: 0.9em; color: #856404;">
+                Alguns utilizadores ainda não têm username definido. Clique em "Migrar Usernames" para adicionar automaticamente.
+              </p>
+            </div>
+          </div>
+        </div>
         
         <div class="filters">
           <div class="filter-group">
@@ -792,11 +806,11 @@
         </div>
         
         <div class="table-container" id="usersTableContainer" style="display: none;">
-          <table id="usersTable">
-            <thead>
+          <table id="usersTable">            <thead>
               <tr>
                 <th>Email</th>
                 <th>Nome</th>
+                <th>Username</th>
                 <th>Sexo</th>
                 <th>Idade</th>
                 <th>País</th>
@@ -1134,12 +1148,14 @@
         });
         
         console.log('✅ Utilizadores carregados:', allUsers.length);
-        
-        // Update dashboard stats
+          // Update dashboard stats
         updateDashboardStats();
         
         // Load users table
         loadUsersTable();
+        
+        // Check users without username
+        await checkUsersWithoutUsername();
         
         // Load reports stats
         loadReportsStats();
@@ -1230,16 +1246,20 @@
       
       const createdStr = createdAt ? createdAt.toLocaleDateString('pt-PT') + ' ' + createdAt.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'}) : '-';
       const loginStr = lastLogin ? lastLogin.toLocaleDateString('pt-PT') + ' ' + lastLogin.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'}) : '-';
-      
-      const genderBadge = user.gender === 'M' ? 
+        const genderBadge = user.gender === 'M' ? 
         '<span class="badge badge-male">♂️ Masculino</span>' :
         user.gender === 'F' ?
         '<span class="badge badge-female">♀️ Feminino</span>' :
         '<span class="badge badge-other">⚧️ Outro</span>';
       
+      const usernameBadge = user.username ? 
+        `<span style="color: #667eea; font-weight: 500;">@${user.username}</span>` :
+        '<span style="color: #dc3545; font-size: 0.85em;">❌ Sem username</span>';
+      
       tr.innerHTML = `
         <td><span class="user-email">${user.email || '-'}</span></td>
         <td>${user.name || '-'}</td>
+        <td>${usernameBadge}</td>
         <td>${genderBadge}</td>
         <td>${user.ageRange || '-'}</td>
         <td>${user.country || '-'}</td>
@@ -1447,18 +1467,161 @@
     }
     
     // ===========================
+    // EXPORT FUNCTIONS    // ===========================
+    // USERNAME MIGRATION
+    // ===========================
+    async function checkUsersWithoutUsername() {
+      const usersWithoutUsername = allUsers.filter(user => !user.username);
+      const count = usersWithoutUsername.length;
+      
+      const alertDiv = document.getElementById('migrationAlert');
+      const countSpan = document.getElementById('usersWithoutUsername');
+      
+      if (count > 0) {
+        countSpan.textContent = count;
+        alertDiv.style.display = 'block';
+      } else {
+        alertDiv.style.display = 'none';
+      }
+      
+      return count;
+    }
+    
+    async function migrateUsernames() {
+      if (!confirm('⚠️ Atenção!\n\nEsta operação vai adicionar automaticamente um username a todos os utilizadores que ainda não têm um definido.\n\nOs usernames serão gerados com base no nome ou email do utilizador.\n\nDesejas continuar?')) {
+        return;
+      }
+      
+      try {
+        const usersWithoutUsername = allUsers.filter(user => !user.username);
+        
+        if (usersWithoutUsername.length === 0) {
+          alert('✅ Todos os utilizadores já têm username!');
+          return;
+        }
+        
+        console.log(`🔄 Migrando ${usersWithoutUsername.length} utilizadores...`);
+        
+        let successCount = 0;
+        let errorCount = 0;
+        const errors = [];
+        
+        for (const user of usersWithoutUsername) {
+          try {
+            // Gerar username base a partir do nome ou email
+            let baseUsername = '';
+            if (user.name) {
+              baseUsername = user.name
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+                .replace(/[^a-z0-9]/g, '')        // Remove caracteres especiais
+                .substring(0, 15);
+            } else if (user.email) {
+              baseUsername = user.email
+                .split('@')[0]
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '')
+                .substring(0, 15);
+            } else {
+              baseUsername = 'user';
+            }
+            
+            // Garantir que tem pelo menos 3 caracteres
+            if (baseUsername.length < 3) {
+              baseUsername = baseUsername + '123';
+            }
+            
+            // Verificar se username já existe e adicionar número se necessário
+            let username = baseUsername;
+            let counter = 1;
+            let isUnique = false;
+            
+            while (!isUnique) {
+              const check = await db.collection('users')
+                .where('username', '==', username)
+                .limit(1)
+                .get();
+              
+              if (check.empty) {
+                isUnique = true;
+              } else {
+                username = `${baseUsername}${counter}`;
+                counter++;
+              }
+            }
+            
+            // Atualizar documento com o username
+            await db.collection('users').doc(user.uid).update({
+              username: username,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            console.log(`✅ ${user.email || user.uid} -> @${username}`);
+            successCount++;
+            
+          } catch (error) {
+            console.error(`❌ Erro ao processar ${user.uid}:`, error);
+            errors.push({ user: user.email || user.uid, error: error.message });
+            errorCount++;
+          }
+        }
+        
+        // Mostrar resultado
+        let message = '📊 MIGRAÇÃO CONCLUÍDA\n\n';
+        message += `✅ Sucesso: ${successCount} utilizadores\n`;
+        message += `❌ Erros: ${errorCount} utilizadores\n\n`;
+        
+        if (errors.length > 0) {
+          message += '⚠️ Erros encontrados:\n';
+          errors.forEach(e => {
+            message += `  - ${e.user}: ${e.error}\n`;
+          });
+        }
+          if (errorCount === 0) {
+          message += '🎉 Todos os usernames foram adicionados com sucesso!';
+        }
+        
+        alert(message);
+        
+        // Recarregar utilizadores
+        try {
+          const usersSnapshot = await db.collection('users').get();
+          allUsers = [];
+          
+          usersSnapshot.forEach(doc => {
+            allUsers.push({ id: doc.id, uid: doc.id, ...doc.data() });
+          });
+          
+          console.log('✅ Utilizadores recarregados:', allUsers.length);
+          
+          // Atualizar tabela e estatísticas
+          loadUsersTable();
+          updateDashboardStats();
+          await checkUsersWithoutUsername();
+        } catch (reloadError) {
+          console.error('⚠️ Erro ao recarregar dados:', reloadError);
+        }
+        
+      } catch (error) {
+        console.error('❌ Erro fatal na migração:', error);
+        alert('❌ Erro ao migrar usernames:\n\n' + error.message);
+      }
+    }
+    
+    // ===========================
     // EXPORT FUNCTIONS
     // ===========================
     function exportUsers() {
-      const csv = ['Email,Nome,Sexo,Idade,País,Cidade,Data Registo,Último Login'];
-      
-      allUsers.forEach(user => {
+      const csv = ['Email,Nome,Username,Sexo,Idade,País,Cidade,Data Registo,Último Login'];
+        allUsers.forEach(user => {
         const createdAt = user.createdAt?.toDate();
         const lastLogin = user.lastLogin?.toDate();
         
         const row = [
           user.email || '',
           user.name || '',
+          user.username ? `@${user.username}` : 'Sem username',
           user.gender || '',
           user.ageRange || '',
           user.country || '',

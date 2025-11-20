@@ -470,12 +470,30 @@
 
 <!-- Header -->
 <div class="header">
+  <!-- Logo e Título (Centro) -->
   <div class="logo-section">
     <a href="index.html">
       <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
     </a>
     <h1>Quest4Couple</h1>
     <p class="tagline">Relatório de Compatibilidade 💕</p>
+  </div>
+  
+  <!-- User Section (Canto Superior Direito) -->
+  <div class="user-section-top" id="headerUserSection" style="display: none;">
+    <span class="user-info" id="headerUserInfo">
+      👤 <span id="headerUserName">Carregando...</span>
+    </span>
+    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard">
+      📊 Dashboard
+    </button>
+    <button class="btn btn-logout" onclick="headerLogout()" title="Sair">
+      🚪 Sair
+    </button>
+  </div>
+  
+  <div class="free-badge-small">
+    ✨ 100% Gratuito
   </div>
 </div>
 
@@ -515,9 +533,8 @@
         <h3 style="color: #667eea; margin: 0 0 5px 0; font-size: 1.3em;">Gerar com Conta Quest4Couple</h3>
         <p style="color: #6c757d; margin: 0; font-size: 0.9em;">Sem ficheiros! Direto pela cloud 🚀</p>
       </div>
-      
-      <div id="cloudSection">        <!-- Estado: Não autenticado -->
-        <div id="cloudNotAuth" style="text-align: center;">
+        <div id="cloudSection">        <!-- Estado: Não autenticado -->
+        <div id="cloudNoAuth" style="text-align: center;">
           <p style="color: #495057; margin-bottom: 15px;">
             <strong>✨ Novo!</strong> Se ambos têm conta Quest4Couple, podem gerar o relatório diretamente sem ficheiros .q4c!
           </p>
@@ -667,8 +684,202 @@
         console.warn('⚠️ Firebase não carregado - funcionalidade cloud desativada');
       }
     }, 500);
-  });
-
+  });  // ===================================
+  // AUTENTICAÇÃO E CARREGAMENTO DE PARCEIROS
+  // ===================================
+  
+  let currentUser = null;
+  
+  async function checkCloudAuthentication() {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      const cloudNoAuth = document.getElementById('cloudNoAuth');
+      const cloudAuth = document.getElementById('cloudAuth');
+      const headerUserSection = document.getElementById('headerUserSection');
+      const headerUserName = document.getElementById('headerUserName');
+      
+      if (user) {
+        console.log('✅ Utilizador autenticado:', user.email);
+        currentUser = user;
+        
+        // Atualizar header
+        if (headerUserSection && headerUserName) {
+          headerUserSection.style.display = 'flex';
+          
+          // Buscar nome do utilizador
+          try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists && userDoc.data().name) {
+              headerUserName.textContent = userDoc.data().name;
+            } else {
+              headerUserName.textContent = user.email.split('@')[0];
+            }
+          } catch (error) {
+            console.error('Erro ao carregar nome:', error);
+            headerUserName.textContent = user.email.split('@')[0];
+          }
+        }
+        
+        // Mostrar secção autenticada
+        if (cloudNoAuth) cloudNoAuth.style.display = 'none';
+        if (cloudAuth) cloudAuth.style.display = 'block';
+        
+        // Carregar lista de parceiros
+        await loadPartnersList();
+      } else {
+        console.log('❌ Utilizador não autenticado');
+        currentUser = null;
+        
+        // Esconder header de utilizador
+        if (headerUserSection) {
+          headerUserSection.style.display = 'none';
+        }
+        
+        // Mostrar secção não autenticada
+        if (cloudNoAuth) cloudNoAuth.style.display = 'block';
+        if (cloudAuth) cloudAuth.style.display = 'none';
+      }
+    });
+  }
+  
+  // Função de logout para o header
+  function headerLogout() {
+    if (confirm('❓ Tens a certeza que queres sair?')) {
+      firebase.auth().signOut().then(() => {
+        window.location.href = 'index.html';
+      }).catch((error) => {
+        console.error('Erro ao sair:', error);
+        alert('❌ Erro ao sair. Tenta novamente.');
+      });
+    }
+  }
+  
+  async function loadPartnersList() {
+    const partnerSelect = document.getElementById('partnerSelect');
+    
+    if (!currentUser) {
+      partnerSelect.innerHTML = '<option value="">Não autenticado</option>';
+      return;
+    }
+    
+    try {
+      // Buscar todas as conexões do utilizador
+      const connectionsSnapshot = await db.collection('connections')
+        .where('userId', '==', currentUser.uid)
+        .get();
+      
+      if (connectionsSnapshot.empty) {
+        partnerSelect.innerHTML = '<option value="">Nenhum parceiro conectado ainda</option>';
+        console.log('ℹ️ Nenhuma conexão encontrada para o utilizador');
+        return;
+      }
+      
+      // Popular dropdown com parceiros
+      let options = '<option value="">Escolher parceiro/a...</option>';
+      
+      connectionsSnapshot.forEach(doc => {
+        const connection = doc.data();
+        const partnerName = connection.partnerName || 'Parceiro';
+        const partnerUsername = connection.partnerUsername || '';
+        const partnerId = connection.partnerId;
+        
+        options += `<option value="${partnerId}" data-username="${partnerUsername}">${partnerName} (@${partnerUsername})</option>`;
+      });
+      
+      partnerSelect.innerHTML = options;
+      console.log(`✅ Carregados ${connectionsSnapshot.size} parceiros`);
+      
+    } catch (error) {
+      console.error('❌ Erro ao carregar parceiros:', error);
+      partnerSelect.innerHTML = '<option value="">Erro ao carregar parceiros</option>';
+    }
+  }
+    // ===================================
+  // GERAR RELATÓRIO CLOUD
+  // ===================================
+  
+  async function generateCloudReport() {
+    const partnerSelect = document.getElementById('partnerSelect');
+    const partnerId = partnerSelect.value;
+    
+    if (!partnerId) {
+      alert('❌ Por favor, escolhe um parceiro da lista!');
+      return;
+    }
+    
+    if (!currentUser) {
+      alert('❌ Não estás autenticado!');
+      return;
+    }
+    
+    try {
+      // Mostrar loading
+      const loadingMsg = document.createElement('div');
+      loadingMsg.id = 'cloudLoadingMsg';
+      loadingMsg.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; text-align: center;';
+      loadingMsg.innerHTML = '<div style="font-size: 2em; margin-bottom: 15px;">☁️</div><div style="font-weight: 600; font-size: 1.2em; color: #667eea;">A gerar relatório...</div><div style="color: #6c757d; margin-top: 10px;">Aguarda um momento</div>';
+      document.body.appendChild(loadingMsg);
+      
+      // Buscar respostas de ambos os utilizadores
+      const myAnswersDoc = await db.collection('answers').doc(currentUser.uid).get();
+      const partnerAnswersDoc = await db.collection('answers').doc(partnerId).get();
+      
+      if (!myAnswersDoc.exists) {
+        throw new Error('Ainda não respondeste aos questionários! Vai ao app.html primeiro.');
+      }
+      
+      if (!partnerAnswersDoc.exists) {
+        throw new Error('O teu parceiro ainda não respondeu aos questionários!');
+      }
+      
+      const myAnswers = myAnswersDoc.data();
+      const partnerAnswers = partnerAnswersDoc.data();
+      
+      // Buscar informação do parceiro
+      const partnerDoc = await db.collection('users').doc(partnerId).get();
+      const partnerData = partnerDoc.data();
+      
+      // Preparar dados no formato esperado pelo generateCompatibilityReport
+      const person1Data = {
+        name: myAnswers.name || currentUser.email.split('@')[0],
+        answers: myAnswers.answers || {}
+      };
+      
+      const person2Data = {
+        name: partnerData.name || partnerAnswers.name || partnerData.email.split('@')[0],
+        answers: partnerAnswers.answers || {}
+      };
+      
+      // Remover loading
+      document.body.removeChild(loadingMsg);
+      
+      // Gerar relatório usando a função existente
+      if (typeof window.generateCompatibilityReport === 'function') {
+        window.generateCompatibilityReport(person1Data, person2Data);
+        
+        // Scroll para o relatório
+        setTimeout(() => {
+          const reportContainer = document.querySelector('.report-container');
+          if (reportContainer) {
+            reportContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 500);
+      } else {
+        throw new Error('Função de gerar relatório não encontrada');
+      }
+      
+    } catch (error) {
+      console.error('❌ Erro ao gerar relatório cloud:', error);
+      
+      // Remover loading se existir
+      const loadingMsg = document.getElementById('cloudLoadingMsg');
+      if (loadingMsg) {
+        document.body.removeChild(loadingMsg);
+      }
+      
+      alert('❌ Erro ao gerar relatório:\n\n' + error.message);
+    }
+  }
+  
   // ===================================
   // FUNÇÕES DO MODAL DE ADICIONAR PARCEIRO
   // ===================================

@@ -77,6 +77,8 @@ async function signUpWithEmail(email, password, displayName, additionalData = {}
         uid: user.uid,
         email: user.email,
         displayName: displayName,
+        name: displayName,
+        username: additionalData.username || null,
         gender: additionalData.gender || null,
         ageRange: additionalData.ageRange || null,
         country: additionalData.country || null,
