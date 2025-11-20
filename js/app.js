@@ -235,11 +235,11 @@ function sendByEmail() {
 // AUTOSAVE TO FIRESTORE
 // ========================================
 function setupAutosave() {
-  // Listener para todas as respostas de rádio
-  document.addEventListener('change', async function(e) {
-    if (e.target.type === 'radio' && e.target.name) {
-      const name = e.target.name;
-      const value = e.target.value;
+  // Função auxiliar para salvar resposta de rádio
+  async function saveRadioAnswer(target) {
+    if (target.type === 'radio' && target.name) {
+      const name = target.name;
+      const value = target.value;
       
       // Extrair packId e questionId do name (formato: packId_qNum)
       const match = name.match(/^(.+)_q(\d+)$/);
@@ -260,42 +260,81 @@ function setupAutosave() {
         }
       }
     }
+  }
+  
+  // ✅ Função auxiliar para salvar comentário
+  async function saveComment(target) {
+    if (target.tagName === 'TEXTAREA' && target.name) {
+      const name = target.name;
+      const value = target.value;
+      
+      // Extrair packId e questionId do name (formato: packId_qNum_comment)
+      const match = name.match(/^(.+)_q(\d+)_comment$/);
+      if (match) {
+        const packId = match[1];
+        const questionId = `q${match[2]}`;
+        
+        // Buscar resposta radio correspondente
+        const radio = document.querySelector(`input[name="${packId}_q${match[2]}"]:checked`);
+        
+        // Salvar no Firestore
+        if (typeof saveAnswerToFirestore === 'function') {
+          const saved = await saveAnswerToFirestore(packId, questionId, {
+            answer: radio ? radio.value : null,
+            comment: value
+          });
+          
+          if (saved) {
+            console.log(`💾 Autosave comment: ${packId}/${questionId}`);
+          }
+        }
+      }
+    }
+  }
+  
+  // Listener para desktop (change)
+  document.addEventListener('change', async function(e) {
+    await saveRadioAnswer(e.target);
+  });
+  
+  // ✅ NOVO: Listener adicional para mobile (click/touchend)
+  document.addEventListener('click', async function(e) {
+    if (e.target.type === 'radio' && e.target.checked) {
+      console.log('📱 Mobile click detectado no radio:', e.target.name, '=', e.target.value);
+      await saveRadioAnswer(e.target);
+    }
+  });
+  
+  // ✅ NOVO: Fallback para touchend (dispositivos touch)
+  document.addEventListener('touchend', async function(e) {
+    const target = e.target;
+    if (target.type === 'radio') {
+      // Aguardar um pouco para garantir que o checked foi aplicado
+      setTimeout(async () => {
+        if (target.checked) {
+          console.log('📱 Mobile touch detectado no radio:', target.name, '=', target.value);
+          await saveRadioAnswer(target);
+        }
+      }, 50);
+    }
   });
   
   // Listener para comentários (com debounce)
   let commentTimeout = null;
+  
   document.addEventListener('input', async function(e) {
-    if (e.target.tagName === 'TEXTAREA' && e.target.name) {
-      const name = e.target.name;
-      const value = e.target.value;
-      
-      // Debounce para não salvar a cada tecla
-      clearTimeout(commentTimeout);
-      commentTimeout = setTimeout(async () => {
-        // Extrair packId e questionId do name (formato: packId_qNum_comment)
-        const match = name.match(/^(.+)_q(\d+)_comment$/);
-        if (match) {
-          const packId = match[1];
-          const questionId = `q${match[2]}`;
-          
-          // Buscar resposta radio correspondente
-          const radio = document.querySelector(`input[name="${packId}_q${match[2]}"]:checked`);
-          
-          // Salvar no Firestore
-          if (typeof saveAnswerToFirestore === 'function') {
-            const saved = await saveAnswerToFirestore(packId, questionId, {
-              answer: radio ? radio.value : null,
-              comment: value
-            });
-            
-            if (saved) {
-              console.log(`💾 Autosave comment: ${packId}/${questionId}`);
-            }
-          }
-        }
-      }, 1000); // Espera 1 segundo após parar de digitar
-    }
+    // Debounce para não salvar a cada tecla
+    clearTimeout(commentTimeout);
+    commentTimeout = setTimeout(async () => {
+      await saveComment(e.target);
+    }, 1000); // Espera 1 segundo após parar de digitar
   });
+  
+  // ✅ NOVO: Listener para blur (quando sai do textarea no mobile)
+  document.addEventListener('blur', async function(e) {
+    clearTimeout(commentTimeout);
+    await saveComment(e.target);
+  }, true); // useCapture = true para pegar todos os blurs
 }
 
 // ========================================
