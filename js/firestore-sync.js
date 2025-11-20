@@ -42,10 +42,16 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
             [questionId]: normalizedData
           }
         },
-        { merge: true }
-      );
+        { merge: true }      );
 
     console.log(`✅ Resposta guardada no Firestore: ${packId}/${questionId}`, normalizedData);
+    
+    // Atualizar barra de progresso após guardar
+    if (typeof updateThemeProgress === 'function') {
+      updateThemeProgress();
+      console.log('📊 Barra de progresso atualizada após guardar');
+    }
+    
     return true;
   } catch (error) {
     console.error('Erro ao guardar resposta no Firestore:', error);
@@ -208,9 +214,14 @@ function setupRealtimeSync(packId) {
                   textarea.style.borderColor = '';
                 }, 1000);
               }
-            }
-          }
+            }          }
         });
+        
+        // Atualizar barra de progresso após sincronização
+        if (typeof updateThemeProgress === 'function') {
+          updateThemeProgress();
+          console.log('📊 REALTIME SYNC: Barra de progresso atualizada');
+        }
       }, (error) => {
         console.error('❌ REALTIME SYNC: Erro no listener:', error);
       });

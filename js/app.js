@@ -339,9 +339,10 @@ async function loadSavedAnswersForPack(packId) {
       
       console.log(`✅ Total de respostas carregadas: ${loadedCount}`);
       
-      // Atualizar barra de progresso
-      if (typeof updateProgress === 'function') {
-        updateProgress(packId);
+      // Atualizar barra de progresso dos cards
+      if (typeof updateThemeProgress === 'function') {
+        updateThemeProgress();
+        console.log('📊 Barra de progresso atualizada');
       }
     } else {
       console.log(`ℹ️ Nenhuma resposta salva encontrada para ${packId}`);
