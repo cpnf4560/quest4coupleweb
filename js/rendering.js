@@ -88,15 +88,35 @@ function renderPackQuestions(containerId, packId, categories) {
   // Carregar perguntas custom
   const customQuestions = getCustomQuestions ? getCustomQuestions() : {};
   const customPack = customQuestions[packId] || [];
-
   categories.forEach((category, catIndex) => {
     console.log(`  📁 Categoria ${catIndex + 1}: "${category.name}" com ${category.questions ? category.questions.length : 0} perguntas`);
-    
-    // Título da categoria
+      // Criar wrapper para categoria (para collapse/expand)
+    const categoryWrapper = document.createElement('div');
+    categoryWrapper.className = 'category-wrapper collapsed'; // ✅ Inicia COLAPSADA
+    categoryWrapper.id = `${packId}-cat-${catIndex}`;
+      // Título da categoria (clicável)
     const categoryTitle = document.createElement('h3');
     categoryTitle.className = 'category-title';
-    categoryTitle.textContent = category.name;
-    container.appendChild(categoryTitle);
+    categoryTitle.style.cursor = 'pointer';
+    categoryTitle.innerHTML = `
+      <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
+      <span class="category-name">${category.name}</span>
+      <span class="category-progress-badge">0/${category.questions ? category.questions.length : 0}</span>
+    `;    // Evento de click no título para toggle
+    categoryTitle.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof window.togglePackCategory === 'function') {
+        window.togglePackCategory(categoryWrapper);
+      } else {
+        console.error('❌ togglePackCategory não encontrada!');
+      }
+    };
+      categoryWrapper.appendChild(categoryTitle);
+    
+    // Container para as perguntas
+    const questionsContainer = document.createElement('div');
+    questionsContainer.className = 'category-questions';
 
     if (category.questions && Array.isArray(category.questions)) {
       category.questions.forEach((questionText) => {
@@ -128,21 +148,44 @@ function renderPackQuestions(containerId, packId, categories) {
                 <input type="radio" name="${packId}_q${qNum}" value="talvez">
               </div>
             </div>
-          </div>
-          <div class="question-comment">
+          </div>          <div class="question-comment">
             <textarea name="${packId}_q${qNum}_comment" placeholder="Comentários (opcional)"></textarea>
           </div>        `;
-          container.appendChild(questionDiv);
+          questionsContainer.appendChild(questionDiv);
       });
     }
+      // Adicionar container de perguntas ao wrapper
+    categoryWrapper.appendChild(questionsContainer);
+      // Adicionar wrapper ao container principal
+    container.appendChild(categoryWrapper);
   });
-  
-  // Adicionar perguntas personalizadas
-  if (customPack.length > 0) {
+    // Adicionar perguntas personalizadas
+  if (customPack.length > 0) {    // Criar wrapper para categoria custom
+    const customCategoryWrapper = document.createElement('div');
+    customCategoryWrapper.className = 'category-wrapper collapsed'; // ✅ Inicia COLAPSADA
+    customCategoryWrapper.id = `${packId}-cat-custom`;
+    
     const customCategoryTitle = document.createElement('h3');
     customCategoryTitle.className = 'category-title custom-category-title';
-    customCategoryTitle.innerHTML = '✨ Perguntas Personalizadas';
-    container.appendChild(customCategoryTitle);
+    customCategoryTitle.style.cursor = 'pointer';
+    customCategoryTitle.innerHTML = `
+      <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
+      <span class="category-name">✨ Perguntas Personalizadas</span>
+      <span class="category-progress-badge">0/${customPack.length}</span>
+    `;    // Evento de click no título para toggle
+    customCategoryTitle.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof window.togglePackCategory === 'function') {
+        window.togglePackCategory(customCategoryWrapper);
+      }
+    };
+    
+    customCategoryWrapper.appendChild(customCategoryTitle);
+    
+    // Container para as perguntas custom
+    const customQuestionsContainer = document.createElement('div');
+    customQuestionsContainer.className = 'category-questions';
     
     customPack.forEach((customQ) => {
       questionCounter++;
@@ -177,20 +220,136 @@ function renderPackQuestions(containerId, packId, categories) {
               <input type="radio" name="${packId}_q${qNum}" value="talvez">
             </div>
           </div>
-        </div>
-        <div class="question-comment">
+        </div>        <div class="question-comment">
           <textarea name="${packId}_q${qNum}_comment" placeholder="Comentários (opcional)"></textarea>
         </div>`;
       
-      container.appendChild(questionDiv);
+      customQuestionsContainer.appendChild(questionDiv);
     });
+    
+    // Adicionar container de perguntas ao wrapper
+    customCategoryWrapper.appendChild(customQuestionsContainer);
+    
+    // Adicionar wrapper ao container principal
+    container.appendChild(customCategoryWrapper);
   }
-  
-  console.log(`✅ ${questionCounter} perguntas renderizadas no contentor ${containerId} (incluindo ${customPack.length} custom)`);
+    console.log(`✅ ${questionCounter} perguntas renderizadas no contentor ${containerId} (incluindo ${customPack.length} custom)`);
   console.log(`📏 HTML length: ${container.innerHTML.length} characters`);
+  
+  // Restaurar estados salvos das categorias (expandido/colapsado)
+  setTimeout(() => {
+    restoreCategoryStates();
+    updateAllCategoriesProgress();
+  }, 100);
 }
 
 // Função auxiliar para recarregar pack
 function loadPackQuestions(packId) {
   loadAndRenderAllPacks();
 }
+
+// ========================================
+// RESTORE CATEGORY STATES (ao carregar página)
+// ========================================
+function restoreCategoryStates() {
+  const savedStates = JSON.parse(localStorage.getItem('quest4couple_category_states') || '{}');
+  
+  Object.keys(savedStates).forEach(categoryId => {
+    const isExpanded = savedStates[categoryId];
+    const categoryWrapper = document.getElementById(categoryId);
+    
+    if (categoryWrapper) {
+      if (isExpanded) {
+        categoryWrapper.classList.add('expanded');
+        categoryWrapper.classList.remove('collapsed');
+      } else {
+        categoryWrapper.classList.remove('expanded');
+        categoryWrapper.classList.add('collapsed');
+      }
+      
+      // Atualizar ícone
+      const icon = categoryWrapper.querySelector('.category-toggle-icon');
+      if (icon) {
+        icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)';
+      }
+    }
+  });
+  
+  console.log('✅ Estados das categorias restaurados');
+}
+
+// ========================================
+// TOGGLE PACK CATEGORY (Collapse/Expand Subcategorias nos Questionários)
+// ========================================
+function togglePackCategory(categoryWrapper) {
+  const isExpanded = categoryWrapper.classList.contains('expanded');
+    if (isExpanded) {
+    categoryWrapper.classList.remove('expanded');
+    categoryWrapper.classList.add('collapsed');
+  } else {
+    categoryWrapper.classList.add('expanded');
+    categoryWrapper.classList.remove('collapsed');
+  }
+  
+  // Atualizar ícone
+  const icon = categoryWrapper.querySelector('.category-toggle-icon');
+  if (icon) {
+    icon.style.transform = isExpanded ? 'rotate(-90deg)' : 'rotate(0deg)';
+  }
+  
+  // Salvar estado no localStorage
+  const categoryId = categoryWrapper.id;
+  const savedStates = JSON.parse(localStorage.getItem('quest4couple_category_states') || '{}');
+  savedStates[categoryId] = !isExpanded;
+  localStorage.setItem('quest4couple_category_states', JSON.stringify(savedStates));
+}
+
+// ========================================
+// UPDATE CATEGORY PROGRESS
+// ========================================
+function updateCategoryProgress(categoryWrapper) {
+  const questions = categoryWrapper.querySelectorAll('.question');
+  const answered = Array.from(questions).filter(q => 
+    q.querySelector('input[type="radio"]:checked')
+  ).length;
+  
+  const badge = categoryWrapper.querySelector('.category-progress-badge');
+  if (badge) {
+    badge.textContent = `${answered}/${questions.length}`;
+    
+    // Mudar cor baseado no progresso
+    const percentage = questions.length > 0 ? (answered / questions.length) * 100 : 0;
+    if (percentage === 0) {
+      badge.style.background = 'rgba(255, 255, 255, 0.3)';
+    } else if (percentage === 100) {
+      badge.style.background = 'rgba(40, 167, 69, 0.9)';
+      badge.style.color = 'white';
+    } else {
+      badge.style.background = 'rgba(0, 123, 255, 0.8)';
+      badge.style.color = 'white';
+    }
+  }
+}
+
+// ========================================
+// UPDATE ALL CATEGORIES PROGRESS
+// ========================================
+function updateAllCategoriesProgress() {
+  document.querySelectorAll('.category-wrapper').forEach(wrapper => {
+    updateCategoryProgress(wrapper);
+  });
+}
+
+// ========================================
+// EXPORTAR FUNÇÕES PARA ESCOPO GLOBAL
+// ========================================
+window.togglePackCategory = togglePackCategory;
+window.updateCategoryProgress = updateCategoryProgress;
+window.updateAllCategoriesProgress = updateAllCategoriesProgress;
+window.restoreCategoryStates = restoreCategoryStates;
+
+console.log('✅ Funções de collapse/expand exportadas para escopo global');
+console.log('   - togglePackCategory:', typeof window.togglePackCategory);
+console.log('   - updateCategoryProgress:', typeof window.updateCategoryProgress);
+console.log('   - updateAllCategoriesProgress:', typeof window.updateAllCategoriesProgress);
+console.log('   - restoreCategoryStates:', typeof window.restoreCategoryStates);

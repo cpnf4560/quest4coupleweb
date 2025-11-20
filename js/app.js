@@ -88,6 +88,10 @@ async function showTheme(themeName) {
   if (!window.questionsLoaded) {
     loadAndRenderAllPacks();
     window.questionsLoaded = true;
+    
+    // ✅ Collapse/expand agora é gerido automaticamente pelo rendering.js
+    // Os event listeners são adicionados quando as categorias são criadas
+    console.log('✅ Perguntas carregadas - event listeners de collapse/expand já adicionados');
   }
   
   document.getElementById('themesView').style.display = 'none';
@@ -114,6 +118,11 @@ async function showTheme(themeName) {
   if (typeof setupRealtimeSync === 'function') {
     setupRealtimeSync(themeName);
     console.log('🔥 Sincronização em tempo real ativada para:', themeName);
+  }
+  
+  // ✅ NOVO: Atualizar progresso do pack após carregar respostas
+  if (typeof PackCollapse !== 'undefined' && typeof PackCollapse.updateProgress === 'function') {
+    PackCollapse.updateProgress(themeName);
   }
   
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -417,11 +426,15 @@ window.addEventListener('DOMContentLoaded', async function() {
                 });
               }
             }
-            
-            // Atualizar progresso após carregar tudo
+              // Atualizar progresso após carregar tudo
             if (typeof updateThemeProgress === 'function') {
               updateThemeProgress();
               console.log('✅ Progresso inicial carregado e atualizado');
+            }
+            
+            // ✅ NOVO: Inicializar sistema de collapse/expand
+            if (typeof initializePackCollapse === 'function') {
+              initializePackCollapse();
             }
           }
         }

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>🧪 Teste SUPER Simples - Collapse/Expand</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2em;
+    }
+    
+    .status {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    
+    .status.waiting {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status.working {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status.broken {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .category-wrapper {
+      background: white;
+      margin: 20px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    
+    .category-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 25px;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      user-select: none;
+      transition: all 0.3s ease;
+    }
+    
+    .category-title:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #653a8e 100%);
+      transform: translateX(5px);
+    }
+    
+    .category-title:active {
+      transform: translateX(5px) scale(0.98);
+    }
+    
+    .category-toggle-icon {
+      font-size: 1em;
+      transition: transform 0.3s ease;
+      display: inline-block;
+      font-weight: bold;
+    }
+    
+    .category-name {
+      flex: 1;
+      font-weight: 700;
+      font-size: 1.2em;
+    }
+    
+    .category-progress-badge {
+      font-size: 0.9em;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 6px 15px;
+      border-radius: 15px;
+      font-weight: 600;
+    }
+    
+    .category-questions {
+      padding: 25px;
+      background: #f8f9fa;
+    }
+    
+    .question {
+      padding: 15px 20px;
+      margin: 10px 0;
+      background: white;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+      font-size: 1.05em;
+    }
+    
+    /* ⭐ ESTADOS DE COLLAPSE/EXPAND */
+    .category-wrapper.collapsed .category-questions {
+      display: none !important;
+    }
+    
+    .category-wrapper.collapsed .category-toggle-icon {
+      transform: rotate(-90deg) !important;
+    }
+    
+    .category-wrapper.expanded .category-questions {
+      display: block !important;
+    }
+    
+    .category-wrapper.expanded .category-toggle-icon {
+      transform: rotate(0deg) !important;
+    }
+    
+    .log {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 300px;
+      overflow-y: auto;
+      border-top: 4px solid #00ff00;
+    }
+    
+    .log-entry {
+      margin: 3px 0;
+      padding: 3px 0;
+    }
+    
+    .click-count {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      font-size: 1.5em;
+      font-weight: bold;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Teste SUPER Simples - Collapse/Expand</h1>
+
+<div class="status waiting" id="status">
+  ⏳ Clique em qualquer título para testar...
+</div>
+
+<div class="click-count" id="clickCount">
+  Clicks: 0
+</div>
+
+<!-- ⭐ CATEGORIA 1 -->
+<div class="category-wrapper expanded" id="cat-1">
+  <h3 class="category-title" onclick="testToggle(this.parentElement)">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">💝 Categoria 1 - Romântico</span>
+    <span class="category-progress-badge">0/3</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Primeira pergunta romântica</div>
+    <div class="question">2. Segunda pergunta romântica</div>
+    <div class="question">3. Terceira pergunta romântica</div>
+  </div>
+</div>
+
+<!-- ⭐ CATEGORIA 2 -->
+<div class="category-wrapper expanded" id="cat-2">
+  <h3 class="category-title" onclick="testToggle(this.parentElement)">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">🔥 Categoria 2 - Pimentinha</span>
+    <span class="category-progress-badge">0/3</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Primeira pergunta picante</div>
+    <div class="question">2. Segunda pergunta picante</div>
+    <div class="question">3. Terceira pergunta picante</div>
+  </div>
+</div>
+
+<!-- ⭐ CATEGORIA 3 -->
+<div class="category-wrapper expanded" id="cat-3">
+  <h3 class="category-title" onclick="testToggle(this.parentElement)">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">⛓️ Categoria 3 - Fetiches</span>
+    <span class="category-progress-badge">0/3</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Primeira pergunta fetichista</div>
+    <div class="question">2. Segunda pergunta fetichista</div>
+    <div class="question">3. Terceira pergunta fetichista</div>
+  </div>
+</div>
+
+<div class="log" id="log">
+  <strong>📟 LOG DE TESTES:</strong><br>
+</div>
+
+<script>
+  let clickCount = 0;
+  const logDiv = document.getElementById('log');
+  const statusDiv = document.getElementById('status');
+  const clickCountDiv = document.getElementById('clickCount');
+  
+  function log(message, color = '#00ff00') {
+    console.log(message);
+    const time = new Date().toLocaleTimeString();
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.innerHTML = `<span style="color: #999;">[${time}]</span> <span style="color: ${color};">${message}</span>`;
+    logDiv.appendChild(entry);
+    logDiv.scrollTop = logDiv.scrollHeight;
+  }
+  
+  function testToggle(wrapper) {
+    clickCount++;
+    clickCountDiv.textContent = `Clicks: ${clickCount}`;
+    
+    log(`🖱️ CLICK #${clickCount} no wrapper: ${wrapper.id}`, '#74c0fc');
+    
+    // Verificar estado atual
+    const isExpanded = wrapper.classList.contains('expanded');
+    log(`📦 Estado ANTES: ${isExpanded ? 'EXPANDIDO' : 'COLAPSADO'}`, '#ffd43b');
+    
+    // Toggle classes
+    if (isExpanded) {
+      wrapper.classList.remove('expanded');
+      wrapper.classList.add('collapsed');
+      log(`✅ Mudou para: COLAPSADO`, '#51cf66');
+    } else {
+      wrapper.classList.add('expanded');
+      wrapper.classList.remove('collapsed');
+      log(`✅ Mudou para: EXPANDIDO`, '#51cf66');
+    }
+    
+    // Verificar se as perguntas foram escondidas/mostradas
+    const questions = wrapper.querySelector('.category-questions');
+    const computedDisplay = window.getComputedStyle(questions).display;
+    log(`📊 Display das perguntas: ${computedDisplay}`, '#ff6b6b');
+    
+    // Verificar classes finais
+    const finalClasses = wrapper.className;
+    log(`🏷️ Classes finais: ${finalClasses}`, '#a5d8ff');
+    
+    // Atualizar status
+    statusDiv.className = 'status working';
+    statusDiv.textContent = `✅ FUNCIONANDO! (${clickCount} toggles bem-sucedidos)`;
+    
+    log('─────────────────────────────────────', '#666');
+  }
+  
+  // Log inicial
+  log('🎨 Sistema inicializado', '#51cf66');
+  log('👆 Clique nos títulos das categorias para testar', '#74c0fc');
+</script>
+
+</body>
+</html>

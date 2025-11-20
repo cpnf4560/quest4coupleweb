@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Collapse/Expand - Debug</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    
+    .pack {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .pack-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .pack-header h2 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pack-content {
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 5px;
+    }
+    
+    .pack-footer {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e9ecef;
+      border-radius: 5px;
+    }
+    
+    /* Collapse/Expand States */
+    .pack.collapsed .pack-content {
+      display: none;
+    }
+    
+    .pack.collapsed .pack-footer {
+      display: none;
+    }
+    
+    .pack.expanded .pack-content {
+      display: block;
+      animation: expand 0.3s ease-out;
+    }
+    
+    .pack.expanded .pack-footer {
+      display: block;
+    }
+    
+    @keyframes expand {
+      from { 
+        opacity: 0; 
+        max-height: 0;
+      }
+      to { 
+        opacity: 1; 
+        max-height: 1000px;
+      }
+    }
+    
+    .pack-toggle-icon {
+      font-size: 0.8em;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      opacity: 0.7;
+      display: inline-block;
+    }
+    
+    .pack-progress-badge {
+      font-size: 0.7em;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-left: auto;
+      font-weight: 600;
+    }
+    
+    #console {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      border-top: 3px solid #00ff00;
+    }
+    
+    .log-entry {
+      margin: 2px 0;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Teste do Sistema Collapse/Expand</h1>
+
+<div class="pack romantico expanded" id="pack-romantico">
+  <div class="pack-header">
+    <h2>💝 Romântico & Fantasias</h2>
+  </div>
+  <div class="pack-content">
+    <p>Conteúdo do pack romântico...</p>
+    <p>Mais conteúdo aqui...</p>
+  </div>
+  <div class="pack-footer">
+    <button>💾 Guardar</button>
+  </div>
+</div>
+
+<div class="pack experiencia expanded" id="pack-experiencia">
+  <div class="pack-header">
+    <h2>🌍 Experiência a 2</h2>
+  </div>
+  <div class="pack-content">
+    <p>Conteúdo do pack experiência...</p>
+    <p>Mais conteúdo aqui...</p>
+  </div>
+  <div class="pack-footer">
+    <button>💾 Guardar</button>
+  </div>
+</div>
+
+<div class="pack pimentinha expanded" id="pack-pimentinha">
+  <div class="pack-header">
+    <h2>🔥 Pimentinha</h2>
+  </div>
+  <div class="pack-content">
+    <p>Conteúdo do pack pimentinha...</p>
+    <p>Mais conteúdo aqui...</p>
+  </div>
+  <div class="pack-footer">
+    <button>💾 Guardar</button>
+  </div>
+</div>
+
+<div id="console">
+  <strong>📟 Console de Debug:</strong><br>
+</div>
+
+<script>
+  // Sistema de log personalizado
+  const consoleDiv = document.getElementById('console');
+  function log(message) {
+    console.log(message);
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+    consoleDiv.appendChild(entry);
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+  }
+  
+  // Estado dos packs
+  let packStates = {};
+  
+  // Obter ID do pack
+  function getPackId(packElement) {
+    const classes = packElement.className.split(' ');
+    const packClass = classes.find(c => 
+      c !== 'pack' && c !== 'active' && c !== 'expanded' && c !== 'collapsed'
+    );
+    return packClass || null;
+  }
+  
+  // Toggle pack
+  function togglePack(packId) {
+    log(`🔄 togglePack chamado para: ${packId}`);
+    
+    const pack = document.querySelector(`.pack.${packId}`);
+    if (!pack) {
+      log(`❌ Pack não encontrado: ${packId}`);
+      return;
+    }
+    
+    const isCurrentlyExpanded = pack.classList.contains('expanded');
+    const newState = !isCurrentlyExpanded;
+    
+    log(`📦 Pack ${packId}: ${isCurrentlyExpanded ? 'expandido' : 'colapsado'} -> ${newState ? 'expandir' : 'colapsar'}`);
+    
+    // Atualizar classes
+    if (newState) {
+      pack.classList.add('expanded');
+      pack.classList.remove('collapsed');
+      log(`✅ Classes atualizadas: expanded adicionado, collapsed removido`);
+    } else {
+      pack.classList.add('collapsed');
+      pack.classList.remove('expanded');
+      log(`✅ Classes atualizadas: collapsed adicionado, expanded removido`);
+    }
+    
+    // Atualizar ícone
+    const toggleIcon = pack.querySelector('.pack-toggle-icon');
+    if (toggleIcon) {
+      toggleIcon.style.transform = newState ? 'rotate(0deg)' : 'rotate(-90deg)';
+      log(`✅ Ícone rotacionado para: ${newState ? '0deg' : '-90deg'}`);
+    }
+    
+    // Salvar estado
+    packStates[packId] = newState;
+    localStorage.setItem('quest4couple_pack_states', JSON.stringify(packStates));
+    log(`💾 Estado salvo no localStorage`);
+  }
+  
+  // Inicializar
+  function initializePackCollapse() {
+    log('🎨 Inicializando sistema de collapse/expand...');
+    
+    const packs = document.querySelectorAll('.pack');
+    log(`📦 Encontrados ${packs.length} packs`);
+    
+    packs.forEach(pack => {
+      const packId = getPackId(pack);
+      log(`📦 Processando pack: ${packId}`);
+      
+      if (!packId) {
+        log('❌ Pack sem ID');
+        return;
+      }
+      
+      const header = pack.querySelector('.pack-header');
+      if (!header) {
+        log(`❌ Header não encontrado para ${packId}`);
+        return;
+      }
+      
+      const h2 = header.querySelector('h2');
+      if (!h2) {
+        log(`❌ h2 não encontrado para ${packId}`);
+        return;
+      }
+      
+      // Criar ícone de toggle
+      const toggleIcon = document.createElement('span');
+      toggleIcon.className = 'pack-toggle-icon';
+      toggleIcon.innerHTML = '▼';
+      toggleIcon.style.cssText = `
+        font-size: 0.8em;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        opacity: 0.7;
+        display: inline-block;
+      `;
+      
+      // Criar badge de progresso
+      const progressBadge = document.createElement('span');
+      progressBadge.className = 'pack-progress-badge';
+      progressBadge.textContent = '0/0';
+      
+      // Guardar título original
+      const originalTitle = h2.innerHTML;
+      
+      // Reconstruir h2
+      h2.innerHTML = '';
+      h2.style.cssText = 'display: flex; align-items: center; gap: 10px; width: 100%; cursor: pointer;';
+      
+      const titleSpan = document.createElement('span');
+      titleSpan.innerHTML = originalTitle;
+      titleSpan.style.flex = '1';
+      
+      h2.appendChild(toggleIcon);
+      h2.appendChild(titleSpan);
+      h2.appendChild(progressBadge);
+      
+      // Evento de click
+      h2.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        log(`🖱️ Click no h2 do pack ${packId}`);
+        togglePack(packId);
+      };
+      
+      log(`✅ Pack ${packId} inicializado com sucesso`);
+    });
+    
+    log('✅ Sistema de collapse/expand inicializado com sucesso');
+  }
+  
+  // Inicializar ao carregar
+  document.addEventListener('DOMContentLoaded', () => {
+    log('📄 DOM carregado');
+    initializePackCollapse();
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste Category Collapse - Debug Console</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .category-wrapper {
+      background: white;
+      margin: 20px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .category-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      margin: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+    }
+    
+    .category-title:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #653a8e 100%);
+    }
+    
+    .category-toggle-icon {
+      font-size: 0.8em;
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+    
+    .category-name {
+      flex: 1;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    
+    .category-progress-badge {
+      font-size: 0.85em;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    
+    .category-questions {
+      padding: 20px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+    
+    /* Estados de collapse/expand */
+    .category-wrapper.collapsed .category-questions {
+      display: none;
+    }
+    
+    .category-wrapper.collapsed .category-toggle-icon {
+      transform: rotate(-90deg);
+    }
+    
+    .category-wrapper.expanded .category-questions {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+    
+    .category-wrapper.expanded .category-toggle-icon {
+      transform: rotate(0deg);
+    }
+    
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        max-height: 2000px;
+      }
+    }
+    
+    .question {
+      padding: 15px;
+      margin: 10px 0;
+      background: white;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    
+    #console {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 250px;
+      overflow-y: auto;
+      border-top: 3px solid #00ff00;
+      z-index: 9999;
+    }
+    
+    .log-entry {
+      margin: 2px 0;
+      padding: 2px 0;
+    }
+    
+    .log-error {
+      color: #ff6b6b;
+    }
+    
+    .log-success {
+      color: #51cf66;
+    }
+    
+    .log-info {
+      color: #74c0fc;
+    }
+    
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .status {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    
+    .status.working {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status.broken {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Teste: Sistema de Collapse/Expand nas Subcategorias</h1>
+
+<div class="status broken" id="status">
+  ⏳ Aguardando interação...
+</div>
+
+<!-- Categoria 1 -->
+<div class="category-wrapper expanded" id="cat-1">
+  <h3 class="category-title">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">💝 Romântico Clássico</span>
+    <span class="category-progress-badge">0/5</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Gostarias de ter um jantar romântico à luz de velas?</div>
+    <div class="question">2. Achas romântico passear de mãos dadas ao pôr do sol?</div>
+    <div class="question">3. Gostarias de receber uma carta de amor escrita à mão?</div>
+    <div class="question">4. Te interessa um fim de semana romântico num hotel?</div>
+    <div class="question">5. Gostarias de dançar música lenta juntos?</div>
+  </div>
+</div>
+
+<!-- Categoria 2 -->
+<div class="category-wrapper expanded" id="cat-2">
+  <h3 class="category-title">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">🔥 Sedução e Desejo</span>
+    <span class="category-progress-badge">0/5</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Te excita receber mensagens sensuais durante o dia?</div>
+    <div class="question">2. Gostarias de fazer um striptease para o/a teu/tua parceiro/a?</div>
+    <div class="question">3. Te interessa usar lingerie sexy?</div>
+    <div class="question">4. Gostarias de experimentar jogos de sedução?</div>
+    <div class="question">5. Te excita a ideia de sexting?</div>
+  </div>
+</div>
+
+<!-- Categoria 3 -->
+<div class="category-wrapper expanded" id="cat-3">
+  <h3 class="category-title">
+    <span class="category-toggle-icon">▼</span>
+    <span class="category-name">🌹 Fantasias Românticas</span>
+    <span class="category-progress-badge">0/5</span>
+  </h3>
+  <div class="category-questions">
+    <div class="question">1. Sonhas em ser pedido/a em casamento de forma romântica?</div>
+    <div class="question">2. Te interessa renovar votos de forma especial?</div>
+    <div class="question">3. Gostarias de ter um álbum de fotos do casal?</div>
+    <div class="question">4. Te interessa fazer uma viagem romântica?</div>
+    <div class="question">5. Gostarias de ter um ritual de casal especial?</div>
+  </div>
+</div>
+
+<div id="console">
+  <strong>📟 Console de Debug - Sistema de Collapse/Expand:</strong><br>
+</div>
+
+<script>
+  // Sistema de log personalizado
+  const consoleDiv = document.getElementById('console');
+  const statusDiv = document.getElementById('status');
+  let clickCount = 0;
+  
+  function log(message, type = 'info') {
+    console.log(message);
+    const entry = document.createElement('div');
+    entry.className = `log-entry log-${type}`;
+    const timestamp = new Date().toLocaleTimeString();
+    entry.innerHTML = `<span style="color: #999;">[${timestamp}]</span> ${message}`;
+    consoleDiv.appendChild(entry);
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+  }
+  
+  // Toggle category
+  function toggleCategory(categoryWrapper) {
+    clickCount++;
+    log(`🖱️ Click #${clickCount} detectado no wrapper ID: ${categoryWrapper.id}`, 'info');
+    
+    const isExpanded = categoryWrapper.classList.contains('expanded');
+    log(`📦 Estado atual: ${isExpanded ? 'EXPANDIDO' : 'COLAPSADO'}`, 'info');
+    
+    if (isExpanded) {
+      categoryWrapper.classList.remove('expanded');
+      categoryWrapper.classList.add('collapsed');
+      log(`✅ Mudando para: COLAPSADO (expanded → collapsed)`, 'success');
+    } else {
+      categoryWrapper.classList.add('expanded');
+      categoryWrapper.classList.remove('collapsed');
+      log(`✅ Mudando para: EXPANDIDO (collapsed → expanded)`, 'success');
+    }
+    
+    // Atualizar ícone
+    const icon = categoryWrapper.querySelector('.category-toggle-icon');
+    if (icon) {
+      const newRotation = !isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)';
+      icon.style.transform = newRotation;
+      log(`🔄 Ícone rotacionado para: ${newRotation}`, 'success');
+    } else {
+      log(`❌ Ícone não encontrado!`, 'error');
+    }
+    
+    // Verificar se perguntas foram escondidas/mostradas
+    const questionsDiv = categoryWrapper.querySelector('.category-questions');
+    if (questionsDiv) {
+      const display = window.getComputedStyle(questionsDiv).display;
+      log(`📊 Display das perguntas: ${display}`, display === 'none' ? 'success' : 'info');
+    }
+    
+    // Atualizar status
+    if (clickCount > 0) {
+      statusDiv.className = 'status working';
+      statusDiv.textContent = `✅ Sistema FUNCIONANDO! (${clickCount} clicks)`;
+    }
+  }
+  
+  // Inicializar
+  function init() {
+    log('🎨 Inicializando sistema de collapse/expand...', 'info');
+    
+    const categories = document.querySelectorAll('.category-wrapper');
+    log(`📦 Encontradas ${categories.length} categorias`, 'info');
+    
+    categories.forEach((wrapper, index) => {
+      const title = wrapper.querySelector('.category-title');
+      if (!title) {
+        log(`❌ Categoria ${index + 1}: Título não encontrado!`, 'error');
+        return;
+      }
+      
+      log(`✅ Categoria ${index + 1} (${wrapper.id}): Adicionando event listener`, 'success');
+      
+      // Adicionar evento de click
+      title.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        log(`🎯 Click capturado no título da categoria ${wrapper.id}`, 'info');
+        toggleCategory(wrapper);
+      };
+      
+      // Testar se o elemento é clicável
+      title.style.cursor = 'pointer';
+    });
+    
+    log('✅ Sistema inicializado com sucesso!', 'success');
+    log('👆 Clique nos títulos das categorias para testar', 'info');
+  }
+  
+  // Inicializar ao carregar
+  document.addEventListener('DOMContentLoaded', () => {
+    log('📄 DOM carregado', 'info');
+    init();
+  });
+</script>
+
+</body>
+</html>

@@ -94,12 +94,16 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
     console.log(`✅ Resposta guardada no Firestore: ${packId}/${questionId}`, normalizedData);
     
     // Mostrar "Guardado" ✅
-    updateSyncStatus('saved');
-    
-    // Atualizar barra de progresso após guardar
+    updateSyncStatus('saved');    // Atualizar barra de progresso após guardar
     if (typeof updateThemeProgress === 'function') {
       updateThemeProgress();
       console.log('📊 Barra de progresso atualizada após guardar');
+    }
+    
+    // Atualizar badge de progresso das categorias
+    if (typeof updateAllCategoriesProgress === 'function') {
+      updateAllCategoriesProgress();
+      console.log('📊 Progresso das categorias atualizado');
     }
     
     return true;
