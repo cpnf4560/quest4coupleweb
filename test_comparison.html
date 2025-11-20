@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste - Matriz de Compatibilidade</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-result {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 4px solid;
+    }
+    .test-result.pass {
+      border-left-color: #28a745;
+    }
+    .test-result.fail {
+      border-left-color: #dc3545;
+    }
+    h1 {
+      color: #667eea;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Teste da Matriz de Compatibilidade</h1>
+  <div id="results"></div>
+
+  <script>
+    // Simular a lógica da matriz
+    function testMatrixLogic() {
+      const results = [];
+      
+      // Função auxiliar para testar
+      function test(my, partner, expected) {
+        let result = null;
+        let shouldShow = true;
+        let shouldCount = true;
+        
+        // REGRA 1: Ambos Meh = NÃO aparece E NÃO conta
+        if (my === 'meh' && partner === 'meh') {
+          shouldShow = false;
+          shouldCount = false;
+          result = 'OCULTO (Meh+Meh)';
+        }
+        
+        // REGRA 2: Yup + Meh OU Talvez + Meh = OCULTO
+        else if ((my === 'yup' && partner === 'meh') || (my === 'meh' && partner === 'yup') ||
+            (my === 'talvez' && partner === 'meh') || (my === 'meh' && partner === 'talvez')) {
+          shouldShow = false;
+          shouldCount = false;
+          result = 'OCULTO (Yup/Talvez+Meh)';
+        }
+        
+        // SUPER MATCH
+        else if (my === 'porfavor' && partner === 'porfavor') {
+          result = '⭐ SUPER MATCH';
+          shouldCount = true;
+        }
+        
+        // EXCELENTE
+        else if ((my === 'porfavor' && partner === 'yup') || (my === 'yup' && partner === 'porfavor')) {
+          result = '✨ EXCELENTE';
+          shouldCount = true;
+        }
+        
+        // BOM MATCH
+        else if (my === 'yup' && partner === 'yup') {
+          result = '💚 BOM MATCH';
+          shouldCount = true;
+        }
+        
+        // POSSÍVEL
+        else if ((my === 'porfavor' && partner === 'talvez') || (my === 'talvez' && partner === 'porfavor') ||
+            (my === 'yup' && partner === 'talvez') || (my === 'talvez' && partner === 'yup') ||
+            (my === 'talvez' && partner === 'talvez')) {
+          result = '🤔 POSSÍVEL';
+          shouldCount = true;
+        }
+        
+        // NEUTRO
+        else if ((my === 'porfavor' && partner === 'meh') || (my === 'meh' && partner === 'porfavor')) {
+          result = '😐 NEUTRO';
+          shouldCount = false;
+        }
+        
+        const pass = result === expected;
+        results.push({
+          my,
+          partner,
+          expected,
+          result,
+          pass,
+          shouldShow,
+          shouldCount
+        });
+      }
+      
+      // TESTES DA MATRIZ (baseado no tutorial.html)
+      test('meh', 'meh', 'OCULTO (Meh+Meh)');
+      test('yup', 'meh', 'OCULTO (Yup/Talvez+Meh)');
+      test('meh', 'yup', 'OCULTO (Yup/Talvez+Meh)');
+      test('talvez', 'meh', 'OCULTO (Yup/Talvez+Meh)');
+      test('meh', 'talvez', 'OCULTO (Yup/Talvez+Meh)');
+      test('porfavor', 'porfavor', '⭐ SUPER MATCH');
+      test('porfavor', 'yup', '✨ EXCELENTE');
+      test('yup', 'porfavor', '✨ EXCELENTE');
+      test('yup', 'yup', '💚 BOM MATCH');
+      test('porfavor', 'talvez', '🤔 POSSÍVEL');
+      test('talvez', 'porfavor', '🤔 POSSÍVEL');
+      test('yup', 'talvez', '🤔 POSSÍVEL');
+      test('talvez', 'yup', '🤔 POSSÍVEL');
+      test('talvez', 'talvez', '🤔 POSSÍVEL');
+      test('porfavor', 'meh', '😐 NEUTRO');
+      test('meh', 'porfavor', '😐 NEUTRO');
+      
+      return results;
+    }
+    
+    // Executar testes
+    const testResults = testMatrixLogic();
+    const resultsDiv = document.getElementById('results');
+    
+    let passCount = 0;
+    let failCount = 0;
+    
+    testResults.forEach(result => {
+      if (result.pass) passCount++;
+      else failCount++;
+      
+      resultsDiv.innerHTML += `
+        <div class="test-result ${result.pass ? 'pass' : 'fail'}">
+          <strong>${result.pass ? '✅' : '❌'} ${result.my.toUpperCase()} + ${result.partner.toUpperCase()}</strong>
+          <div>Esperado: ${result.expected}</div>
+          <div>Obtido: ${result.result}</div>
+          <div style="font-size: 0.85em; color: #6c757d; margin-top: 5px;">
+            Mostra: ${result.shouldShow ? 'Sim' : 'Não'} | 
+            Conta para %: ${result.shouldCount ? 'Sim' : 'Não'}
+          </div>
+        </div>
+      `;
+    });
+    
+    resultsDiv.innerHTML = `
+      <div style="background: ${passCount === testResults.length ? '#d4edda' : '#f8d7da'}; 
+                  color: ${passCount === testResults.length ? '#155724' : '#721c24'}; 
+                  padding: 15px; 
+                  border-radius: 8px; 
+                  margin-bottom: 20px;">
+        <h2 style="margin: 0;">
+          ${passCount === testResults.length ? '✅ Todos os testes passaram!' : '⚠️ Alguns testes falharam'}
+        </h2>
+        <p style="margin: 10px 0 0 0;">
+          ${passCount} passaram | ${failCount} falharam | Total: ${testResults.length}
+        </p>
+      </div>
+    ` + resultsDiv.innerHTML;
+  </script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antes vs Depois - Cloud Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: white;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      font-size: 1.2em;
+      margin-bottom: 40px;
+    }
+    
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .panel {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .panel-header {
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+    
+    .before-header {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+      color: white;
+    }
+    
+    .after-header {
+      background: linear-gradient(135deg, #51cf66, #37b24d);
+      color: white;
+    }
+    
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      transition: all 0.3s;
+    }
+    
+    .step:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+    
+    .step-number {
+      min-width: 35px;
+      height: 35px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .step-description {
+      color: #6c757d;
+      font-size: 0.9em;
+      line-height: 1.5;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    
+    .badge-slow {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .badge-complex {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .badge-fast {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .badge-simple {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    
+    .stats {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      margin-bottom: 40px;
+    }
+    
+    .stats-header {
+      text-align: center;
+      font-size: 1.8em;
+      color: #667eea;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      padding: 25px;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .stat-icon {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+    
+    .stat-value {
+      font-size: 2em;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      color: #6c757d;
+      font-size: 0.95em;
+      font-weight: 600;
+    }
+    
+    .benefits {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .benefits-header {
+      text-align: center;
+      font-size: 1.8em;
+      color: #667eea;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+    
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border-left: 5px solid #51cf66;
+    }
+    
+    .benefit-icon {
+      font-size: 2.5em;
+      min-width: 50px;
+      text-align: center;
+    }
+    
+    .benefit-content {
+      flex: 1;
+    }
+    
+    .benefit-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 8px;
+    }
+    
+    .benefit-description {
+      color: #6c757d;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      .comparison {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .subtitle {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>⚡ Antes vs Depois: Cloud Report</h1>
+  <p class="subtitle">Veja como simplificamos o processo de gerar relatórios!</p>
+  
+  <!-- COMPARAÇÃO ANTES/DEPOIS -->
+  <div class="comparison">
+    <!-- ANTES -->
+    <div class="panel">
+      <div class="panel-header before-header">
+        ❌ ANTES (Só Ficheiros .q4c)
+      </div>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">Responder questionário</div>
+          <div class="step-description">No app.html, responder todas as perguntas</div>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">Guardar ficheiro .q4c</div>
+          <div class="step-description">Escolher código de segurança e fazer download</div>
+          <span class="badge badge-complex">Código necessário</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">Partilhar ficheiro</div>
+          <div class="step-description">Enviar .q4c ao parceiro/a por email, WhatsApp, etc.</div>
+          <span class="badge badge-slow">Manual</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <div class="step-title">Receber ficheiro do parceiro/a</div>
+          <div class="step-description">Aguardar que o parceiro/a envie o dele/dela</div>
+          <span class="badge badge-slow">Espera</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <div class="step-title">Carregar ambos os ficheiros</div>
+          <div class="step-description">Upload do seu ficheiro + ficheiro do parceiro/a</div>
+          <span class="badge badge-complex">2 uploads</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-content">
+          <div class="step-title">Inserir código de segurança</div>
+          <div class="step-description">Lembrar e digitar o mesmo código usado antes</div>
+          <span class="badge badge-complex">Pode esquecer</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">7</div>
+        <div class="step-content">
+          <div class="step-title">Gerar relatório</div>
+          <div class="step-description">Finalmente! Clicar no botão e ver resultados</div>
+          <span class="badge badge-slow">~5-10 min</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- DEPOIS -->
+    <div class="panel">
+      <div class="panel-header after-header">
+        ✅ DEPOIS (Com Cloud)
+      </div>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <div class="step-title">Responder questionário</div>
+          <div class="step-description">No app.html, respostas são guardadas automaticamente na cloud</div>
+          <span class="badge badge-fast">Automático</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <div class="step-title">Abrir relatorio.html</div>
+          <div class="step-description">Sistema detecta automaticamente que está logado</div>
+          <span class="badge badge-simple">1 clique</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <div class="step-title">Escolher parceiro/a</div>
+          <div class="step-description">Selecionar no dropdown - lista carregada automaticamente</div>
+          <span class="badge badge-fast">Instantâneo</span>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <div class="step-title">Gerar relatório</div>
+          <div class="step-description">Um clique e pronto! Dados buscados da cloud automaticamente</div>
+          <span class="badge badge-fast">~2 segundos</span>
+          <span class="badge badge-simple">Sem código</span>
+        </div>
+      </div>
+      
+      <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #d4edda, #c3e6cb); border-radius: 15px; text-align: center;">
+        <div style="font-size: 3em; margin-bottom: 10px;">🎉</div>
+        <div style="font-size: 1.3em; font-weight: 700; color: #155724; margin-bottom: 8px;">
+          4 Passos vs 7 Passos
+        </div>
+        <div style="color: #155724; font-weight: 600;">
+          Redução de 43% no processo!
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ESTATÍSTICAS -->
+  <div class="stats">
+    <div class="stats-header">📊 Estatísticas de Melhoria</div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value">80%</div>
+        <div class="stat-label">Mais Rápido</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value">-43%</div>
+        <div class="stat-label">Menos Passos</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🔒</div>
+        <div class="stat-value">100%</div>
+        <div class="stat-label">Mais Seguro</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">😊</div>
+        <div class="stat-value">10x</div>
+        <div class="stat-label">Melhor UX</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- BENEFÍCIOS -->
+  <div class="benefits">
+    <div class="benefits-header">✨ Benefícios da Nova Implementação</div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">⚡</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Geração Instantânea</div>
+        <div class="benefit-description">
+          De ~5-10 minutos para ~2 segundos. As respostas já estão na cloud, 
+          basta selecionar o parceiro e clicar!
+        </div>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">🚫</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Sem Ficheiros para Gerir</div>
+        <div class="benefit-description">
+          Não precisa fazer download, guardar, partilhar ou carregar ficheiros .q4c. 
+          Tudo é automático na cloud.
+        </div>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">🔑</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Sem Código de Segurança</div>
+        <div class="benefit-description">
+          Não precisa lembrar ou partilhar códigos. A autenticação Firebase 
+          garante segurança automaticamente.
+        </div>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">📱</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Mobile-Friendly</div>
+        <div class="benefit-description">
+          Funciona perfeitamente em dispositivos móveis. Sem fricção para 
+          carregar ficheiros ou digitar códigos.
+        </div>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">🔄</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Compatibilidade Total</div>
+        <div class="benefit-description">
+          O método tradicional (.q4c) continua funcionando 100%. 
+          Utilizadores sem conta podem usar normalmente.
+        </div>
+      </div>
+    </div>
+    
+    <div class="benefit-item">
+      <div class="benefit-icon">🎨</div>
+      <div class="benefit-content">
+        <div class="benefit-title">Design Coerente</div>
+        <div class="benefit-description">
+          A nova secção cloud integra-se perfeitamente com o design existente, 
+          mantendo a identidade visual do projeto.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

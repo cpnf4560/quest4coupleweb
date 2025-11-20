@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview - Novo Design Compacto</title>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    body {
+      padding: 20px;
+      background: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .preview-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .preview-header {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .preview-header h1 {
+      color: #667eea;
+      margin: 0 0 10px 0;
+    }
+    
+    .preview-header p {
+      color: #6c757d;
+      margin: 0;
+    }
+    
+    /* ========================================
+       ESTILOS DA TABELA COMPACTA
+       ======================================== */
+    .compatibility-category {
+      margin: 25px 0;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+      .compatibility-category h3 {
+      font-size: 1.1em;
+      margin: 0;
+      padding: 12px 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      color: #495057;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .compatibility-category h3:hover {
+      background: #e9ecef;
+    }
+    
+    .category-toggle {
+      font-size: 0.8em;
+      color: #667eea;
+      transition: transform 0.3s;
+      display: inline-block;
+    }
+    
+    .category-content {
+      display: block;
+      transition: all 0.3s ease;
+    }
+    
+    #toggleAllBtn:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .compatibility-section {
+      display: grid;
+      grid-template-columns: 3.5fr 1.2fr 2fr 2fr;
+      gap: 15px;
+      padding: 10px 20px;
+      margin: 0;
+      border-bottom: 1px solid #f0f0f0;
+      align-items: center;
+      transition: background 0.2s;
+      font-size: 0.9em;
+    }
+    
+    .compatibility-section:last-child {
+      border-bottom: none;
+    }
+    
+    .compatibility-section:hover {
+      background: #f8f9fa;
+    }
+    
+    .question-text {
+      color: #2c3e50;
+      font-weight: 500;
+      line-height: 1.4;
+      margin: 0;
+    }
+    
+    .match-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.85em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    
+    .user-answer {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .user-name {
+      font-size: 0.75em;
+      color: #6c757d;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Cores por tipo */
+    .super-match .match-type {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .excellent .match-type {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    
+    .good-match .match-type {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .possible .match-type {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .neutral .match-type {
+      background: #e2e3e5;
+      color: #383d41;
+    }
+    
+    .answer-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.85em;
+      border: 1px solid;
+    }
+      /* Por favor! - AZUL */
+    .answer-badge.porfavor {
+      background: #cfe2ff;
+      color: #084298;
+      border-color: #b6d4fe;
+    }
+    
+    /* Yup - VERDE */
+    .answer-badge.yup {
+      background: #d1e7dd;
+      color: #0f5132;
+      border-color: #badbcc;
+    }
+    
+    /* Talvez - AMARELO (mantém) */
+    .answer-badge.talvez {
+      background: #fff3cd;
+      color: #856404;
+      border-color: #ffeaa7;
+    }
+    
+    /* Meh - VERMELHO */
+    .answer-badge.meh {
+      background: #f8d7da;
+      color: #842029;
+      border-color: #f5c2c7;
+    }
+    
+    /* Responsividade */
+    @media (max-width: 992px) {
+      .compatibility-section {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 15px 20px;
+      }
+      
+      .question-text {
+        font-size: 1em;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e9ecef;
+      }
+      
+      .match-type {
+        margin-bottom: 8px;
+      }
+      
+      .user-answer {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="preview-container">
+    <div class="preview-header">
+    <h1>🎨 Preview - Novo Design Compacto</h1>
+    <p>Formato de tabela com cores sóbrias e informação numa linha</p>
+    
+    <!-- Botão Expandir/Minimizar Tudo -->
+    <button id="toggleAllBtn" onclick="toggleAllCategories()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em; transition: all 0.3s;">
+      📁 Minimizar Tudo
+    </button>
+  </div>
+  <!-- ⭐ Super Matches -->
+  <div class="compatibility-category" data-category="super-matches">
+    <h3 onclick="toggleCategory('super-matches')">
+      <span class="category-toggle">▼</span>
+      ⭐ Super Matches (3)
+    </h3>
+    <div class="category-content">
+    
+    <div class="compatibility-section super-match">
+      <p class="question-text">1. Gostarias de viajar para o estrangeiro?</p>
+      <span class="match-type">⭐ SUPER MATCH</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section super-match">
+      <p class="question-text">2. Experimentar novos hobbies juntos?</p>
+      <span class="match-type">⭐ SUPER MATCH</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section super-match">
+      <p class="question-text">3. Passar um fim de semana numa cabana isolada?</p>
+      <span class="match-type">⭐ SUPER MATCH</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>      </div>
+    </div>
+    </div> <!-- Fecha category-content -->
+  </div>
+
+  <!-- 💚 Excelentes & Bons Matches -->
+  <div class="compatibility-category" data-category="excellent-matches">
+    <h3 onclick="toggleCategory('excellent-matches')">
+      <span class="category-toggle">▼</span>
+      💚 Excelentes & Bons Matches (4)
+    </h3>
+    <div class="category-content">
+    
+    <div class="compatibility-section excellent">
+      <p class="question-text">4. Jantar romântico à luz de velas?</p>
+      <span class="match-type">✨ EXCELENTE</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section excellent">
+      <p class="question-text">5. Assistir ao nascer do sol juntos?</p>
+      <span class="match-type">✨ EXCELENTE</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section good-match">
+      <p class="question-text">6. Cozinhar uma refeição especial em casa?</p>
+      <span class="match-type">💚 BOM MATCH</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section good-match">
+      <p class="question-text">7. Fazer uma caminhada na natureza?</p>
+      <span class="match-type">💚 BOM MATCH</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge yup">👍 Yup</span>      </div>
+    </div>
+    </div> <!-- Fecha category-content -->
+  </div>
+
+  <!-- 🤔 Possíveis -->
+  <div class="compatibility-category" data-category="possible-matches">
+    <h3 onclick="toggleCategory('possible-matches')">
+      <span class="category-toggle">▼</span>
+      🤔 Possíveis (3)
+    </h3>
+    <div class="category-content">
+    
+    <div class="compatibility-section possible">
+      <p class="question-text">8. Experimentar desportos radicais?</p>
+      <span class="match-type">🤔 POSSÍVEL</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge talvez">🤷 Talvez</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section possible">
+      <p class="question-text">9. Ir a um festival de música?</p>
+      <span class="match-type">🤔 POSSÍVEL</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge yup">👍 Yup</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge talvez">🤷 Talvez</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section possible">
+      <p class="question-text">10. Adotar um animal de estimação?</p>
+      <span class="match-type">🤔 POSSÍVEL</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge talvez">🤷 Talvez</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge talvez">🤷 Talvez</span>      </div>
+    </div>
+    </div> <!-- Fecha category-content -->
+  </div>
+
+  <!-- 💭 Para Conversar -->
+  <div class="compatibility-category" data-category="reflection-matches">
+    <h3 onclick="toggleCategory('reflection-matches')">
+      <span class="category-toggle">▼</span>
+      💭 Para Conversar (2)
+    </h3>
+    <div class="category-content">
+    
+    <div class="compatibility-section neutral">
+      <p class="question-text">11. Mudar de cidade por trabalho?</p>
+      <span class="match-type">😐 NEUTRO</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge meh">😐 Meh...</span>
+      </div>
+    </div>
+    
+    <div class="compatibility-section neutral">
+      <p class="question-text">12. Participar em eventos sociais regularmente?</p>
+      <span class="match-type">😐 NEUTRO</span>
+      <div class="user-answer">
+        <span class="user-name">João</span>
+        <span class="answer-badge meh">😐 Meh...</span>
+      </div>
+      <div class="user-answer">
+        <span class="user-name">Maria</span>
+        <span class="answer-badge porfavor">💖 Por favor!</span>      </div>
+    </div>
+    </div> <!-- Fecha category-content -->
+  </div>
+
+  <div style="text-align: center; margin: 40px 0; padding: 30px; background: white; border-radius: 12px;">
+    <h2 style="color: #667eea; margin-bottom: 15px;">✨ Novo Design Implementado!</h2>
+    <p style="color: #6c757d; font-size: 1.1em; margin-bottom: 20px;">
+      Layout compacto em tabela com cores sóbrias e profissionais
+    </p>
+    <a href="relatorio.html" style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 1.1em;">
+      🚀 Testar Relatório Real
+    </a>  </div>
+
+</div>
+
+<script>
+/* ============================================
+   EXPAND/COLLAPSE CATEGORIES - Preview Demo
+   ============================================ */
+
+// Toggle individual category
+function toggleCategory(categoryId) {
+  const category = document.querySelector(`[data-category="${categoryId}"]`);
+  if (!category) return;
+  
+  const content = category.querySelector('.category-content');
+  const toggle = category.querySelector('.category-toggle');
+  
+  if (content.style.display === 'none') {
+    // Expandir
+    content.style.display = 'block';
+    toggle.textContent = '▼';
+    toggle.style.transform = 'rotate(0deg)';
+  } else {
+    // Minimizar
+    content.style.display = 'none';
+    toggle.textContent = '▶';
+    toggle.style.transform = 'rotate(-90deg)';
+  }
+}
+
+// Toggle all categories
+function toggleAllCategories() {
+  const categories = document.querySelectorAll('.compatibility-category');
+  const btn = document.getElementById('toggleAllBtn');
+  
+  if (!categories.length) return;
+  
+  // Verificar estado da primeira categoria
+  const firstContent = categories[0].querySelector('.category-content');
+  const isExpanded = firstContent.style.display !== 'none';
+  
+  categories.forEach(category => {
+    const content = category.querySelector('.category-content');
+    const toggle = category.querySelector('.category-toggle');
+    
+    if (isExpanded) {
+      // Minimizar tudo
+      content.style.display = 'none';
+      toggle.textContent = '▶';
+      toggle.style.transform = 'rotate(-90deg)';
+    } else {
+      // Expandir tudo
+      content.style.display = 'block';
+      toggle.textContent = '▼';
+      toggle.style.transform = 'rotate(0deg)';
+    }
+  });
+  
+  // Atualizar texto do botão
+  if (isExpanded) {
+    btn.innerHTML = '📂 Expandir Tudo';
+  } else {
+    btn.innerHTML = '📁 Minimizar Tudo';
+  }
+}
+</script>
+
+</body>
+</html>

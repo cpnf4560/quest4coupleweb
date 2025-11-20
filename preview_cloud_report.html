@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview: Cloud Report Feature</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 40px 20px;
+      background: #f8f9fa;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      color: #667eea;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #6c757d;
+      margin-bottom: 40px;
+      font-size: 1.1em;
+    }
+    
+    .demo-container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+    
+    .scenario {
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .scenario:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .scenario-title {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 1.1em;
+    }
+    
+    .scenario-description {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      color: #495057;
+      line-height: 1.6;
+    }
+    
+    /* Simulação da seção Cloud */
+    .cloud-section {
+      margin: 35px 0 25px;
+      padding: 25px;
+      background: linear-gradient(135deg, #e0f7fa 0%, #e8eaf6 100%);
+      border-radius: 12px;
+      border: 2px solid #667eea;
+    }
+    
+    .cloud-header {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    
+    .cloud-icon {
+      font-size: 2.5em;
+      margin-bottom: 5px;
+    }
+    
+    .cloud-title {
+      color: #667eea;
+      margin: 0 0 5px 0;
+      font-size: 1.3em;
+    }
+    
+    .cloud-subtitle {
+      color: #6c757d;
+      margin: 0;
+      font-size: 0.9em;
+    }
+    
+    /* Botões */
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1em;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-2px);
+    }
+    
+    .btn-cloud {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #00bcd4 0%, #667eea 100%);
+      color: white;
+      font-size: 1.1em;
+      font-weight: 700;
+    }
+    
+    .btn-cloud:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* Select dropdown */
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #667eea;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+    
+    .hint {
+      color: #6c757d;
+      font-size: 0.85em;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    .info-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    
+    .info-title {
+      font-weight: 700;
+      color: #856404;
+      margin-bottom: 10px;
+    }
+    
+    .info-list {
+      margin: 10px 0 0 20px;
+      line-height: 1.8;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+<h1>☁️ Preview: Cloud Report Feature</h1>
+<p class="subtitle">Opção C - Híbrido Suave | Implementado em 20 Nov 2024</p>
+
+<!-- CENÁRIO 1: NÃO AUTENTICADO -->
+<div class="demo-container">
+  <div class="scenario">
+    <div class="scenario-title">🔒 Cenário 1: Utilizador Não Autenticado</div>
+    <div class="scenario-description">
+      Quando o utilizador abre <code>relatorio.html</code> sem estar logado, vê o botão para fazer login.
+    </div>
+    
+    <div class="cloud-section">
+      <div class="cloud-header">
+        <div class="cloud-icon">☁️</div>
+        <h3 class="cloud-title">Gerar com Conta Quest4Couple</h3>
+        <p class="cloud-subtitle">Sem ficheiros! Direto pela cloud 🚀</p>
+      </div>
+      
+      <div style="text-align: center;">
+        <p style="color: #495057; margin-bottom: 15px;">
+          <strong>✨ Novo!</strong> Se ambos têm conta Quest4Couple, podem gerar o relatório diretamente sem ficheiros .q4c!
+        </p>
+        <button class="btn-primary" onclick="alert('Redirecionaria para login.html?redirect=relatorio.html')">
+          🔐 Fazer Login para Usar Cloud
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CENÁRIO 2: AUTENTICADO -->
+  <div class="scenario">
+    <div class="scenario-title">✅ Cenário 2: Utilizador Autenticado (Com Parceiros)</div>
+    <div class="scenario-description">
+      Quando o utilizador está logado e tem parceiros conectados, vê o dropdown para selecionar e gerar o relatório diretamente.
+    </div>
+    
+    <div class="cloud-section">
+      <div class="cloud-header">
+        <div class="cloud-icon">☁️</div>
+        <h3 class="cloud-title">Gerar com Conta Quest4Couple</h3>
+        <p class="cloud-subtitle">Sem ficheiros! Direto pela cloud 🚀</p>
+      </div>
+      
+      <div>
+        <div>
+          <label>👥 Escolher parceiro/a:</label>
+          <select>
+            <option value="">Selecione um/a parceiro/a...</option>
+            <option value="user123">Maria Silva (maria@example.com)</option>
+            <option value="user456">João Santos (joao@example.com)</option>
+            <option value="user789">Ana Costa (ana@example.com)</option>
+          </select>
+        </div>
+        
+        <button class="btn-cloud" onclick="alert('Geraria relatório usando dados da cloud!')">
+          ☁️ Gerar Relatório pela Cloud
+        </button>
+        
+        <p class="hint">
+          ⚡ Rápido e sem código de segurança!
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CENÁRIO 3: AUTENTICADO SEM PARCEIROS -->
+  <div class="scenario">
+    <div class="scenario-title">⚠️ Cenário 3: Utilizador Autenticado (Sem Parceiros)</div>
+    <div class="scenario-description">
+      Quando o utilizador está logado mas ainda não conectou com nenhum parceiro.
+    </div>
+    
+    <div class="cloud-section">
+      <div class="cloud-header">
+        <div class="cloud-icon">☁️</div>
+        <h3 class="cloud-title">Gerar com Conta Quest4Couple</h3>
+        <p class="cloud-subtitle">Sem ficheiros! Direto pela cloud 🚀</p>
+      </div>
+      
+      <div>
+        <div>
+          <label>👥 Escolher parceiro/a:</label>
+          <select disabled>
+            <option value="">Nenhum parceiro conectado ainda</option>
+          </select>
+        </div>
+        
+        <button class="btn-cloud" disabled style="opacity: 0.5; cursor: not-allowed;">
+          ☁️ Gerar Relatório pela Cloud
+        </button>
+        
+        <p class="hint">
+          💡 Conecte-se com um/a parceiro/a no seu perfil primeiro!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFORMAÇÕES TÉCNICAS -->
+<div class="demo-container">
+  <h2 style="color: #667eea; margin-bottom: 20px;">📋 Informações Técnicas</h2>
+  
+  <div class="info-box">
+    <div class="info-title">🔧 Funções JavaScript Implementadas:</div>
+    <ul class="info-list">
+      <li><code>checkCloudAuthentication()</code> - Verifica estado de autenticação ao carregar página</li>
+      <li><code>loadConnectedPartners(userId)</code> - Carrega parceiros do Firebase</li>
+      <li><code>generateCloudReport()</code> - Gera relatório usando dados da cloud</li>
+      <li><code>loadAnswersFromFirebase(userId)</code> - Busca respostas de um utilizador</li>
+    </ul>
+  </div>
+  
+  <div class="info-box" style="background: #d1ecf1; border-left-color: #0c5460;">
+    <div class="info-title" style="color: #0c5460;">☁️ Estrutura Firebase Esperada:</div>
+    <ul class="info-list">
+      <li><strong>Collection:</strong> <code>connections</code> - Guarda ligações entre utilizadores</li>
+      <li><strong>Collection:</strong> <code>answers</code> - Guarda respostas dos questionários</li>
+      <li><strong>Auth:</strong> Firebase Authentication para gerir sessões</li>
+    </ul>
+  </div>
+  
+  <div class="info-box" style="background: #d4edda; border-left-color: #28a745;">
+    <div class="info-title" style="color: #155724;">✅ Vantagens da Implementação:</div>
+    <ul class="info-list">
+      <li>✨ <strong>Zero Breaking Changes:</strong> Sistema tradicional (.q4c) continua a funcionar</li>
+      <li>⚡ <strong>UX Melhorada:</strong> Menos fricção para utilizadores autenticados</li>
+      <li>🔒 <strong>Mais Seguro:</strong> Não precisa de partilhar ficheiros manualmente</li>
+      <li>🚀 <strong>Mais Rápido:</strong> Geração instantânea sem uploads</li>
+      <li>📱 <strong>Mobile-Friendly:</strong> Funciona perfeitamente em dispositivos móveis</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FLUXO DE TESTE -->
+<div class="demo-container">
+  <h2 style="color: #667eea; margin-bottom: 20px;">🧪 Como Testar</h2>
+  
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+    <h3 style="color: #495057; margin-top: 0;">1️⃣ Teste Sem Firebase</h3>
+    <p style="color: #6c757d; line-height: 1.6;">
+      Abrir <code>relatorio.html</code> diretamente. A secção cloud mostrará o botão "Fazer Login" 
+      e o sistema tradicional de upload funciona normalmente.
+    </p>
+  </div>
+  
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+    <h3 style="color: #495057; margin-top: 0;">2️⃣ Teste Com Firebase + Não Autenticado</h3>
+    <p style="color: #6c757d; line-height: 1.6;">
+      Configurar Firebase no projeto e abrir sem login. Clicar no botão "Fazer Login" 
+      deve redirecionar para <code>login.html?redirect=relatorio.html</code>.
+    </p>
+  </div>
+  
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 12px;">
+    <h3 style="color: #495057; margin-top: 0;">3️⃣ Teste Com Firebase + Autenticado</h3>
+    <p style="color: #6c757d; line-height: 1.6;">
+      Fazer login no sistema e abrir <code>relatorio.html</code>. A secção cloud mostrará 
+      o dropdown de parceiros. Selecionar um parceiro e clicar "Gerar pela Cloud" 
+      deve gerar o relatório automaticamente.
+    </p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align: center; margin-top: 40px; padding: 20px; color: #6c757d;">
+  <p style="margin: 0;">💕 Quest4Couple - Cloud Report Feature</p>
+  <p style="margin: 5px 0 0 0; font-size: 0.9em;">Implementado: 20 Novembro 2024</p>
+</div>
+
+</body>
+</html>
