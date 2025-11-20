@@ -100,8 +100,7 @@ async function showTheme(themeName) {
   document.querySelectorAll('.pack').forEach(pack => {
     pack.classList.remove('active');
   });
-  
-  const selectedPack = document.querySelector('.pack.' + themeName);
+    const selectedPack = document.querySelector('.pack.' + themeName);
   if (selectedPack) {
     selectedPack.classList.add('active');
   }
@@ -111,10 +110,22 @@ async function showTheme(themeName) {
     await loadSavedAnswersForPack(themeName);
   }
   
+  // 🔥 ATIVAR SINCRONIZAÇÃO EM TEMPO REAL
+  if (typeof setupRealtimeSync === 'function') {
+    setupRealtimeSync(themeName);
+    console.log('🔥 Sincronização em tempo real ativada para:', themeName);
+  }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function backToThemes() {
+  // 🛑 PARAR SINCRONIZAÇÃO EM TEMPO REAL
+  if (typeof stopRealtimeSync === 'function') {
+    stopRealtimeSync();
+    console.log('🛑 Sincronização em tempo real desativada');
+  }
+  
   document.querySelectorAll('.pack').forEach(pack => {
     pack.classList.remove('active');
   });
@@ -282,38 +293,61 @@ function setupAutosave() {
 // LOAD SAVED ANSWERS ON PACK OPEN
 // ========================================
 async function loadSavedAnswersForPack(packId) {
+  console.log(`🔄 Tentando carregar respostas para pack: ${packId}`);
+  
   if (typeof loadPackAnswersFromFirestore === 'function') {
     const answers = await loadPackAnswersFromFirestore(packId);
     
+    console.log(`📦 Respostas recebidas do Firestore:`, answers);
+    console.log(`📊 Número de respostas: ${Object.keys(answers || {}).length}`);
+    
     if (answers && Object.keys(answers).length > 0) {
       console.log(`📥 Carregando respostas salvas para ${packId}:`, answers);
+      
+      let loadedCount = 0;
       
       // Preencher formulário com respostas salvas
       Object.entries(answers).forEach(([questionId, data]) => {
         const qNum = questionId.replace('q', '');
         
+        console.log(`  → Processando ${questionId}:`, data);
+        
         // Marcar resposta radio
         if (data.answer) {
-          const radio = document.querySelector(`input[name="${packId}_q${qNum}"][value="${data.answer}"]`);
+          const radioSelector = `input[name="${packId}_q${qNum}"][value="${data.answer}"]`;
+          const radio = document.querySelector(radioSelector);
+          console.log(`    Procurando radio: ${radioSelector}`, radio ? '✅ Encontrado' : '❌ Não encontrado');
+          
           if (radio) {
             radio.checked = true;
+            loadedCount++;
+            console.log(`    ✅ Radio marcado: ${data.answer}`);
           }
         }
         
         // Preencher comentário
         if (data.comment) {
-          const textarea = document.querySelector(`textarea[name="${packId}_q${qNum}_comment"]`);
+          const textareaSelector = `textarea[name="${packId}_q${qNum}_comment"]`;
+          const textarea = document.querySelector(textareaSelector);
+          console.log(`    Procurando textarea: ${textareaSelector}`, textarea ? '✅ Encontrado' : '❌ Não encontrado');
+          
           if (textarea) {
             textarea.value = data.comment;
+            console.log(`    ✅ Comentário preenchido`);
           }
-        }
-      });
+        }      });
+      
+      console.log(`✅ Total de respostas carregadas: ${loadedCount}`);
       
       // Atualizar barra de progresso
       if (typeof updateProgress === 'function') {
         updateProgress(packId);
       }
+    } else {
+      console.log(`ℹ️ Nenhuma resposta salva encontrada para ${packId}`);
     }
+  } else {
+    console.warn(`⚠️ Função loadPackAnswersFromFirestore não está disponível`);
   }
 }
 

@@ -6,7 +6,7 @@
 // ========================================
 // SAVE ANSWERS TO FIRESTORE
 // ========================================
-async function saveAnswerToFirestore(packId, questionId, answer) {
+async function saveAnswerToFirestore(packId, questionId, answerData) {
   try {
     const user = auth.currentUser;
     if (!user) {
@@ -14,10 +14,23 @@ async function saveAnswerToFirestore(packId, questionId, answer) {
       return false;
     }
 
-    const answerData = {
-      answer: answer,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    // answerData pode ser {answer: "A", comment: "texto"} ou só "A"
+    // Normalizar para sempre ter o formato correto
+    let normalizedData;
+    if (typeof answerData === 'object' && answerData !== null) {
+      normalizedData = {
+        answer: answerData.answer || null,
+        comment: answerData.comment || '',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+    } else {
+      // Se receber string direta, criar objeto
+      normalizedData = {
+        answer: answerData,
+        comment: '',
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+    }
 
     await db.collection('users')
       .doc(user.uid)
@@ -26,13 +39,13 @@ async function saveAnswerToFirestore(packId, questionId, answer) {
       .set(
         {
           [packId]: {
-            [questionId]: answerData
+            [questionId]: normalizedData
           }
         },
         { merge: true }
       );
 
-    console.log(`✅ Resposta guardada no Firestore: ${packId}/${questionId}`);
+    console.log(`✅ Resposta guardada no Firestore: ${packId}/${questionId}`, normalizedData);
     return true;
   } catch (error) {
     console.error('Erro ao guardar resposta no Firestore:', error);
@@ -96,6 +109,100 @@ async function loadPackAnswersFromFirestore(packId) {
   } catch (error) {
     console.error('Erro ao carregar respostas do pack do Firestore:', error);
     return {};
+  }
+}
+
+// ========================================
+// REAL-TIME SYNC: Listen to answer changes
+// ========================================
+let currentPackListener = null;
+
+function setupRealtimeSync(packId) {
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      console.warn('User não autenticado - real-time sync desativado');
+      return;
+    }
+
+    // Remover listener anterior se existir
+    if (currentPackListener) {
+      currentPackListener();
+      currentPackListener = null;
+    }
+
+    console.log(`🔄 Ativando sincronização em tempo real para: ${packId}`);
+
+    // Criar listener para mudanças no documento
+    currentPackListener = db.collection('users')
+      .doc(user.uid)
+      .collection('answers')
+      .doc('all')
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          const packAnswers = data[packId] || {};
+          
+          console.log(`⚡ Atualização em tempo real detectada para ${packId}:`, packAnswers);
+          
+          // Atualizar formulário com novas respostas
+          Object.entries(packAnswers).forEach(([questionId, answerData]) => {
+            const qNum = questionId.replace('q', '');
+            
+            // Atualizar radio (só se não for o próprio dispositivo a atualizar)
+            if (answerData.answer) {
+              const radio = document.querySelector(`input[name="${packId}_q${qNum}"][value="${answerData.answer}"]`);
+              if (radio && !radio.checked) {
+                radio.checked = true;
+                console.log(`  ⚡ Radio atualizado em tempo real: ${questionId} = ${answerData.answer}`);
+                
+                // Animação visual para mostrar que foi atualizado
+                const questionElement = radio.closest('.question');
+                if (questionElement) {
+                  questionElement.style.animation = 'pulse 0.5s ease';
+                  setTimeout(() => {
+                    questionElement.style.animation = '';
+                  }, 500);
+                }
+              }
+            }
+            
+            // Atualizar comentário (só se não estiver a escrever)
+            if (answerData.comment) {
+              const textarea = document.querySelector(`textarea[name="${packId}_q${qNum}_comment"]`);
+              if (textarea && textarea !== document.activeElement) {
+                if (textarea.value !== answerData.comment) {
+                  textarea.value = answerData.comment;
+                  console.log(`  ⚡ Comentário atualizado em tempo real: ${questionId}`);
+                  
+                  // Animação visual
+                  textarea.style.borderColor = '#667eea';
+                  setTimeout(() => {
+                    textarea.style.borderColor = '';
+                  }, 1000);
+                }
+              }
+            }
+          });
+        }
+      }, (error) => {
+        console.error('Erro no listener real-time:', error);
+      });
+
+    console.log('✅ Sincronização em tempo real ativada!');
+    
+    return currentPackListener;
+  } catch (error) {
+    console.error('Erro ao configurar real-time sync:', error);
+    return null;
+  }
+}
+
+function stopRealtimeSync() {
+  if (currentPackListener) {
+    console.log('🛑 Parando sincronização em tempo real');
+    currentPackListener();
+    currentPackListener = null;
   }
 }
 
