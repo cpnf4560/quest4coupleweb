@@ -40,15 +40,15 @@ function getInvertPair(packId, questionText) {
     if (!invertMatchingConfig) return null;
 
     const packPairs = invertMatchingConfig.invertPairs.find(p => p.packId === packId);
-    if (!packPairs) return null;
-
-    for (const pair of packPairs.pairs) {
+    if (!packPairs) return null;    for (const pair of packPairs.pairs) {
         // Se é a pergunta "giver", retorna a "receiver"
         if (pair.questionGiver === questionText) {
             return {
                 pairQuestion: pair.questionReceiver,
                 isGiver: true,
-                description: pair.description
+                description: pair.description,
+                labelGiver: pair.labelGiver || 'DAR',
+                labelReceiver: pair.labelReceiver || 'RECEBER'
             };
         }
         // Se é a pergunta "receiver", retorna a "giver"
@@ -56,7 +56,9 @@ function getInvertPair(packId, questionText) {
             return {
                 pairQuestion: pair.questionGiver,
                 isGiver: false,
-                description: pair.description
+                description: pair.description,
+                labelGiver: pair.labelGiver || 'DAR',
+                labelReceiver: pair.labelReceiver || 'RECEBER'
             };
         }
     }

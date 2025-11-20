@@ -7,87 +7,117 @@
         {
           "questionGiver": "Ser dominado/a de forma leve.",
           "questionReceiver": "Dominar o/a parceiro/a de forma leve.",
-          "description": "Dinâmica de dominação/submissão"
+          "description": "Dinâmica de dominação/submissão",
+          "labelGiver": "DOMINAR",
+          "labelReceiver": "SER DOMINADO/A"
         },
         {
           "questionGiver": "Estimular o anus do parceiro/a (com ou sem penetração).",
           "questionReceiver": "Receber estimulação anal (com ou sem penetração).",
-          "description": "Estimulação anal - dar vs receber"
+          "description": "Estimulação anal - dar vs receber",
+          "labelGiver": "ESTIMULAR",
+          "labelReceiver": "RECEBER"
         }
       ]
-    },
-    {
+    },    {
       "packId": "poliamor",
       "pairs": [
         {
           "questionGiver": "Assistir ao/à parceiro/a a beijar outra pessoa.",
           "questionReceiver": "Ser assistido/a pelo/a parceiro/a enquanto beija outra pessoa.",
-          "description": "Voyeurismo vs Exibicionismo - beijos"
+          "description": "Voyeurismo vs Exibicionismo - beijos",
+          "labelGiver": "ASSISTIR",
+          "labelReceiver": "SER VISTO/A"
         },
         {
           "questionGiver": "Assistir ao/à parceiro/a a receber prazer sexual de outro/a.",
           "questionReceiver": "Receber prazer sexual de outro/a, sendo assistido/a pelo/a parceiro/a.",
-          "description": "Voyeurismo vs Exibicionismo - prazer sexual"
+          "description": "Voyeurismo vs Exibicionismo - prazer sexual",
+          "labelGiver": "ASSISTIR",
+          "labelReceiver": "SER VISTO/A"
         },
         {
           "questionGiver": "Assistir ao/à parceiro/a a ter orgasmo com um/a terceiro/a.",
           "questionReceiver": "Ser o/a observador/a passivo/a durante sexo em grupo.",
-          "description": "Ver orgasmo do parceiro com terceiro"
+          "description": "Ver orgasmo do parceiro com terceiro",
+          "labelGiver": "ASSISTIR",
+          "labelReceiver": "SER VISTO/A"
         },
         {
           "questionGiver": "Ser assistido/a pelo/a parceiro/a a ter orgasmo com um/a terceiro/a.",
           "questionReceiver": "Que o/a parceiro/a seja o/a observador/a passivo/a durante sexo em grupo.",
-          "description": "Ser visto tendo orgasmo com terceiro"
+          "description": "Ser visto tendo orgasmo com terceiro",
+          "labelGiver": "SER VISTO/A",
+          "labelReceiver": "ASSISTIR"
         },
         {
           "questionGiver": "Partilhar um vídeo sexting do nosso casal com um/a terceiro/a de confiança.",
           "questionReceiver": "Que o/a parceiro/a partilhe um vídeo sexting nosso com um/a terceiro/a de confiança.",
-          "description": "Partilhar vídeo íntimo"
+          "description": "Partilhar vídeo íntimo",
+          "labelGiver": "PARTILHAR",
+          "labelReceiver": "ACEITAR PARTILHA"
         },
         {
           "questionGiver": "Assistir ao/à parceiro/a a preparar-se para um date externo.",
           "questionReceiver": "Ser visto/a pelo/a parceiro/a a preparar-se para um date externo.",
-          "description": "Preparação para date externo"
+          "description": "Preparação para date externo",
+          "labelGiver": "ASSISTIR",
+          "labelReceiver": "SER VISTO/A"
         },
         {
           "questionGiver": "Excitação pelo cuckolding: Saber que o/a parceiro/a está com outro/a, mas não ver.",
           "questionReceiver": "Gostar que o/a parceiro/a saiba que estou com outro/a (sem que ele/a veja).",
-          "description": "Cuckolding - saber vs estar"
+          "description": "Cuckolding - saber vs estar",
+          "labelGiver": "SABER",
+          "labelReceiver": "FAZER"
         },
         {
           "questionGiver": "Fantasiar em ser 'roubado/a' por um/a terceiro/a (não-consensual fantasia).",
           "questionReceiver": "Fantasiar em 'roubar' o/a parceiro/a de um/a terceiro/a (não-consensual fantasia).",
-          "description": "Fantasia de roubo"
+          "description": "Fantasia de roubo",
+          "labelGiver": "SER ROUBADO/A",
+          "labelReceiver": "ROUBAR"
         },
         {
           "questionGiver": "Ser flirtado/a por terceiros em frente ao/à parceiro/a.",
           "questionReceiver": "Que o/a parceiro/a seja flirtado/a por terceiros em minha frente.",
-          "description": "Flirt com terceiros"
+          "description": "Flirt com terceiros",
+          "labelGiver": "SER FLIRTADO/A",
+          "labelReceiver": "VER FLIRT"
         },
         {
           "questionGiver": "Ter encontros sexuais com terceiros de forma planeada e consentida.",
           "questionReceiver": "Que o/a parceiro/a tenha encontros sexuais com terceiros de forma planeada e consentida.",
-          "description": "Encontros sexuais com terceiros"
+          "description": "Encontros sexuais com terceiros",
+          "labelGiver": "TER ENCONTROS",
+          "labelReceiver": "ACEITAR ENCONTROS"
         },
         {
           "questionGiver": "Ter um/a parceiro/a fixo/a para as minhas necessidades sexuais (separado).",
           "questionReceiver": "Que o/a parceiro/a tenha um/a parceiro/a fixo/a para as suas necessidades sexuais (separado).",
-          "description": "Parceiro fixo separado"
-        },
-        {
+          "description": "Parceiro fixo separado",
+          "labelGiver": "TER PARCEIRO FIXO",
+          "labelReceiver": "ACEITAR PARCEIRO FIXO"
+        },        {
           "questionGiver": "Pagar por sexo (prostitutas/os) com consentimento do parceiro.",
           "questionReceiver": "Que o parceiro pague por sexo, com o meu consentimento.",
-          "description": "Pagar por sexo"
+          "description": "Pagar por sexo",
+          "labelGiver": "PAGAR",
+          "labelReceiver": "ACEITAR"
         },
         {
           "questionGiver": "Fazer uma massagem tântrica (Yoni/Lingham).",
           "questionReceiver": "Que o parceiro/a receba uma massagem tântrica (Yoni/Lingham).",
-          "description": "Massagem tântrica com terceiro"
+          "description": "Massagem tântrica com terceiro",
+          "labelGiver": "FAZER",
+          "labelReceiver": "ACEITAR"
         },
         {
           "questionGiver": "Parceiro/a fixo/a para mim só para sexo (com regras e limites).",
           "questionReceiver": "Parceiro/a fixo/a para o meu parceiro só para sexo (com regras e limites).",
-          "description": "Parceiro fixo com regras"
+          "description": "Parceiro fixo com regras",
+          "labelGiver": "TER",
+          "labelReceiver": "ACEITAR"
         }
       ]
     },    {
@@ -96,62 +126,85 @@
         {
           "questionGiver": "Ser a pessoa dominante na relação sexual.",
           "questionReceiver": "Ser a pessoa submissa na relação sexual.",
-          "description": "Dominante vs Submisso"
+          "description": "Dominante vs Submisso",
+          "labelGiver": "DOMINAR",
+          "labelReceiver": "SUBMETER-ME"
         },
         {
           "questionGiver": "Ter o controlo total do ritmo e das ações do/a parceiro/a (comando/instruções).",
           "questionReceiver": "Render-me totalmente ao/à parceiro/a, seguindo todas as instruções e ordens (submissão total).",
-          "description": "Controlo total vs Submissão total"
+          "description": "Controlo total vs Submissão total",
+          "labelGiver": "CONTROLAR",
+          "labelReceiver": "RENDER-ME"
         },
         {
           "questionGiver": "Fazer o/a parceiro/a esperar e implorar por prazer.",
           "questionReceiver": "Tease and denial (provocar e negar o orgasmo) do/a parceiro/a.",
-          "description": "Fazer esperar vs Ser negado"
+          "description": "Fazer esperar vs Ser negado",
+          "labelGiver": "NEGAR",
+          "labelReceiver": "SER NEGADO/A"
         },
         {
           "questionGiver": "Dar praise ou degradation (elogios ou humilhação verbal leve) ao/à parceiro/a.",
           "questionReceiver": "Receber praise ou degradation (elogios ou humilhação verbal leve) do/a parceiro/a.",
-          "description": "Dar vs Receber praise/degradation"
+          "description": "Dar vs Receber praise/degradation",
+          "labelGiver": "ELOGIAR/HUMILHAR",
+          "labelReceiver": "RECEBER"
         },
         {
           "questionGiver": "Vendar o/a parceiro/a para privação sensorial.",
           "questionReceiver": "Ser vendado/a para privação sensorial.",
-          "description": "Vendar vs Ser vendado"
+          "description": "Vendar vs Ser vendado",
+          "labelGiver": "VENDAR",
+          "labelReceiver": "SER VENDADO/A"
         },
         {
           "questionGiver": "Atribuir tarefas (tarefas domésticas, etc.) como parte de um jogo D/S.",
           "questionReceiver": "Realizar tarefas (tarefas domésticas, etc.) atribuídas pelo/a parceiro/a como parte de um jogo D/S.",
-          "description": "Atribuir vs Realizar tarefas D/S"
+          "description": "Atribuir vs Realizar tarefas D/S",
+          "labelGiver": "MANDAR",
+          "labelReceiver": "OBEDECER"
         },
         {
           "questionGiver": "Usar chicotes/palmatórias (flogger, paddle) de forma controlada.",
           "questionReceiver": "Receber chicotadas/palmadas (flogger, paddle) de forma controlada.",
-          "description": "Usar chicote vs Receber chicotadas"
+          "description": "Usar chicote vs Receber chicotadas",
+          "labelGiver": "APLICAR",
+          "labelReceiver": "RECEBER"
         },
         {
           "questionGiver": "Brincar com cera quente (wax play) no corpo do/a parceiro/a.",
           "questionReceiver": "Receber cera quente (wax play) no corpo.",
-          "description": "Dar cera quente vs Receber cera quente"
+          "description": "Dar cera quente vs Receber cera quente",
+          "labelGiver": "APLICAR",
+          "labelReceiver": "RECEBER"
         },
         {
           "questionGiver": "Brincar com gelo ou temperaturas frias no corpo do/a parceiro/a.",
           "questionReceiver": "Receber gelo ou temperaturas frias no corpo.",
-          "description": "Dar gelo vs Receber gelo"
-        },
-        {
+          "description": "Dar gelo vs Receber gelo",
+          "labelGiver": "APLICAR",
+          "labelReceiver": "RECEBER"
+        },        {
           "questionGiver": "Tease and denial (provocar e negar o orgasmo) ao/à parceiro/a.",
           "questionReceiver": "Tease and denial (provocar e negar o orgasmo) do/a parceiro/a.",
-          "description": "Provocar negação vs Ser negado"
+          "description": "Provocar negação vs Ser negado",
+          "labelGiver": "PROVOCAR",
+          "labelReceiver": "SER PROVOCADO/A"
         },
         {
           "questionGiver": "Espiar o/a parceiro/a a masturbar-se ou em momentos íntimos com terceiros (voyeurismo passivo).",
           "questionReceiver": "Ser observado/a pelo/a parceiro/a enquanto me masturbo.",
-          "description": "Espiar vs Ser observado"
+          "description": "Espiar vs Ser observado",
+          "labelGiver": "ESPIAR",
+          "labelReceiver": "SER VISTO/A"
         },
         {
           "questionGiver": "Trampling (pisar com os pés/corpo) no/a parceiro/a.",
           "questionReceiver": "Ser pisado/a (trampling) pelo/a parceiro/a.",
-          "description": "Pisar vs Ser pisado"
+          "description": "Pisar vs Ser pisado",
+          "labelGiver": "PISAR",
+          "labelReceiver": "SER PISADO/A"
         }
       ]
     }

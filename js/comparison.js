@@ -83,9 +83,15 @@ async function compareEncryptedAnswers() {
 }
 
 async function generateCompatibilityReport(myData, partnerData) {
+  // CARREGAR CONFIGURAÇÃO DE INVERT MATCHING
+  if (!window.invertMatchingConfig) {
+    await loadInvertMatchingConfig();
+    window.invertMatchingConfig = invertMatchingConfig;
+  }
+  
   const reportContainer = document.getElementById('compatibilityReport');
   let html = `
-    <h2>💖 Relatório de Compatibilidade entre ${myData.userName} e ${partnerData.userName}</h2>
+    <h2 style="text-align: center; font-size: 2em; color: #495057; margin: 20px 0;">💖 Relatório de Compatibilidade entre ${myData.userName} e ${partnerData.userName}</h2>
     
     <!-- Explicação sobre Invert Matching -->
     <div style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-left: 5px solid #667eea; padding: 20px; border-radius: 12px; margin: 20px 0 30px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
@@ -303,13 +309,17 @@ async function generateCompatibilityReport(myData, partnerData) {
         
         items.forEach(item => {          if (item.isInverted && item.invertInfo) {
             // RENDERIZAÇÃO COM INVERT MATCHING - FORMATO DESTACADO
+            // Usar labels contextuais do JSON ou fallback para DAR/RECEBER
+            const myLabel = item.invertInfo.isGiver ? item.invertInfo.labelGiver : item.invertInfo.labelReceiver;
+            const partnerLabel = item.invertInfo.isGiver ? item.invertInfo.labelReceiver : item.invertInfo.labelGiver;
+            
             const giverLabel = item.invertInfo.isGiver 
-              ? `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">✋ DAR</span>`
-              : `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">👐 RECEBER</span>`;
+              ? `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${myLabel || '✋ DAR'}</span>`
+              : `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${myLabel || '👐 RECEBER'}</span>`;
 
-            const partnerLabel = item.invertInfo.isGiver
-              ? `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">👐 RECEBER</span>`
-              : `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">✋ DAR</span>`;
+            const partnerLabelHtml = item.invertInfo.isGiver
+              ? `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${partnerLabel || '👐 RECEBER'}</span>`
+              : `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${partnerLabel || '✋ DAR'}</span>`;
 
             categoryHtml += `
               <div class="compatibility-section ${item.compatibilityClass} inverted" style="background: linear-gradient(to right, #f9fbe7, #fff8e1); border-left: 5px solid #667eea !important; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);">
@@ -327,8 +337,7 @@ async function generateCompatibilityReport(myData, partnerData) {
                   
                   <!-- Tipo de Match -->
                   <span class="match-type" style="font-size: 1em; padding: 6px 14px;">${item.resultText}</span>
-                  
-                  <!-- Container Invert com Setas -->
+                    <!-- Container Invert com Setas -->
                   <div style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 15px; align-items: center; margin-top: 15px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
                     <!-- User 1 -->
                     ${giverLabel}
@@ -347,7 +356,7 @@ async function generateCompatibilityReport(myData, partnerData) {
                       <span class="answer-badge ${item.partnerAns.answer}" style="font-size: 0.95em;">${getAnswerText(item.partnerAns.answer)}</span>
                       ${item.partnerAns?.comment ? `<div><small style="color: #6c757d; font-style: italic; display: block; margin-top: 4px;">"${item.partnerAns.comment}"</small></div>` : ''}
                     </div>
-                    ${partnerLabel}
+                    ${partnerLabelHtml}
                   </div>
                   
                   <!-- Descrição da Dinâmica -->
