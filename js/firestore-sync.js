@@ -121,17 +121,20 @@ function setupRealtimeSync(packId) {
   try {
     const user = auth.currentUser;
     if (!user) {
-      console.warn('User não autenticado - real-time sync desativado');
+      console.warn('❌ REALTIME SYNC: User não autenticado');
       return;
     }
 
     // Remover listener anterior se existir
     if (currentPackListener) {
+      console.log('🔄 REALTIME SYNC: Removendo listener anterior');
       currentPackListener();
       currentPackListener = null;
     }
 
-    console.log(`🔄 Ativando sincronização em tempo real para: ${packId}`);
+    console.log(`🔄 REALTIME SYNC: Ativando para pack "${packId}"`);
+    console.log(`   👤 User: ${user.email}`);
+    console.log(`   🆔 UID: ${user.uid}`);
 
     // Criar listener para mudanças no documento
     currentPackListener = db.collection('users')
@@ -139,24 +142,42 @@ function setupRealtimeSync(packId) {
       .collection('answers')
       .doc('all')
       .onSnapshot((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          const packAnswers = data[packId] || {};
+        console.log('📡 REALTIME SYNC: onSnapshot triggered!');
+        
+        if (!doc.exists) {
+          console.log('⚠️ REALTIME SYNC: Documento "all" não existe');
+          return;
+        }
+        
+        const data = doc.data();
+        console.log('📦 REALTIME SYNC: Dados completos:', data);
+        
+        const packAnswers = data[packId] || {};
+        console.log(`⚡ REALTIME SYNC: Respostas para "${packId}":`, packAnswers);
+        
+        if (Object.keys(packAnswers).length === 0) {
+          console.log(`⚠️ REALTIME SYNC: Nenhuma resposta em "${packId}"`);
+          return;
+        }
+        
+        // Atualizar formulário com novas respostas
+        Object.entries(packAnswers).forEach(([questionId, answerData]) => {
+          console.log(`  🔍 REALTIME SYNC: Processando ${questionId}:`, answerData);
+          const qNum = questionId.replace('q', '');
           
-          console.log(`⚡ Atualização em tempo real detectada para ${packId}:`, packAnswers);
-          
-          // Atualizar formulário com novas respostas
-          Object.entries(packAnswers).forEach(([questionId, answerData]) => {
-            const qNum = questionId.replace('q', '');
+          // Atualizar radio
+          if (answerData.answer) {
+            const radioSelector = `input[name="${packId}_q${qNum}"][value="${answerData.answer}"]`;
+            console.log(`    🎯 REALTIME SYNC: Selector: ${radioSelector}`);
             
-            // Atualizar radio (só se não for o próprio dispositivo a atualizar)
-            if (answerData.answer) {
-              const radio = document.querySelector(`input[name="${packId}_q${qNum}"][value="${answerData.answer}"]`);
-              if (radio && !radio.checked) {
+            const radio = document.querySelector(radioSelector);
+            if (radio) {
+              console.log(`    ✅ REALTIME SYNC: Radio encontrado! Checked: ${radio.checked}`);
+              if (!radio.checked) {
                 radio.checked = true;
-                console.log(`  ⚡ Radio atualizado em tempo real: ${questionId} = ${answerData.answer}`);
+                console.log(`    ⚡ REALTIME SYNC: Radio ATUALIZADO para: ${answerData.answer}`);
                 
-                // Animação visual para mostrar que foi atualizado
+                // Animação visual
                 const questionElement = radio.closest('.question');
                 if (questionElement) {
                   questionElement.style.animation = 'pulse 0.5s ease';
@@ -164,36 +185,41 @@ function setupRealtimeSync(packId) {
                     questionElement.style.animation = '';
                   }, 500);
                 }
+              } else {
+                console.log(`    ⏭️ REALTIME SYNC: Radio já estava marcado`);
+              }
+            } else {
+              console.error(`    ❌ REALTIME SYNC: Radio NÃO encontrado!`);
+              console.error(`       Tentou: ${radioSelector}`);
+            }
+          }
+          
+          // Atualizar comentário
+          if (answerData.comment) {
+            const textarea = document.querySelector(`textarea[name="${packId}_q${qNum}_comment"]`);
+            if (textarea && textarea !== document.activeElement) {
+              if (textarea.value !== answerData.comment) {
+                textarea.value = answerData.comment;
+                console.log(`    ⚡ REALTIME SYNC: Comentário atualizado`);
+                
+                // Animação visual
+                textarea.style.borderColor = '#667eea';
+                setTimeout(() => {
+                  textarea.style.borderColor = '';
+                }, 1000);
               }
             }
-            
-            // Atualizar comentário (só se não estiver a escrever)
-            if (answerData.comment) {
-              const textarea = document.querySelector(`textarea[name="${packId}_q${qNum}_comment"]`);
-              if (textarea && textarea !== document.activeElement) {
-                if (textarea.value !== answerData.comment) {
-                  textarea.value = answerData.comment;
-                  console.log(`  ⚡ Comentário atualizado em tempo real: ${questionId}`);
-                  
-                  // Animação visual
-                  textarea.style.borderColor = '#667eea';
-                  setTimeout(() => {
-                    textarea.style.borderColor = '';
-                  }, 1000);
-                }
-              }
-            }
-          });
-        }
+          }
+        });
       }, (error) => {
-        console.error('Erro no listener real-time:', error);
+        console.error('❌ REALTIME SYNC: Erro no listener:', error);
       });
 
-    console.log('✅ Sincronização em tempo real ativada!');
+    console.log('✅ REALTIME SYNC: Listener configurado com sucesso!');
     
     return currentPackListener;
   } catch (error) {
-    console.error('Erro ao configurar real-time sync:', error);
+    console.error('❌ REALTIME SYNC: Erro ao configurar:', error);
     return null;
   }
 }
