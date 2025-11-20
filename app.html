@@ -544,6 +544,16 @@
 <script src="js/firestore-sync.js"></script>
 <script src="js/analytics.js"></script>
 
+<!-- JavaScript Modules -->
+<script src="js/customQuestions.js?v=20241120"></script>
+<script src="js/invertMatching.js?v=20241120"></script>
+<script src="js/loadAnswers.js?v=20241120"></script>
+<script src="js/pack-collapse.js?v=20241120"></script>
+<script src="js/app.js?v=20241120"></script>
+<script src="js/rendering.js?v=20241120"></script>
+<script src="js/storage.js?v=20241120"></script>
+<script src="js/comparison.js?v=20241120"></script>
+
 <!-- Auth Check (Permitir visualização sem login) -->
 <script>
   let isUserAuthenticated = false;
@@ -740,45 +750,55 @@
 
 <!-- ✅ Service Worker Cleanup - Força atualização no Chrome mobile -->
 <script>
-  // Verificar e limpar service workers antigos que podem estar a causar problemas de cache
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      if (registrations.length > 0) {
-        console.log('🧹 Service Workers encontrados:', registrations.length);
-        
-        // Desregistar todos os service workers
-        for(let registration of registrations) {
-          registration.unregister().then(function(success) {
-            if (success) {
-              console.log('✅ Service Worker desregistado com sucesso');
-              // Recarregar página para aplicar mudanças
-              if (window.location.search.indexOf('sw_cleared=1') === -1) {
-                window.location.href = window.location.href + (window.location.search ? '&' : '?') + 'sw_cleared=1';
-              }
-            }
+  // ✅ CORRIGIDO: Executar cleanup de forma silenciosa sem recarregar página
+  (function() {
+    // Marcar que cleanup foi executado (usar flag mais persistente)
+    const CLEANUP_VERSION = 'v20241120'; // Atualizar esta versão para forçar novo cleanup
+    const lastCleanup = localStorage.getItem('sw_cleanup_version');
+    
+    if (lastCleanup === CLEANUP_VERSION) {
+      console.log('✅ Cleanup já executado para versão:', CLEANUP_VERSION);
+      return;
+    }
+    
+    console.log('🧹 Executando cleanup de cache e service workers...');
+    
+    // Verificar e limpar service workers antigos
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        if (registrations.length > 0) {
+          console.log('🧹 Service Workers encontrados:', registrations.length);
+          
+          // Desregistar todos os service workers (silenciosamente)
+          Promise.all(
+            registrations.map(reg => reg.unregister())
+          ).then(function() {
+            console.log('✅ Todos os Service Workers desregistados');
+            localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+          });
+        } else {
+          console.log('✅ Nenhum Service Worker ativo');
+          localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+        }
+      });
+    } else {
+      localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+    }
+    
+    // Limpar cache do browser programaticamente (silenciosamente)
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        if (names.length > 0) {
+          console.log('🧹 Limpando', names.length, 'caches...');
+          Promise.all(
+            names.map(name => caches.delete(name))
+          ).then(function() {
+            console.log('✅ Todo o cache limpo');
           });
         }
-      } else {
-        console.log('✅ Nenhum Service Worker ativo');
-      }
-    });
-  }
-  
-  // Limpar cache do browser programaticamente
-  if ('caches' in window) {
-    caches.keys().then(function(names) {
-      if (names.length > 0) {
-        console.log('🧹 Cache encontrado:', names);
-        for (let name of names) {
-          caches.delete(name).then(function(success) {
-            if (success) {
-              console.log('✅ Cache limpo:', name);
-            }
-          });
-        }
-      }
-    });
-  }
+      });
+    }
+  })();
 </script>
 
 <!-- Renderizar Support Banner -->
