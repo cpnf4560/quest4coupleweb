@@ -590,19 +590,47 @@ function openEditProfileModal() {
     return;
   }
   
-  // Preencher formulário com dados atuais
-  document.getElementById('editProfileName').value = userProfile.name || '';
-  document.getElementById('editProfileEmail').value = auth.currentUser.email || '';
-  document.getElementById('editProfileGender').value = userProfile.gender || '';
-  document.getElementById('editProfileAgeRange').value = userProfile.ageRange || '';
+  // Preencher formulário com dados atuais - com verificação de elementos
+  const nameField = document.getElementById('editProfileName');
+  const emailField = document.getElementById('editProfileEmail');
+  const genderField = document.getElementById('editProfileGender');
+  const ageRangeField = document.getElementById('editProfileAgeRange');
   
-  // Carregar países no select
+  console.log('🔍 Elementos do formulário:', { nameField, emailField, genderField, ageRangeField });
+  
+  if (!nameField || !emailField || !genderField || !ageRangeField) {
+    console.error('❌ Campos do formulário não encontrados:', {
+      name: !!nameField,
+      email: !!emailField,
+      gender: !!genderField,
+      ageRange: !!ageRangeField
+    });
+    alert('❌ Erro: Formulário incompleto. Por favor, recarregue a página.');
+    return;
+  }
+  
+  nameField.value = userProfile.name || '';
+  emailField.value = auth.currentUser.email || '';
+  genderField.value = userProfile.gender || '';
+  ageRangeField.value = userProfile.ageRange || '';
+    // Carregar países no select
   loadCountriesInEditModal();
   
   // Definir país e cidade após carregar países
   setTimeout(() => {
-    document.getElementById('editProfileCountry').value = userProfile.country || '';
-    document.getElementById('editProfileCity').value = userProfile.city || '';
+    const countryField = document.getElementById('editProfileCountry');
+    const cityField = document.getElementById('editProfileCity');
+    
+    if (countryField && cityField) {
+      countryField.value = userProfile.country || '';
+      cityField.value = userProfile.city || '';
+      console.log('✅ País e cidade definidos:', { country: userProfile.country, city: userProfile.city });
+    } else {
+      console.error('❌ Campos país/cidade não encontrados:', { 
+        country: !!countryField, 
+        city: !!cityField 
+      });
+    }
   }, 100);
   
   // Mostrar modal
