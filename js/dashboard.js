@@ -63,12 +63,13 @@ async function initDashboard(user) {
     userAnswers = await loadUserAnswers(user.uid);
 
     // Load connections
-    userConnections = await loadUserConnections(user.uid);
-
-    // Render everything
+    userConnections = await loadUserConnections(user.uid);    // Render everything
     renderStats();
     renderPacks();
     renderConnections();
+    
+    // Update username display in modal (if it exists)
+    updateMyUsernameDisplay();
 
     hideLoading();
   } catch (error) {
@@ -323,9 +324,22 @@ addConnectionBtn.addEventListener('click', () => {
 // Função para atualizar o username no modal
 function updateMyUsernameDisplay() {
   const usernameDisplay = document.getElementById('myUsernameDisplay');
-  if (usernameDisplay && userProfile) {
-    const username = userProfile.username || userProfile.email?.split('@')[0] || 'user';
-    usernameDisplay.textContent = `@${username}`;
+  console.log('🔍 updateMyUsernameDisplay', { 
+    elementExists: !!usernameDisplay, 
+    userProfileExists: !!userProfile,
+    userProfile: userProfile 
+  });
+  
+  if (usernameDisplay) {
+    if (userProfile) {
+      const username = userProfile.username || userProfile.email?.split('@')[0] || auth.currentUser?.email?.split('@')[0] || 'user';
+      usernameDisplay.textContent = `@${username}`;
+      console.log('✅ Username atualizado:', `@${username}`);
+    } else {
+      console.warn('⚠️ userProfile ainda não carregado, mantendo "@carregando..."');
+    }
+  } else {
+    console.warn('⚠️ Elemento myUsernameDisplay não encontrado no DOM');
   }
 }
 
@@ -562,8 +576,17 @@ if (editProfileBtn) {
 }
 
 function openEditProfileModal() {
+  console.log('🔍 openEditProfileModal chamada', { userProfile, currentUser: auth.currentUser });
+  
+  if (!editProfileModal) {
+    console.error('❌ Modal editProfileModal não encontrado no DOM');
+    alert('❌ Erro: Modal de edição não encontrado');
+    return;
+  }
+  
   if (!userProfile || !auth.currentUser) {
-    alert('❌ Erro ao carregar perfil');
+    console.error('❌ Perfil não carregado', { userProfile, currentUser: auth.currentUser });
+    alert('❌ Erro ao carregar perfil. Por favor, recarregue a página.');
     return;
   }
   
@@ -583,6 +606,7 @@ function openEditProfileModal() {
   }, 100);
   
   // Mostrar modal
+  console.log('✅ Abrindo modal...');
   editProfileModal.classList.add('active');
 }
 
