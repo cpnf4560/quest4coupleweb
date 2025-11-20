@@ -3,6 +3,11 @@
    ============================================ */
 
 // ========================================
+// GLOBAL VARIABLES
+// ========================================
+let pendingUserForLocation = null;
+
+// ========================================
 // DOM ELEMENTS
 // ========================================
 const loginTab = document.querySelector('[data-tab="login"]');
@@ -62,23 +67,26 @@ googleLoginBtn.addEventListener('click', async () => {
   showLoading();
   clearMessages();
 
-  try {
-    console.log('🔵 Calling signInWithGoogle...');
+  try {    console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google login success:', result);
     
     // Verificar se o utilizador tem dados completos
     const userDoc = await db.collection('users').doc(result.user.uid).get();
+    const userData = userDoc.exists ? userDoc.data() : {};
     
-    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender || !userDoc.data().username) {
+    console.log('📋 User data:', userData);
+    
+    if (!userDoc.exists || !userData.country || !userData.gender || !userData.username) {
       // Utilizador precisa completar dados - mostrar modal
       console.log('🔵 Dados incompletos - mostrar modal');
       hideLoading();
       showLocationModal(result.user);
     } else {
       // Dados completos - redirecionar
-      console.log('✅ Dados completos - redirecionando...');
-      // onAuthStateChanged vai redirecionar automaticamente
+      console.log('✅ Dados completos - redirecionando para dashboard...');
+      hideLoading();
+      window.location.href = 'dashboard.html';
     }
   } catch (error) {
     console.error('❌ Google login error:', error);
@@ -103,23 +111,26 @@ googleSignupBtn.addEventListener('click', async () => {
   showLoading();
   clearMessages();
 
-  try {
-    console.log('🔵 Calling signInWithGoogle...');
+  try {    console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google signup success:', result);
     
     // Verificar se é um novo utilizador
     const userDoc = await db.collection('users').doc(result.user.uid).get();
+    const userData = userDoc.exists ? userDoc.data() : {};
     
-    if (!userDoc.exists || !userDoc.data().country || !userDoc.data().gender || !userDoc.data().username) {
+    console.log('📋 User data:', userData);
+    
+    if (!userDoc.exists || !userData.country || !userData.gender || !userData.username) {
       // Novo utilizador ou dados incompletos - mostrar modal
       console.log('🔵 Novo utilizador ou dados incompletos - mostrar modal');
       hideLoading();
       showLocationModal(result.user);
     } else {
       // Utilizador já tem dados completos - redirecionar
-      console.log('✅ Dados completos - redirecionando...');
-      // onAuthStateChanged vai redirecionar automaticamente
+      console.log('✅ Dados completos - redirecionando para dashboard...');
+      hideLoading();
+      window.location.href = 'dashboard.html';
     }
   } catch (error) {
     console.error('❌ Google signup error:', error);
@@ -316,7 +327,7 @@ resetPasswordFormElement.addEventListener('submit', async (e) => {
 // ========================================
 // LOCATION MODAL (Google/Reddit Signup)
 // ========================================
-let pendingUserForLocation = null;
+// pendingUserForLocation já está declarado no topo do arquivo como variável global
 
 // Lista de países
 const COUNTRIES_LIST = [
