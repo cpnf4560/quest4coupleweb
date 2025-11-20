@@ -4,6 +4,48 @@
    ============================================ */
 
 // ========================================
+// SYNC STATUS INDICATOR
+// ========================================
+function updateSyncStatus(status, message) {
+  const syncStatus = document.getElementById('syncStatus');
+  if (!syncStatus) return;
+  
+  syncStatus.style.display = 'inline-flex';
+  
+  // Remover classes antigas
+  syncStatus.classList.remove('saved', 'saving', 'offline', 'error');
+  
+  // Adicionar nova classe e atualizar conteúdo
+  switch(status) {
+    case 'saved':
+      syncStatus.classList.add('saved');
+      syncStatus.innerHTML = '<span class="sync-icon">✅</span><span class="sync-text">Guardado</span>';
+      // Esconder após 3 segundos
+      setTimeout(() => {
+        if (syncStatus.classList.contains('saved')) {
+          syncStatus.style.display = 'none';
+        }
+      }, 3000);
+      break;
+      
+    case 'saving':
+      syncStatus.classList.add('saving');
+      syncStatus.innerHTML = '<span class="sync-icon">🔄</span><span class="sync-text">A guardar...</span>';
+      break;
+      
+    case 'offline':
+      syncStatus.classList.add('offline');
+      syncStatus.innerHTML = '<span class="sync-icon">📱</span><span class="sync-text">Offline</span>';
+      break;
+      
+    case 'error':
+      syncStatus.classList.add('error');
+      syncStatus.innerHTML = `<span class="sync-icon">❌</span><span class="sync-text">${message || 'Erro'}</span>`;
+      break;
+  }
+}
+
+// ========================================
 // SAVE ANSWERS TO FIRESTORE
 // ========================================
 async function saveAnswerToFirestore(packId, questionId, answerData) {
@@ -11,8 +53,12 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
     const user = auth.currentUser;
     if (!user) {
       console.warn('User não autenticado - usando localStorage');
+      updateSyncStatus('offline', 'Sem login');
       return false;
     }
+
+    // Mostrar "A guardar..."
+    updateSyncStatus('saving');
 
     // answerData pode ser {answer: "A", comment: "texto"} ou só "A"
     // Normalizar para sempre ter o formato correto
@@ -42,9 +88,13 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
             [questionId]: normalizedData
           }
         },
-        { merge: true }      );
+        { merge: true }
+      );
 
     console.log(`✅ Resposta guardada no Firestore: ${packId}/${questionId}`, normalizedData);
+    
+    // Mostrar "Guardado" ✅
+    updateSyncStatus('saved');
     
     // Atualizar barra de progresso após guardar
     if (typeof updateThemeProgress === 'function') {
@@ -55,6 +105,7 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
     return true;
   } catch (error) {
     console.error('Erro ao guardar resposta no Firestore:', error);
+    updateSyncStatus('error', 'Erro ao guardar');
     return false;
   }
 }

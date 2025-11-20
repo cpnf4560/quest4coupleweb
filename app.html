@@ -2,14 +2,14 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quest4Couple - Sistema para Casais 💕</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Quest4Couple - Sistema para Casais 💕</title>
   
   <!-- Favicons -->
-  <link rel="icon" href="./favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
+  <link rel="manifest" href="/site.webmanifest">
     <!-- CSS Modules -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/themes.css">
@@ -58,12 +58,18 @@
     <h1>Quest4Couple</h1>
     <p class="tagline">Descubram-se juntos 💕</p>
   </div>
-  
-  <!-- User Section (Canto Superior Direito) -->
+    <!-- User Section (Canto Superior Direito) -->
   <div class="user-section-top">
     <span class="user-info" id="userInfo">
       👤 <span id="currentUserName">Carregando...</span>
     </span>
+    
+    <!-- ✅ NOVO: Indicador de sincronização -->
+    <span id="syncStatus" class="sync-status" style="display: none;">
+      <span class="sync-icon">✅</span>
+      <span class="sync-text">Guardado</span>
+    </span>
+    
     <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard">
       📊 Dashboard
     </button>

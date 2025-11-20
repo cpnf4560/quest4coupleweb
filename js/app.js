@@ -355,7 +355,7 @@ async function loadSavedAnswersForPack(packId) {
 // ========================================
 // INITIALIZATION
 // ========================================
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', async function() {
   checkAgeVerification();
   attachProgressListeners();
   
@@ -369,4 +369,63 @@ window.addEventListener('DOMContentLoaded', function() {
   // Setup autosave
   setupAutosave();
   console.log('✅ Autosave ativado');
+  
+  // ✅ NOVO: Carregar progresso ao inicializar
+  // Aguardar autenticação antes de carregar progresso
+  auth.onAuthStateChanged(async (user) => {
+    if (user && document.getElementById('themesView').style.display === 'grid') {
+      console.log('🔄 Carregando progresso inicial...');
+      
+      // Carregar perguntas se ainda não carregadas
+      if (!window.questionsLoaded) {
+        loadAndRenderAllPacks();
+        window.questionsLoaded = true;
+      }
+      
+      // Aguardar um pouco para perguntas renderizarem
+      setTimeout(async () => {
+        // Carregar respostas de todos os packs do Firestore
+        if (typeof loadAllAnswersFromFirestore === 'function') {
+          const allAnswers = await loadAllAnswersFromFirestore();
+          
+          if (allAnswers) {
+            // Preencher respostas em todos os packs
+            const themeClasses = ['romantico', 'experiencia', 'pimentinha', 'poliamor', 'kinks'];
+            
+            for (const packId of themeClasses) {
+              if (allAnswers[packId]) {
+                const packAnswers = allAnswers[packId];
+                
+                Object.entries(packAnswers).forEach(([questionId, data]) => {
+                  const qNum = questionId.replace('q', '');
+                  
+                  // Marcar radio
+                  if (data.answer) {
+                    const radio = document.querySelector(`input[name="${packId}_q${qNum}"][value="${data.answer}"]`);
+                    if (radio) {
+                      radio.checked = true;
+                    }
+                  }
+                  
+                  // Preencher comentário
+                  if (data.comment) {
+                    const textarea = document.querySelector(`textarea[name="${packId}_q${qNum}_comment"]`);
+                    if (textarea) {
+                      textarea.value = data.comment;
+                    }
+                  }
+                });
+              }
+            }
+            
+            // Atualizar progresso após carregar tudo
+            if (typeof updateThemeProgress === 'function') {
+              updateThemeProgress();
+              console.log('✅ Progresso inicial carregado e atualizado');
+            }
+          }
+        }
+      }, 500); // Aguardar 500ms para perguntas renderizarem
+    }
+  });
 });
