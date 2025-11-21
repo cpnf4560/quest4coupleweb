@@ -1,0 +1,48 @@
+# Quest4Couple - Robots.txt
+# Permitir indexação de conteúdo público
+
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /auth.html
+Allow: /tutorial.html
+Allow: /relatorio.html
+Allow: /pages/
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+
+# Bloquear páginas privadas/sensíveis
+Disallow: /app.html
+Disallow: /dashboard.html
+Disallow: /js/firebase-config.js
+Disallow: /js/firestore-sync.js
+
+# Bloquear crawling de arquivos do sistema
+Disallow: /*.json$
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /.vscode/
+
+# Bloquear bots específicos indesejados
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+# Permitir GoogleBot e Bingbot (principais)
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /assets/
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap
+Sitemap: https://quest4couple.pt/sitemap.xml
