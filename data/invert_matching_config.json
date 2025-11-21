@@ -36,27 +36,12 @@
           "description": "Voyeurismo vs Exibicionismo - prazer sexual",
           "labelGiver": "ASSISTIR",
           "labelReceiver": "SER VISTO/A"
-        },
-        {
+        },        {
           "questionGiver": "Assistir ao/à parceiro/a a ter orgasmo com um/a terceiro/a.",
-          "questionReceiver": "Ser o/a observador/a passivo/a durante sexo em grupo.",
-          "description": "Ver orgasmo do parceiro com terceiro",
+          "questionReceiver": "Ser assistido/a pelo/a parceiro/a a ter orgasmo com um/a terceiro/a.",
+          "description": "Ver vs ser visto tendo orgasmo com terceiro",
           "labelGiver": "ASSISTIR",
           "labelReceiver": "SER VISTO/A"
-        },
-        {
-          "questionGiver": "Ser assistido/a pelo/a parceiro/a a ter orgasmo com um/a terceiro/a.",
-          "questionReceiver": "Que o/a parceiro/a seja o/a observador/a passivo/a durante sexo em grupo.",
-          "description": "Ser visto tendo orgasmo com terceiro",
-          "labelGiver": "SER VISTO/A",
-          "labelReceiver": "ASSISTIR"
-        },
-        {
-          "questionGiver": "Partilhar um vídeo sexting do nosso casal com um/a terceiro/a de confiança.",
-          "questionReceiver": "Que o/a parceiro/a partilhe um vídeo sexting nosso com um/a terceiro/a de confiança.",
-          "description": "Partilhar vídeo íntimo",
-          "labelGiver": "PARTILHAR",
-          "labelReceiver": "ACEITAR PARTILHA"
         },
         {
           "questionGiver": "Assistir ao/à parceiro/a a preparar-se para um date externo.",
