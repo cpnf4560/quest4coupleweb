@@ -3,6 +3,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml"
 
 # ✅ HTML - Sempre revalidar
 /*.html
@@ -30,3 +31,12 @@
 
 /assets/pimentinha.png
   Cache-Control: public, max-age=0, must-revalidate
+
+# SEO Files
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600
