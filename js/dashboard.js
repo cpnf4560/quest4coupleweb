@@ -137,7 +137,7 @@ async function loadUserConnections(userId) {
 
 async function loadPacksData() {
   try {
-    const response = await fetch('data/packs_data_clean.json');
+    const response = await fetch('data/packs_data_clean.json?v=' + Date.now());
     const data = await response.json();
     
     // O JSON é um array direto, não tem propriedade "packs"

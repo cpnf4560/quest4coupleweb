@@ -118,7 +118,7 @@ async function generateCompatibilityReport(myData, partnerData) {
     </div>
   `;
 
-  const allPacksResponse = await fetch('data/packs_data_clean.json');
+  const allPacksResponse = await fetch('data/packs_data_clean.json?v=' + Date.now());
   const allPacksData = await allPacksResponse.json();
   const packConfigs = [
     { id: 'romantico', name: 'Pack Romântico', color: '#f082a9' },
