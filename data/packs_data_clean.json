@@ -80,8 +80,7 @@
                     "Desafio de 7 experiências em 7 dias (ou período similar).",
                     "Usar o vestuário ou adereços do parceiro/a durante o sexo."
                 ]
-            },
-            {
+            },            {
                 "name": "Ferramentas, Intensidade e Rituais",
                 "questions": [
                     "Comprar um brinquedo sexual para usarem juntos.",
@@ -91,11 +90,10 @@
                     "Usar um código/palavra para iniciar sexo de imediato.",
                     "Tentar uma posição nova por semana.",
                     "Sexo oral em locais inesperados.",
-                    "Dar/Receber palmadas leves (spanking) durante o sexo.",
                     "Planear ao detalhe sessão erótica a dois (o que fazer, quanto tempo por tarefa, etc.)",
                     "Troca de papéis de dominância e submissão durante o ato."
                 ]
-            },            {
+            },{
                 "name": "Comunicação, Fantasia e Contexto",
                 "questions": [
                     "Roleplay de desconhecidos num bar.",
@@ -158,27 +156,37 @@
                     "Sexo sob efeito de estupefacientes (com segurança e moderação)."
                 ]
             },            {
-                "name": "Foco Oral, Anal e Técnicas",
+                "name": "Práticas Orais Avançadas",
                 "questions": [
                     "Sexo oral no carro em andamento.",
-                    "Masturbação mútua prolongada.",
                     "Sexo oral como atividade principal (sem penetração).",
-                    "Beijo grego (com devida higiene).",
-                    "Estimular o anus do/a parceiro/a (externo, sem penetração).",
-                    "Penetração anal com dedos no/a parceiro/a.",
-                    "Receber estimulação anal externa (sem penetração).",
-                    "Receber penetração anal com dedos.",
-                    "Dirty talk suave/picante.",
-                    "Experimentar fisting superficial e consensual.",
-                    "Ejacular na cara.",
-                    "Engolir esperma.",
-                    "Pegging (sexo com strap-on).",
-                    "Usar vibrador de próstata.",
-                    "Dirty talk intenso (degradation).",
-                    "Cuckqueaning/cuckolding light (fantasiar, não concretizar).",
-                    "Usar mordaça (gag) durante o sexo.",
                     "Facesitting (sentar na cara do/a parceiro/a).",
                     "Throatfucking (oral profundo/garganta profunda).",
+                    "Ejacular na cara.",
+                    "Engolir esperma."
+                ]
+            },
+            {
+                "name": "Exploração Anal",
+                "questions": [
+                    "Beijo grego (com devida higiene).",
+                    "Estimular o anus do/a parceiro/a (externo, sem penetração).",
+                    "Receber estimulação anal externa (sem penetração).",
+                    "Penetração anal com dedos no/a parceiro/a.",
+                    "Receber penetração anal com dedos.",
+                    "Pegging (sexo com strap-on).",
+                    "Usar vibrador de próstata.",
+                    "Experimentar fisting superficial e consensual."
+                ]
+            },
+            {
+                "name": "Comunicação e Fantasias Intensas",
+                "questions": [
+                    "Dirty talk suave/picante.",
+                    "Dirty talk intenso (degradation).",
+                    "Cuckqueaning/cuckolding light (fantasiar, não concretizar).",
+                    "Masturbação mútua prolongada.",
+                    "Usar mordaça (gag) durante o sexo.",
                     "Pôr à venda roupa interior numa plataforma online."
                 ]
             }
@@ -208,7 +216,9 @@
                     "Envolver-me com alguém do mesmo sexo.",
                     "Que o/a parceiro/a se envolva com alguém do mesmo sexo.",
                     "Ser flirtado/a por terceiros em frente ao/à parceiro/a.",
-                    "Que o/a parceiro/a seja flirtado/a por terceiros em minha frente."
+                    "Que o/a parceiro/a seja flirtado/a por terceiros em minha frente.",
+                    "Assistir a vídeos educativos sobre poliamor e swing juntos.",
+                    "Partilhar fantasias de poliamor em conversas íntimas (sem concretizar)."
                 ]
             },            {
                 "name": "Risco, Exposição e Ação",
@@ -232,7 +242,9 @@
                     "Que o parceiro/a receba uma massagem tântrica (Yoni/Lingham).",
                     "Ser surpreendido pelo parceiro/a durante o sexo, com a aparição de uma terceira pessoa.",
                     "Surpreender o/a parceiro/a durante o sexo, com a aparição de uma terceira pessoa.",
-                    "Trocar roupa interior com terceiro(s)."
+                    "Trocar roupa interior com terceiro(s).",
+                    "Conversar com outros casais sobre experiências de abertura de relação.",
+                    "Ler histórias/relatos reais sobre experiências poliamorosas juntos."
                 ]
             },            {
                 "name": "Estrutura, Limites e Afeto",
@@ -252,7 +264,9 @@
                     "Sexo monogâmico com outros casais presentes (cada casal entre si).",
                     "Hard Swing: A quatro, com troca completa entre casais.",
                     "Ver o/a parceiro/a receber oral de terceiro/a.",
-                    "Dar oral a terceiro/a enquanto o/a parceiro/a observa."
+                    "Dar oral a terceiro/a enquanto o/a parceiro/a observa.",
+                    "Discutir limites e regras antes de qualquer experiência com terceiros.",
+                    "Conversar sobre ciúmes e inseguranças antes de explorar."
                 ]
             }
         ]

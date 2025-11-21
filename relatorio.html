@@ -10,19 +10,11 @@
   <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
-    <!-- CSS Modules -->
+  
+  <!-- CSS Modules -->
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/questions.css">
-  
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
-          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "u8hwuw3ixs");
-  </script>
     <style>
     /* Estilos específicos para o relatório - FORMATO TABELA COMPACTO */
     body {
@@ -455,21 +447,10 @@
       .action-buttons {
         flex-direction: column;
       }
-          .btn-action {
+      
+      .btn-action {
         width: 100%;
         justify-content: center;
-      }
-    }
-    
-    /* Modal Animation */
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-50px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
       }
     }
   </style>
@@ -478,30 +459,12 @@
 
 <!-- Header -->
 <div class="header">
-  <!-- Logo e Título (Centro) -->
   <div class="logo-section">
     <a href="index.html">
       <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
     </a>
     <h1>Quest4Couple</h1>
     <p class="tagline">Relatório de Compatibilidade 💕</p>
-  </div>
-  
-  <!-- User Section (Canto Superior Direito) -->
-  <div class="user-section-top" id="headerUserSection" style="display: none;">
-    <span class="user-info" id="headerUserInfo">
-      👤 <span id="headerUserName">Carregando...</span>
-    </span>
-    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard">
-      📊 Dashboard
-    </button>
-    <button class="btn btn-logout" onclick="headerLogout()" title="Sair">
-      🚪 Sair
-    </button>
-  </div>
-  
-  <div class="free-badge-small">
-    ✨ 100% Gratuito
   </div>
 </div>
 
@@ -541,8 +504,9 @@
         <h3 style="color: #667eea; margin: 0 0 5px 0; font-size: 1.3em;">Gerar com Conta Quest4Couple</h3>
         <p style="color: #6c757d; margin: 0; font-size: 0.9em;">Sem ficheiros! Direto pela cloud 🚀</p>
       </div>
-        <div id="cloudSection">        <!-- Estado: Não autenticado -->
-        <div id="cloudNoAuth" style="text-align: center;">
+      
+      <div id="cloudSection">        <!-- Estado: Não autenticado -->
+        <div id="cloudNotAuth" style="text-align: center;">
           <p style="color: #495057; margin-bottom: 15px;">
             <strong>✨ Novo!</strong> Se ambos têm conta Quest4Couple, podem gerar o relatório diretamente sem ficheiros .q4c!
           </p>
@@ -550,18 +514,14 @@
             🔐 Fazer Login para Usar Cloud
           </button>
         </div>
-          <!-- Estado: Autenticado (escondido por padrão) -->
+        
+        <!-- Estado: Autenticado (escondido por padrão) -->
         <div id="cloudAuth" style="display: none;">
           <div style="margin-bottom: 15px;">
             <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">👥 Escolher parceiro/a:</label>
-            <div style="display: flex; gap: 10px;">
-              <select id="partnerSelect" style="flex: 1; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 1em; cursor: pointer;">
-                <option value="">Carregando parceiros...</option>
-              </select>
-              <button onclick="showAddPartnerModal()" style="padding: 12px 20px; background: white; color: #667eea; border: 2px solid #667eea; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; white-space: nowrap;">
-                ➕ Adicionar
-              </button>
-            </div>
+            <select id="partnerSelect" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 1em; cursor: pointer;">
+              <option value="">Carregando parceiros...</option>
+            </select>
           </div>
           
           <button onclick="generateCloudReport()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00bcd4 0%, #667eea 100%); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 700; cursor: pointer; transition: all 0.3s;">
@@ -603,37 +563,7 @@
       🏠 Voltar ao Início
     </a>
   </div>
-  </div>
-
-<!-- Add Partner Modal -->
-<div id="addPartnerModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px);">
-  <div style="background: white; border-radius: 20px; padding: 30px; max-width: 500px; width: 90%; box-shadow: 0 10px 50px rgba(0,0,0,0.3); animation: slideIn 0.3s ease-out;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef;">
-      <h3 style="margin: 0; color: #667eea; font-size: 1.5em;">Adicionar Parceiro</h3>
-      <button onclick="closeAddPartnerModal()" style="background: none; border: none; font-size: 2em; color: #aaa; cursor: pointer; line-height: 1; transition: color 0.2s;">×</button>
-    </div>
-    
-    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-      <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 O teu username para partilhar:</p>
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
-        <button type="button" onclick="copyMyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; white-space: nowrap; font-weight: 600;">📋 Copiar</button>
-      </div>
-      <small style="color: #6c757d; display: block; margin-top: 8px;">Partilha este username com o teu parceiro</small>
-    </div>
-    
-    <p style="font-weight: 500; margin-bottom: 10px; color: #495057;">🔍 Procura pelo username do teu parceiro:</p>
-    <form id="searchUserForm" onsubmit="searchPartnerByUsername(event)" style="margin-bottom: 20px;">
-      <div style="display: flex; gap: 10px;">
-        <input type="text" id="searchUsername" placeholder="@username" required style="flex: 1; padding: 12px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em; transition: border-color 0.3s;">
-        <button type="submit" style="padding: 12px 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; white-space: nowrap;">Procurar</button>
-      </div>
-    </form>
-    
-    <div id="searchResults" style="margin-top: 15px;">
-      <!-- Results will appear here -->
-    </div>
-  </div>
+  
 </div>
 
 <!-- Footer -->
@@ -657,16 +587,7 @@
 <!-- CryptoJS Library (necessário para desencriptar) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-<!-- Firebase Configuration -->
-<script src="js/firebase-config.js"></script>
-
 <!-- JavaScript Modules -->
-<script src="js/analytics.js"></script>
 <script src="js/invertMatching.js"></script>
 <script src="js/comparison.js"></script>
 
@@ -680,383 +601,6 @@
       document.getElementById('uploadSection').style.display = 'none';
     };
   }
-    // Verificar autenticação ao carregar a página
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('🔍 Verificando autenticação na página relatório...');
-    
-    // Aguardar Firebase inicializar
-    setTimeout(() => {
-      if (typeof firebase !== 'undefined' && firebase.auth) {
-        checkCloudAuthentication();
-      } else {
-        console.warn('⚠️ Firebase não carregado - funcionalidade cloud desativada');
-      }
-    }, 500);
-  });  // ===================================
-  // AUTENTICAÇÃO E CARREGAMENTO DE PARCEIROS
-  // ===================================
-  
-  let currentUser = null;
-  
-  async function checkCloudAuthentication() {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      const cloudNoAuth = document.getElementById('cloudNoAuth');
-      const cloudAuth = document.getElementById('cloudAuth');
-      const headerUserSection = document.getElementById('headerUserSection');
-      const headerUserName = document.getElementById('headerUserName');
-      
-      if (user) {
-        console.log('✅ Utilizador autenticado:', user.email);
-        currentUser = user;
-        
-        // Atualizar header
-        if (headerUserSection && headerUserName) {
-          headerUserSection.style.display = 'flex';
-          
-          // Buscar nome do utilizador
-          try {
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            if (userDoc.exists && userDoc.data().name) {
-              headerUserName.textContent = userDoc.data().name;
-            } else {
-              headerUserName.textContent = user.email.split('@')[0];
-            }
-          } catch (error) {
-            console.error('Erro ao carregar nome:', error);
-            headerUserName.textContent = user.email.split('@')[0];
-          }
-        }
-        
-        // Mostrar secção autenticada
-        if (cloudNoAuth) cloudNoAuth.style.display = 'none';
-        if (cloudAuth) cloudAuth.style.display = 'block';
-        
-        // Carregar lista de parceiros
-        await loadPartnersList();
-      } else {
-        console.log('❌ Utilizador não autenticado');
-        currentUser = null;
-        
-        // Esconder header de utilizador
-        if (headerUserSection) {
-          headerUserSection.style.display = 'none';
-        }
-        
-        // Mostrar secção não autenticada
-        if (cloudNoAuth) cloudNoAuth.style.display = 'block';
-        if (cloudAuth) cloudAuth.style.display = 'none';
-      }
-    });
-  }
-  
-  // Função de logout para o header
-  function headerLogout() {
-    if (confirm('❓ Tens a certeza que queres sair?')) {
-      firebase.auth().signOut().then(() => {
-        window.location.href = 'index.html';
-      }).catch((error) => {
-        console.error('Erro ao sair:', error);
-        alert('❌ Erro ao sair. Tenta novamente.');
-      });
-    }
-  }
-  
-  async function loadPartnersList() {
-    const partnerSelect = document.getElementById('partnerSelect');
-    
-    if (!currentUser) {
-      partnerSelect.innerHTML = '<option value="">Não autenticado</option>';
-      return;
-    }
-    
-    try {
-      // Buscar todas as conexões do utilizador
-      const connectionsSnapshot = await db.collection('connections')
-        .where('userId', '==', currentUser.uid)
-        .get();
-      
-      if (connectionsSnapshot.empty) {
-        partnerSelect.innerHTML = '<option value="">Nenhum parceiro conectado ainda</option>';
-        console.log('ℹ️ Nenhuma conexão encontrada para o utilizador');
-        return;
-      }
-      
-      // Popular dropdown com parceiros
-      let options = '<option value="">Escolher parceiro/a...</option>';
-      
-      connectionsSnapshot.forEach(doc => {
-        const connection = doc.data();
-        const partnerName = connection.partnerName || 'Parceiro';
-        const partnerUsername = connection.partnerUsername || '';
-        const partnerId = connection.partnerId;
-        
-        options += `<option value="${partnerId}" data-username="${partnerUsername}">${partnerName} (@${partnerUsername})</option>`;
-      });
-      
-      partnerSelect.innerHTML = options;
-      console.log(`✅ Carregados ${connectionsSnapshot.size} parceiros`);
-      
-    } catch (error) {
-      console.error('❌ Erro ao carregar parceiros:', error);
-      partnerSelect.innerHTML = '<option value="">Erro ao carregar parceiros</option>';
-    }
-  }
-    // ===================================
-  // GERAR RELATÓRIO CLOUD
-  // ===================================
-  
-  async function generateCloudReport() {
-    const partnerSelect = document.getElementById('partnerSelect');
-    const partnerId = partnerSelect.value;
-    
-    if (!partnerId) {
-      alert('❌ Por favor, escolhe um parceiro da lista!');
-      return;
-    }
-    
-    if (!currentUser) {
-      alert('❌ Não estás autenticado!');
-      return;
-    }
-    
-    try {
-      // Mostrar loading
-      const loadingMsg = document.createElement('div');
-      loadingMsg.id = 'cloudLoadingMsg';
-      loadingMsg.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; text-align: center;';
-      loadingMsg.innerHTML = '<div style="font-size: 2em; margin-bottom: 15px;">☁️</div><div style="font-weight: 600; font-size: 1.2em; color: #667eea;">A gerar relatório...</div><div style="color: #6c757d; margin-top: 10px;">Aguarda um momento</div>';
-      document.body.appendChild(loadingMsg);
-      
-      // Buscar respostas de ambos os utilizadores
-      const myAnswersDoc = await db.collection('answers').doc(currentUser.uid).get();
-      const partnerAnswersDoc = await db.collection('answers').doc(partnerId).get();
-      
-      if (!myAnswersDoc.exists) {
-        throw new Error('Ainda não respondeste aos questionários! Vai ao app.html primeiro.');
-      }
-      
-      if (!partnerAnswersDoc.exists) {
-        throw new Error('O teu parceiro ainda não respondeu aos questionários!');
-      }
-      
-      const myAnswers = myAnswersDoc.data();
-      const partnerAnswers = partnerAnswersDoc.data();
-      
-      // Buscar informação do parceiro
-      const partnerDoc = await db.collection('users').doc(partnerId).get();
-      const partnerData = partnerDoc.data();
-      
-      // Preparar dados no formato esperado pelo generateCompatibilityReport
-      const person1Data = {
-        name: myAnswers.name || currentUser.email.split('@')[0],
-        answers: myAnswers.answers || {}
-      };
-      
-      const person2Data = {
-        name: partnerData.name || partnerAnswers.name || partnerData.email.split('@')[0],
-        answers: partnerAnswers.answers || {}
-      };
-      
-      // Remover loading
-      document.body.removeChild(loadingMsg);
-      
-      // Gerar relatório usando a função existente
-      if (typeof window.generateCompatibilityReport === 'function') {
-        window.generateCompatibilityReport(person1Data, person2Data);
-        
-        // Scroll para o relatório
-        setTimeout(() => {
-          const reportContainer = document.querySelector('.report-container');
-          if (reportContainer) {
-            reportContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 500);
-      } else {
-        throw new Error('Função de gerar relatório não encontrada');
-      }
-      
-    } catch (error) {
-      console.error('❌ Erro ao gerar relatório cloud:', error);
-      
-      // Remover loading se existir
-      const loadingMsg = document.getElementById('cloudLoadingMsg');
-      if (loadingMsg) {
-        document.body.removeChild(loadingMsg);
-      }
-      
-      alert('❌ Erro ao gerar relatório:\n\n' + error.message);
-    }
-  }
-  
-  // ===================================
-  // FUNÇÕES DO MODAL DE ADICIONAR PARCEIRO
-  // ===================================
-  
-  function showAddPartnerModal() {
-    const modal = document.getElementById('addPartnerModal');
-    if (modal) {
-      modal.style.display = 'flex';
-      loadMyUsername();
-    }
-  }
-  
-  function closeAddPartnerModal() {
-    const modal = document.getElementById('addPartnerModal');
-    if (modal) {
-      modal.style.display = 'none';
-      document.getElementById('searchUsername').value = '';
-      document.getElementById('searchResults').innerHTML = '';
-    }
-  }
-  
-  async function loadMyUsername() {
-    const user = firebase.auth().currentUser;
-    if (!user) {
-      document.getElementById('myUsernameDisplay').textContent = '@erro';
-      return;
-    }
-    
-    try {
-      const userDoc = await db.collection('users').doc(user.uid).get();
-      if (userDoc.exists) {
-        const username = userDoc.data().username || user.email.split('@')[0];
-        document.getElementById('myUsernameDisplay').textContent = '@' + username;
-      }
-    } catch (error) {
-      console.error('Erro ao carregar username:', error);
-      document.getElementById('myUsernameDisplay').textContent = '@' + user.email.split('@')[0];
-    }
-  }
-  
-  function copyMyUsername() {
-    const usernameText = document.getElementById('myUsernameDisplay').textContent;
-    navigator.clipboard.writeText(usernameText).then(() => {
-      alert('✅ Username copiado!\n\n' + usernameText + '\n\nPartilha com o teu parceiro.');
-    }).catch(() => {
-      alert('❌ Erro ao copiar. Tenta selecionar e copiar manualmente: ' + usernameText);
-    });
-  }
-  
-  async function searchPartnerByUsername(event) {
-    event.preventDefault();
-    
-    const searchInput = document.getElementById('searchUsername');
-    const searchResults = document.getElementById('searchResults');
-    const searchUsername = searchInput.value.trim().replace('@', '').toLowerCase();
-    
-    if (!searchUsername) {
-      alert('❌ Por favor, insere um username válido!');
-      return;
-    }
-    
-    searchResults.innerHTML = '<div style="text-align: center; padding: 20px; color: #6c757d;">🔍 Procurando...</div>';
-    
-    try {
-      const currentUser = firebase.auth().currentUser;
-      if (!currentUser) {
-        throw new Error('Utilizador não autenticado');
-      }
-      
-      // Buscar utilizador pelo username
-      const usersSnapshot = await db.collection('users')
-        .where('username', '==', searchUsername)
-        .limit(1)
-        .get();
-      
-      if (usersSnapshot.empty) {
-        searchResults.innerHTML = `
-          <div style="text-align: center; padding: 20px; background: #fff3cd; border-radius: 8px; color: #856404;">
-            <p style="margin: 0; font-weight: 500;">❌ Username não encontrado</p>
-            <p style="margin: 5px 0 0 0; font-size: 0.9em;">Verifica se o username está correto</p>
-          </div>
-        `;
-        return;
-      }
-      
-      const partnerDoc = usersSnapshot.docs[0];
-      const partnerData = partnerDoc.data();
-      const partnerId = partnerDoc.id;
-      
-      // Verificar se já está conectado
-      const connectionSnapshot = await db.collection('connections')
-        .where('userId', '==', currentUser.uid)
-        .where('partnerId', '==', partnerId)
-        .get();
-      
-      if (!connectionSnapshot.empty) {
-        searchResults.innerHTML = `
-          <div style="text-align: center; padding: 20px; background: #d1ecf1; border-radius: 8px; color: #0c5460;">
-            <p style="margin: 0; font-weight: 500;">ℹ️ Já estás conectado com este utilizador</p>
-          </div>
-        `;
-        return;
-      }
-      
-      // Mostrar resultado e botão para adicionar
-      searchResults.innerHTML = `
-        <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; border: 2px solid #667eea;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em;">
-              ${partnerData.gender === 'M' ? '👨' : partnerData.gender === 'F' ? '👩' : '👤'}
-            </div>
-            <div style="flex: 1;">
-              <div style="font-weight: 600; color: #495057; font-size: 1.1em;">${partnerData.name || 'Utilizador'}</div>
-              <div style="color: #6c757d; font-size: 0.9em;">@${partnerData.username}</div>
-            </div>
-          </div>
-          <button onclick="addPartnerConnection('${partnerId}', '${partnerData.name}', '${partnerData.username}')" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;">
-            ➕ Adicionar como Parceiro
-          </button>
-        </div>
-      `;
-    } catch (error) {
-      console.error('Erro ao procurar utilizador:', error);
-      searchResults.innerHTML = `
-        <div style="text-align: center; padding: 20px; background: #f8d7da; border-radius: 8px; color: #721c24;">
-          <p style="margin: 0; font-weight: 500;">❌ Erro ao procurar</p>
-          <p style="margin: 5px 0 0 0; font-size: 0.9em;">${error.message}</p>
-        </div>
-      `;
-    }
-  }
-  
-  async function addPartnerConnection(partnerId, partnerName, partnerUsername) {
-    try {
-      const currentUser = firebase.auth().currentUser;
-      if (!currentUser) {
-        throw new Error('Utilizador não autenticado');
-      }
-      
-      // Criar conexão
-      await db.collection('connections').add({
-        userId: currentUser.uid,
-        partnerId: partnerId,
-        partnerName: partnerName,
-        partnerUsername: partnerUsername,
-        status: 'pending',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      
-      alert('✅ Parceiro adicionado com sucesso!\n\n' + partnerName + ' foi adicionado à tua lista de parceiros.');
-      
-      closeAddPartnerModal();
-      
-      // Recarregar lista de parceiros
-      if (typeof loadPartnersList === 'function') {
-        loadPartnersList();
-      }
-    } catch (error) {
-      console.error('Erro ao adicionar parceiro:', error);
-      alert('❌ Erro ao adicionar parceiro:\n\n' + error.message);
-    }
-  }
-  
-  // Fechar modal ao clicar fora
-  document.getElementById('addPartnerModal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'addPartnerModal') {
-      closeAddPartnerModal();
-    }
-  });
 </script>
 
 </body>

@@ -2,6 +2,18 @@
   "description": "Configuração de perguntas que requerem matching invertido - quando uma pessoa quer dar e a outra receber",
   "invertPairs": [
     {
+      "packId": "romantico",
+      "pairs": [
+        {
+          "questionGiver": "Acordar o/a parceiro/a com sexo oral.",
+          "questionReceiver": "Ser acordado/a com sexo oral.",
+          "description": "Acordar com sexo oral - dar vs receber",
+          "labelGiver": "ACORDAR PARCEIRO/A",
+          "labelReceiver": "SER ACORDADO/A"
+        }
+      ]
+    },
+    {
       "packId": "pimentinha",
       "pairs": [
         {
@@ -12,10 +24,24 @@
           "labelReceiver": "SER DOMINADO/A"
         },
         {
-          "questionGiver": "Estimular o anus do parceiro/a (com ou sem penetração).",
-          "questionReceiver": "Receber estimulação anal (com ou sem penetração).",
-          "description": "Estimulação anal - dar vs receber",
+          "questionGiver": "Estimular o anus do/a parceiro/a (externo, sem penetração).",
+          "questionReceiver": "Receber estimulação anal externa (sem penetração).",
+          "description": "Estimulação anal externa - dar vs receber",
           "labelGiver": "ESTIMULAR",
+          "labelReceiver": "RECEBER"
+        },
+        {
+          "questionGiver": "Penetração anal com dedos no/a parceiro/a.",
+          "questionReceiver": "Receber penetração anal com dedos.",
+          "description": "Penetração anal com dedos - dar vs receber",
+          "labelGiver": "PENETRAR",
+          "labelReceiver": "RECEBER"
+        },
+        {
+          "questionGiver": "Ejacular na cara.",
+          "questionReceiver": "Receber ejaculação na cara.",
+          "description": "Ejaculação facial - dar vs receber",
+          "labelGiver": "EJACULAR",
           "labelReceiver": "RECEBER"
         }
       ]
@@ -36,7 +62,8 @@
           "description": "Voyeurismo vs Exibicionismo - prazer sexual",
           "labelGiver": "ASSISTIR",
           "labelReceiver": "SER VISTO/A"
-        },        {
+        },
+        {
           "questionGiver": "Assistir ao/à parceiro/a a ter orgasmo com um/a terceiro/a.",
           "questionReceiver": "Ser assistido/a pelo/a parceiro/a a ter orgasmo com um/a terceiro/a.",
           "description": "Ver vs ser visto tendo orgasmo com terceiro",

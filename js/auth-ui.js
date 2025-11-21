@@ -67,7 +67,8 @@ googleLoginBtn.addEventListener('click', async () => {
   showLoading();
   clearMessages();
 
-  try {    console.log('🔵 Calling signInWithGoogle...');
+  try {    
+    console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google login success:', result);
     
@@ -83,6 +84,10 @@ googleLoginBtn.addEventListener('click', async () => {
       hideLoading();
       showLocationModal(result.user);
     } else {
+      // Atualizar lastLogin no Firestore
+      await db.collection('users').doc(result.user.uid).update({
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
       // Dados completos - redirecionar
       console.log('✅ Dados completos - redirecionando para dashboard...');
       hideLoading();
@@ -111,7 +116,8 @@ googleSignupBtn.addEventListener('click', async () => {
   showLoading();
   clearMessages();
 
-  try {    console.log('🔵 Calling signInWithGoogle...');
+  try {    
+    console.log('🔵 Calling signInWithGoogle...');
     const result = await signInWithGoogle();
     console.log('✅ Google signup success:', result);
     
@@ -127,6 +133,10 @@ googleSignupBtn.addEventListener('click', async () => {
       hideLoading();
       showLocationModal(result.user);
     } else {
+      // Atualizar lastLogin no Firestore
+      await db.collection('users').doc(result.user.uid).update({
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
       // Utilizador já tem dados completos - redirecionar
       console.log('✅ Dados completos - redirecionando para dashboard...');
       hideLoading();
@@ -161,6 +171,10 @@ emailLoginForm.addEventListener('submit', async (e) => {
     console.log('📧 Calling signInWithEmailPassword...');
     const result = await signInWithEmailPassword(email, password);
     console.log('✅ Email login success:', result);
+    // Atualizar lastLogin no Firestore
+    await db.collection('users').doc(result.user.uid).update({
+      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+    });
     // onAuthStateChanged vai redirecionar automaticamente
   } catch (error) {
     console.error('❌ Email login error:', error);

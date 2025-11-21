@@ -83,16 +83,6 @@ async function compareEncryptedAnswers() {
 }
 
 async function generateCompatibilityReport(myData, partnerData) {
-  // CARREGAR CONFIGURAÇÃO DE INVERT MATCHING
-  if (!window.invertMatchingConfig) {
-    await loadInvertMatchingConfig();
-    window.invertMatchingConfig = invertMatchingConfig;
-  }
-  
-  // Track statistics for analytics
-  const matchCounts = { superMatch: 0, match: 0, mismatch: 0, invertMatching: 0 };
-  const usedPackIds = [];
-  
   const reportContainer = document.getElementById('compatibilityReport');
   let html = `
     <h2 style="text-align: center; font-size: 2em; color: #495057; margin: 20px 0;">💖 Relatório de Compatibilidade entre ${myData.userName} e ${partnerData.userName}</h2>
@@ -158,12 +148,11 @@ async function generateCompatibilityReport(myData, partnerData) {
     );
     
     // Adicionar custom questions ao array
-    packQuestions = [...packQuestions, ...uniqueCustom.map(q => q.text)];    const myAnswers = myData.answers[config.id] || {};
+    packQuestions = [...packQuestions, ...uniqueCustom.map(q => q.text)];
+
+    const myAnswers = myData.answers[config.id] || {};
     const partnerAnswers = partnerData.answers[config.id] || {};
     const commonQuestions = { ...myAnswers, ...partnerAnswers };    if (Object.keys(commonQuestions).length > 0) {
-      // Track pack usage for analytics
-      usedPackIds.push(config.id);
-      
       html += `
         <div class="pack ${config.id}" data-pack-color="${config.color}" style="display:block; margin: 15px 0;">
           <h2 style="font-size: 1.5em; color: #495057; padding: 12px 15px; background: linear-gradient(to right, #f8f9fa, white); border-left: 4px solid ${config.color}; border-radius: 8px; margin-bottom: 15px;">${config.name}</h2>
@@ -219,7 +208,8 @@ async function generateCompatibilityReport(myData, partnerData) {
         
         // A partir daqui, TODAS as combinações contam para as estatísticas
         totalQuestions++;
-          // ⭐ SUPER MATCH: Por favor! + Por favor!
+        
+        // ⭐ SUPER MATCH: Por favor! + Por favor!
         if (my === 'porfavor' && partner === 'porfavor') {
           superMatches.push({
             qIndex,
@@ -232,11 +222,10 @@ async function generateCompatibilityReport(myData, partnerData) {
             invertInfo
           });
           totalMatches++;
-          matchCounts.superMatch++;
-          if (isInverted) matchCounts.invertMatching++;
           return;
         }
-          // ✨ EXCELENTE: Por favor! + Yup
+        
+        // ✨ EXCELENTE: Por favor! + Yup
         if ((my === 'porfavor' && partner === 'yup') || (my === 'yup' && partner === 'porfavor')) {
           matches.push({
             qIndex,
@@ -249,8 +238,6 @@ async function generateCompatibilityReport(myData, partnerData) {
             invertInfo
           });
           totalMatches++;
-          matchCounts.match++;
-          if (isInverted) matchCounts.invertMatching++;
           return;
         }
         
@@ -267,8 +254,6 @@ async function generateCompatibilityReport(myData, partnerData) {
             invertInfo
           });
           totalMatches++;
-          matchCounts.match++;
-          if (isInverted) matchCounts.invertMatching++;
           return;
         }
         
@@ -287,11 +272,10 @@ async function generateCompatibilityReport(myData, partnerData) {
             invertInfo
           });
           totalMatches++;
-          matchCounts.match++;
-          if (isInverted) matchCounts.invertMatching++;
           return;
         }
-          // 😐 NEUTRO: Por favor! + Meh (aparece para reflexão)
+        
+        // 😐 NEUTRO: Por favor! + Meh (aparece para reflexão)
         if ((my === 'porfavor' && partner === 'meh') || (my === 'meh' && partner === 'porfavor')) {
           reflectionNeeded.push({
             qIndex,
@@ -304,7 +288,6 @@ async function generateCompatibilityReport(myData, partnerData) {
             invertInfo
           });
           // NÃO incrementa totalMatches (neutro não é match positivo)
-          matchCounts.mismatch++;
           return;
         }
       });      // Renderizar por categorias
@@ -320,23 +303,16 @@ async function generateCompatibilityReport(myData, partnerData) {
         
         items.forEach(item => {          if (item.isInverted && item.invertInfo) {
             // RENDERIZAÇÃO COM INVERT MATCHING - FORMATO DESTACADO
-            // Usar labels contextuais do JSON ou fallback para DAR/RECEBER
-            const myLabel = item.invertInfo.isGiver ? item.invertInfo.labelGiver : item.invertInfo.labelReceiver;
-            const partnerLabel = item.invertInfo.isGiver ? item.invertInfo.labelReceiver : item.invertInfo.labelGiver;
-            
             const giverLabel = item.invertInfo.isGiver 
-              ? `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${myLabel || '✋ DAR'}</span>`
-              : `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${myLabel || '👐 RECEBER'}</span>`;
+              ? `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">✋ DAR</span>`
+              : `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">👐 RECEBER</span>`;
 
-            const partnerLabelHtml = item.invertInfo.isGiver
-              ? `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${partnerLabel || '👐 RECEBER'}</span>`
-              : `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75em; display: inline-block;">${partnerLabel || '✋ DAR'}</span>`;            categoryHtml += `
-              <div class="compatibility-section ${item.compatibilityClass} inverted" 
-                   data-question-index="${item.qIndex}" 
-                   data-pack-id="${config.id}" 
-                   data-match-type="${item.resultText}"
-                   data-is-inverted="true"
-                   style="background: linear-gradient(to right, #f9fbe7, #fff8e1); border-left: 5px solid #667eea !important; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);">
+            const partnerLabel = item.invertInfo.isGiver
+              ? `<span class="invert-label receiver" style="background: #fff3e0; color: #e65100; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">👐 RECEBER</span>`
+              : `<span class="invert-label giver" style="background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.8em; display: inline-block;">✋ DAR</span>`;
+
+            categoryHtml += `
+              <div class="compatibility-section ${item.compatibilityClass} inverted" style="background: linear-gradient(to right, #f9fbe7, #fff8e1); border-left: 5px solid #667eea !important; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);">
                 <div style="grid-column: 1 / -1; padding: 15px;">
                   <!-- Badge de Matching Invertido -->
                   <div style="display: inline-flex; align-items: center; gap: 8px; background: #667eea; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.85em; font-weight: 700; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);">
@@ -351,10 +327,12 @@ async function generateCompatibilityReport(myData, partnerData) {
                   
                   <!-- Tipo de Match -->
                   <span class="match-type" style="font-size: 1em; padding: 6px 14px;">${item.resultText}</span>
-                    <!-- Container Invert com Setas -->
-                  <div style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 15px; align-items: center; margin-top: 15px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">                    <!-- User 1 -->
+                  
+                  <!-- Container Invert com Setas -->
+                  <div style="display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 15px; align-items: center; margin-top: 15px; padding: 15px; background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                    <!-- User 1 -->
                     ${giverLabel}
-                    <div class="my-answer">
+                    <div>
                       <span class="user-name" style="display: block; margin-bottom: 6px;">${myData.userName}</span>
                       <span class="answer-badge ${item.myAns.answer}" style="font-size: 0.95em;">${getAnswerText(item.myAns.answer)}</span>
                       ${item.myAns?.comment ? `<div><small style="color: #6c757d; font-style: italic; display: block; margin-top: 4px;">"${item.myAns.comment}"</small></div>` : ''}
@@ -364,12 +342,12 @@ async function generateCompatibilityReport(myData, partnerData) {
                     <div style="text-align: center; font-size: 1.8em; color: #667eea;">↔️</div>
                     
                     <!-- Parceiro -->
-                    <div class="partner-answer">
+                    <div>
                       <span class="user-name" style="display: block; margin-bottom: 6px;">${partnerData.userName}</span>
                       <span class="answer-badge ${item.partnerAns.answer}" style="font-size: 0.95em;">${getAnswerText(item.partnerAns.answer)}</span>
                       ${item.partnerAns?.comment ? `<div><small style="color: #6c757d; font-style: italic; display: block; margin-top: 4px;">"${item.partnerAns.comment}"</small></div>` : ''}
                     </div>
-                    ${partnerLabelHtml}
+                    ${partnerLabel}
                   </div>
                   
                   <!-- Descrição da Dinâmica -->
@@ -377,14 +355,11 @@ async function generateCompatibilityReport(myData, partnerData) {
                     <strong>💡 Dinâmica:</strong> ${item.invertInfo.description}
                   </div>
                 </div>
-              </div>`;          } else {
+              </div>`;
+          } else {
             // RENDERIZAÇÃO NORMAL - FORMATO TABELA COMPACTO
             categoryHtml += `
-              <div class="compatibility-section ${item.compatibilityClass}"
-                   data-question-index="${item.qIndex}" 
-                   data-pack-id="${config.id}" 
-                   data-match-type="${item.resultText}"
-                   data-is-inverted="false">
+              <div class="compatibility-section ${item.compatibilityClass}">
                 <!-- Coluna 1: Questão -->
                 <p class="question-text">${item.qIndex + 1}. ${item.questionText}</p>
                 
@@ -392,14 +367,14 @@ async function generateCompatibilityReport(myData, partnerData) {
                 <span class="match-type">${item.resultText}</span>
                 
                 <!-- Coluna 3: User 1 -->
-                <div class="user-answer my-answer">
+                <div class="user-answer">
                   <span class="user-name">${myData.userName}</span>
                   <span class="answer-badge ${item.myAns?.answer}">${item.myAns ? getAnswerText(item.myAns.answer) : 'Não respondeu'}</span>
                   ${item.myAns?.comment ? `<small style="color: #6c757d; font-style: italic;">"${item.myAns.comment}"</small>` : ''}
                 </div>
                 
                 <!-- Coluna 4: User 2 -->
-                <div class="user-answer partner-answer">
+                <div class="user-answer">
                   <span class="user-name">${partnerData.userName}</span>
                   <span class="answer-badge ${item.partnerAns?.answer}">${item.partnerAns ? getAnswerText(item.partnerAns.answer) : 'Não respondeu'}</span>
                   ${item.partnerAns?.comment ? `<small style="color: #6c757d; font-style: italic;">"${item.partnerAns.comment}"</small>` : ''}
@@ -471,58 +446,11 @@ async function generateCompatibilityReport(myData, partnerData) {
         </button>
       </div>
     </div>
-  ` + html;  reportContainer.innerHTML = html;
+  ` + html;
+
+  reportContainer.innerHTML = html;
   reportContainer.style.display = 'block';
   window.scrollTo({ top: reportContainer.offsetTop - 100, behavior: 'smooth' });
-  
-  // Log analytics (não bloqueia se falhar)
-  try {
-    if (typeof logReportGeneration === 'function') {
-      await logReportGeneration(usedPackIds, matchCounts);
-    }
-  } catch (error) {
-    console.log('Analytics error (ignorado):', error);
-  }
-  
-  // Log relatório completo com nomes mascarados (para backoffice)
-  try {
-    if (typeof logFullReport === 'function') {
-      // Preparar dados do relatório para armazenamento
-      const reportData = {
-        userName1: myData.userName,
-        userName2: partnerData.userName,
-        questions: [] // Será preenchido abaixo
-      };
-      
-      // Extrair todas as questões do relatório (já renderizadas)
-      const reportElement = document.createElement('div');
-      reportElement.innerHTML = html;
-      
-      const questionElements = reportElement.querySelectorAll('[data-question-index]');
-      questionElements.forEach(el => {
-        const qIndex = el.getAttribute('data-question-index');
-        const packId = el.getAttribute('data-pack-id');
-        const questionText = el.querySelector('.question-text')?.textContent || '';
-        const myAnswer = el.querySelector('.my-answer')?.textContent || '';
-        const partnerAnswer = el.querySelector('.partner-answer')?.textContent || '';
-        const matchType = el.getAttribute('data-match-type') || '';
-        
-        reportData.questions.push({
-          packId,
-          questionIndex: qIndex,
-          questionText,
-          answer1: myAnswer,
-          answer2: partnerAnswer,
-          matchType,
-          isInvertMatching: el.getAttribute('data-is-inverted') === 'true'
-        });
-      });
-      
-      await logFullReport(reportData, matchCounts, usedPackIds);
-    }
-  } catch (error) {
-    console.log('Full report analytics error (ignorado):', error);
-  }
 }
 
 function getAnswerText(value) {
@@ -596,46 +524,40 @@ function toggleAllCategories() {
    CLOUD REPORT - Opção C (Híbrido Suave)
    ============================================ */
 
+// Verifica se o usuário está autenticado ao carregar a página
+window.addEventListener('DOMContentLoaded', () => {
+  checkCloudAuthentication();
+});
+
 /**
  * Verifica se o usuário está autenticado e mostra a seção apropriada
  */
 async function checkCloudAuthentication() {
-  console.log('🔍 checkCloudAuthentication() chamada');
-  const cloudNotAuth = document.getElementById('cloudNotAuth');
-  const cloudAuth = document.getElementById('cloudAuth');
-  
   // Verifica se o Firebase está configurado
-  if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) {
+  if (typeof firebase === 'undefined' || !firebase.apps.length) {
     // Firebase não inicializado - manter seção de login visível
     console.log('Firebase não inicializado. Usando método tradicional.');
-    if (cloudNotAuth) cloudNotAuth.style.display = 'block';
-    if (cloudAuth) cloudAuth.style.display = 'none';
     return;
   }
 
-  try {
-    // Ouvir mudanças no estado de autenticação
-    firebase.auth().onAuthStateChanged(async (user) => {
-      console.log('Estado de autenticação:', user ? `Autenticado: ${user.email}` : 'Não autenticado');
+  // Ouvir mudanças no estado de autenticação
+  firebase.auth().onAuthStateChanged(async (user) => {
+    const cloudNotAuth = document.getElementById('cloudNotAuth');
+    const cloudAuth = document.getElementById('cloudAuth');
+    
+    if (user) {
+      // Usuário autenticado - mostrar seção cloud
+      cloudNotAuth.style.display = 'none';
+      cloudAuth.style.display = 'block';
       
-      if (user) {
-        // Usuário autenticado - mostrar seção cloud
-        if (cloudNotAuth) cloudNotAuth.style.display = 'none';
-        if (cloudAuth) cloudAuth.style.display = 'block';
-        
-        // Carregar parceiros conectados
-        await loadConnectedPartners(user.uid);
-      } else {
-        // Não autenticado - mostrar botão de login
-        if (cloudNotAuth) cloudNotAuth.style.display = 'block';
-        if (cloudAuth) cloudAuth.style.display = 'none';
-      }
-    });
-  } catch (error) {
-    console.error('Erro ao verificar autenticação:', error);
-    if (cloudNotAuth) cloudNotAuth.style.display = 'block';
-    if (cloudAuth) cloudAuth.style.display = 'none';
-  }
+      // Carregar parceiros conectados
+      await loadConnectedPartners(user.uid);
+    } else {
+      // Não autenticado - mostrar botão de login
+      cloudNotAuth.style.display = 'block';
+      cloudAuth.style.display = 'none';
+    }
+  });
 }
 
 /**
