@@ -19,7 +19,8 @@
           "labelReceiver": "RECEBER"
         }
       ]
-    },    {
+    },
+    {
       "packId": "poliamor",
       "pairs": [
         {
@@ -98,7 +99,15 @@
           "description": "Parceiro fixo separado",
           "labelGiver": "TER PARCEIRO FIXO",
           "labelReceiver": "ACEITAR PARCEIRO FIXO"
-        },        {
+        },
+        {
+          "questionGiver": "Ser surpreendido pelo parceiro/a durante o sexo, com a aparição de uma terceira pessoa.",
+          "questionReceiver": "Surpreender o/a parceiro/a durante o sexo, com a aparição de uma terceira pessoa.",
+          "description": "Surpresa com terceira pessoa",
+          "labelGiver": "SER SURPREENDIDO/A",
+          "labelReceiver": "SURPREENDER"
+        },
+        {
           "questionGiver": "Pagar por sexo (prostitutas/os) com consentimento do parceiro.",
           "questionReceiver": "Que o parceiro pague por sexo, com o meu consentimento.",
           "description": "Pagar por sexo",
@@ -120,7 +129,8 @@
           "labelReceiver": "ACEITAR"
         }
       ]
-    },    {
+    },
+    {
       "packId": "kinks",
       "pairs": [
         {
@@ -185,7 +195,8 @@
           "description": "Dar gelo vs Receber gelo",
           "labelGiver": "APLICAR",
           "labelReceiver": "RECEBER"
-        },        {
+        },
+        {
           "questionGiver": "Tease and denial (provocar e negar o orgasmo) ao/à parceiro/a.",
           "questionReceiver": "Tease and denial (provocar e negar o orgasmo) do/a parceiro/a.",
           "description": "Provocar negação vs Ser negado",
