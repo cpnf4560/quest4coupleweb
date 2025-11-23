@@ -6,7 +6,8 @@
 function loadAndRenderAllPacks() {
   console.log('🚀 loadAndRenderAllPacks() chamado');
   
-  // Tentar múltiplos caminhos para o JSON  const possiblePaths = [
+  // Tentar múltiplos caminhos para o JSON
+  const possiblePaths = [
     './data/packs_data_clean.json?v=' + Date.now(),
     'data/packs_data_clean.json?v=' + Date.now(),
     '../data/packs_data_clean.json?v=' + Date.now()
