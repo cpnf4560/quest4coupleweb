@@ -498,6 +498,128 @@
                 padding: 8px 16px;
                 font-size: 0.9em;
             }
+        }        /* Beta Banner Styles */
+        .beta-banner {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.95), rgba(255, 152, 0, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
+            z-index: 999;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .beta-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .beta-icon {
+            font-size: 2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .beta-text {
+            flex: 1;
+        }
+        
+        .beta-text h3 {
+            margin: 0 0 5px 0;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .beta-text p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .beta-text a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: underline;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .beta-text a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .beta-close {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .beta-close:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
+        }
+        
+        @media (max-width: 768px) {
+            .beta-banner {
+                top: 60px;
+                width: 95%;
+                padding: 12px 15px;
+            }
+            
+            .beta-banner-content {
+                gap: 10px;
+            }
+            
+            .beta-icon {
+                font-size: 1.5em;
+            }
+            
+            .beta-text h3 {
+                font-size: 0.95em;
+            }
+            
+            .beta-text p {
+                font-size: 0.85em;
+            }
+            
+            .container {
+                margin-top: 180px !important;
+            }
         }
     </style>
 </head>
@@ -509,7 +631,21 @@
             <a href="auth.html" class="header-btn btn-login">Entrar</a>
             <a href="auth.html" class="header-btn btn-register">Criar Conta</a>
         </div>
-    </header>      <div class="container">
+    </header>
+    
+    <!-- Beta Banner -->
+    <div class="beta-banner" id="betaBanner">
+        <div class="beta-banner-content">
+            <div class="beta-icon">🚧</div>
+            <div class="beta-text">
+                <h3>🔨 Site em Construção (Beta)</h3>
+                <p>O Quest4Couple ainda está em desenvolvimento. Poderá encontrar alguns bugs ou funcionalidades incompletas. Precisas de ajuda? Contacta-nos: <a href="mailto:info@quest4couple.pt">info@quest4couple.pt</a></p>
+            </div>
+            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso">✕</button>
+        </div>
+    </div>
+    
+    <div class="container">
         <div class="hero-logo">
             <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
         </div>
@@ -714,8 +850,7 @@
             closeModal('registerModal');
             setTimeout(() => showLogin(), 200);
         }
-        
-        // Close modal when clicking outside
+          // Close modal when clicking outside
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', (e) => {
                 if (e.target === overlay) {
@@ -723,6 +858,41 @@
                 }
             });
         });
+        
+        // Beta Banner Functions
+        function closeBetaBanner() {
+            const banner = document.getElementById('betaBanner');
+            banner.style.animation = 'slideUp 0.3s ease-out';
+            setTimeout(() => {
+                banner.style.display = 'none';
+                // Guardar preferência no localStorage
+                localStorage.setItem('betaBannerClosed', 'true');
+            }, 300);
+        }
+        
+        // Verificar se o banner já foi fechado
+        window.addEventListener('DOMContentLoaded', () => {
+            const bannerClosed = localStorage.getItem('betaBannerClosed');
+            if (bannerClosed === 'true') {
+                document.getElementById('betaBanner').style.display = 'none';
+            }
+        });
+        
+        // Adicionar animação de slide up
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-30px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
         
         // Handle Login
         async function handleLogin(event) {
