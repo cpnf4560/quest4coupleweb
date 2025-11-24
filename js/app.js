@@ -153,11 +153,11 @@ function backToThemes() {
 function updateThemeProgress() {
   const themeClasses = ['romantico', 'experiencia', 'pimentinha', 'poliamor', 'kinks'];
   const themeQuestionCounts = {
-    'romantico': 40,
-    'experiencia': 30,
-    'pimentinha': 30,
-    'poliamor': 50,
-    'kinks': 110
+    'romantico': 50,
+    'experiencia': 50,
+    'pimentinha': 50,
+    'poliamor': 60,
+    'kinks': 90
   };
   
   themeClasses.forEach(themeClass => {
