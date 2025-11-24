@@ -363,26 +363,41 @@
                 <p class="donation-text">
                     A vossa opinião é valiosa! Digam-nos o que funciona, o que não funciona, e o que gostariam de ver.
                 </p>
-                
-                <form class="feedback-form" id="feedbackForm" onsubmit="submitFeedback(event)">
+                  <form class="feedback-form" 
+                      id="feedbackForm" 
+                      action="https://formspree.io/f/YOUR_FORM_ID" 
+                      method="POST">
+                    
+                    <!-- Campo oculto para o e-mail de destino -->
+                    <input type="hidden" name="_to" value="info@quest4couple.pt">
+                    
+                    <!-- Redirecionar após envio -->
+                    <input type="hidden" name="_next" value="https://quest4couple.pt/pages/apoiar.html?success=true">
+                    
+                    <!-- Assunto do e-mail -->
+                    <input type="hidden" name="_subject" value="Novo Feedback - Quest4Couple">
+                    
                     <div class="form-group">
                         <label for="feedbackName">Nome (opcional)</label>
                         <input type="text" 
-                               id="feedbackName" 
+                               id="feedbackName"
+                               name="nome"
                                placeholder="Como preferem ser chamados?">
                     </div>
                     
                     <div class="form-group">
                         <label for="feedbackEmail">Email (opcional)</label>
                         <input type="email" 
-                               id="feedbackEmail" 
+                               id="feedbackEmail"
+                               name="_replyto"
                                placeholder="vosso.email@exemplo.com">
                         <span class="form-hint">Só se quiserem uma resposta</span>
                     </div>
                     
                     <div class="form-group">
                         <label for="feedbackType">Tipo de Feedback</label>
-                        <select id="feedbackType" 
+                        <select id="feedbackType"
+                                name="tipo"
                                 style="padding: 10px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em;">
                             <option value="sugestao">💡 Sugestão</option>
                             <option value="bug">🐛 Reportar Problema</option>
@@ -393,10 +408,14 @@
                     
                     <div class="form-group">
                         <label for="feedbackMessage">Mensagem *</label>
-                        <textarea id="feedbackMessage" 
+                        <textarea id="feedbackMessage"
+                                  name="mensagem"
                                   placeholder="Partilhem a vossa opinião, sugestão ou experiência..."
                                   required></textarea>
                     </div>
+                    
+                    <!-- Proteção anti-spam do Formspree -->
+                    <input type="text" name="_gotcha" style="display:none">
                     
                     <button type="submit" class="submit-btn">
                         ✉️ Enviar Feedback
@@ -437,50 +456,21 @@
         </div>
     </footer>
     
-    <script>
-        // Função para enviar feedback
-        function submitFeedback(event) {
-            event.preventDefault();
-            
-            // Obter valores do formulário
-            const name = document.getElementById('feedbackName').value || 'Anônimo';
-            const email = document.getElementById('feedbackEmail').value || 'Não fornecido';
-            const type = document.getElementById('feedbackType').value;
-            const message = document.getElementById('feedbackMessage').value;
-            
-            // Criar objeto com os dados
-            const feedbackData = {
-                name: name,
-                email: email,
-                type: type,
-                message: message,
-                timestamp: new Date().toISOString(),
-                page: 'apoiar'
-            };
-            
-            // Guardar no localStorage (temporário - depois pode enviar para servidor)
-            const feedbacks = JSON.parse(localStorage.getItem('quest4couple_feedbacks') || '[]');
-            feedbacks.push(feedbackData);
-            localStorage.setItem('quest4couple_feedbacks', JSON.stringify(feedbacks));
-            
-            // Mostrar mensagem de sucesso
-            const successMsg = document.getElementById('successMessage');
-            successMsg.classList.add('visible');
-            
-            // Limpar formulário
-            document.getElementById('feedbackForm').reset();
-            
-            // Esconder mensagem após 5 segundos
-            setTimeout(() => {
-                successMsg.classList.remove('visible');
-            }, 5000);
-            
-            // Log para debug (pode remover em produção)
-            console.log('Feedback enviado:', feedbackData);
-            
-            // Aqui você pode adicionar código para enviar para um servidor
-            // Por exemplo: fetch('/api/feedback', { method: 'POST', body: JSON.stringify(feedbackData) })
-        }
+    <script>        // Verificar se o formulário foi enviado com sucesso (URL param)
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                const successMsg = document.getElementById('successMessage');
+                successMsg.classList.add('visible');
+                
+                // Esconder mensagem após 7 segundos
+                setTimeout(() => {
+                    successMsg.classList.remove('visible');
+                    // Limpar URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }, 7000);
+            }
+        });
     </script>
     
     <!-- Support Banner Script -->
