@@ -459,12 +459,40 @@
 
 <!-- Header -->
 <div class="header">
+  <!-- Logo e Título (Centro) -->
   <div class="logo-section">
     <a href="index.html">
       <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
     </a>
     <h1>Quest4Couple</h1>
     <p class="tagline">Relatório de Compatibilidade 💕</p>
+  </div>
+  
+  <!-- User Section (Canto Superior Direito) -->
+  <div class="user-section-top">
+    <span class="user-info" id="userInfo">
+      👤 <span id="currentUserName">Visitante</span>
+    </span>
+    
+    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard" id="dashboardBtn" style="display: none;">
+      📊 Dashboard
+    </button>
+    
+    <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário">
+      📝 Questionário
+    </button>
+    
+    <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início">
+      🏠 Início
+    </button>
+    
+    <button class="btn btn-logout" onclick="logout()" title="Sair" id="logoutBtn" style="display: none;">
+      🚪 Sair
+    </button>
+  </div>
+  
+  <div class="free-badge-small">
+    ✨ 100% Gratuito
   </div>
 </div>
 
@@ -587,11 +615,82 @@
 <!-- CryptoJS Library (necessário para desencriptar) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- App Scripts -->
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+
 <!-- JavaScript Modules -->
 <script src="js/invertMatching.js"></script>
 <script src="js/comparison.js"></script>
 
-<script>
+<script>  // ========================================
+  // CONTROLO DE AUTENTICAÇÃO
+  // ========================================
+  
+  // Esperar que o Firebase esteja pronto
+  window.addEventListener('DOMContentLoaded', () => {
+    // Listener para mudanças no estado de autenticação
+    if (typeof auth !== 'undefined') {
+      auth.onAuthStateChanged((user) => {
+        // Controlar secção cloud
+        const cloudNotAuth = document.getElementById('cloudNotAuth');
+        const cloudAuth = document.getElementById('cloudAuth');
+        
+        // Controlar header
+        const currentUserName = document.getElementById('currentUserName');
+        const dashboardBtn = document.getElementById('dashboardBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        
+        if (user) {
+          // User autenticado - mostrar secção cloud
+          console.log('✅ User autenticado em relatorio.html:', user.email);
+          if (cloudNotAuth) cloudNotAuth.style.display = 'none';
+          if (cloudAuth) cloudAuth.style.display = 'block';
+          
+          // Atualizar header
+          if (currentUserName) currentUserName.textContent = user.displayName || user.email.split('@')[0];
+          if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
+          if (logoutBtn) logoutBtn.style.display = 'inline-block';
+        } else {
+          // User não autenticado - mostrar botão de login
+          console.log('❌ User não autenticado em relatorio.html');
+          if (cloudNotAuth) cloudNotAuth.style.display = 'block';
+          if (cloudAuth) cloudAuth.style.display = 'none';
+          
+          // Atualizar header
+          if (currentUserName) currentUserName.textContent = 'Visitante';
+          if (dashboardBtn) dashboardBtn.style.display = 'none';
+          if (logoutBtn) logoutBtn.style.display = 'none';
+        }
+      });
+    }
+  });
+  
+  // ========================================
+  // FUNÇÃO DE LOGOUT
+  // ========================================
+  
+  function logout() {
+    if (confirm('Tens a certeza que queres sair?')) {
+      auth.signOut().then(() => {
+        console.log('✅ Logout com sucesso');
+        window.location.href = 'index.html';
+      }).catch((error) => {
+        console.error('❌ Erro no logout:', error);
+        alert('Erro ao fazer logout. Por favor tenta novamente.');
+      });
+    }
+  }
+  
+  // ========================================
+  // MOSTRAR BOTÕES APÓS GERAR RELATÓRIO
+  // ========================================
+  
   // Mostrar botões de ação após gerar relatório
   const originalGenerateReport = window.generateCompatibilityReport;
   if (originalGenerateReport) {
