@@ -31,8 +31,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
+          body {
             font-family: 'Arial', sans-serif;
             background: 
                 radial-gradient(circle at 15% 25%, rgba(214, 51, 132, 0.35) 0%, transparent 35%),
@@ -45,7 +44,8 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-        }          .header {
+            padding-top: 140px;
+        }        .header {
             position: fixed;
             top: 0;
             left: 0;
@@ -57,10 +57,10 @@
             z-index: 1000;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(214, 51, 132, 0.08);
+            align-items: center;        border-bottom: 1px solid rgba(214, 51, 132, 0.08);
         }
-          .logo-container {
+        
+        .logo-container {
             text-decoration: none;
             color: inherit;
             transition: opacity 0.3s ease;
@@ -84,7 +84,8 @@
             display: flex;
             gap: 10px;
         }
-          .header-btn {
+        
+        .header-btn {
             padding: 10px 22px;
             border-radius: 10px;
             text-decoration: none;
@@ -99,27 +100,25 @@
         .btn-login {
             background: white;
             color: #d63384;
-            border: 2px solid rgba(214, 51, 132, 0.3);
         }
         
         .btn-login:hover {
-            background: rgba(214, 51, 132, 0.05);
-            border-color: #d63384;
+            background: #f8f9fa;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.2);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
         }
         
         .btn-register {
             background: linear-gradient(135deg, #d63384, #e83e8c);
             color: white;
-            border: 2px solid transparent;
         }
         
         .btn-register:hover {
-            background: linear-gradient(135deg, #c1296d, #d63384);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.4);
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
         }
+        
+        /* Estilos para o conteúdo abaixo do header */
           .container {
             max-width: 900px;
             text-align: center;
@@ -131,9 +130,8 @@
             text-align: center;
             margin-bottom: 30px;
         }
-        
-        .hero-logo img {
-            height: 160px;
+          .hero-logo img {
+            height: 80px;
             width: auto;
             filter: drop-shadow(0 4px 12px rgba(214, 51, 132, 0.3));
             animation: fadeInScale 0.8s ease-out;
@@ -623,15 +621,7 @@
         }
     </style>
 </head>
-<body>    <header class="header">
-        <a href="index.html" class="logo-container">
-            <span class="logo-text">Quest4Couple</span>
-        </a>
-        <div class="auth-buttons">
-            <a href="auth.html" class="header-btn btn-login">Entrar</a>
-            <a href="auth.html" class="header-btn btn-register">Criar Conta</a>
-        </div>
-    </header>
+<body>
     
     <!-- Beta Banner -->
     <div class="beta-banner" id="betaBanner">

@@ -18,18 +18,41 @@
 <body>
   
   <!-- Header -->
-  <header class="dashboard-header">
-    <div class="container">
-      <div class="header-content">
-        <div class="logo">
-          <img src="./assets/logo.png" alt="Quest4Couple">
-          <h1>Quest4Couple</h1>        </div>
-        <div class="user-menu">
-          <a href="index.html" class="btn-home" title="Voltar à Página Inicial">🏠 Início</a>
-          <span class="user-name" id="userName">Carregando...</span>
-          <button class="btn-logout" id="logoutBtn">Sair</button>
-        </div>
-      </div>
+  <header class="header">
+    <!-- Logo e Título (Centro) -->
+    <div class="logo-section">
+      <a href="index.html">
+        <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
+      </a>
+      <h1>Quest4Couple</h1>
+      <p class="tagline">Dashboard 📊</p>
+    </div>
+    
+    <!-- User Section (Canto Superior Direito) -->
+    <div class="user-section-top">
+      <span class="user-info" id="userInfo">
+        👤 <span id="currentUserName">Carregando...</span>
+      </span>
+      
+      <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário">
+        📝 Questionário
+      </button>
+      
+      <button class="btn btn-secondary" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+        📊 Relatório
+      </button>
+      
+      <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início">
+        🏠 Início
+      </button>
+      
+      <button class="btn btn-logout" onclick="logout()" title="Sair" id="logoutBtn">
+        🚪 Sair
+      </button>
+    </div>
+    
+    <div class="free-badge-small">
+      ✨ 100% Gratuito
     </div>
   </header>
 

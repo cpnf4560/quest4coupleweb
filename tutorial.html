@@ -28,15 +28,45 @@
                 linear-gradient(135deg, #e8ecf0 0%, #d1d9e0 100%);
             min-height: 100vh;
             color: #333;
-        }
-
-        /* Header */
+        }        /* Header */
         .tutorial-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px 20px;
             text-align: center;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tutorial-header-left {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .tutorial-header-right {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .tutorial-header-right .header-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .tutorial-header-right .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .tutorial-header h1 {
@@ -303,10 +333,24 @@
         .btn-secondary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Responsive */
+        }        /* Responsive */
         @media (max-width: 768px) {
+            .tutorial-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tutorial-header-left {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            
+            .tutorial-header-right {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
             .tutorial-header h1 {
                 font-size: 1.8em;
             }
@@ -331,12 +375,18 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body>    <div class="container">
         <!-- Header -->
         <div class="tutorial-header">
-            <h1>🎓 Como Funciona o Quest4Couple</h1>
-            <p>Guia completo para descobrirem-se juntos</p>
+            <div class="tutorial-header-left">
+                <h1>🎓 Como Funciona o Quest4Couple</h1>
+                <p>Guia completo para descobrirem-se juntos</p>
+            </div>
+            <div class="tutorial-header-right">
+                <a href="app.html" class="header-btn">📝 Questionário</a>
+                <a href="relatorio.html" class="header-btn">📊 Relatório</a>
+                <a href="index.html" class="header-btn">🏠 Início</a>
+            </div>
         </div>
 
         <!-- Navigation -->
