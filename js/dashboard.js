@@ -9,8 +9,7 @@ let userProfile = null;
 let userAnswers = {};
 let userConnections = [];
 let packsData = [];
-let auth = null;
-let db = null;
+// auth e db já são declarados em firebase-config.js
 
 // ========================================
 // DOM ELEMENTS (serão inicializados depois do DOM estar pronto)
@@ -141,19 +140,15 @@ document.addEventListener('DOMContentLoaded', () => {
   sharedReportsEl = document.getElementById('sharedReports');
   
   console.log('✅ Elementos DOM inicializados');
-  
-  if (typeof firebase === 'undefined') {
-    console.error('❌ Firebase não carregado');
+    // Verificar se Firebase já foi inicializado por firebase-config.js
+  if (typeof firebase === 'undefined' || typeof auth === 'undefined' || typeof db === 'undefined') {
+    console.error('❌ Firebase não carregado corretamente');
     alert('Erro ao carregar Firebase. Recarregue a página.');
     if (loadingOverlay) loadingOverlay.style.display = 'none';
     return;
   }
-
-  // Inicializar Firebase
-  auth = firebase.auth();
-  db = firebase.firestore();
   
-  console.log('✅ Firebase Auth e Firestore inicializados');
+  console.log('✅ Firebase já inicializado, usando instâncias globais');
   
   // Inicializar event listeners
   initEventListeners();
