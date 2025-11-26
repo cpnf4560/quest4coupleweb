@@ -9,61 +9,201 @@ let userProfile = null;
 let userAnswers = {};
 let userConnections = [];
 let packsData = [];
+let auth = null;
+let db = null;
 
 // ========================================
-// DOM ELEMENTS
+// DOM ELEMENTS (serão inicializados depois do DOM estar pronto)
 // ========================================
-const userName = document.getElementById('userName');
-const userDisplayName = document.getElementById('userDisplayName');
-const logoutBtn = document.getElementById('logoutBtn');
-const packsGrid = document.getElementById('packsGrid');
-const connectionsList = document.getElementById('connectionsList');
-const loadingOverlay = document.getElementById('loadingOverlay');
+let userName, userDisplayName, logoutBtn, packsGrid, connectionsList, loadingOverlay;
 
 // Modals
-const addConnectionModal = document.getElementById('addConnectionModal');
-const shareModal = document.getElementById('shareModal');
-const addConnectionBtn = document.getElementById('addConnectionBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const closeShareModalBtn = document.getElementById('closeShareModalBtn');
-const searchUserForm = document.getElementById('searchUserForm');
-const searchResults = document.getElementById('searchResults');
+let addConnectionModal, shareModal, addConnectionBtn, closeModalBtn, closeShareModalBtn, searchUserForm, searchResults;
 
 // Stats
-const totalAnswersEl = document.getElementById('totalAnswers');
-const completedPacksEl = document.getElementById('completedPacks');
-const totalConnectionsEl = document.getElementById('totalConnections');
-const sharedReportsEl = document.getElementById('sharedReports');
+let totalAnswersEl, completedPacksEl, totalConnectionsEl, sharedReportsEl;
+
+// ========================================
+// INIT EVENT LISTENERS
+// ========================================
+function initEventListeners() {
+  // Logout button
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', async () => {
+      showLoading();
+      try {
+        await auth.signOut();
+        window.location.href = 'auth.html';
+      } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+        hideLoading();
+      }
+    });
+  }
+  
+  // Add connection modal
+  if (addConnectionBtn) {
+    addConnectionBtn.addEventListener('click', () => {
+      if (addConnectionModal) {
+        addConnectionModal.classList.add('active');
+        if (searchResults) searchResults.innerHTML = '';
+        const searchInput = document.getElementById('searchUsername');
+        if (searchInput) searchInput.value = '';
+        updateMyUsernameDisplay();
+      }
+    });
+  }
+  
+  // Close modals
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', () => {
+      if (addConnectionModal) addConnectionModal.classList.remove('active');
+    });
+  }
+  
+  if (closeShareModalBtn) {
+    closeShareModalBtn.addEventListener('click', () => {
+      if (shareModal) shareModal.classList.remove('active');
+    });
+  }
+  
+  // Search user form
+  if (searchUserForm) {
+    searchUserForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const searchInput = document.getElementById('searchUsername');
+      if (searchInput) {
+        await searchUser(searchInput.value);
+      }
+    });
+  }
+  
+  // Confirm share button
+  const confirmShareBtn = document.getElementById('confirmShareBtn');
+  if (confirmShareBtn) {
+    confirmShareBtn.addEventListener('click', async () => {
+      await confirmShare();
+    });
+  }
+  
+  // Edit profile button
+  const editProfileBtn = document.getElementById('editProfileBtn');
+  if (editProfileBtn) {
+    editProfileBtn.addEventListener('click', openEditProfileModal);
+  }
+  
+  // Close modals on outside click
+  if (addConnectionModal) {
+    addConnectionModal.addEventListener('click', (e) => {
+      if (e.target === addConnectionModal) {
+        addConnectionModal.classList.remove('active');
+      }
+    });
+  }
+  
+  if (shareModal) {
+    shareModal.addEventListener('click', (e) => {
+      if (e.target === shareModal) {
+        shareModal.classList.remove('active');
+      }
+    });
+  }
+  
+  console.log('✅ Event listeners inicializados');
+}
 
 // ========================================
 // INIT
 // ========================================
-auth.onAuthStateChanged(async (user) => {
-  if (user) {
-    await initDashboard(user);
-  } else {
-    window.location.href = 'auth.html';
+// Aguardar Firebase estar pronto
+document.addEventListener('DOMContentLoaded', () => {
+  // Inicializar elementos DOM principais
+  userName = document.getElementById('userName');
+  userDisplayName = document.getElementById('userDisplayName');
+  logoutBtn = document.getElementById('logoutBtn');
+  packsGrid = document.getElementById('packsGrid');
+  connectionsList = document.getElementById('connectionsList');
+  loadingOverlay = document.getElementById('loadingOverlay');
+  
+  // Inicializar modais
+  addConnectionModal = document.getElementById('addConnectionModal');
+  shareModal = document.getElementById('shareModal');
+  addConnectionBtn = document.getElementById('addConnectionBtn');
+  closeModalBtn = document.getElementById('closeModalBtn');
+  closeShareModalBtn = document.getElementById('closeShareModalBtn');
+  searchUserForm = document.getElementById('searchUserForm');
+  searchResults = document.getElementById('searchResults');
+  
+  // Inicializar stats
+  totalAnswersEl = document.getElementById('totalAnswers');
+  completedPacksEl = document.getElementById('completedPacks');
+  totalConnectionsEl = document.getElementById('totalConnections');
+  sharedReportsEl = document.getElementById('sharedReports');
+  
+  console.log('✅ Elementos DOM inicializados');
+  
+  if (typeof firebase === 'undefined') {
+    console.error('❌ Firebase não carregado');
+    alert('Erro ao carregar Firebase. Recarregue a página.');
+    if (loadingOverlay) loadingOverlay.style.display = 'none';
+    return;
   }
+
+  // Inicializar Firebase
+  auth = firebase.auth();
+  db = firebase.firestore();
+  
+  console.log('✅ Firebase Auth e Firestore inicializados');
+  
+  // Inicializar event listeners
+  initEventListeners();
+
+  auth.onAuthStateChanged(async (user) => {
+    if (user) {
+      console.log('✅ Utilizador autenticado:', user.email);
+      await initDashboard(user);
+    } else {
+      console.log('❌ Nenhum utilizador autenticado, redirecionando...');
+      window.location.href = 'auth.html';
+    }
+  });
 });
 
 async function initDashboard(user) {
   try {
-    showLoading();    // Load user profile
+    console.log('🔄 Inicializando dashboard para:', user.email);
+    showLoading();
+    
+    // Load user profile
+    console.log('📥 Carregando perfil...');
     userProfile = await loadUserProfile(user.uid);
+    console.log('✅ Perfil carregado:', userProfile);
     
     // Update UI with proper name fallback
     const displayName = userProfile?.name || user.displayName || user.email?.split('@')[0] || 'Utilizador';
-    userName.textContent = displayName;
-    userDisplayName.textContent = displayName;
+    const userNameEl = document.getElementById('currentUserName');
+    const userDisplayNameEl = document.getElementById('userDisplayName');
+    
+    if (userNameEl) userNameEl.textContent = displayName;
+    if (userDisplayNameEl) userDisplayNameEl.textContent = displayName;
 
     // Load packs data
+    console.log('📥 Carregando packs...');
     await loadPacksData();
+    console.log('✅ Packs carregados:', packsData.length);
 
     // Load user answers
+    console.log('📥 Carregando respostas...');
     userAnswers = await loadUserAnswers(user.uid);
+    console.log('✅ Respostas carregadas:', Object.keys(userAnswers).length);
 
     // Load connections
-    userConnections = await loadUserConnections(user.uid);    // Render everything
+    console.log('📥 Carregando conexões...');
+    userConnections = await loadUserConnections(user.uid);
+    console.log('✅ Conexões carregadas:', userConnections.length);
+    
+    // Render everything
+    console.log('🎨 Renderizando interface...');
     renderStats();
     renderPacks();
     renderConnections();
@@ -71,9 +211,11 @@ async function initDashboard(user) {
     // Update username display in modal (if it exists)
     updateMyUsernameDisplay();
 
+    console.log('✅ Dashboard inicializado com sucesso!');
     hideLoading();
   } catch (error) {
-    console.error('Erro ao inicializar dashboard:', error);
+    console.error('❌ Erro ao inicializar dashboard:', error);
+    alert('Erro ao carregar dashboard: ' + error.message);
     hideLoading();
   }
 }
@@ -312,15 +454,6 @@ function viewReport(connectionId) {
 // ========================================
 // ADD CONNECTION MODAL
 // ========================================
-addConnectionBtn.addEventListener('click', () => {
-  addConnectionModal.classList.add('active');
-  searchResults.innerHTML = '';
-  document.getElementById('searchUsername').value = '';
-  
-  // Mostrar o username do utilizador atual
-  updateMyUsernameDisplay();
-});
-
 // Função para atualizar o username no modal
 function updateMyUsernameDisplay() {
   const usernameDisplay = document.getElementById('myUsernameDisplay');
@@ -385,14 +518,9 @@ function fallbackCopyToClipboard(text) {
 // Tornar a função global para o onclick
 window.copyMyUsername = copyMyUsername;
 
-closeModalBtn.addEventListener('click', () => {
-  addConnectionModal.classList.remove('active');
-});
-
-searchUserForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const username = document.getElementById('searchUsername').value.trim().replace('@', '');
+// Função para procurar utilizador (chamada pelo event listener)
+async function searchUser(searchText) {
+  const username = searchText.trim().replace('@', '');
   
   if (!username) {
     return;
@@ -407,50 +535,58 @@ searchUserForm.addEventListener('submit', async (e) => {
       .limit(1)
       .get();
 
-    searchResults.innerHTML = '';
+    if (searchResults) searchResults.innerHTML = '';
 
     if (snapshot.empty) {
-      searchResults.innerHTML = '<p style="text-align: center; color: #999;">Utilizador não encontrado 😕</p>';
+      if (searchResults) {
+        searchResults.innerHTML = '<p style="text-align: center; color: #999;">Utilizador não encontrado 😕</p>';
+      }
     } else {
       const userDoc = snapshot.docs[0];
       const userData = userDoc.data();
-      const userId = userDoc.id;
-
-      // Check if already connected
+      const userId = userDoc.id;      // Check if already connected
       const alreadyConnected = userConnections.some(conn => conn.partnerId === userId);
 
       // Check if it's the current user
       if (userId === auth.currentUser.uid) {
-        searchResults.innerHTML = '<p style="text-align: center; color: #999;">Não podes conectar contigo próprio 😅</p>';
+        if (searchResults) {
+          searchResults.innerHTML = '<p style="text-align: center; color: #999;">Não podes conectar contigo próprio 😅</p>';
+        }
       } else if (alreadyConnected) {
-        searchResults.innerHTML = '<p style="text-align: center; color: #999;">Já estás conectado com este utilizador ✅</p>';
+        if (searchResults) {
+          searchResults.innerHTML = '<p style="text-align: center; color: #999;">Já estás conectado com este utilizador ✅</p>';
+        }
       } else {
         const initials = userData.name ? userData.name.substring(0, 2).toUpperCase() : '??';
         
-        searchResults.innerHTML = `
-          <div class="user-result">
-            <div class="user-result-info">
-              <div class="user-result-avatar">${initials}</div>
-              <div>
-                <h4>${userData.name || 'Utilizador'}</h4>
-                <p style="color: #666; font-size: 14px;">@${userData.username}</p>
+        if (searchResults) {
+          searchResults.innerHTML = `
+            <div class="user-result">
+              <div class="user-result-info">
+                <div class="user-result-avatar">${initials}</div>
+                <div>
+                  <h4>${userData.name || 'Utilizador'}</h4>
+                  <p style="color: #666; font-size: 14px;">@${userData.username}</p>
+                </div>
               </div>
+              <button class="btn-connect" onclick="connectWithUser('${userId}', '${userData.name}')">
+                Conectar
+              </button>
             </div>
-            <button class="btn-connect" onclick="connectWithUser('${userId}', '${userData.name}')">
-              Conectar
-            </button>
-          </div>
-        `;
+          `;
+        }
       }
     }
 
     hideLoading();
   } catch (error) {
     console.error('Erro ao procurar utilizador:', error);
-    searchResults.innerHTML = '<p style="text-align: center; color: #c33;">Erro ao procurar. Tenta novamente.</p>';
+    if (searchResults) {
+      searchResults.innerHTML = '<p style="text-align: center; color: #c33;">Erro ao procurar. Tenta novamente.</p>';
+    }
     hideLoading();
   }
-});
+}
 
 async function connectWithUser(partnerId, partnerName) {
   showLoading();
@@ -527,12 +663,8 @@ function shareWithPartner(connectionId, partnerName) {
 
 window.shareWithPartner = shareWithPartner;
 
-closeShareModalBtn.addEventListener('click', () => {
-  shareModal.classList.remove('active');
-  currentShareConnectionId = null;
-});
-
-document.getElementById('confirmShareBtn').addEventListener('click', async () => {
+// Função para confirmar partilha (chamada pelo event listener)
+async function confirmShare() {
   const checkboxes = document.querySelectorAll('#sharePacksList input[type="checkbox"]:checked');
   const selectedPacks = Array.from(checkboxes).map(cb => cb.value);
 
@@ -555,7 +687,7 @@ document.getElementById('confirmShareBtn').addEventListener('click', async () =>
     userConnections = await loadUserConnections(auth.currentUser.uid);
     renderConnections();
 
-    shareModal.classList.remove('active');
+    if (shareModal) shareModal.classList.remove('active');
     hideLoading();
     alert(`✅ Packs partilhados com sucesso!`);
   } catch (error) {
@@ -563,18 +695,11 @@ document.getElementById('confirmShareBtn').addEventListener('click', async () =>
     hideLoading();
     alert('❌ Erro ao partilhar. Tenta novamente.');
   }
-});
+}
 
 // ========================================
 // EDIT PROFILE
 // ========================================
-const editProfileBtn = document.getElementById('editProfileBtn');
-const editProfileModal = document.getElementById('editProfileModal');
-
-if (editProfileBtn) {
-  editProfileBtn.addEventListener('click', openEditProfileModal);
-}
-
 function openEditProfileModal() {
   console.log('🔍 openEditProfileModal chamada', { userProfile, currentUser: auth.currentUser });
   
@@ -757,41 +882,16 @@ async function saveProfileChanges(event) {
 }
 
 // ========================================
-// LOGOUT
-// ========================================
-logoutBtn.addEventListener('click', async () => {
-  showLoading();
-  try {
-    await signOut();
-    window.location.href = 'auth.html';
-  } catch (error) {
-    console.error('Erro ao fazer logout:', error);
-    hideLoading();
-  }
-});
-
-// ========================================
 // UI HELPERS
 // ========================================
 function showLoading() {
-  loadingOverlay.classList.add('active');
+  if (loadingOverlay) {
+    loadingOverlay.classList.add('active');
+  }
 }
 
 function hideLoading() {
-  loadingOverlay.classList.remove('active');
+  if (loadingOverlay) {
+    loadingOverlay.classList.remove('active');
+  }
 }
-
-// Close modals on outside click
-addConnectionModal.addEventListener('click', (e) => {
-  if (e.target === addConnectionModal) {
-    addConnectionModal.classList.remove('active');
-  }
-});
-
-shareModal.addEventListener('click', (e) => {
-  if (e.target === shareModal) {
-    shareModal.classList.remove('active');
-  }
-});
-
-console.log('✅ Dashboard inicializado');
