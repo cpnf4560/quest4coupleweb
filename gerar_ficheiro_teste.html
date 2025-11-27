@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerar Ficheiro .q4c de Teste</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #E91E63;
+      margin-bottom: 10px;
+    }
+    .info {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    button {
+      background: #E91E63;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #C2185B;
+    }
+    .success {
+      background: #d4edda;
+      border: 1px solid #28a745;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      display: none;
+    }
+    .details {
+      background: #e9ecef;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      width: 200px;
+      margin: 10px 0;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Gerar Ficheiro .q4c de Teste</h1>
+    <p>Esta ferramenta gera ficheiros .q4c encriptados para testar o sistema de relatórios.</p>
+    
+    <div class="info">
+      <strong>ℹ️ Informação:</strong><br>
+      O ficheiro será encriptado com <strong>CryptoJS AES</strong>, exatamente como o sistema real faz.<br>
+      Use o mesmo código de segurança em ambos os ficheiros para testar a comparação.
+    </div>
+
+    <label for="securityCode">Código de Segurança:</label>
+    <input type="text" id="securityCode" value="teste123" placeholder="Digite o código">
+
+    <label for="userName">Nome do Utilizador:</label>
+    <input type="text" id="userName" value="Maria Silva" placeholder="Nome">
+
+    <div style="margin: 20px 0;">
+      <button onclick="generateFile1()">📥 Gerar Ficheiro 1 (Maria)</button>
+      <button onclick="generateFile2()">📥 Gerar Ficheiro 2 (João)</button>
+    </div>
+
+    <div class="success" id="successMsg">
+      ✅ Ficheiro gerado com sucesso!<br>
+      O download deve iniciar automaticamente.
+    </div>
+
+    <div class="details">
+      <strong>📊 Dados do Ficheiro:</strong>
+      <div id="fileDetails"></div>
+    </div>
+  </div>
+
+  <!-- CryptoJS Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+    // Função auxiliar para gerar respostas aleatórias
+    function getRandomAnswer() {
+      const answers = ['Yup', 'Meh...', 'Talvez', 'Por favor!'];
+      const weights = [0.4, 0.2, 0.2, 0.2]; // Yup mais comum
+      const random = Math.random();
+      let sum = 0;
+      for (let i = 0; i < weights.length; i++) {
+        sum += weights[i];
+        if (random < sum) return answers[i];
+      }
+      return 'Yup';
+    }
+
+    function getRandomComment(answer) {
+      const comments = {
+        'Por favor!': [
+          'Adoraria muito! ❤️',
+          'Definitivamente sim! 😊',
+          'Com certeza! Vamos fazer!',
+          'Estou super a fim! 🎉',
+          'Perfeito para nós! 💝'
+        ],
+        'Yup': [
+          'Gostaria de experimentar',
+          'Sim, estou aberto/a',
+          'Parece interessante',
+          'Vamos tentar!',
+          'Porque não? 😊'
+        ],
+        'Meh...': [
+          'Prefiro outra coisa',
+          'Não é bem o meu estilo',
+          'Não me sinto confortável',
+          'Não é para mim',
+          'Prefiro passar'
+        ],
+        'Talvez': [
+          'Preciso pensar melhor',
+          'Depende das circunstâncias',
+          'Pode ser interessante',
+          'Vamos discutir juntos',
+          'Estou aberto a considerar'
+        ]
+      };
+      const options = comments[answer] || [''];
+      return options[Math.floor(Math.random() * options.length)];
+    }
+
+    // Gerar respostas para todos os packs (50 perguntas cada para os 3 primeiros)
+    function generateAllAnswers(seed = 0) {
+      const answers = {};
+      
+      // Pack Romântico - 50 perguntas
+      answers.romantico = {};
+      for (let i = 1; i <= 50; i++) {
+        const answer = getRandomAnswer();
+        answers.romantico[`q${i}`] = {
+          answer: answer,
+          comment: getRandomComment(answer)
+        };
+      }
+      
+      // Exploração e Aventura - 50 perguntas
+      answers.experiencia = {};
+      for (let i = 1; i <= 50; i++) {
+        const answer = getRandomAnswer();
+        answers.experiencia[`q${i}`] = {
+          answer: answer,
+          comment: getRandomComment(answer)
+        };
+      }
+      
+      // Pimentinha - 50 perguntas
+      answers.pimentinha = {};
+      for (let i = 1; i <= 50; i++) {
+        const answer = getRandomAnswer();
+        answers.pimentinha[`q${i}`] = {
+          answer: answer,
+          comment: getRandomComment(answer)
+        };
+      }
+      
+      // Poliamor - 60 perguntas
+      answers.poliamor = {};
+      for (let i = 1; i <= 60; i++) {
+        const answer = getRandomAnswer();
+        answers.poliamor[`q${i}`] = {
+          answer: answer,
+          comment: getRandomComment(answer)
+        };
+      }
+      
+      // Fetiches - 90 perguntas
+      answers.kinks = {};
+      for (let i = 1; i <= 90; i++) {
+        const answer = getRandomAnswer();
+        answers.kinks[`q${i}`] = {
+          answer: answer,
+          comment: getRandomComment(answer)
+        };
+      }
+      
+      return answers;
+    }
+
+    function generateFile1() {
+      const code = document.getElementById('securityCode').value;
+      const userName = document.getElementById('userName').value;
+      
+      if (!code) {
+        alert('Por favor, insira um código de segurança!');
+        return;
+      }
+
+      const data = {
+        userName: userName,
+        answers: generateAllAnswers(1), // Seed 1 para Maria
+        customQuestions: {},
+        timestamp: new Date().toISOString()
+      };
+
+      generateAndDownload(data, code);
+    }    function generateFile2() {
+      const code = document.getElementById('securityCode').value;
+      
+      if (!code) {
+        alert('Por favor, insira um código de segurança!');
+        return;
+      }
+
+      const data = {
+        userName: 'João Costa',
+        answers: generateAllAnswers(2), // Seed 2 para João (respostas diferentes)
+        customQuestions: {},
+        timestamp: new Date().toISOString()
+      };
+
+      generateAndDownload(data, code);
+    }
+
+    function generateAndDownload(data, code) {
+      try {
+        // Converter para JSON
+        const dataString = JSON.stringify(data);
+        
+        // Encriptar com CryptoJS (mesmo método que storage.js usa)
+        const encrypted = CryptoJS.AES.encrypt(dataString, code).toString();
+        
+        // Criar Blob
+        const blob = new Blob([encrypted], { type: 'text/plain;charset=utf-8' });
+        
+        // Criar link de download
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `Quest4Couple_${data.userName.replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.q4c`;
+        
+        // Fazer download
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Limpar
+        setTimeout(() => {
+          URL.revokeObjectURL(a.href);
+        }, 100);
+        
+        // Mostrar sucesso
+        document.getElementById('successMsg').style.display = 'block';
+          // Mostrar detalhes
+        const totalAnswers = Object.keys(data.answers).reduce((sum, pack) => {
+          return sum + Object.keys(data.answers[pack]).length;
+        }, 0);
+        
+        const packCounts = Object.keys(data.answers).map(pack => 
+          `${pack} (${Object.keys(data.answers[pack]).length})`
+        ).join(', ');
+        
+        document.getElementById('fileDetails').innerHTML = `
+          <div style="margin-top: 10px;">
+            👤 <strong>Utilizador:</strong> ${data.userName}<br>
+            🔐 <strong>Código:</strong> ${code}<br>
+            📊 <strong>Total respostas:</strong> ${totalAnswers}<br>
+            📦 <strong>Packs:</strong> ${packCounts}<br>
+            📅 <strong>Data:</strong> ${new Date().toLocaleString('pt-PT')}<br>
+            💾 <strong>Ficheiro:</strong> ${a.download}<br>
+            <br>
+            ✅ <strong style="color: #28a745;">Ficheiro gerado com TODAS as ${totalAnswers} perguntas!</strong>
+          </div>
+        `;
+        
+        setTimeout(() => {
+          document.getElementById('successMsg').style.display = 'none';
+        }, 3000);
+        
+      } catch (error) {
+        alert('❌ Erro ao gerar ficheiro: ' + error.message);
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>

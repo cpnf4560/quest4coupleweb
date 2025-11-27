@@ -629,7 +629,16 @@
 <script src="js/invertMatching.js"></script>
 <script src="js/comparison.js"></script>
 
-<script>  // ========================================
+<script>
+  // ========================================
+  // VERIFICAÇÃO DE CARREGAMENTO
+  // ========================================
+  console.log('🔍 Verificando funções carregadas:');
+  console.log('- compareEncryptedAnswers:', typeof compareEncryptedAnswers);
+  console.log('- generateCompatibilityReport:', typeof generateCompatibilityReport);
+  console.log('- CryptoJS:', typeof CryptoJS);
+  
+  // ========================================
   // CONTROLO DE AUTENTICAÇÃO
   // ========================================
   

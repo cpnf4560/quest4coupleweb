@@ -4,15 +4,34 @@
    ============================================ */
 
 async function compareEncryptedAnswers() {
+  console.log('🎯 compareEncryptedAnswers() chamada!');
+  
   const myFileInput = document.getElementById('myFile');
   const partnerFileInput = document.getElementById('partnerFile');
   const securityCodeInput = document.getElementById('securityCode');
   const reportContainer = document.getElementById('compatibilityReport');
 
+  console.log('📋 Elementos encontrados:', {
+    myFileInput: !!myFileInput,
+    partnerFileInput: !!partnerFileInput,
+    securityCodeInput: !!securityCodeInput,
+    reportContainer: !!reportContainer
+  });
+
+  console.log('📁 Ficheiros carregados:', {
+    myFile: myFileInput?.files[0]?.name,
+    partnerFile: partnerFileInput?.files[0]?.name,
+    hasCode: !!securityCodeInput?.value
+  });
+
   if (!myFileInput.files[0] || !partnerFileInput.files[0] || !securityCodeInput.value) {
+    console.error('❌ Validação falhou!');
     alert("Por favor, carregue ambos os ficheiros e introduza o código de segurança.");
     return;
   }
+  
+  console.log('✅ Validação passou! A processar ficheiros...');
+  
   try {
     const myFileContent = await myFileInput.files[0].text();
     const partnerFileContent = await partnerFileInput.files[0].text();
