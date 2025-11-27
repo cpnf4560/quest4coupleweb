@@ -16,17 +16,20 @@
  * - Não faz sentido comparar diretamente "dar" com "dar"
  */
 
-let invertMatchingConfig = null;
+// Variável global para configuração
+window.invertMatchingConfig = null;
 
 // Carregar configuração
 async function loadInvertMatchingConfig() {
     try {
         const response = await fetch('./data/invert_matching_config.json');
-        invertMatchingConfig = await response.json();
-        console.log('✅ Configuração de Invert Matching carregada:', invertMatchingConfig);
+        window.invertMatchingConfig = await response.json();
+        console.log('✅ Configuração de Invert Matching carregada:', window.invertMatchingConfig);
+        return window.invertMatchingConfig;
     } catch (error) {
         console.error('❌ Erro ao carregar invert matching config:', error);
-        invertMatchingConfig = { invertPairs: [] };
+        window.invertMatchingConfig = { invertPairs: [] };
+        return window.invertMatchingConfig;
     }
 }
 
@@ -37,10 +40,10 @@ async function loadInvertMatchingConfig() {
  * @returns {Object|null} - {pairQuestion, isGiver} ou null se não for par invertido
  */
 function getInvertPair(packId, questionText) {
-    if (!invertMatchingConfig) return null;
+    if (!window.invertMatchingConfig) return null;
 
-    const packPairs = invertMatchingConfig.invertPairs.find(p => p.packId === packId);
-    if (!packPairs) return null;    for (const pair of packPairs.pairs) {
+    const packPairs = window.invertMatchingConfig.invertPairs.find(p => p.packId === packId);
+    if (!packPairs) return null;for (const pair of packPairs.pairs) {
         // Se é a pergunta "giver", retorna a "receiver"
         if (pair.questionGiver === questionText) {
             return {

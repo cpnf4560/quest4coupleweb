@@ -631,12 +631,23 @@
 
 <script>
   // ========================================
+  // CARREGAR CONFIGURAÇÃO DE INVERT MATCHING
+  // ========================================
+  window.addEventListener('DOMContentLoaded', async () => {
+    console.log('📦 A carregar configuração de Invert Matching...');
+    await loadInvertMatchingConfig();
+    console.log('✅ Configuração carregada:', window.invertMatchingConfig ? 'OK' : 'FALHOU');
+  });
+  
+  // ========================================
   // VERIFICAÇÃO DE CARREGAMENTO
   // ========================================
   console.log('🔍 Verificando funções carregadas:');
   console.log('- compareEncryptedAnswers:', typeof compareEncryptedAnswers);
   console.log('- generateCompatibilityReport:', typeof generateCompatibilityReport);
   console.log('- CryptoJS:', typeof CryptoJS);
+  console.log('- loadInvertMatchingConfig:', typeof loadInvertMatchingConfig);
+  console.log('- getInvertPair:', typeof getInvertPair);
   
   // ========================================
   // CONTROLO DE AUTENTICAÇÃO

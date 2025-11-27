@@ -187,9 +187,7 @@ async function generateCompatibilityReport(myData, partnerData) {
         if (questionText === undefined) return;
 
         const myAns = myAnswers[qKey];
-        const partnerAns = partnerAnswers[qKey];
-
-        // VERIFICAR SE É PERGUNTA COM INVERT MATCHING
+        const partnerAns = partnerAnswers[qKey];        // VERIFICAR SE É PERGUNTA COM INVERT MATCHING
         let partnerAnswerToCompare = partnerAns;
         let isInverted = false;
         let invertInfo = null;
@@ -199,12 +197,26 @@ async function generateCompatibilityReport(myData, partnerData) {
           
           if (invertInfo) {
             isInverted = true;
+            console.log('🔄 INVERT MATCH encontrado:', questionText, '↔️', invertInfo.pairQuestion);
+            
             // Buscar resposta da pergunta PAR do parceiro
             const pairQIndex = packQuestions.findIndex(q => q === invertInfo.pairQuestion);
             if (pairQIndex !== -1) {
               const pairQKey = `q${pairQIndex + 1}`;
               partnerAnswerToCompare = partnerAnswers[pairQKey];
-            }          }
+              console.log('  ✅ Resposta do parceiro encontrada:', pairQKey, partnerAnswerToCompare?.answer);
+            } else {
+              console.log('  ⚠️ Pergunta par não encontrada no pack');
+            }
+          }
+        } else {
+          // Debug: por que não está funcionando?
+          if (!window.invertMatchingConfig) {
+            console.warn('⚠️ invertMatchingConfig não está carregado!');
+          }
+          if (typeof getInvertPair !== 'function') {
+            console.warn('⚠️ getInvertPair não é uma função!');
+          }
         }
         
         // ============================================
