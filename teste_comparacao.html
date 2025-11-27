@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Comparação - Quest4Couple</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #E91E63;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #E91E63;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 10px 5px;
+    }
+    button:hover {
+      background: #C2185B;
+    }
+    input[type="file"] {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px dashed #E91E63;
+      border-radius: 5px;
+      width: 100%;
+    }
+    input[type="password"] {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 16px;
+    }
+    #log {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .log-entry {
+      padding: 3px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Teste de Comparação de Ficheiros .q4c</h1>
+    <p>Esta página testa se o sistema de comparação está a funcionar corretamente.</p>
+    
+    <div style="margin: 20px 0;">
+      <label><strong>Ficheiro 1:</strong></label>
+      <input type="file" id="file1" accept=".q4c">
+      
+      <label><strong>Ficheiro 2:</strong></label>
+      <input type="file" id="file2" accept=".q4c">
+      
+      <label><strong>Código de Segurança:</strong></label>
+      <input type="password" id="code" placeholder="Digite o código" value="teste123">
+    </div>
+
+    <button onclick="testComparison()">🎯 Testar Comparação</button>
+    <button onclick="clearLog()">🗑️ Limpar Log</button>
+
+    <div id="log">
+      <div class="log-entry">📋 Aguardando teste...</div>
+    </div>
+  </div>
+
+  <!-- CryptoJS Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  
+  <script>
+    const logEl = document.getElementById('log');
+    
+    function log(message, type = 'info') {
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      
+      const timestamp = new Date().toLocaleTimeString('pt-PT');
+      const icon = type === 'error' ? '❌' : type === 'success' ? '✅' : type === 'warning' ? '⚠️' : '📋';
+      
+      entry.innerHTML = `<strong>${timestamp}</strong> ${icon} ${message}`;
+      entry.style.color = type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : type === 'warning' ? '#ffc107' : '#495057';
+      
+      logEl.appendChild(entry);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+    
+    function clearLog() {
+      logEl.innerHTML = '<div class="log-entry">📋 Log limpo</div>';
+    }
+    
+    async function testComparison() {
+      log('🎯 Iniciando teste de comparação...', 'info');
+      
+      const file1 = document.getElementById('file1');
+      const file2 = document.getElementById('file2');
+      const code = document.getElementById('code');
+      
+      // Validações
+      log('📋 Validando inputs...', 'info');
+      
+      if (!file1.files[0]) {
+        log('Ficheiro 1 não foi carregado!', 'error');
+        alert('Por favor, carregue o Ficheiro 1');
+        return;
+      }
+      log(`✅ Ficheiro 1: ${file1.files[0].name} (${file1.files[0].size} bytes)`, 'success');
+      
+      if (!file2.files[0]) {
+        log('Ficheiro 2 não foi carregado!', 'error');
+        alert('Por favor, carregue o Ficheiro 2');
+        return;
+      }
+      log(`✅ Ficheiro 2: ${file2.files[0].name} (${file2.files[0].size} bytes)`, 'success');
+      
+      if (!code.value) {
+        log('Código de segurança não foi preenchido!', 'error');
+        alert('Por favor, digite o código de segurança');
+        return;
+      }
+      log(`✅ Código de segurança: ${code.value}`, 'success');
+      
+      // Verificar CryptoJS
+      log('🔍 Verificando CryptoJS...', 'info');
+      if (typeof CryptoJS === 'undefined') {
+        log('CryptoJS não está carregado!', 'error');
+        alert('Erro: Biblioteca de encriptação não carregou. Recarregue a página.');
+        return;
+      }
+      log('✅ CryptoJS carregado', 'success');
+      
+      try {
+        // Ler ficheiros
+        log('📂 A ler conteúdo dos ficheiros...', 'info');
+        const content1 = await file1.files[0].text();
+        const content2 = await file2.files[0].text();
+        
+        log(`✅ Ficheiro 1 lido: ${content1.length} caracteres`, 'success');
+        log(`✅ Ficheiro 2 lido: ${content2.length} caracteres`, 'success');
+        
+        // Limpar conteúdo
+        log('🧹 A limpar whitespace/BOM...', 'info');
+        const clean1 = content1.trim();
+        const clean2 = content2.trim();
+        
+        // Desencriptar
+        log('🔐 A desencriptar ficheiros...', 'info');
+        const decrypted1 = CryptoJS.AES.decrypt(clean1, code.value);
+        const decrypted2 = CryptoJS.AES.decrypt(clean2, code.value);
+        
+        // Converter para string
+        log('🔄 A converter para UTF-8...', 'info');
+        const str1 = decrypted1.toString(CryptoJS.enc.Utf8);
+        const str2 = decrypted2.toString(CryptoJS.enc.Utf8);
+        
+        if (!str1 || str1.length === 0) {
+          log('Ficheiro 1: Desencriptação falhou (código incorreto?)', 'error');
+          throw new Error('Código de segurança incorreto para Ficheiro 1');
+        }
+        log(`✅ Ficheiro 1 desencriptado: ${str1.length} caracteres`, 'success');
+        
+        if (!str2 || str2.length === 0) {
+          log('Ficheiro 2: Desencriptação falhou (código incorreto?)', 'error');
+          throw new Error('Código de segurança incorreto para Ficheiro 2');
+        }
+        log(`✅ Ficheiro 2 desencriptado: ${str2.length} caracteres`, 'success');
+        
+        // Parse JSON
+        log('📊 A fazer parse do JSON...', 'info');
+        const data1 = JSON.parse(str1);
+        const data2 = JSON.parse(str2);
+        
+        log(`✅ Ficheiro 1 JSON válido: ${data1.userName || 'Sem nome'}`, 'success');
+        log(`✅ Ficheiro 2 JSON válido: ${data2.userName || 'Sem nome'}`, 'success');
+        
+        // Mostrar estatísticas
+        log('📈 Estatísticas:', 'info');
+        log(`- Utilizador 1: ${data1.userName}`, 'info');
+        log(`- Utilizador 2: ${data2.userName}`, 'info');
+        log(`- Packs no Ficheiro 1: ${Object.keys(data1.answers || {}).join(', ')}`, 'info');
+        log(`- Packs no Ficheiro 2: ${Object.keys(data2.answers || {}).join(', ')}`, 'info');
+        
+        log('✅ TESTE PASSOU! Ficheiros são válidos e foram desencriptados com sucesso!', 'success');
+        alert('✅ Teste passou! Os ficheiros são válidos e foram desencriptados com sucesso!');
+        
+      } catch (error) {
+        log(`Erro: ${error.message}`, 'error');
+        log(`Stack: ${error.stack}`, 'error');
+        alert('❌ Erro: ' + error.message);
+      }
+    }
+    
+    // Verificar carregamento na inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+      log('🚀 Página carregada', 'success');
+      log('🔍 CryptoJS: ' + (typeof CryptoJS !== 'undefined' ? 'Carregado ✅' : 'Não carregado ❌'), 
+          typeof CryptoJS !== 'undefined' ? 'success' : 'error');
+    });
+  </script>
+</body>
+</html>

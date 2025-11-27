@@ -108,44 +108,44 @@
 
   <!-- CryptoJS Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script>
-    // Função auxiliar para gerar respostas aleatórias
+    <script>    // Função auxiliar para gerar respostas aleatórias
+    // IMPORTANTE: Usar valores minúsculos conforme o sistema espera!
     function getRandomAnswer() {
-      const answers = ['Yup', 'Meh...', 'Talvez', 'Por favor!'];
-      const weights = [0.4, 0.2, 0.2, 0.2]; // Yup mais comum
+      const answers = ['yup', 'meh', 'talvez', 'porfavor'];
+      const weights = [0.4, 0.2, 0.2, 0.2]; // yup mais comum
       const random = Math.random();
       let sum = 0;
       for (let i = 0; i < weights.length; i++) {
         sum += weights[i];
         if (random < sum) return answers[i];
       }
-      return 'Yup';
+      return 'yup';
     }
 
     function getRandomComment(answer) {
       const comments = {
-        'Por favor!': [
+        'porfavor': [
           'Adoraria muito! ❤️',
           'Definitivamente sim! 😊',
           'Com certeza! Vamos fazer!',
           'Estou super a fim! 🎉',
           'Perfeito para nós! 💝'
         ],
-        'Yup': [
+        'yup': [
           'Gostaria de experimentar',
           'Sim, estou aberto/a',
           'Parece interessante',
           'Vamos tentar!',
           'Porque não? 😊'
         ],
-        'Meh...': [
+        'meh': [
           'Prefiro outra coisa',
           'Não é bem o meu estilo',
           'Não me sinto confortável',
           'Não é para mim',
           'Prefiro passar'
         ],
-        'Talvez': [
+        'talvez': [
           'Preciso pensar melhor',
           'Depende das circunstâncias',
           'Pode ser interessante',
