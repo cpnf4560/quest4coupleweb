@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Minhas Respostas - Quest4Couple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #d63384;
+            margin-bottom: 20px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 2px solid #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .user-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        #log {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 20px;
+        }
+        .log-entry {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Reset das Minhas Respostas</h1>
+        
+        <div class="warning">
+            <strong>⚠️ ATENÇÃO:</strong> Esta ação irá apagar permanentemente todas as suas respostas e comentários no Firebase!
+        </div>
+        
+        <div class="user-info" id="userInfo">
+            <strong>👤 Utilizador:</strong> <span id="userName">Carregando...</span><br>
+            <strong>📧 Email:</strong> <span id="userEmail">Carregando...</span><br>
+            <strong>🆔 UID:</strong> <span id="userId">Carregando...</span>
+        </div>
+        
+        <div class="info">
+            <strong>ℹ️ O que será apagado:</strong>
+            <ul>
+                <li>Todas as respostas aos questionários</li>
+                <li>Todos os comentários</li>
+                <li>Progresso salvo</li>
+            </ul>
+            <strong>✅ O que será mantido:</strong>
+            <ul>
+                <li>Perfil de utilizador</li>
+                <li>Conexões com parceiros</li>
+                <li>Relatórios partilhados</li>
+            </ul>
+        </div>
+        
+        <div style="text-align: center;">
+            <button class="btn-danger" onclick="resetMyAnswers()" id="resetBtn">
+                🗑️ Apagar Minhas Respostas
+            </button>
+            <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
+                ❌ Cancelar
+            </button>
+        </div>
+        
+        <div id="log"></div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        let currentUser = null;
+        const logDiv = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            console.log(message);
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            entry.textContent = `${icon} ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Verificar autenticação
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userId').textContent = user.uid;
+            } else {
+                alert('❌ Não está autenticado! Redirecionando para login...');
+                window.location.href = 'auth.html';
+            }
+        });
+        
+        async function resetMyAnswers() {
+            if (!currentUser) {
+                alert('❌ Não está autenticado!');
+                return;
+            }
+            
+            const confirmText = 'APAGAR TUDO';
+            const userInput = prompt(`⚠️ ESTA AÇÃO É IRREVERSÍVEL!\n\nTodas as suas respostas e comentários serão apagados permanentemente.\n\nPara confirmar, digite: ${confirmText}`);
+            
+            if (userInput !== confirmText) {
+                alert('❌ Operação cancelada.');
+                return;
+            }
+            
+            const resetBtn = document.getElementById('resetBtn');
+            resetBtn.disabled = true;
+            resetBtn.textContent = '🔄 A apagar...';
+            logDiv.style.display = 'block';
+            
+            try {
+                log(`Iniciando reset para: ${currentUser.email}`, 'info');
+                
+                // 1. Apagar documento de respostas
+                log('🗑️ A apagar respostas do Firebase...', 'info');
+                const answersRef = db.collection('users').doc(currentUser.uid).collection('answers').doc('all');
+                await answersRef.delete();
+                log('✅ Respostas apagadas do Firebase', 'success');
+                
+                // 2. Apagar progresso
+                log('🗑️ A apagar progresso...', 'info');
+                const progressRef = db.collection('users').doc(currentUser.uid).collection('progress');
+                const progressSnapshot = await progressRef.get();
+                const batch = db.batch();
+                progressSnapshot.docs.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                await batch.commit();
+                log(`✅ ${progressSnapshot.size} documentos de progresso apagados`, 'success');
+                
+                // 3. Limpar localStorage
+                log('🗑️ A limpar localStorage...', 'info');
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.includes('answers') || key.includes('comments') || key.includes('progress')) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+                log(`✅ ${keysToRemove.length} chaves removidas do localStorage`, 'success');
+                
+                // 4. Limpar sessionStorage
+                log('🗑️ A limpar sessionStorage...', 'info');
+                sessionStorage.clear();
+                log('✅ sessionStorage limpo', 'success');
+                
+                log('', 'info');
+                log('🎉 RESET CONCLUÍDO COM SUCESSO!', 'success');
+                log('', 'info');
+                log('Pode agora responder aos questionários novamente.', 'info');
+                
+                resetBtn.textContent = '✅ Reset Concluído!';
+                resetBtn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    if (confirm('✅ Reset concluído!\n\nDeseja ir para o dashboard?')) {
+                        window.location.href = 'dashboard.html';
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Erro ao resetar respostas:', error);
+                log(`❌ ERRO: ${error.message}`, 'error');
+                alert('❌ Erro ao resetar respostas: ' + error.message);
+                resetBtn.disabled = false;
+                resetBtn.textContent = '🗑️ Apagar Minhas Respostas';
+            }
+        }
+    </script>
+</body>
+</html>

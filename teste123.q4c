@@ -1,0 +1,59 @@
+{
+  "version": "2.0",
+  "code": "teste123",
+  "packId": "romantico",
+  "packName": "Pack Romântico 💝",
+  "partner1": {
+    "name": "Maria Silva",
+    "email": "maria@example.com",
+    "answers": {
+      "romantico_basico_1": { "answer": "Sim", "comment": "Adoro demonstrações de carinho em público! ❤️" },
+      "romantico_basico_2": { "answer": "Sim", "comment": "Presente surpresa é sempre especial e me deixa muito feliz" },
+      "romantico_basico_3": { "answer": "Talvez", "comment": "Depende do contexto e do momento" },
+      "romantico_basico_4": { "answer": "Sim", "comment": "Jantar romântico é perfeito para reconectar" },
+      "romantico_basico_5": { "answer": "Sim", "comment": "Viagem romântica seria incrível! Quero muito! 🌴" },
+      "romantico_avancado_1": { "answer": "Sim", "comment": "Cartas de amor são lindas e muito tocantes" },
+      "romantico_avancado_2": { "answer": "Talvez", "comment": "Nunca tentei, mas estou aberta a experimentar" },
+      "romantico_avancado_3": { "answer": "Sim", "comment": "Demonstrar amor é fundamental" },
+      "romantico_avancado_4": { "answer": "Não", "comment": "Prefiro privacidade, momentos íntimos são só nossos" },
+      "romantico_avancado_5": { "answer": "Sim", "comment": "Renovar votos seria lindo e emocionante! 💍" }
+    }
+  },
+  "partner2": {
+    "name": "João Costa",
+    "email": "joao@example.com",
+    "answers": {
+      "romantico_basico_1": { "answer": "Sim", "comment": "Também gosto muito! É bom mostrar afeto 😊" },
+      "romantico_basico_2": { "answer": "Sim", "comment": "Adoro surpreender com presentes" },
+      "romantico_basico_3": { "answer": "Sim", "comment": "Seria muito romântico e especial" },
+      "romantico_basico_4": { "answer": "Sim", "comment": "Sempre quis fazer um jantar à luz de velas" },
+      "romantico_basico_5": { "answer": "Sim", "comment": "Vamos planejar! Paris seria perfeito 🗼" },
+      "romantico_avancado_1": { "answer": "Talvez", "comment": "Sou melhor falando do que escrevendo, mas posso tentar" },
+      "romantico_avancado_2": { "answer": "Não", "comment": "Não é para mim, sou mais tradicional" },
+      "romantico_avancado_3": { "answer": "Sim", "comment": "Amor é demonstrar todos os dias" },
+      "romantico_avancado_4": { "answer": "Não", "comment": "Concordo totalmente, prefiro privacidade" },
+      "romantico_avancado_5": { "answer": "Sim", "comment": "Que ideia maravilhosa! Vamos fazer! 💖" }
+    }
+  },
+  "submittedAt": "2024-11-27T10:30:00.000Z",
+  "generatedAt": "2024-11-27T10:30:00.000Z",
+  "metadata": {
+    "totalQuestions": 10,
+    "compatibility": 85,
+    "superMatches": 6,
+    "matches": 2,
+    "possibilities": 2,
+    "categories": {
+      "romantico_basico": {
+        "total": 5,
+        "matches": 4,
+        "superMatches": 4
+      },
+      "romantico_avancado": {
+        "total": 5,
+        "matches": 4,
+        "superMatches": 2
+      }
+    }
+  }
+}

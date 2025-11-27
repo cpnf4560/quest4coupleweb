@@ -8,6 +8,11 @@
   # Comando de build (não necessário para site estático)
   command = ""
 
+# SSL/TLS Configuration
+[context.production]
+  # Forçar HTTPS
+  force_ssl = true
+
 # Redirects e Rewrites
 # Comentado - deixar o site carregar ficheiros HTML diretamente
 # [[redirects]]
@@ -73,6 +78,19 @@
 # Redirect www para não-www (ou vice-versa)
 [[redirects]]
   from = "https://www.quest4couple.pt/*"
+  to = "https://quest4couple.pt/:splat"
+  status = 301
+  force = true
+
+# Forçar HTTPS - Redirect HTTP para HTTPS
+[[redirects]]
+  from = "http://quest4couple.pt/*"
+  to = "https://quest4couple.pt/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.quest4couple.pt/*"
   to = "https://quest4couple.pt/:splat"
   status = 301
   force = true

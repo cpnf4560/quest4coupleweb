@@ -1,0 +1,44 @@
+{
+  "version": "2.0",
+  "code": "teste123",
+  "packId": "romantico",
+  "packName": "Pack Romântico 💝",
+  "partner1": {
+    "name": "Maria",
+    "answers": {
+      "romantico_basico_1": { "answer": "Sim", "comment": "Adoro demonstrações de carinho!" },
+      "romantico_basico_2": { "answer": "Sim", "comment": "Presente surpresa é sempre especial" },
+      "romantico_basico_3": { "answer": "Talvez", "comment": "Depende do contexto" },
+      "romantico_basico_4": { "answer": "Sim", "comment": "" },
+      "romantico_basico_5": { "answer": "Sim", "comment": "Viagem romântica seria incrível" },
+      "romantico_avancado_1": { "answer": "Sim", "comment": "Cartas de amor são lindas" },
+      "romantico_avancado_2": { "answer": "Talvez", "comment": "Nunca tentei" },
+      "romantico_avancado_3": { "answer": "Sim", "comment": "" },
+      "romantico_avancado_4": { "answer": "Não", "comment": "Prefiro privacidade" },
+      "romantico_avancado_5": { "answer": "Sim", "comment": "Renovar votos seria lindo" }
+    }
+  },
+  "partner2": {
+    "name": "João",
+    "answers": {
+      "romantico_basico_1": { "answer": "Sim", "comment": "Também gosto muito!" },
+      "romantico_basico_2": { "answer": "Sim", "comment": "" },
+      "romantico_basico_3": { "answer": "Sim", "comment": "Seria romântico" },
+      "romantico_basico_4": { "answer": "Sim", "comment": "Sempre quis fazer" },
+      "romantico_basico_5": { "answer": "Sim", "comment": "Vamos planejar!" },
+      "romantico_avancado_1": { "answer": "Talvez", "comment": "Sou melhor falando" },
+      "romantico_avancado_2": { "answer": "Não", "comment": "Não é para mim" },
+      "romantico_avancado_3": { "answer": "Sim", "comment": "Amor é demonstrar" },
+      "romantico_avancado_4": { "answer": "Não", "comment": "Concordo, prefiro privacidade" },
+      "romantico_avancado_5": { "answer": "Sim", "comment": "Que ideia maravilhosa!" }
+    }
+  },
+  "generatedAt": "2024-11-27T10:30:00.000Z",
+  "metadata": {
+    "totalQuestions": 10,
+    "compatibility": 85,
+    "superMatches": 6,
+    "matches": 2,
+    "possibilities": 2
+  }
+}

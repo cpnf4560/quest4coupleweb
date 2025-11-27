@@ -4,17 +4,33 @@
    ============================================ */
 
 // Carregar biblioteca de encriptação
+let cryptoJSLoaded = false;
 const cryptoScript = document.createElement('script');
 cryptoScript.src = "https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js";
+cryptoScript.onload = function() {
+  cryptoJSLoaded = true;
+  console.log('✅ CryptoJS carregado com sucesso');
+};
+cryptoScript.onerror = function() {
+  console.error('❌ Erro ao carregar CryptoJS');
+  alert('⚠️ Erro ao carregar biblioteca de encriptação. Verifique a sua conexão à internet.');
+};
 document.head.appendChild(cryptoScript);
 
 function getAnswersData() {
+  console.log('📋 A recolher dados das respostas...');
+  
+  const userNameElement = document.getElementById('userName');
+  const userName = userNameElement ? (userNameElement.value || 'Anónimo') : 'Anónimo';
+  
   const data = {
-    userName: document.getElementById('userName').value || 'Anónimo',
+    userName: userName,
     answers: {},
     customQuestions: getCustomQuestions ? getCustomQuestions() : {},
     timestamp: new Date().toISOString()
   };
+  
+  console.log('👤 Nome do utilizador:', userName);
 
   const packConfigs = [
     { id: 'romantico', name: 'Pack Romântico' },
@@ -24,10 +40,15 @@ function getAnswersData() {
     { id: 'kinks', name: 'Fetiches' }
   ];
 
+  let totalAnswers = 0;
+  
   packConfigs.forEach(config => {
     const packContainer = document.getElementById(`pack-${config.id}-questions`);
     if (packContainer) {
       const questions = packContainer.querySelectorAll('.question');
+      console.log(`📦 Pack ${config.name}: ${questions.length} perguntas encontradas`);
+      
+      let packAnswers = 0;
       questions.forEach((q, index) => {
         const qNum = index + 1;
         const radio = q.querySelector(`input[name="${config.id}_q${qNum}"]:checked`);
@@ -41,38 +62,87 @@ function getAnswersData() {
             answer: radio ? radio.value : null,
             comment: comment ? comment.value.trim() : ''
           };
+          packAnswers++;
+          totalAnswers++;
         }
       });
+      
+      if (packAnswers > 0) {
+        console.log(`✅ ${config.name}: ${packAnswers} respostas recolhidas`);
+      }
+    } else {
+      console.log(`⚠️ Container do pack ${config.name} não encontrado`);
     }
   });
 
+  console.log(`📊 Total de respostas recolhidas: ${totalAnswers}`);
   return data;
 }
 
 function saveAnswers() {
-  const securityCode = prompt("Por favor, introduza um código de segurança para encriptar as suas respostas.\\nLembre-se deste código para comparar mais tarde.", "");
+  // Verificar se CryptoJS está carregado
+  if (typeof CryptoJS === 'undefined') {
+    alert('⏳ A biblioteca de encriptação ainda está a carregar. Por favor aguarde alguns segundos e tente novamente.');
+    console.error('❌ CryptoJS não está carregado ainda!');
+    return;
+  }
+
+  const securityCode = prompt("Por favor, introduza um código de segurança para encriptar as suas respostas.\nLembre-se deste código para comparar mais tarde.", "");
   if (!securityCode) {
     alert("Código de segurança é obrigatório para guardar.");
     return;
   }
+  
+  if (securityCode.trim() === '') {
+    alert("O código não pode estar vazio!");
+    return;
+  }
 
+  console.log('📦 A preparar dados para download...');
   const data = getAnswersData();
+  
+  // Verificar se há respostas
+  if (!data.answers || Object.keys(data.answers).length === 0) {
+    alert('❌ Não há respostas para guardar! Por favor responda pelo menos uma pergunta.');
+    return;
+  }
+  
   const dataString = JSON.stringify(data);
+  console.log('✅ Dados preparados:', data);
   
   // Salvar estatísticas anônimas para o admin
   saveAnonymousAnalytics(data);
   
-  // Encriptar
-  const encrypted = CryptoJS.AES.encrypt(dataString, securityCode).toString();
+  try {
+    // Encriptar
+    console.log('🔐 A encriptar dados...');
+    const encrypted = CryptoJS.AES.encrypt(dataString, securityCode).toString();
+    console.log('✅ Dados encriptados com sucesso');
 
-  const blob = new Blob([encrypted], { type: 'text/plain;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `Quest4Couple_${data.userName.replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.q4c`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  
-  alert("Ficheiro com as respostas guardado com sucesso!");
+    // Criar blob e fazer download
+    const blob = new Blob([encrypted], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Quest4Couple_${data.userName.replace(/ /g, '_')}_${new Date().toISOString().slice(0,10)}.q4c`;
+    
+    console.log('💾 A iniciar download do arquivo:', a.download);
+    
+    // Adicionar ao DOM temporariamente (necessário em alguns browsers)
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    // Limpar URL após 100ms
+    setTimeout(() => {
+      URL.revokeObjectURL(a.href);
+    }, 100);
+    
+    console.log('✅ Download iniciado com sucesso!');
+    alert("✅ Ficheiro com as respostas guardado com sucesso!");
+  } catch (error) {
+    console.error('❌ Erro ao guardar respostas:', error);
+    alert('❌ Erro ao guardar o ficheiro. Por favor tente novamente.\n\nDetalhes: ' + error.message);
+  }
 }
 
 /* ============================================
