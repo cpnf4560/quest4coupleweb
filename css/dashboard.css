@@ -624,6 +624,25 @@ body {
   color: white;
 }
 
+/* Delete/Danger Button */
+.btn-danger {
+  background: #fff5f5;
+  color: #dc3545;
+  border: 2px solid #dc3545;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1em;
+}
+
+.btn-danger:hover {
+  background: #dc3545;
+  color: white;
+  transform: scale(1.05);
+}
+
 /* Empty State */
 .empty-state {
   text-align: center;

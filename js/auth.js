@@ -13,25 +13,37 @@ let isRedirecting = false; // Flag para evitar múltiplos redirects
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     console.log('✅ User autenticado:', user.email);
+    console.log('🔍 User UID:', user.uid);
+    console.log('🔍 User displayName:', user.displayName);
     currentUser = user;
     
     // Criar/Atualizar perfil no Firestore
+    let firestoreSuccess = false;
     try {
+      console.log('🔵 Chamando createOrUpdateUserProfile...');
       await createOrUpdateUserProfile(user);
       console.log('✅ Perfil criado/atualizado no Firestore');
+      firestoreSuccess = true;
     } catch (error) {
       console.error('❌ Erro ao criar perfil:', error);
+      console.error('❌ Error code:', error.code);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      console.error('🔴 NÃO REDIRECIONAR - Perfil não foi criado no Firestore!');
+      firestoreSuccess = false;
     }
-    
-    // Redirecionar para dashboard se estiver em auth page (APENAS UMA VEZ)
-    if (window.location.pathname.includes('auth.html') && !isRedirecting) {
+      // Redirecionar para dashboard APENAS se o perfil foi criado com sucesso
+    if (window.location.pathname.includes('auth.html') && !isRedirecting && firestoreSuccess) {
       console.log('🔄 Redirecionando para dashboard...');
       isRedirecting = true;
       
-      // Pequeno delay para garantir que tudo foi processado
+      // Delay para garantir que tudo foi processado
+      // Não precisa ser grande porque retry logic já garantiu sucesso
+      console.log('⏳ Aguardando 1 segundo para finalizar...');
       setTimeout(() => {
+        console.log('✅ Redirecionando agora...');
         window.location.href = 'dashboard.html';
-      }, 500);
+      }, 1000); // 1s é suficiente após retry logic ter sucesso
     }
     
     // Mostrar conteúdo protegido
@@ -64,35 +76,31 @@ auth.onAuthStateChanged(async (user) => {
 // ========================================
 async function signUpWithEmail(email, password, displayName, additionalData = {}) {
   try {
+    console.log('📝 Criando conta com email/password...');
+    
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
     
-    // Update profile
-    await user.updateProfile({ displayName });
+    console.log('✅ Utilizador criado no Firebase Auth:', user.email);
     
-    // Store additional data in Firestore
+    // Update profile name
+    await user.updateProfile({ displayName });
+    console.log('✅ DisplayName atualizado:', displayName);
+    
+    // Store additional data temporarily for use in onAuthStateChanged
+    // This will be picked up by createOrUpdateUserProfile
     if (Object.keys(additionalData).length > 0) {
-      const userRef = db.collection('users').doc(user.uid);
-      await userRef.set({
-        uid: user.uid,
-        email: user.email,
+      sessionStorage.setItem('pendingUserData', JSON.stringify({
+        ...additionalData,
         displayName: displayName,
-        name: displayName,
-        username: additionalData.username || null,
-        gender: additionalData.gender || null,
-        ageRange: additionalData.ageRange || null,
-        country: additionalData.country || null,
-        countryName: additionalData.countryName || null,
-        city: additionalData.city || null,
-        photoURL: user.photoURL || null,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-        authProvider: 'email',
-        isAdmin: false
-      });
+        name: displayName
+      }));
+      console.log('💾 Dados adicionais guardados temporariamente');
     }
     
-    console.log('✅ Conta criada:', user.email);
+    console.log('✅ Conta criada com sucesso:', user.email);
+    console.log('⏳ Perfil será criado no Firestore pelo onAuthStateChanged...');
+    
     return { success: true, user };
   } catch (error) {
     console.error('❌ Erro ao criar conta:', error);
@@ -173,30 +181,103 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
   try {
     console.log('🔵 Criando/atualizando perfil para:', user.email);
     
+    // ⭐ CRITICAL: Aguardar token de autenticação estar pronto
+    console.log('⏳ Aguardando token de autenticação...');
+    const token = await user.getIdToken(true); // Force refresh
+    console.log('✅ Token obtido:', token ? 'OK' : 'FALHOU');
+    
+    // Aguardar mais 500ms para garantir propagação
+    await new Promise(resolve => setTimeout(resolve, 500));
+    console.log('✅ Aguardou 500ms para propagação do token');
+    
+    // Check for pending user data from registration
+    const pendingDataStr = sessionStorage.getItem('pendingUserData');
+    let pendingData = {};
+    
+    if (pendingDataStr) {
+      try {
+        pendingData = JSON.parse(pendingDataStr);
+        console.log('📦 Dados pendentes encontrados:', pendingData);
+        sessionStorage.removeItem('pendingUserData'); // Clean up
+      } catch (e) {
+        console.warn('⚠️ Erro ao parse de dados pendentes:', e);
+      }
+    }
+    
+    // Merge all data sources (priority: additionalData > pendingData > defaults)
+    const mergedData = {
+      ...pendingData,
+      ...additionalData
+    };
+      
+    console.log('🔍 Database (db):', db);
+    console.log('🔍 User UID para Firestore:', user.uid);
+    
     const userRef = db.collection('users').doc(user.uid);
+    console.log('🔍 UserRef criado:', userRef.path);
+    
+    console.log('📖 Verificando se perfil já existe...');
     const doc = await userRef.get();
+    console.log('📖 Documento existe?', doc.exists);
     
     if (!doc.exists) {
       // Criar novo perfil
       console.log('🔵 Perfil não existe, criando novo...');
       
-      await userRef.set({
+      const profileData = {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName || 'User',
+        displayName: user.displayName || mergedData.displayName || 'User',
+        name: user.displayName || mergedData.name || 'User',
+        username: mergedData.username || null,
         photoURL: user.photoURL || null,
-        gender: additionalData.gender || null,
-        ageRange: additionalData.ageRange || null,
-        country: additionalData.country || null,
-        countryName: additionalData.countryName || null,
-        city: additionalData.city || null,
+        gender: mergedData.gender || null,
+        ageRange: mergedData.ageRange || null,
+        country: mergedData.country || null,
+        countryName: mergedData.countryName || null,
+        city: mergedData.city || null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-        authProvider: user.providerData[0]?.providerId || 'email',
+        authProvider: user.providerData[0]?.providerId || 'password',
         isAdmin: false
-      });
+      };
       
-      console.log('✅ Perfil criado');
+      console.log('📝 Dados do perfil a criar:', profileData);
+      console.log('🔐 Auth UID:', user.uid);
+      console.log('🔐 Document ID:', user.uid);
+      console.log('✅ UIDs coincidem?', user.uid === user.uid);
+      
+      console.log('💾 Executando userRef.set() com RETRY...');
+      
+      // ⭐ RETRY LOGIC: Tentar até 3 vezes com delays crescentes
+      let attempts = 0;
+      let success = false;
+      let lastError = null;
+      
+      while (attempts < 3 && !success) {
+        attempts++;
+        console.log(`🔄 Tentativa ${attempts}/3 de criar perfil...`);
+        
+        try {
+          await userRef.set(profileData);
+          success = true;
+          console.log('✅ Perfil criado com sucesso!');
+        } catch (err) {
+          lastError = err;
+          console.warn(`⚠️ Tentativa ${attempts} falhou:`, err.message);
+          
+          if (attempts < 3) {
+            const delay = attempts * 1000; // 1s, 2s, 3s
+            console.log(`⏳ Aguardando ${delay}ms antes de retry...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        }
+      }
+      
+      if (!success) {
+        throw lastError || new Error('Failed to create profile after 3 attempts');
+      }
+      
     } else {
       // Atualizar last login
       console.log('🔵 Perfil existe, atualizando last login...');
@@ -206,12 +287,25 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
       
       console.log('✅ Perfil atualizado');
     }
-    
-    return true; // Retorna sucesso
+      return true; // Retorna sucesso
   } catch (error) {
-    console.error('❌ Erro ao criar/atualizar perfil:', error);
+    console.error('❌ ========================================');
+    console.error('❌ ERRO AO CRIAR/ATUALIZAR PERFIL NO FIRESTORE');
+    console.error('❌ ========================================');
+    console.error('❌ Error object:', error);
+    console.error('❌ Error code:', error.code);
+    console.error('❌ Error message:', error.message);
+    console.error('❌ Error name:', error.name);
+    console.error('❌ Error stack:', error.stack);
+    console.error('❌ ========================================');
+    console.error('❌ User UID:', user.uid);
+    console.error('❌ User email:', user.email);
+    console.error('❌ Auth state:', auth.currentUser ? 'Authenticated' : 'NOT authenticated');
+    console.error('❌ ========================================');
+    
     // NÃO bloquear o redirect mesmo se houver erro no Firestore
-    return false;
+    // Mas vamos fazer throw para ver o erro no console
+    throw error;
   }
 }
 

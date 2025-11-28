@@ -358,6 +358,120 @@ async function showReportDetails(reportId) {
 // ========================================
 
 /**
+ * Busca analytics de questões do Firebase
+ */
+async function getQuestionAnalytics(packId = null) {
+  console.log('📊 Buscando analytics de questões...', packId ? `Pack: ${packId}` : 'Todos os packs');
+  
+  try {
+    // 1. Buscar todas as respostas dos utilizadores
+    const answersSnapshot = await db.collection('userAnswers').get();
+    console.log('📝 Documentos de respostas encontrados:', answersSnapshot.size);
+    
+    // 2. Agregar respostas por questão
+    const questionStats = {};
+    
+    answersSnapshot.forEach(doc => {
+      const userData = doc.data();
+      
+      // Iterar pelos packs do utilizador
+      Object.keys(userData).forEach(pack => {
+        // Filtrar por packId se especificado
+        if (packId && pack !== packId) return;
+        
+        const packAnswers = userData[pack];
+        if (typeof packAnswers !== 'object' || !packAnswers) return;
+        
+        // Iterar pelas respostas
+        Object.keys(packAnswers).forEach(questionKey => {
+          const answer = packAnswers[questionKey];
+          if (!answer || !answer.answer) return;
+          
+          // Criar chave única: pack_questionKey
+          const uniqueKey = `${pack}_${questionKey}`;
+          
+          if (!questionStats[uniqueKey]) {
+            questionStats[uniqueKey] = {
+              packId: pack,
+              questionKey: questionKey,
+              totalResponses: 0,
+              byAnswer: {
+                'porfavor': 0,
+                'yup': 0,
+                'talvez': 0,
+                'meh': 0
+              }
+            };
+          }
+          
+          questionStats[uniqueKey].totalResponses++;
+          
+          // Contar por tipo de resposta (normalizar para minúsculas)
+          const answerType = answer.answer.toLowerCase();
+          if (questionStats[uniqueKey].byAnswer.hasOwnProperty(answerType)) {
+            questionStats[uniqueKey].byAnswer[answerType]++;
+          }
+        });
+      });
+    });
+    
+    console.log('📊 Questões agregadas:', Object.keys(questionStats).length);
+    
+    // 3. Carregar textos das perguntas do packs_data_clean.json
+    const packsResponse = await fetch('../data/packs_data_clean.json');
+    const packsData = await packsResponse.json();
+    
+    // Mapear pack names
+    const packNames = {
+      'romantico': 'Pack Romântico',
+      'experiencia': 'Exploração e Aventura a Dois',
+      'pimentinha': 'Pimentinha',
+      'poliamor': 'Poliamor',
+      'kinks': 'Fetiches'
+    };
+    
+    // 4. Enriquecer com textos das perguntas
+    const enrichedQuestions = [];
+    
+    Object.keys(questionStats).forEach(key => {
+      const stat = questionStats[key];
+      const pack = packsData.find(p => p.name === packNames[stat.packId]);
+      
+      if (pack && pack.categories) {
+        // Achatar todas as perguntas do pack
+        const allQuestions = pack.categories.flatMap(cat => cat.questions || []);
+        
+        // Extrair número da questão (ex: q1 -> 1)
+        const questionNumber = parseInt(stat.questionKey.replace('q', ''));
+        const questionText = allQuestions[questionNumber - 1];
+        
+        enrichedQuestions.push({
+          packId: stat.packId,
+          packName: packNames[stat.packId],
+          questionKey: stat.questionKey,
+          questionNumber: questionNumber,
+          questionText: questionText || `Questão ${questionNumber}`,
+          totalResponses: stat.totalResponses,
+          byAnswer: stat.byAnswer,
+          hasInvertMatching: false // TODO: Detectar se tem invert matching
+        });
+      }
+    });
+    
+    // 5. Ordenar por número de respostas (desc)
+    enrichedQuestions.sort((a, b) => b.totalResponses - a.totalResponses);
+    
+    console.log('✅ Analytics de questões carregadas:', enrichedQuestions.length);
+    
+    return enrichedQuestions;
+    
+  } catch (error) {
+    console.error('❌ Erro ao buscar analytics de questões:', error);
+    return [];
+  }
+}
+
+/**
  * Carrega e exibe analytics por questão
  */
 async function loadQuestionAnalytics(packId = null, minResponses = 0) {
@@ -395,18 +509,17 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
     
     // Renderizar questões
     let html = '';
-    
-    questions.forEach((q, index) => {
+      questions.forEach((q, index) => {
       const total = q.totalResponses;
-      const porfavor = q.byAnswer['Por favor!'] || 0;
-      const ok = q.byAnswer['OK'] || 0;
-      const talvez = q.byAnswer['Talvez'] || 0;
-      const nao = q.byAnswer['Não'] || 0;
+      const porfavor = q.byAnswer['porfavor'] || 0;
+      const yup = q.byAnswer['yup'] || 0;
+      const talvez = q.byAnswer['talvez'] || 0;
+      const meh = q.byAnswer['meh'] || 0;
       
       const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(1) : 0;
-      const pctOK = total > 0 ? ((ok / total) * 100).toFixed(1) : 0;
+      const pctYup = total > 0 ? ((yup / total) * 100).toFixed(1) : 0;
       const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(1) : 0;
-      const pctNao = total > 0 ? ((nao / total) * 100).toFixed(1) : 0;
+      const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(1) : 0;
       
       const invertBadge = q.hasInvertMatching ? '<span style="background: #667eea; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; margin-left: 10px;">🔄 INVERT</span>' : '';
       
@@ -437,10 +550,9 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
           <!-- Distribuição Geral -->
           <div style="margin-bottom: 20px;">
             <h4 style="color: #495057; font-size: 0.95em; margin-bottom: 12px;">📊 Distribuição Geral</h4>
-            
-            <div style="margin-bottom: 10px;">
+              <div style="margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">💖 Por favor!</span>
+                <span style="font-size: 0.9em; color: #495057;">😍 Por favor!</span>
                 <span style="font-weight: 600; color: #2e7d32;">${pctPorfavor}% (${porfavor})</span>
               </div>
               <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
@@ -450,11 +562,11 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
             
             <div style="margin-bottom: 10px;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">👍 OK</span>
-                <span style="font-weight: 600; color: #2e7d32;">${pctOK}% (${ok})</span>
+                <span style="font-size: 0.9em; color: #495057;">👍 Yup</span>
+                <span style="font-weight: 600; color: #2e7d32;">${pctYup}% (${yup})</span>
               </div>
               <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #8bc34a; height: 100%; width: ${pctOK}%; transition: width 0.3s;"></div>
+                <div style="background: #8bc34a; height: 100%; width: ${pctYup}%; transition: width 0.3s;"></div>
               </div>
             </div>
             
@@ -467,14 +579,13 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
                 <div style="background: #ffa726; height: 100%; width: ${pctTalvez}%; transition: width 0.3s;"></div>
               </div>
             </div>
-            
-            <div>
+              <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">❌ Não</span>
-                <span style="font-weight: 600; color: #d32f2f;">${pctNao}% (${nao})</span>
+                <span style="font-size: 0.9em; color: #495057;">😑 Meh...</span>
+                <span style="font-weight: 600; color: #d32f2f;">${pctMeh}% (${meh})</span>
               </div>
               <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #f44336; height: 100%; width: ${pctNao}%; transition: width 0.3s;"></div>
+                <div style="background: #f44336; height: 100%; width: ${pctMeh}%; transition: width 0.3s;"></div>
               </div>
             </div>
           </div>
@@ -566,7 +677,7 @@ function renderGenderStats(genderData, label) {
   
   if (total === 0) return '';
   
-  const porfavor = genderData['Por favor!'] || 0;
+  const porfavor = genderData['porfavor'] || 0;
   const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(1) : 0;
   
   return `
@@ -587,7 +698,7 @@ function renderAgeRangeStats(ageData) {
     if (!rangeData || rangeData.total === 0) return;
     
     const total = rangeData.total;
-    const porfavor = rangeData['Por favor!'] || 0;
+    const porfavor = rangeData['porfavor'] || 0;
     const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(1) : 0;
     
     html += `
@@ -644,18 +755,17 @@ async function exportQuestionCSV(packId, questionId) {
     }
     
     const q = question[0];
-    
-    // Criar CSV
+      // Criar CSV
     let csv = 'Métrica,Valor\n';
     csv += `"Questão","${q.questionText}"\n`;
     csv += `"Pack","${q.packName}"\n`;
     csv += `"Total Respostas","${q.totalResponses}"\n`;
     csv += `"\n`;
     csv += `"Resposta","Quantidade","Percentagem"\n`;
-    csv += `"Por favor!","${q.byAnswer['Por favor!']}","${((q.byAnswer['Por favor!'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
-    csv += `"OK","${q.byAnswer['OK']}","${((q.byAnswer['OK'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
-    csv += `"Talvez","${q.byAnswer['Talvez']}","${((q.byAnswer['Talvez'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
-    csv += `"Não","${q.byAnswer['Não']}","${((q.byAnswer['Não'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
+    csv += `"Por favor!","${q.byAnswer['porfavor']}","${((q.byAnswer['porfavor'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
+    csv += `"Yup","${q.byAnswer['yup']}","${((q.byAnswer['yup'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
+    csv += `"Talvez","${q.byAnswer['talvez']}","${((q.byAnswer['talvez'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
+    csv += `"Meh","${q.byAnswer['meh']}","${((q.byAnswer['meh'] / q.totalResponses) * 100).toFixed(1)}%"\n`;
     
     // Download
     downloadCSV(csv, `questao_${packId}_${questionId}.csv`);

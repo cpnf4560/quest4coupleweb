@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Firestore Permissions - Quest4Couple</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #ff6b9d;
+      text-align: center;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 5px;
+      border-left: 4px solid #ff6b9d;
+    }
+    .test-result {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    button {
+      background: #ff6b9d;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button:hover {
+      background: #ff4081;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    pre {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .log {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="test-container">
+    <h1>🧪 Test Firestore Permissions</h1>
+    <p style="text-align: center; color: #666;">Teste as permissões do Firestore em tempo real</p>
+    
+    <!-- User Info -->
+    <div class="test-section">
+      <h3>👤 Estado de Autenticação</h3>
+      <div id="authStatus" class="test-result info">
+        ⏳ Verificando autenticação...
+      </div>
+      <button onclick="checkAuth()">🔄 Verificar Autenticação</button>
+      <button onclick="testEmailSignup()">📝 Testar Registo Email</button>
+      <button onclick="testGoogleSignIn()">🔵 Testar Google Sign-In</button>
+      <button onclick="logout()">🚪 Logout</button>
+    </div>
+    
+    <!-- Test Results -->
+    <div class="test-section">
+      <h3>📊 Resultados dos Testes</h3>
+      <div id="testResults"></div>
+    </div>
+    
+    <!-- Firestore Rules Check -->
+    <div class="test-section">
+      <h3>🔐 Verificação de Regras</h3>
+      <button onclick="testReadUsers()">📖 Testar Leitura (users)</button>
+      <button onclick="testCreateUser()">✍️ Testar Criação (users)</button>
+      <button onclick="testUpdateUser()">✏️ Testar Atualização (users)</button>
+      <button onclick="testReadActivities()">📚 Testar Leitura (activities)</button>
+      <div id="rulesResults"></div>
+    </div>
+    
+    <!-- Console Logs -->
+    <div class="test-section">
+      <h3>📝 Console Logs</h3>
+      <div id="consoleLogs" style="max-height: 400px; overflow-y: auto;"></div>
+      <button onclick="clearLogs()">🗑️ Limpar Logs</button>
+    </div>
+  </div>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  
+  <!-- Firebase Config -->
+  <script src="js/firebase-config.js"></script>
+  
+  <!-- Auth.js - Sistema de autenticação (com createOrUpdateUserProfile) -->
+  <script src="js/auth.js"></script>
+  
+  <script>
+    // ============================================
+    // LOGGING SYSTEM
+    // ============================================
+    const logs = [];
+    
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const emoji = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+      const logMessage = `${emoji} [${timestamp}] ${message}`;
+      
+      logs.push({ message: logMessage, type });
+      console.log(logMessage);
+      
+      // Update UI
+      const logsDiv = document.getElementById('consoleLogs');
+      const logElement = document.createElement('div');
+      logElement.className = `log test-result ${type}`;
+      logElement.textContent = logMessage;
+      logsDiv.insertBefore(logElement, logsDiv.firstChild);
+    }
+    
+    function clearLogs() {
+      document.getElementById('consoleLogs').innerHTML = '';
+      logs.length = 0;
+      addLog('Logs limpos', 'info');
+    }
+    
+    function showTestResult(message, type = 'info') {
+      const resultsDiv = document.getElementById('testResults');
+      const resultElement = document.createElement('div');
+      resultElement.className = `test-result ${type}`;
+      resultElement.innerHTML = message;
+      resultsDiv.insertBefore(resultElement, resultsDiv.firstChild);
+    }
+    
+    function showRulesResult(message, type = 'info') {
+      const resultsDiv = document.getElementById('rulesResults');
+      const resultElement = document.createElement('div');
+      resultElement.className = `test-result ${type}`;
+      resultElement.innerHTML = message;
+      resultsDiv.insertBefore(resultElement, resultsDiv.firstChild);
+    }
+      // ============================================
+    // AUTH STATE OBSERVER (UI Update Only)
+    // ============================================
+    // Nota: O auth.js já tem um onAuthStateChanged que cria perfis
+    // Este é apenas para atualizar a UI
+    auth.onAuthStateChanged((user) => {
+      const statusDiv = document.getElementById('authStatus');
+      
+      if (user) {
+        statusDiv.className = 'test-result success';
+        statusDiv.innerHTML = `
+          ✅ <strong>Autenticado</strong><br>
+          📧 Email: ${user.email}<br>
+          🆔 UID: ${user.uid}<br>
+          👤 Nome: ${user.displayName || 'N/A'}<br>
+          🔑 Provider: ${user.providerData[0]?.providerId || 'N/A'}
+        `;
+        addLog(`[UI] Utilizador autenticado: ${user.email}`, 'success');
+      } else {
+        statusDiv.className = 'test-result error';
+        statusDiv.innerHTML = '❌ <strong>Não autenticado</strong><br>Por favor, faça login para testar as permissões.';
+        addLog('[UI] Utilizador não autenticado', 'warning');
+      }
+    });
+    
+    // ============================================
+    // AUTH TESTS
+    // ============================================
+    function checkAuth() {
+      addLog('🔍 Verificando autenticação...', 'info');
+      const user = auth.currentUser;
+      
+      if (user) {
+        addLog(`✅ Utilizador: ${user.email} (UID: ${user.uid})`, 'success');
+        showTestResult(`✅ <strong>Autenticado:</strong> ${user.email}`, 'success');
+      } else {
+        addLog('❌ Nenhum utilizador autenticado', 'error');
+        showTestResult('❌ <strong>Não autenticado.</strong> Por favor, faça login.', 'error');
+      }
+    }
+    
+    async function testEmailSignup() {
+      addLog('📝 Iniciando teste de registo com email...', 'info');
+      
+      const testEmail = `test_${Date.now()}@quest4couple.test`;
+      const testPassword = 'Test123456!';
+      const testName = 'Test User';
+      
+      try {
+        addLog(`📧 Criando utilizador: ${testEmail}`, 'info');
+        
+        // Create user
+        const userCredential = await auth.createUserWithEmailAndPassword(testEmail, testPassword);
+        const user = userCredential.user;
+        
+        addLog(`✅ Utilizador criado no Firebase Auth: ${user.uid}`, 'success');
+        
+        // Update profile
+        await user.updateProfile({ displayName: testName });
+        addLog('✅ DisplayName atualizado', 'success');
+        
+        // Store data temporarily
+        const additionalData = {
+          displayName: testName,
+          name: testName,
+          gender: 'male',
+          ageRange: '25-34',
+          country: 'PT'
+        };
+        
+        sessionStorage.setItem('pendingUserData', JSON.stringify(additionalData));
+        addLog('💾 Dados adicionais guardados no sessionStorage', 'success');
+        
+        // Wait for profile creation
+        addLog('⏳ Aguardando criação do perfil no Firestore...', 'info');
+        
+        setTimeout(async () => {
+          try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            
+            if (userDoc.exists) {
+              addLog('✅ Perfil criado no Firestore com sucesso!', 'success');
+              showTestResult(`✅ <strong>Registo bem-sucedido!</strong><br>Email: ${testEmail}<br>Perfil criado no Firestore.`, 'success');
+            } else {
+              addLog('❌ Perfil NÃO foi criado no Firestore!', 'error');
+              showTestResult(`⚠️ <strong>Registo parcial:</strong><br>Utilizador criado no Auth, mas perfil não apareceu no Firestore.<br>Verificar logs do console para detalhes.`, 'error');
+            }
+          } catch (error) {
+            addLog(`❌ Erro ao verificar perfil: ${error.message}`, 'error');
+            showTestResult(`❌ <strong>Erro:</strong> ${error.message}`, 'error');
+          }
+        }, 3000);
+        
+      } catch (error) {
+        addLog(`❌ Erro no registo: ${error.code} - ${error.message}`, 'error');
+        showTestResult(`❌ <strong>Erro no registo:</strong><br>${error.code}<br>${error.message}`, 'error');
+      }
+    }
+    
+    async function testGoogleSignIn() {
+      addLog('🔵 Iniciando Google Sign-In...', 'info');
+      
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        
+        addLog(`✅ Login Google bem-sucedido: ${result.user.email}`, 'success');
+        showTestResult(`✅ <strong>Google Sign-In bem-sucedido!</strong><br>Email: ${result.user.email}`, 'success');
+        
+      } catch (error) {
+        addLog(`❌ Erro no Google Sign-In: ${error.code} - ${error.message}`, 'error');
+        showTestResult(`❌ <strong>Erro no Google Sign-In:</strong><br>${error.code}<br>${error.message}`, 'error');
+      }
+    }
+    
+    async function logout() {
+      addLog('🚪 Fazendo logout...', 'info');
+      
+      try {
+        await auth.signOut();
+        addLog('✅ Logout bem-sucedido', 'success');
+        showTestResult('✅ <strong>Logout bem-sucedido!</strong>', 'success');
+      } catch (error) {
+        addLog(`❌ Erro no logout: ${error.message}`, 'error');
+        showTestResult(`❌ <strong>Erro no logout:</strong> ${error.message}`, 'error');
+      }
+    }
+    
+    // ============================================
+    // FIRESTORE RULES TESTS
+    // ============================================
+    async function testReadUsers() {
+      addLog('📖 Testando leitura da collection users...', 'info');
+      
+      const user = auth.currentUser;
+      if (!user) {
+        addLog('❌ Não autenticado. Faça login primeiro.', 'error');
+        showRulesResult('❌ <strong>Não autenticado.</strong> Faça login para testar.', 'error');
+        return;
+      }
+      
+      try {
+        addLog(`🔍 Buscando utilizadores... (auth.uid: ${user.uid})`, 'info');
+        const snapshot = await db.collection('users').limit(5).get();
+        
+        addLog(`✅ Leitura bem-sucedida! ${snapshot.size} documentos encontrados`, 'success');
+        showRulesResult(`✅ <strong>Leitura permitida!</strong><br>Documentos encontrados: ${snapshot.size}`, 'success');
+        
+      } catch (error) {
+        addLog(`❌ Erro na leitura: ${error.code} - ${error.message}`, 'error');
+        showRulesResult(`❌ <strong>Leitura negada!</strong><br>${error.code}<br>${error.message}`, 'error');
+      }
+    }
+    
+    async function testCreateUser() {
+      addLog('✍️ Testando criação de documento em users...', 'info');
+      
+      const user = auth.currentUser;
+      if (!user) {
+        addLog('❌ Não autenticado. Faça login primeiro.', 'error');
+        showRulesResult('❌ <strong>Não autenticado.</strong> Faça login para testar.', 'error');
+        return;
+      }
+      
+      try {
+        addLog(`🔍 Tentando criar perfil para UID: ${user.uid}`, 'info');
+        addLog(`📝 Auth UID: ${user.uid}`, 'info');
+        
+        const userRef = db.collection('users').doc(user.uid);
+        const doc = await userRef.get();
+        
+        if (doc.exists) {
+          addLog('ℹ️ Perfil já existe. Testando atualização...', 'info');
+          await userRef.update({
+            testField: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          addLog('✅ Atualização bem-sucedida!', 'success');
+          showRulesResult('✅ <strong>Atualização permitida!</strong><br>(Perfil já existia)', 'success');
+        } else {
+          addLog('📝 Criando novo perfil...', 'info');
+          await userRef.set({
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName || 'Test User',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            isAdmin: false
+          });
+          addLog('✅ Criação bem-sucedida!', 'success');
+          showRulesResult('✅ <strong>Criação permitida!</strong><br>Perfil criado com sucesso.', 'success');
+        }
+        
+      } catch (error) {
+        addLog(`❌ Erro na criação: ${error.code} - ${error.message}`, 'error');
+        addLog(`⚠️ Auth UID: ${user.uid}`, 'warning');
+        addLog(`⚠️ Document ID: ${user.uid}`, 'warning');
+        showRulesResult(`❌ <strong>Criação negada!</strong><br>${error.code}<br>${error.message}<br><br>ℹ️ Verificar se:<br>• Auth UID (${user.uid}) == Document ID<br>• Regra: allow create: if request.auth.uid == userId`, 'error');
+      }
+    }
+    
+    async function testUpdateUser() {
+      addLog('✏️ Testando atualização de documento em users...', 'info');
+      
+      const user = auth.currentUser;
+      if (!user) {
+        addLog('❌ Não autenticado. Faça login primeiro.', 'error');
+        showRulesResult('❌ <strong>Não autenticado.</strong> Faça login para testar.', 'error');
+        return;
+      }
+      
+      try {
+        addLog(`🔍 Tentando atualizar perfil UID: ${user.uid}`, 'info');
+        
+        const userRef = db.collection('users').doc(user.uid);
+        await userRef.update({
+          lastTestAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        addLog('✅ Atualização bem-sucedida!', 'success');
+        showRulesResult('✅ <strong>Atualização permitida!</strong>', 'success');
+        
+      } catch (error) {
+        addLog(`❌ Erro na atualização: ${error.code} - ${error.message}`, 'error');
+        
+        if (error.code === 'not-found') {
+          showRulesResult(`⚠️ <strong>Documento não existe.</strong><br>Crie o perfil primeiro.`, 'error');
+        } else {
+          showRulesResult(`❌ <strong>Atualização negada!</strong><br>${error.code}<br>${error.message}`, 'error');
+        }
+      }
+    }
+    
+    async function testReadActivities() {
+      addLog('📚 Testando leitura da collection activities...', 'info');
+      
+      const user = auth.currentUser;
+      if (!user) {
+        addLog('❌ Não autenticado. Faça login primeiro.', 'error');
+        showRulesResult('❌ <strong>Não autenticado.</strong> Faça login para testar.', 'error');
+        return;
+      }
+      
+      try {
+        addLog('🔍 Buscando atividades...', 'info');
+        const snapshot = await db.collection('activities').limit(5).get();
+        
+        addLog(`✅ Leitura bem-sucedida! ${snapshot.size} documentos encontrados`, 'success');
+        showRulesResult(`✅ <strong>Leitura permitida!</strong><br>Documentos encontrados: ${snapshot.size}`, 'success');
+        
+      } catch (error) {
+        addLog(`❌ Erro na leitura: ${error.code} - ${error.message}`, 'error');
+        showRulesResult(`❌ <strong>Leitura negada!</strong><br>${error.code}<br>${error.message}`, 'error');
+      }
+    }
+    
+    // ============================================
+    // INITIALIZE
+    // ============================================
+    addLog('🚀 Sistema de testes iniciado', 'success');
+    addLog('ℹ️ Aguardando autenticação...', 'info');
+    
+  </script>
+
+</body>
+</html>

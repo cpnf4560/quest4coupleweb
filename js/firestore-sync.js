@@ -111,6 +111,9 @@ async function saveAnswerToFirestore(packId, questionId, answerData) {
       console.log('📊 Progresso das categorias atualizado');
     }
     
+    // Notificar parceiros que há novas respostas (debounced)
+    notifyPartnersOfNewAnswers(user.uid);
+    
     return true;
   } catch (error) {
     console.error('Erro ao guardar resposta no Firestore:', error);
@@ -520,6 +523,48 @@ async function loadPackAnswers(packId) {
 }
 
 // ========================================
+// NOTIFICAR PARCEIROS DE NOVAS RESPOSTAS
+// ========================================
+let notifyPartnersTimeout = null;
+
+async function notifyPartnersOfNewAnswers(userId) {
+  // Debounce - só notificar após 5 segundos de inatividade
+  if (notifyPartnersTimeout) {
+    clearTimeout(notifyPartnersTimeout);
+  }
+  
+  notifyPartnersTimeout = setTimeout(async () => {
+    try {
+      // Buscar todas as conexões do utilizador
+      const connectionsSnapshot = await db.collection('connections')
+        .where('users', 'array-contains', userId)
+        .get();
+      
+      if (connectionsSnapshot.empty) {
+        console.log('ℹ️ Sem conexões para notificar');
+        return;
+      }
+      
+      // Atualizar lastAnswerUpdate em todas as conexões
+      const batch = db.batch();
+      const now = firebase.firestore.FieldValue.serverTimestamp();
+      
+      connectionsSnapshot.forEach(doc => {
+        batch.update(doc.ref, {
+          [`lastAnswerUpdate_${userId}`]: now
+        });
+      });
+      
+      await batch.commit();
+      console.log(`✅ ${connectionsSnapshot.size} parceiros notificados de novas respostas`);
+      
+    } catch (error) {
+      console.error('Erro ao notificar parceiros:', error);
+    }
+  }, 5000); // Esperar 5 segundos
+}
+
+// ========================================
 // EXPORT FUNCTIONS
 // ========================================
 window.FirestoreSync = {
@@ -530,6 +575,7 @@ window.FirestoreSync = {
   saveCustomQuestions: saveCustomQuestionsToFirestore,
   loadCustomQuestions: loadCustomQuestionsFromFirestore,
   migrate: migrateLocalStorageToFirestore,
+  notifyPartners: notifyPartnersOfNewAnswers,
   
   // Hybrid functions
   hybridSave: saveAnswer,

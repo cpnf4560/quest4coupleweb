@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Reset Protegido - Quest4Couple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .danger-box {
+            background: #f8d7da;
+            border: 3px solid #dc3545;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+        }
+        .step.completed {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        #countdown {
+            font-size: 3em;
+            font-weight: bold;
+            color: #dc3545;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔒 Reset das Minhas Respostas - PROTEGIDO</h1>
+        
+        <div class="danger-box">
+            <h2 style="color: #dc3545; margin-top: 0;">⚠️ AVISO EXTREMO DE PERIGO</h2>
+            <p style="font-size: 1.1em; font-weight: bold;">
+                Esta ação irá APAGAR PERMANENTEMENTE todas as suas respostas!
+            </p>
+            <p>Esta operação:</p>
+            <ul>
+                <li>❌ É <strong>IRREVERSÍVEL</strong></li>
+                <li>❌ Apaga <strong>TODAS</strong> as respostas</li>
+                <li>❌ Remove <strong>TODO</strong> o progresso</li>
+                <li>❌ <strong>NÃO PODE</strong> ser desfeita</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <h3>🛡️ Sistema de Proteção Multi-Camada</h3>
+            <p>Para sua segurança, implementámos <strong>5 camadas de proteção</strong>:</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p style="text-align: center; margin-top: 10px;">
+                <strong>Progresso: <span id="progressText">0/5</span></strong>
+            </p>
+        </div>
+
+        <!-- Step 1: Backup Automático -->
+        <div class="step" id="step1">
+            <h3>📥 Passo 1: Backup Automático</h3>
+            <p>Antes de apagar, vamos fazer backup automático das suas respostas.</p>
+            <button class="btn-success" onclick="step1_backup()" id="btn1">
+                💾 Criar Backup
+            </button>
+            <div id="step1Status"></div>
+        </div>
+
+        <!-- Step 2: Re-autenticação -->
+        <div class="step" id="step2" style="opacity: 0.5; pointer-events: none;">
+            <h3>🔐 Passo 2: Re-autenticação</h3>
+            <p>Por favor, introduza a sua password para confirmar identidade:</p>
+            <input type="password" id="passwordInput" placeholder="Sua password do Quest4Couple">
+            <button class="btn-success" onclick="step2_reauth()" id="btn2">
+                ✅ Verificar Password
+            </button>
+            <div id="step2Status"></div>
+        </div>
+
+        <!-- Step 3: Confirmação de Texto -->
+        <div class="step" id="step3" style="opacity: 0.5; pointer-events: none;">
+            <h3>⌨️ Passo 3: Confirmação Escrita</h3>
+            <p>Digite <strong style="color: #dc3545; font-size: 1.2em;">APAGAR TUDO PERMANENTEMENTE</strong> no campo abaixo:</p>
+            <input type="text" id="confirmText" placeholder="Digite aqui...">
+            <button class="btn-success" onclick="step3_confirm()" id="btn3">
+                ✅ Confirmar
+            </button>
+            <div id="step3Status"></div>
+        </div>
+
+        <!-- Step 4: Cooling Period -->
+        <div class="step" id="step4" style="opacity: 0.5; pointer-events: none;">
+            <h3>⏱️ Passo 4: Período de Reflexão</h3>
+            <p>Aguarde 10 segundos para refletir sobre esta decisão...</p>
+            <div id="countdown">10</div>
+            <p style="text-align: center; color: #6c757d;">
+                Este tempo permite que reconsidere sua decisão.
+            </p>
+            <div id="step4Status"></div>
+        </div>
+
+        <!-- Step 5: Confirmação Final -->
+        <div class="step" id="step5" style="opacity: 0.5; pointer-events: none;">
+            <h3>✋ Passo 5: Confirmação Final</h3>
+            <p style="font-size: 1.1em; color: #dc3545; font-weight: bold;">
+                TEM ABSOLUTA CERTEZA que deseja apagar PERMANENTEMENTE todas as suas respostas?
+            </p>
+            <p>Esta é a última oportunidade para cancelar!</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn-danger" onclick="step5_finalDelete()" id="btn5">
+                    🗑️ SIM, APAGAR TUDO AGORA
+                </button>
+                <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
+                    ❌ NÃO, CANCELAR
+                </button>
+            </div>
+            <div id="step5Status"></div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: #e7f3ff; border-radius: 10px;">
+            <h3>💡 Alternativas ao Reset Completo</h3>
+            <p>Sabia que pode:</p>
+            <ul>
+                <li>✏️ Editar respostas individuais (sem apagar tudo)</li>
+                <li>🔄 Refazer apenas um pack específico</li>
+                <li>📊 Exportar respostas antes de apagar</li>
+            </ul>
+            <button class="btn-secondary" onclick="window.location.href='dashboard.html'">
+                🏠 Voltar ao Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    
+    <script>
+        let currentUser = null;
+        let steps = {
+            backup: false,
+            reauth: false,
+            confirm: false,
+            cooling: false,
+            final: false
+        };
+
+        // Verificar autenticação
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                alert('❌ Não está autenticado! Redirecionando...');
+                window.location.href = 'auth.html';
+            }
+            currentUser = user;
+        });
+
+        function updateProgress() {
+            const completed = Object.values(steps).filter(v => v).length;
+            const percentage = (completed / 5) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${completed}/5`;
+        }
+
+        function enableStep(stepNum) {
+            const step = document.getElementById(`step${stepNum}`);
+            step.style.opacity = '1';
+            step.style.pointerEvents = 'auto';
+            step.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function completeStep(stepNum) {
+            const step = document.getElementById(`step${stepNum}`);
+            step.classList.add('completed');
+        }
+
+        // STEP 1: Backup Automático
+        async function step1_backup() {
+            const btn = document.getElementById('btn1');
+            const status = document.getElementById('step1Status');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ A criar backup...';
+            
+            try {
+                // Buscar respostas do Firebase
+                const answersDoc = await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('answers')
+                    .doc('all')
+                    .get();
+
+                if (!answersDoc.exists) {
+                    status.innerHTML = '<p style="color: #ffc107;">⚠️ Nenhuma resposta encontrada para fazer backup.</p>';
+                    steps.backup = true;
+                    updateProgress();
+                    completeStep(1);
+                    enableStep(2);
+                    return;
+                }
+
+                const data = answersDoc.data();
+                
+                // Criar blob e fazer download
+                const blob = new Blob([JSON.stringify(data, null, 2)], {
+                    type: 'application/json'
+                });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `Quest4Couple_BACKUP_${Date.now()}.json`;
+                a.click();
+
+                status.innerHTML = '<p style="color: #28a745;">✅ Backup criado e baixado com sucesso!</p>';
+                steps.backup = true;
+                updateProgress();
+                completeStep(1);
+                
+                setTimeout(() => enableStep(2), 500);
+                
+            } catch (error) {
+                status.innerHTML = `<p style="color: #dc3545;">❌ Erro: ${error.message}</p>`;
+                btn.disabled = false;
+                btn.textContent = '💾 Tentar Novamente';
+            }
+        }
+
+        // STEP 2: Re-autenticação
+        async function step2_reauth() {
+            const btn = document.getElementById('btn2');
+            const status = document.getElementById('step2Status');
+            const password = document.getElementById('passwordInput').value;
+            
+            if (!password) {
+                status.innerHTML = '<p style="color: #dc3545;">❌ Por favor, introduza sua password</p>';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ A verificar...';
+            
+            try {
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    currentUser.email,
+                    password
+                );
+                
+                await currentUser.reauthenticateWithCredential(credential);
+                
+                status.innerHTML = '<p style="color: #28a745;">✅ Password verificada com sucesso!</p>';
+                steps.reauth = true;
+                updateProgress();
+                completeStep(2);
+                
+                setTimeout(() => enableStep(3), 500);
+                
+            } catch (error) {
+                status.innerHTML = '<p style="color: #dc3545;">❌ Password incorreta! Tente novamente.</p>';
+                btn.disabled = false;
+                btn.textContent = '✅ Verificar Password';
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        // STEP 3: Confirmação de Texto
+        function step3_confirm() {
+            const status = document.getElementById('step3Status');
+            const text = document.getElementById('confirmText').value;
+            
+            if (text !== 'APAGAR TUDO PERMANENTEMENTE') {
+                status.innerHTML = '<p style="color: #dc3545;">❌ Texto incorreto! Digite exatamente como mostrado.</p>';
+                return;
+            }
+            
+            status.innerHTML = '<p style="color: #28a745;">✅ Confirmação aceite!</p>';
+            steps.confirm = true;
+            updateProgress();
+            completeStep(3);
+            
+            setTimeout(() => {
+                enableStep(4);
+                startCountdown();
+            }, 500);
+        }
+
+        // STEP 4: Countdown
+        function startCountdown() {
+            let seconds = 10;
+            const countdownDiv = document.getElementById('countdown');
+            
+            const interval = setInterval(() => {
+                seconds--;
+                countdownDiv.textContent = seconds;
+                
+                if (seconds === 0) {
+                    clearInterval(interval);
+                    countdownDiv.textContent = '✅';
+                    document.getElementById('step4Status').innerHTML = 
+                        '<p style="color: #28a745;">✅ Período de reflexão completo</p>';
+                    steps.cooling = true;
+                    updateProgress();
+                    completeStep(4);
+                    
+                    setTimeout(() => enableStep(5), 500);
+                }
+            }, 1000);
+        }
+
+        // STEP 5: Delete Final
+        async function step5_finalDelete() {
+            const btn = document.getElementById('btn5');
+            const status = document.getElementById('step5Status');
+            
+            btn.disabled = true;
+            btn.textContent = '⏳ A apagar...';
+            
+            try {
+                // Audit log ANTES de apagar
+                await db.collection('audit_log').add({
+                    action: 'DELETE_ALL_ANSWERS',
+                    userId: currentUser.uid,
+                    email: currentUser.email,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    userAgent: navigator.userAgent,
+                    steps_completed: Object.keys(steps).filter(k => steps[k]).length
+                });
+
+                // Apagar respostas
+                await db.collection('users')
+                    .doc(currentUser.uid)
+                    .collection('answers')
+                    .doc('all')
+                    .delete();
+
+                // Apagar progresso
+                const progressRef = db.collection('users').doc(currentUser.uid).collection('progress');
+                const progressSnapshot = await progressRef.get();
+                const batch = db.batch();
+                progressSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+                await batch.commit();
+
+                // Limpar localStorage
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && (key.includes('answers') || key.includes('comments') || key.includes('progress'))) {
+                        keysToRemove.push(key);
+                    }
+                }
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+
+                status.innerHTML = '<p style="color: #28a745; font-size: 1.2em;">✅ Respostas apagadas com sucesso!</p>';
+                steps.final = true;
+                updateProgress();
+                completeStep(5);
+
+                setTimeout(() => {
+                    alert('✅ Reset concluído! Redirecionando...');
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+
+            } catch (error) {
+                status.innerHTML = `<p style="color: #dc3545;">❌ Erro: ${error.message}</p>`;
+                btn.disabled = false;
+                btn.textContent = '🗑️ Tentar Novamente';
+            }
+        }
+
+        // Log de acesso
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    await db.collection('audit_log').add({
+                        action: 'ACCESSED_RESET_PAGE',
+                        userId: user.uid,
+                        email: user.email,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        userAgent: navigator.userAgent
+                    });
+                } catch (e) {
+                    console.error('Erro ao registar acesso:', e);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -2,6 +2,28 @@
    QUEST4COUPLE - AUTH UI LOGIC
    ============================================ */
 
+// Verificar se estamos na página de autenticação
+// Se não existirem elementos essenciais, não executar o resto do código
+const loginTab = document.querySelector('[data-tab="login"]');
+const signupTab = document.querySelector('[data-tab="signup"]');
+
+// Se não estivermos na página de auth, sair
+if (!loginTab && !signupTab) {
+  console.log('⚠️ auth-ui.js: Não estamos na página de autenticação, ignorando...');
+} else {
+
+// Importar funções do auth.js (já carregado antes deste script)
+const signUpWithEmail = window.authFunctions?.signUpWithEmail;
+const signInWithEmail = window.authFunctions?.signInWithEmail;
+const signInWithGoogle = window.authFunctions?.signInWithGoogle;
+const resetPassword = window.authFunctions?.resetPassword;
+const updateUserData = window.authFunctions?.updateUserData;
+
+// Verificar se as funções foram importadas
+if (!signUpWithEmail || !signInWithEmail) {
+  console.error('❌ Erro: Funções de autenticação não encontradas! Verifique se auth.js foi carregado antes de auth-ui.js');
+}
+
 // ========================================
 // GLOBAL VARIABLES
 // ========================================
@@ -10,8 +32,6 @@ let pendingUserForLocation = null;
 // ========================================
 // DOM ELEMENTS
 // ========================================
-const loginTab = document.querySelector('[data-tab="login"]');
-const signupTab = document.querySelector('[data-tab="signup"]');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
 const loadingOverlay = document.getElementById('loadingOverlay');
@@ -22,9 +42,9 @@ const googleSignupBtn = document.getElementById('googleSignupBtn');
 const emailLoginForm = document.getElementById('emailLoginForm');
 const emailSignupForm = document.getElementById('emailSignupForm');
 const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-const resetPasswordForm = document.getElementById('resetPasswordForm');
-const cancelResetBtn = document.getElementById('cancelResetBtn');
-const resetPasswordFormElement = document.getElementById('resetPasswordFormElement');
+const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+const backToLoginBtn = document.getElementById('backToLoginBtn');
+const resetPasswordFormElement = document.getElementById('resetPasswordForm');
 
 // Messages
 let currentMessageTimeout = null;
@@ -53,9 +73,8 @@ function switchTab(tab) {
     signupForm.classList.add('active');
     loginForm.classList.remove('active');
   }
-
   // Hide reset password form
-  resetPasswordForm.classList.remove('active');
+  forgotPasswordForm.classList.remove('active');
   clearMessages();
 }
 
@@ -156,49 +175,11 @@ googleSignupBtn.addEventListener('click', async () => {
 });
 
 // ========================================
-// EMAIL/PASSWORD AUTH
-// ========================================
-emailLoginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  console.log('📧 Email login submitted');
-  showLoading();
-  clearMessages();
-
-  try {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-
-    console.log('📧 Calling signInWithEmailPassword...');
-    const result = await signInWithEmailPassword(email, password);
-    console.log('✅ Email login success:', result);
-    // Atualizar lastLogin no Firestore
-    await db.collection('users').doc(result.user.uid).update({
-      lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    // onAuthStateChanged vai redirecionar automaticamente
-  } catch (error) {
-    console.error('❌ Email login error:', error);
-    hideLoading();
-    
-    // Better error messages
-    let errorMsg = error.message;
-    if (error.code === 'auth/popup-closed-by-user') {
-      errorMsg = 'Popup fechado. Tenta novamente.';
-    } else if (error.code === 'auth/unauthorized-domain') {
-      errorMsg = 'Domínio não autorizado. Verifica as configurações do Firebase.';
-    } else if (error.code === 'auth/cancelled-popup-request') {
-      errorMsg = 'Popup cancelado. Tenta novamente.';
-    }
-    
-    showMessage('error', errorMsg);
-  }
-});
-
-// ========================================
 // EMAIL/PASSWORD LOGIN
 // ========================================
 emailLoginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  console.log('📧 Email login submitted');
   
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -213,11 +194,22 @@ emailLoginForm.addEventListener('submit', async (e) => {
   clearMessages();
 
   try {
-    await signInWithEmail(email, password);
-    // onAuthStateChanged vai redirecionar automaticamente
-  } catch (error) {
+    const result = await signInWithEmail(email, password);
+    
+    if (result.success) {
+      console.log('✅ Email login success:', result);
+      // Atualizar lastLogin no Firestore
+      await db.collection('users').doc(result.user.uid).update({
+        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      // onAuthStateChanged vai redirecionar automaticamente
+    } else {
+      hideLoading();
+      showMessage('error', result.error || 'Erro no login.');
+    }  } catch (error) {
+    console.error('❌ Email login error:', error);
     hideLoading();
-    showMessage('error', error.message);
+    showMessage('error', error.message || 'Erro no login.');
   }
 });
 
@@ -231,6 +223,7 @@ emailSignupForm.addEventListener('submit', async (e) => {
   const username = document.getElementById('signupUsername').value.trim().toLowerCase();
   const email = document.getElementById('signupEmail').value.trim();
   const password = document.getElementById('signupPassword').value;
+  const confirmPassword = document.getElementById('signupConfirmPassword').value;
   const gender = document.getElementById('signupGender').value;
   const ageRange = document.getElementById('signupAgeRange').value;
   const countrySelect = document.getElementById('signupCountry');
@@ -265,16 +258,28 @@ emailSignupForm.addEventListener('submit', async (e) => {
     return;
   }
 
+  if (password !== confirmPassword) {
+    showMessage('error', 'As passwords não coincidem.');
+    return;
+  }
+
   showLoading();
   clearMessages();
 
   try {
     // Verificar se o username já existe
-    const usernameCheck = await db.collection('users').where('username', '==', username).limit(1).get();
-    if (!usernameCheck.empty) {
-      hideLoading();
-      showMessage('error', `Username "@${username}" já está em uso. Por favor escolhe outro.`);
-      return;
+    // NOTA: Esta verificação só funciona se o utilizador já estiver autenticado
+    // Se der erro de permissões, ignoramos e deixamos o servidor validar depois
+    try {
+      const usernameCheck = await db.collection('users').where('username', '==', username).limit(1).get();
+      if (!usernameCheck.empty) {
+        hideLoading();
+        showMessage('error', `Username "@${username}" já está em uso. Por favor escolhe outro.`);
+        return;
+      }
+    } catch (usernameError) {
+      console.warn('⚠️ Não foi possível verificar username (utilizador não autenticado):', usernameError.message);
+      // Continuar - a verificação será feita depois de criar a conta
     }
     
     const additionalData = {
@@ -286,57 +291,68 @@ emailSignupForm.addEventListener('submit', async (e) => {
       city
     };
     
-    await signUpWithEmail(email, password, name, additionalData);
-    // onAuthStateChanged vai redirecionar automaticamente
+    console.log('📧 Chamando signUpWithEmail...');
+    const result = await signUpWithEmail(email, password, name, additionalData);
+    
+    if (result.success) {
+      console.log('✅ Conta criada com sucesso, aguardando redirecionamento...');
+      // onAuthStateChanged vai redirecionar automaticamente
+    } else {
+      hideLoading();
+      showMessage('error', result.error || 'Erro ao criar conta.');
+    }
   } catch (error) {
+    console.error('❌ Erro no signup:', error);
     hideLoading();
-    showMessage('error', error.message);
+    showMessage('error', error.message || 'Erro ao criar conta.');
   }
 });
 
 // ========================================
 // FORGOT PASSWORD
 // ========================================
-forgotPasswordLink.addEventListener('click', (e) => {
-  e.preventDefault();
-  resetPasswordForm.classList.add('active');
+forgotPasswordLink.addEventListener('click', (e) => {  e.preventDefault();  forgotPasswordForm.classList.add('active');
   clearMessages();
 });
 
-cancelResetBtn.addEventListener('click', () => {
-  resetPasswordForm.classList.remove('active');
-  document.getElementById('resetEmail').value = '';
-  clearMessages();
-});
+if (backToLoginBtn) {
+  backToLoginBtn.addEventListener('click', () => {
+    forgotPasswordForm.classList.remove('active');
+    document.getElementById('resetEmail').value = '';
+    clearMessages();
+  });
+}
 
-resetPasswordFormElement.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const email = document.getElementById('resetEmail').value.trim();
-
-  if (!email) {
-    showMessage('error', 'Por favor insere o teu email.');
-    return;
-  }
-
-  showLoading();
-  clearMessages();
-
-  try {
-    await resetPassword(email);
-    hideLoading();
-    showMessage('success', 'Email de recuperação enviado! Verifica a tua caixa de entrada.');
+if (resetPasswordFormElement) {
+  resetPasswordFormElement.addEventListener('submit', async (e) => {
+    e.preventDefault();
     
-    // Reset form e esconder após 3 segundos
-    setTimeout(() => {
-      resetPasswordForm.classList.remove('active');
-      document.getElementById('resetEmail').value = '';
-    }, 3000);
-  } catch (error) {
-    hideLoading();
-    showMessage('error', error.message);
-  }
-});
+    const email = document.getElementById('resetEmail').value.trim();
+
+    if (!email) {
+      showMessage('error', 'Por favor insere o teu email.');
+      return;
+    }
+
+    showLoading();
+    clearMessages();
+
+    try {
+      await resetPassword(email);
+      hideLoading();
+      showMessage('success', 'Email de recuperação enviado! Verifica a tua caixa de entrada.');
+      
+      // Reset form e esconder após 3 segundos
+      setTimeout(() => {
+        forgotPasswordForm.classList.remove('active');
+        document.getElementById('resetEmail').value = '';
+      }, 3000);
+    } catch (error) {
+      hideLoading();
+      showMessage('error', error.message);
+    }
+  });
+}
 
 // ========================================
 // LOCATION MODAL (Google/Reddit Signup)
@@ -639,3 +655,5 @@ document.addEventListener('keydown', (e) => {
 });
 
 console.log('✅ Auth UI inicializada');
+
+} // Fim do else (estamos na página de auth)

@@ -197,6 +197,10 @@ async function initDashboard(user) {
     userConnections = await loadUserConnections(user.uid);
     console.log('✅ Conexões carregadas:', userConnections.length);
     
+    // Load pending connection requests
+    console.log('📥 Carregando pedidos de conexão...');
+    await loadAndRenderConnectionRequests(user.uid);
+    
     // Render everything
     console.log('🎨 Renderizando interface...');
     renderStats();
@@ -424,6 +428,9 @@ function renderConnections() {
           Partilhar
         </button>
         ${connection.report ? '<button class="btn-secondary" onclick="viewReport(\'' + connection.id + '\')">Ver Relatório</button>' : ''}
+        <button class="btn-danger" onclick="deleteConnection('${connection.id}', '${partner.name || 'Utilizador'}')" title="Remover conexão">
+          🗑️
+        </button>
       </div>
     `;
 
@@ -552,23 +559,48 @@ async function searchUser(searchText) {
           searchResults.innerHTML = '<p style="text-align: center; color: #999;">Já estás conectado com este utilizador ✅</p>';
         }
       } else {
+        // Check if there's already a pending request
+        const pendingRequest = await db.collection('connection_requests')
+          .where('fromUserId', '==', auth.currentUser.uid)
+          .where('toUserId', '==', userId)
+          .where('status', '==', 'pending')
+          .limit(1)
+          .get();
+        
         const initials = userData.name ? userData.name.substring(0, 2).toUpperCase() : '??';
         
-        if (searchResults) {
-          searchResults.innerHTML = `
-            <div class="user-result">
-              <div class="user-result-info">
-                <div class="user-result-avatar">${initials}</div>
-                <div>
-                  <h4>${userData.name || 'Utilizador'}</h4>
-                  <p style="color: #666; font-size: 14px;">@${userData.username}</p>
+        if (!pendingRequest.empty) {
+          if (searchResults) {
+            searchResults.innerHTML = `
+              <div class="user-result">
+                <div class="user-result-info">
+                  <div class="user-result-avatar">${initials}</div>
+                  <div>
+                    <h4>${userData.name || 'Utilizador'}</h4>
+                    <p style="color: #666; font-size: 14px;">@${userData.username}</p>
+                  </div>
                 </div>
+                <span style="color: #f59e0b; font-weight: 600;">⏳ Pedido enviado</span>
               </div>
-              <button class="btn-connect" onclick="connectWithUser('${userId}', '${userData.name}')">
-                Conectar
-              </button>
-            </div>
-          `;
+            `;
+          }
+        } else {
+          if (searchResults) {
+            searchResults.innerHTML = `
+              <div class="user-result">
+                <div class="user-result-info">
+                  <div class="user-result-avatar">${initials}</div>
+                  <div>
+                    <h4>${userData.name || 'Utilizador'}</h4>
+                    <p style="color: #666; font-size: 14px;">@${userData.username}</p>
+                  </div>
+                </div>
+                <button class="btn-connect" onclick="sendConnectionRequest('${userId}', '${userData.name}', '${userData.username}')">
+                  📨 Enviar Pedido
+                </button>
+              </div>
+            `;
+          }
         }
       }
     }
@@ -583,37 +615,62 @@ async function searchUser(searchText) {
   }
 }
 
-async function connectWithUser(partnerId, partnerName) {
+// Enviar pedido de conexão (em vez de conectar diretamente)
+async function sendConnectionRequest(partnerId, partnerName, partnerUsername) {
   showLoading();
 
   try {
-    // Create connection
-    await db.collection('connections').add({
-      users: [auth.currentUser.uid, partnerId],
-      sharedPacks: [],
-      report: null,
+    // Obter dados do utilizador atual
+    const currentUserDoc = await db.collection('users').doc(auth.currentUser.uid).get();
+    const currentUserData = currentUserDoc.data();
+    
+    // Criar pedido de conexão
+    await db.collection('connection_requests').add({
+      fromUserId: auth.currentUser.uid,
+      fromUserName: currentUserData.name || 'Utilizador',
+      fromUsername: currentUserData.username || '',
+      toUserId: partnerId,
+      toUserName: partnerName,
+      toUsername: partnerUsername,
+      status: 'pending', // pending, accepted, rejected
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    // Reload connections
-    userConnections = await loadUserConnections(auth.currentUser.uid);
-    renderConnections();
-    renderStats();
-
-    // Close modal
-    addConnectionModal.classList.remove('active');
-
     hideLoading();
-    alert(`✅ Conectado com ${partnerName}!`);
+    
+    // Atualizar a UI
+    if (searchResults) {
+      const initials = partnerName ? partnerName.substring(0, 2).toUpperCase() : '??';
+      searchResults.innerHTML = `
+        <div class="user-result">
+          <div class="user-result-info">
+            <div class="user-result-avatar">${initials}</div>
+            <div>
+              <h4>${partnerName || 'Utilizador'}</h4>
+              <p style="color: #666; font-size: 14px;">@${partnerUsername}</p>
+            </div>
+          </div>
+          <span style="color: #10b981; font-weight: 600;">✅ Pedido enviado!</span>
+        </div>
+      `;
+    }
+    
+    alert(`✅ Pedido de conexão enviado para ${partnerName}!\nEle(a) receberá uma notificação.`);
   } catch (error) {
-    console.error('Erro ao criar conexão:', error);
+    console.error('Erro ao enviar pedido:', error);
     hideLoading();
-    alert('❌ Erro ao conectar. Tenta novamente.');
+    alert('❌ Erro ao enviar pedido. Tenta novamente.');
   }
 }
 
-// Make function global
+// Função legacy para manter compatibilidade (agora redireciona para sendConnectionRequest)
+async function connectWithUser(partnerId, partnerName) {
+  await sendConnectionRequest(partnerId, partnerName, '');
+}
+
+// Make functions global
 window.connectWithUser = connectWithUser;
+window.sendConnectionRequest = sendConnectionRequest;
 
 // ========================================
 // SHARE MODAL
@@ -890,3 +947,270 @@ function hideLoading() {
     loadingOverlay.classList.remove('active');
   }
 }
+
+// ========================================
+// CONNECTION REQUESTS (Pedidos de Conexão)
+// ========================================
+
+// Carregar e renderizar pedidos de conexão pendentes
+async function loadAndRenderConnectionRequests(userId) {
+  try {
+    console.log('🔍 Buscando pedidos de conexão para:', userId);
+    
+    // Buscar pedidos recebidos (onde sou o destinatário)
+    // Nota: removido orderBy para evitar problemas com índices
+    const receivedSnapshot = await db.collection('connection_requests')
+      .where('toUserId', '==', userId)
+      .where('status', '==', 'pending')
+      .get();
+    
+    const pendingRequests = [];
+    receivedSnapshot.forEach(doc => {
+      pendingRequests.push({ id: doc.id, ...doc.data() });
+    });
+    
+    // Ordenar manualmente por data (mais recentes primeiro)
+    pendingRequests.sort((a, b) => {
+      const dateA = a.createdAt?.toDate?.() || new Date(0);
+      const dateB = b.createdAt?.toDate?.() || new Date(0);
+      return dateB - dateA;
+    });
+    
+    console.log(`📬 ${pendingRequests.length} pedidos de conexão pendentes`);
+    
+    // Renderizar pedidos se houver
+    renderConnectionRequests(pendingRequests);
+    
+    // Atualizar badge de notificação
+    updateConnectionRequestsBadge(pendingRequests.length);
+    
+    return pendingRequests;
+  } catch (error) {
+    console.error('❌ Erro ao carregar pedidos de conexão:', error);
+    console.error('Código do erro:', error.code);
+    console.error('Mensagem:', error.message);
+    return [];
+  }
+}
+
+// Renderizar pedidos de conexão
+function renderConnectionRequests(requests) {
+  // Criar ou obter container para pedidos
+  let requestsContainer = document.getElementById('connectionRequestsContainer');
+  
+  if (!requestsContainer) {
+    // Criar container se não existir (inserir antes da lista de conexões)
+    const connectionsSection = document.querySelector('.connections-section');
+    if (connectionsSection) {
+      requestsContainer = document.createElement('div');
+      requestsContainer.id = 'connectionRequestsContainer';
+      requestsContainer.className = 'connection-requests-section';
+      connectionsSection.insertBefore(requestsContainer, connectionsSection.firstChild);
+    }
+  }
+  
+  if (!requestsContainer) return;
+  
+  if (requests.length === 0) {
+    requestsContainer.innerHTML = '';
+    requestsContainer.style.display = 'none';
+    return;
+  }
+  
+  requestsContainer.style.display = 'block';
+  
+  let html = `
+    <div class="requests-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+      <span style="font-size: 1.5em;">📬</span>
+      <h3 style="margin: 0; color: #667eea;">Pedidos de Conexão</h3>
+      <span class="badge" style="background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85em;">${requests.length}</span>
+    </div>
+    <div class="requests-list">
+  `;
+  
+  requests.forEach(request => {
+    const initials = request.fromUserName ? request.fromUserName.substring(0, 2).toUpperCase() : '??';
+    const timeAgo = request.createdAt ? getTimeAgo(request.createdAt.toDate()) : 'agora';
+    
+    html += `
+      <div class="request-card" style="background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); border: 2px solid #e0e7ff; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1em;">${initials}</div>
+          <div>
+            <h4 style="margin: 0 0 4px 0; color: #333;">${request.fromUserName || 'Utilizador'}</h4>
+            <p style="margin: 0; color: #666; font-size: 0.9em;">Quer conectar contigo • ${timeAgo}</p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button onclick="acceptConnectionRequest('${request.id}', '${request.fromUserId}', '${(request.fromUserName || 'Utilizador').replace(/'/g, "\\'")}')" style="padding: 10px 20px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+            ✅ Aceitar
+          </button>
+          <button onclick="rejectConnectionRequest('${request.id}', '${(request.fromUserName || 'Utilizador').replace(/'/g, "\\'")}')" style="padding: 10px 20px; background: white; color: #ef4444; border: 2px solid #ef4444; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+            ❌ Recusar
+          </button>
+        </div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  requestsContainer.innerHTML = html;
+}
+
+// Aceitar pedido de conexão
+async function acceptConnectionRequest(requestId, fromUserId, fromUserName) {
+  showLoading();
+  
+  try {
+    // Atualizar status do pedido
+    await db.collection('connection_requests').doc(requestId).update({
+      status: 'accepted',
+      acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Criar conexão com ID previsível (IDs ordenados unidos por underscore)
+    // Isto permite verificar nas regras do Firestore se existe conexão
+    const currentUserId = auth.currentUser.uid;
+    const connectionId = [currentUserId, fromUserId].sort().join('_');
+    
+    await db.collection('connections').doc(connectionId).set({
+      users: [currentUserId, fromUserId],
+      sharedPacks: [],
+      report: null,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Recarregar conexões e pedidos
+    userConnections = await loadUserConnections(auth.currentUser.uid);
+    await loadAndRenderConnectionRequests(auth.currentUser.uid);
+    renderConnections();
+    renderStats();
+    
+    hideLoading();
+    alert(`✅ Conectado com ${fromUserName}!`);
+  } catch (error) {
+    console.error('Erro ao aceitar pedido:', error);
+    hideLoading();
+    alert('❌ Erro ao aceitar pedido. Tenta novamente.');
+  }
+}
+
+// Recusar pedido de conexão
+async function rejectConnectionRequest(requestId, fromUserName) {
+  if (!confirm(`Tens a certeza que queres recusar o pedido de ${fromUserName}?`)) {
+    return;
+  }
+  
+  showLoading();
+  
+  try {
+    // Atualizar status do pedido
+    await db.collection('connection_requests').doc(requestId).update({
+      status: 'rejected',
+      rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Recarregar pedidos
+    await loadAndRenderConnectionRequests(auth.currentUser.uid);
+    
+    hideLoading();
+    alert('Pedido recusado.');
+  } catch (error) {
+    console.error('Erro ao recusar pedido:', error);
+    hideLoading();
+    alert('❌ Erro ao recusar pedido. Tenta novamente.');
+  }
+}
+
+// Atualizar badge de notificação para pedidos
+function updateConnectionRequestsBadge(count) {
+  // Atualizar badge no botão de adicionar conexão
+  const addBtn = document.getElementById('addConnectionBtn');
+  if (!addBtn) return;
+  
+  // Remover badge existente
+  const existingBadge = addBtn.querySelector('.request-badge');
+  if (existingBadge) existingBadge.remove();
+  
+  if (count > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'request-badge';
+    badge.textContent = count > 9 ? '9+' : count;
+    badge.style.cssText = `
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ef4444;
+      color: white;
+      border-radius: 50%;
+      min-width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75em;
+      font-weight: 700;
+      padding: 2px;
+    `;
+    addBtn.style.position = 'relative';
+    addBtn.appendChild(badge);
+  }
+}
+
+// Helper: tempo relativo
+function getTimeAgo(date) {
+  const now = new Date();
+  const diff = now - date;
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(diff / 86400000);
+  
+  if (minutes < 1) return 'agora';
+  if (minutes < 60) return `há ${minutes}m`;
+  if (hours < 24) return `há ${hours}h`;
+  if (days < 7) return `há ${days}d`;
+  return date.toLocaleDateString('pt-PT');
+}
+
+// ========================================
+// ELIMINAR CONEXÃO COM PARCEIRO
+// ========================================
+async function deleteConnection(connectionId, partnerName) {
+  // Primeiro aviso
+  if (!confirm(`Tens a certeza que queres remover a conexão com ${partnerName}?`)) {
+    return;
+  }
+  
+  // Segundo aviso (dupla confirmação)
+  if (!confirm(`⚠️ ATENÇÃO: Ao remover a conexão:\n\n• Vocês deixam de poder ver as respostas um do outro\n• Para se reconectarem, terão de enviar novo pedido\n\nTens a certeza ABSOLUTA que queres remover ${partnerName}?`)) {
+    return;
+  }
+  
+  showLoading();
+  
+  try {
+    // Apagar o documento de conexão
+    await db.collection('connections').doc(connectionId).delete();
+    
+    console.log(`✅ Conexão ${connectionId} eliminada com sucesso`);
+    
+    // Recarregar conexões
+    userConnections = await loadUserConnections(auth.currentUser.uid);
+    renderConnections();
+    renderStats();
+    
+    hideLoading();
+    alert(`✅ Conexão com ${partnerName} removida.`);
+    
+  } catch (error) {
+    console.error('Erro ao eliminar conexão:', error);
+    hideLoading();
+    alert('❌ Erro ao remover conexão. Tenta novamente.');
+  }
+}
+
+// Tornar funções globais
+window.acceptConnectionRequest = acceptConnectionRequest;
+window.rejectConnectionRequest = rejectConnectionRequest;
+window.loadAndRenderConnectionRequests = loadAndRenderConnectionRequests;
+window.deleteConnection = deleteConnection;

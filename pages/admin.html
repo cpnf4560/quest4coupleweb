@@ -825,6 +825,7 @@
                 <th>Cidade</th>
                 <th>Data Registo</th>
                 <th>Último Login</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody id="usersTableBody">
@@ -1025,29 +1026,92 @@
     const adminDashboard = document.getElementById('adminDashboard');
     const errorMessage = document.getElementById('errorMessage');
     const adminLoginForm = document.getElementById('adminLoginForm');
-    
-    // Check if already logged in
+      // Check if already logged in
     const isAdminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
     if (isAdminLoggedIn) {
-      showDashboard();
-    }
-    
-    // Login form handler
-    adminLoginForm.addEventListener('submit', (e) => {
+      // Use setTimeout to allow async execution
+      setTimeout(() => showDashboard(), 0);
+    }    // Login form handler
+    adminLoginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      console.log('🔐 Tentativa de login admin...');
       
       const username = document.getElementById('adminUsername').value.trim();
       const password = document.getElementById('adminPassword').value;
+        console.log('👤 Username/Email inserido:', username);
       
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        sessionStorage.setItem('adminUsername', username);
-        errorMessage.classList.remove('show');
-        showDashboard();
-      } else {
+      // Construir email se necessário (permitir login com username ou email)
+      const email = username.includes('@') ? username : `${username}@quest4couple.com`;
+      
+      console.log('📧 Email para autenticação:', email);
+      
+      try {
+        console.log('🔑 Autenticando com Firebase Auth...');
+        
+        // ✅ Login com Firebase Auth
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        console.log('✅ Utilizador autenticado:', user.email);
+        console.log('🔍 Verificando se é admin...');
+        
+        // Verificar se é admin no Firestore
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        if (userDoc.exists && userDoc.data().isAdmin === true) {
+          console.log('✅ Admin confirmado!');
+          console.log('👤 Admin data:', userDoc.data());
+          
+          sessionStorage.setItem('adminLoggedIn', 'true');
+          sessionStorage.setItem('adminUsername', user.email);
+          errorMessage.classList.remove('show');
+          showDashboard();
+        } else {
+          console.error('❌ Utilizador não é administrador');
+          console.log('📄 User data:', userDoc.exists ? userDoc.data() : 'Document não existe');
+          
+          errorMessage.textContent = 'Acesso negado. Não é administrador.';
+          errorMessage.classList.add('show');
+          
+          await auth.signOut(); // Logout
+          document.getElementById('adminPassword').value = '';
+          setTimeout(() => {
+            errorMessage.classList.remove('show');
+            errorMessage.textContent = 'Credenciais inválidas';
+          }, 3000);
+        }
+      } catch (error) {
+        console.error('❌ Erro no login admin:', error);
+        console.error('❌ Error code:', error.code);
+        console.error('❌ Error message:', error.message);
+        
+        let errorMsg = 'Erro no login';
+        
+        switch(error.code) {
+          case 'auth/user-not-found':
+            errorMsg = 'Utilizador não encontrado';
+            break;
+          case 'auth/wrong-password':
+            errorMsg = 'Password incorreta';
+            break;
+          case 'auth/invalid-email':
+            errorMsg = 'Email inválido';
+            break;
+          case 'auth/too-many-requests':
+            errorMsg = 'Demasiadas tentativas. Aguarde alguns minutos.';
+            break;
+          default:
+            errorMsg = error.message;
+        }
+        
+        errorMessage.textContent = errorMsg;
         errorMessage.classList.add('show');
         document.getElementById('adminPassword').value = '';
-        setTimeout(() => errorMessage.classList.remove('show'), 3000);
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+          errorMessage.textContent = 'Credenciais inválidas';
+        }, 3000);
       }
     });
     
@@ -1055,6 +1119,24 @@
     // DASHBOARD FUNCTIONS
     // ===========================
     function showDashboard() {
+      console.log('📊 A mostrar dashboard...');
+      
+      // Verificar se Firebase está disponível
+      if (typeof firebase === 'undefined') {
+        console.error('❌ Firebase não está carregado!');
+        alert('Erro: Firebase não está disponível. Por favor recarregue a página.');
+        return;
+      }
+      
+      if (typeof db === 'undefined') {
+        console.error('❌ Firestore (db) não está disponível!');
+        alert('Erro: Base de dados não está disponível. Por favor recarregue a página.');
+        return;
+      }
+      
+      console.log('✅ Firebase carregado:', firebase);
+      console.log('✅ Firestore disponível:', db);
+      
       loginContainer.style.display = 'none';
       adminDashboard.style.display = 'block';
       document.body.style.alignItems = 'flex-start';
@@ -1064,13 +1146,13 @@
       
       loadAllData();
     }
-    
-    function logout() {
+      function logout() {
       sessionStorage.removeItem('adminLoggedIn');
       sessionStorage.removeItem('adminUsername');
       window.location.reload();
     }
-      // ===========================
+    
+    // ===========================
     // TAB NAVIGATION
     // ===========================
     function showTab(tabName) {
@@ -1116,8 +1198,7 @@
     }
     
     function resetFullReportFilters() {
-      document.getElementById('filterReportPeriod').value = '';
-      document.getElementById('filterReportCompat').value = '';
+      document.getElementById('filterReportPeriod').value = '';      document.getElementById('filterReportCompat').value = '';
       loadFullReportsWithFilters();
     }
     
@@ -1145,18 +1226,21 @@
     // ===========================
     async function loadAllData() {
       try {
-        console.log('🔄 A carregar dados...');
+        console.log('🔄 A carregar dados do Firebase...');
+        console.log('📦 Firestore instance:', db);
         
         // Load users
+        console.log('👥 A buscar utilizadores...');
         const usersSnapshot = await db.collection('users').get();
+        console.log('✅ Snapshot recebido:', usersSnapshot.size, 'utilizadores');
         allUsers = [];
         
         usersSnapshot.forEach(doc => {
           allUsers.push({ id: doc.id, ...doc.data() });
         });
+          console.log('✅ Utilizadores carregados:', allUsers.length);
         
-        console.log('✅ Utilizadores carregados:', allUsers.length);
-          // Update dashboard stats
+        // Update dashboard stats
         updateDashboardStats();
         
         // Load users table
@@ -1172,8 +1256,29 @@
         loadActivityLog();
         
       } catch (error) {
-        console.error('❌ Erro ao carregar dados:', error);
-        alert('Erro ao carregar dados: ' + error.message);
+        console.error('❌ ERRO CRÍTICO ao carregar dados:', error);
+        console.error('📋 Stack trace:', error.stack);
+        
+        // Mostrar erro detalhado
+        const errorDetails = `
+❌ ERRO AO CARREGAR DADOS DO ADMIN
+
+Tipo: ${error.name}
+Mensagem: ${error.message}
+
+Por favor:
+1. Verifique a consola do browser (F12)
+2. Verifique se o Firebase está configurado
+3. Verifique a conexão à internet
+
+Detalhes técnicos:
+${error.stack || 'Sem stack trace'}
+        `;
+        
+        alert(errorDetails);
+        
+        // Fazer logout para evitar problemas
+        logout();
       }
     }
     
@@ -1234,7 +1339,7 @@
       });
       
       if (allUsers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum utilizador encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum utilizador encontrado.</td></tr>';
       } else {
         allUsers.forEach(user => {
           const row = createUserRow(user);
@@ -1274,6 +1379,15 @@
         <td>${user.city || '-'}</td>
         <td>${createdStr}</td>
         <td>${loginStr}</td>
+        <td>
+          <button onclick="deleteUser('${user.id}', '${user.email}')" 
+                  style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s;"
+                  onmouseover="this.style.background='#c82333'" 
+                  onmouseout="this.style.background='#dc3545'"
+                  title="Eliminar utilizador">
+            🗑️ Eliminar
+          </button>
+        </td>
       `;
       
       return tr;
@@ -1317,6 +1431,94 @@
     }
     
     // ===========================
+    // DELETE USER
+    // ===========================
+    async function deleteUser(userId, userEmail) {
+      // Confirmação dupla para segurança
+      if (!confirm(`⚠️ ATENÇÃO!\n\nTens a certeza que queres eliminar o utilizador:\n${userEmail}\n\nEsta ação é IRREVERSÍVEL!`)) {
+        return;
+      }
+      
+      if (!confirm(`🔴 CONFIRMAÇÃO FINAL\n\nVais eliminar permanentemente:\n${userEmail}\n\nTodos os dados serão perdidos!\n\nContinuar?`)) {
+        return;
+      }
+      
+      try {
+        // Mostrar loading
+        const loadingUsers = document.getElementById('loadingUsers');
+        const tableContainer = document.getElementById('usersTableContainer');
+        if (loadingUsers) loadingUsers.style.display = 'flex';
+        if (tableContainer) tableContainer.style.display = 'none';
+        
+        // Eliminar documento do Firestore
+        await db.collection('users').doc(userId).delete();
+        
+        // Eliminar subcoleções (answers, progress, etc.)
+        try {
+          const answersRef = db.collection('users').doc(userId).collection('answers');
+          const answersSnapshot = await answersRef.get();
+          for (const doc of answersSnapshot.docs) {
+            await doc.ref.delete();
+          }
+        } catch (e) { console.log('Sem respostas para eliminar'); }
+        
+        try {
+          const progressRef = db.collection('users').doc(userId).collection('progress');
+          const progressSnapshot = await progressRef.get();
+          for (const doc of progressSnapshot.docs) {
+            await doc.ref.delete();
+          }
+        } catch (e) { console.log('Sem progresso para eliminar'); }
+        
+        // Eliminar conexões onde o utilizador participa
+        try {
+          const connectionsSnapshot = await db.collection('connections')
+            .where('users', 'array-contains', userId)
+            .get();
+          for (const doc of connectionsSnapshot.docs) {
+            await doc.ref.delete();
+          }
+        } catch (e) { console.log('Sem conexões para eliminar'); }
+        
+        // Eliminar pedidos de conexão
+        try {
+          const requestsFrom = await db.collection('connection_requests')
+            .where('fromUserId', '==', userId)
+            .get();
+          for (const doc of requestsFrom.docs) {
+            await doc.ref.delete();
+          }
+          
+          const requestsTo = await db.collection('connection_requests')
+            .where('toUserId', '==', userId)
+            .get();
+          for (const doc of requestsTo.docs) {
+            await doc.ref.delete();
+          }
+        } catch (e) { console.log('Sem pedidos para eliminar'); }
+        
+        // Atualizar lista local
+        allUsers = allUsers.filter(u => u.id !== userId);
+        
+        // Re-renderizar
+        loadUsersTable();
+        updateDashboardStats();
+        
+        alert(`✅ Utilizador ${userEmail} eliminado com sucesso!`);
+        
+      } catch (error) {
+        console.error('Erro ao eliminar utilizador:', error);
+        alert(`❌ Erro ao eliminar utilizador: ${error.message}`);
+        
+        // Restaurar tabela
+        const loadingUsers = document.getElementById('loadingUsers');
+        const tableContainer = document.getElementById('usersTableContainer');
+        if (loadingUsers) loadingUsers.style.display = 'none';
+        if (tableContainer) tableContainer.style.display = 'block';
+      }
+    }
+    
+    // ===========================
     // REPORTS STATS
     // ===========================
     function loadReportsStats() {
@@ -1354,22 +1556,24 @@
         </div>
       `;
     }
-    
-    // ===========================
+      // ===========================
     // ACTIVITY LOG
     // ===========================
     async function loadActivityLog() {
       const loadingActivity = document.getElementById('loadingActivity');
       const activityLog = document.getElementById('activityLog');
       
-      // Generate mock activity (in real app, fetch from activity collection)
+      console.log('📋 A carregar log de atividade completo...');
+      
       allActivity = [];
       
+      // 1. REGISTOS E LOGINS (de users)
       allUsers.forEach(user => {
         if (user.createdAt) {
           allActivity.push({
             type: 'register',
             user: user.email,
+            userName: user.name || 'Sem nome',
             timestamp: user.createdAt.toDate(),
             details: `Novo registo: ${user.name || 'Sem nome'}`
           });
@@ -1379,17 +1583,122 @@
           allActivity.push({
             type: 'login',
             user: user.email,
+            userName: user.name || 'Sem nome',
             timestamp: user.lastLogin.toDate(),
             details: `Login realizado`
           });
         }
       });
       
+      console.log('✅ Registos e logins carregados:', allActivity.length);
+      
+      // 2. RESPOSTAS (de userAnswers)
+      try {
+        const answersSnapshot = await db.collection('userAnswers').get();
+        console.log('📝 Documentos de respostas encontrados:', answersSnapshot.size);
+        
+        answersSnapshot.forEach(doc => {
+          const data = doc.data();
+          const userId = doc.id;
+          const user = allUsers.find(u => u.id === userId);
+          const userEmail = user?.email || userId;
+          const userName = user?.name || 'Utilizador desconhecido';
+          
+          // Contar respostas por pack
+          Object.keys(data).forEach(packId => {
+            if (typeof data[packId] === 'object' && data[packId] !== null) {
+              const answers = data[packId];
+              const answerCount = Object.keys(answers).length;
+              
+              if (answerCount > 0) {
+                // Usar updatedAt se existir, senão usar createdAt do user
+                const timestamp = data.updatedAt?.toDate() || user?.createdAt?.toDate() || new Date();
+                
+                allActivity.push({
+                  type: 'answer',
+                  user: userEmail,
+                  userName: userName,
+                  timestamp: timestamp,
+                  details: `Respondeu a ${answerCount} perguntas do pack "${packId}"`
+                });
+              }
+            }
+          });
+        });
+        
+        console.log('✅ Respostas carregadas. Total atividades:', allActivity.length);
+      } catch (error) {
+        console.error('❌ Erro ao carregar respostas:', error);
+      }
+      
+      // 3. RELATÓRIOS (de partnerConnections com reportViewed)
+      try {
+        const connectionsSnapshot = await db.collection('partnerConnections').get();
+        console.log('📊 Conexões encontradas:', connectionsSnapshot.size);
+        
+        connectionsSnapshot.forEach(doc => {
+          const data = doc.data();
+          
+          if (data.reportViewed) {
+            const user1 = allUsers.find(u => u.id === data.userId);
+            const user2 = allUsers.find(u => u.id === data.partnerId);
+            
+            const user1Name = user1?.name || 'Utilizador 1';
+            const user2Name = user2?.name || 'Utilizador 2';
+            const user1Email = user1?.email || data.userId;
+            
+            allActivity.push({
+              type: 'report',
+              user: user1Email,
+              userName: user1Name,
+              timestamp: data.reportViewed.toDate(),
+              details: `Gerou relatório com ${user2Name}`
+            });
+          }
+        });
+        
+        console.log('✅ Relatórios carregados. Total atividades:', allActivity.length);
+      } catch (error) {
+        console.error('❌ Erro ao carregar relatórios:', error);
+      }
+      
+      // 4. CONEXÕES (de partnerConnections com createdAt)
+      try {
+        const connectionsSnapshot = await db.collection('partnerConnections').get();
+        
+        connectionsSnapshot.forEach(doc => {
+          const data = doc.data();
+          
+          if (data.createdAt) {
+            const user1 = allUsers.find(u => u.id === data.userId);
+            const user2 = allUsers.find(u => u.id === data.partnerId);
+            
+            const user1Name = user1?.name || 'Utilizador 1';
+            const user2Name = user2?.name || 'Utilizador 2';
+            const user1Email = user1?.email || data.userId;
+            
+            allActivity.push({
+              type: 'connection',
+              user: user1Email,
+              userName: user1Name,
+              timestamp: data.createdAt.toDate(),
+              details: `Conectou-se com ${user2Name}`
+            });
+          }
+        });
+        
+        console.log('✅ Conexões carregadas. Total atividades:', allActivity.length);
+      } catch (error) {
+        console.error('❌ Erro ao carregar conexões:', error);
+      }
+      
       // Sort by timestamp desc
       allActivity.sort((a, b) => b.timestamp - a.timestamp);
       
-      // Show only last 50
-      const recentActivity = allActivity.slice(0, 50);
+      console.log('📊 Total de atividades:', allActivity.length);
+      
+      // Show only last 100
+      const recentActivity = allActivity.slice(0, 100);
       
       activityLog.innerHTML = '';
       

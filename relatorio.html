@@ -564,6 +564,63 @@
     </div>
     <!-- FIM SECÇÃO CLOUD -->
     
+    <!-- SECÇÃO PEDIDOS DE CONEXÃO (visível só para autenticados) -->
+    <div id="connectionRequestsSection" style="display: none; margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); border-radius: 12px; border: 2px solid #667eea;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+        <span style="font-size: 1.5em;">📬</span>
+        <h3 style="margin: 0; color: #667eea; font-size: 1.2em;">Pedidos de Conexão</h3>
+        <span id="requestsBadge" style="background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">0</span>
+      </div>
+      <div id="connectionRequestsList" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Pedidos serão carregados aqui -->
+        <p style="text-align: center; color: #999; padding: 15px;">Carregando pedidos...</p>
+      </div>
+    </div>
+    
+    <!-- SECÇÃO CONEXÕES (visível só para autenticados) -->
+    <div id="connectionsSection" style="display: none; margin-top: 25px; padding: 20px; background: white; border-radius: 12px; border: 1px solid #e9ecef;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+        <h3 style="margin: 0; color: #495057; font-size: 1.2em;">👥 As tuas Conexões</h3>
+        <button onclick="openAddConnectionModal()" style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;">
+          + Adicionar Parceiro
+        </button>
+      </div>
+      <div id="connectionsList" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Conexões serão carregadas aqui -->
+        <p style="text-align: center; color: #999; padding: 15px;">Carregando conexões...</p>
+      </div>
+    </div>
+    
+    <!-- Add Connection Modal -->
+    <div id="addConnectionModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+      <div style="background: white; padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="margin: 0; color: #495057;">Adicionar Parceiro</h3>
+          <button onclick="closeAddConnectionModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+          <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 O teu username:</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
+            <button type="button" onclick="copyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">📋</button>
+          </div>
+        </div>
+        
+        <p style="font-weight: 500; margin-bottom: 10px;">🔍 Procura pelo username do parceiro:</p>
+        <form onsubmit="searchPartnerUser(event)">
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="searchUsername" placeholder="@username" required style="flex: 1; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em;">
+            <button type="submit" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Procurar</button>
+          </div>
+        </form>
+        
+        <div id="searchResults" style="margin-top: 15px;">
+          <!-- Resultados da pesquisa -->
+        </div>
+      </div>
+    </div>
+    
     <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #17a2b8;">
       <div style="font-weight: 700; margin-bottom: 10px; color: #0c5460;">💡 Como funciona:</div>
       <ol style="margin: 10px 0 0 20px; line-height: 1.8; color: #6c757d;">
@@ -657,10 +714,12 @@
   window.addEventListener('DOMContentLoaded', () => {
     // Listener para mudanças no estado de autenticação
     if (typeof auth !== 'undefined') {
-      auth.onAuthStateChanged((user) => {
+      auth.onAuthStateChanged(async (user) => {
         // Controlar secção cloud
         const cloudNotAuth = document.getElementById('cloudNotAuth');
         const cloudAuth = document.getElementById('cloudAuth');
+        const connectionsSection = document.getElementById('connectionsSection');
+        const connectionRequestsSection = document.getElementById('connectionRequestsSection');
         
         // Controlar header
         const currentUserName = document.getElementById('currentUserName');
@@ -672,16 +731,24 @@
           console.log('✅ User autenticado em relatorio.html:', user.email);
           if (cloudNotAuth) cloudNotAuth.style.display = 'none';
           if (cloudAuth) cloudAuth.style.display = 'block';
+          if (connectionsSection) connectionsSection.style.display = 'block';
           
           // Atualizar header
           if (currentUserName) currentUserName.textContent = user.displayName || user.email.split('@')[0];
           if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
           if (logoutBtn) logoutBtn.style.display = 'inline-block';
+          
+          // Carregar conexões, pedidos e username
+          await loadUserConnections(user.uid);
+          await loadConnectionRequests(user.uid);
+          await loadMyUsername(user.uid);
         } else {
           // User não autenticado - mostrar botão de login
           console.log('❌ User não autenticado em relatorio.html');
           if (cloudNotAuth) cloudNotAuth.style.display = 'block';
           if (cloudAuth) cloudAuth.style.display = 'none';
+          if (connectionsSection) connectionsSection.style.display = 'none';
+          if (connectionRequestsSection) connectionRequestsSection.style.display = 'none';
           
           // Atualizar header
           if (currentUserName) currentUserName.textContent = 'Visitante';
@@ -691,6 +758,387 @@
       });
     }
   });
+  
+  // ========================================
+  // FUNÇÕES DE CONEXÕES
+  // ========================================
+  
+  let currentUserUsername = '';
+  
+  // ========================================
+  // PEDIDOS DE CONEXÃO
+  // ========================================
+  
+  async function loadConnectionRequests(userId) {
+    const requestsSection = document.getElementById('connectionRequestsSection');
+    const requestsList = document.getElementById('connectionRequestsList');
+    const badge = document.getElementById('requestsBadge');
+    
+    if (!requestsList) return;
+    
+    try {
+      console.log('🔍 Buscando pedidos de conexão para:', userId);
+      
+      // Buscar pedidos pendentes onde sou o destinatário
+      // Nota: removido orderBy para evitar problemas com índices
+      const snapshot = await db.collection('connection_requests')
+        .where('toUserId', '==', userId)
+        .where('status', '==', 'pending')
+        .get();
+      
+      const requests = [];
+      snapshot.forEach(doc => {
+        requests.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Ordenar manualmente por data (mais recentes primeiro)
+      requests.sort((a, b) => {
+        const dateA = a.createdAt?.toDate?.() || new Date(0);
+        const dateB = b.createdAt?.toDate?.() || new Date(0);
+        return dateB - dateA;
+      });
+      
+      console.log(`📬 ${requests.length} pedidos de conexão pendentes`);
+      
+      // Atualizar badge
+      if (badge) badge.textContent = requests.length;
+      
+      // Mostrar/esconder secção
+      if (requestsSection) {
+        requestsSection.style.display = requests.length > 0 ? 'block' : 'none';
+      }
+      
+      if (requests.length === 0) {
+        requestsList.innerHTML = '<p style="text-align: center; color: #999; padding: 10px;">Nenhum pedido pendente</p>';
+        return;
+      }
+      
+      // Renderizar pedidos
+      let html = '';
+      requests.forEach(request => {
+        const initials = request.fromUserName ? request.fromUserName.substring(0, 2).toUpperCase() : '??';
+        const timeAgo = request.createdAt ? getTimeAgo(request.createdAt.toDate()) : 'agora';
+        
+        html += `
+          <div style="background: white; border: 1px solid #e0e7ff; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 45px; height: 45px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">${initials}</div>
+              <div>
+                <strong style="color: #333;">${request.fromUserName}</strong>
+                <p style="margin: 0; color: #666; font-size: 0.85em;">${timeAgo}</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="acceptRequest('${request.id}', '${request.fromUserId}', '${request.fromUserName.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                ✅ Aceitar
+              </button>
+              <button onclick="rejectRequest('${request.id}', '${request.fromUserName.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: white; color: #ef4444; border: 2px solid #ef4444; border-radius: 6px; font-weight: 600; cursor: pointer;">
+                ❌
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      
+      requestsList.innerHTML = html;
+      
+    } catch (error) {
+      console.error('Erro ao carregar pedidos:', error);
+      if (requestsSection) requestsSection.style.display = 'none';
+    }
+  }
+  
+  // Aceitar pedido de conexão
+  async function acceptRequest(requestId, fromUserId, fromUserName) {
+    try {
+      // Atualizar status do pedido
+      await db.collection('connection_requests').doc(requestId).update({
+        status: 'accepted',
+        acceptedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      // Criar conexão com ID previsível
+      const currentUserId = auth.currentUser.uid;
+      const connectionId = [currentUserId, fromUserId].sort().join('_');
+      
+      await db.collection('connections').doc(connectionId).set({
+        users: [currentUserId, fromUserId],
+        sharedPacks: [],
+        report: null,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      // Recarregar dados
+      await loadConnectionRequests(currentUserId);
+      await loadUserConnections(currentUserId);
+      
+      // Atualizar dropdown de parceiros
+      if (typeof loadConnectedPartners === 'function') {
+        await loadConnectedPartners(currentUserId);
+      }
+      
+      alert(`✅ Conectado com ${fromUserName}!`);
+      
+    } catch (error) {
+      console.error('Erro ao aceitar pedido:', error);
+      alert('❌ Erro ao aceitar pedido. Tenta novamente.');
+    }
+  }
+  
+  // Recusar pedido de conexão
+  async function rejectRequest(requestId, fromUserName) {
+    if (!confirm(`Tens a certeza que queres recusar o pedido de ${fromUserName}?`)) {
+      return;
+    }
+    
+    try {
+      await db.collection('connection_requests').doc(requestId).update({
+        status: 'rejected',
+        rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      await loadConnectionRequests(auth.currentUser.uid);
+      alert('Pedido recusado.');
+      
+    } catch (error) {
+      console.error('Erro ao recusar pedido:', error);
+      alert('❌ Erro ao recusar pedido. Tenta novamente.');
+    }
+  }
+  
+  // Helper: tempo relativo
+  function getTimeAgo(date) {
+    if (!date) return 'agora';
+    const now = new Date();
+    const diff = now - date;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'agora';
+    if (minutes < 60) return `há ${minutes}m`;
+    if (hours < 24) return `há ${hours}h`;
+    if (days < 7) return `há ${days}d`;
+    return date.toLocaleDateString('pt-PT');
+  }
+  
+  async function loadMyUsername(userId) {
+    try {
+      const userDoc = await db.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        currentUserUsername = userDoc.data().username || '';
+        const display = document.getElementById('myUsernameDisplay');
+        if (display) {
+          display.textContent = currentUserUsername ? `@${currentUserUsername}` : '(sem username)';
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar username:', error);
+    }
+  }
+  
+  async function loadUserConnections(userId) {
+    const connectionsList = document.getElementById('connectionsList');
+    if (!connectionsList) return;
+    
+    try {
+      const connectionsSnapshot = await db.collection('connections')
+        .where('users', 'array-contains', userId)
+        .get();
+      
+      if (connectionsSnapshot.empty) {
+        connectionsList.innerHTML = `
+          <div style="text-align: center; padding: 20px; color: #6c757d;">
+            <div style="font-size: 2em; margin-bottom: 10px;">💑</div>
+            <p style="margin: 0;">Nenhuma conexão ainda. Adiciona o teu parceiro!</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = '';
+      for (const doc of connectionsSnapshot.docs) {
+        const connection = doc.data();
+        const partnerId = connection.users.find(id => id !== userId);
+        
+        if (partnerId) {
+          const partnerDoc = await db.collection('users').doc(partnerId).get();
+          const partnerData = partnerDoc.exists ? partnerDoc.data() : {};
+          const partnerName = partnerData.name || partnerData.email?.split('@')[0] || 'Parceiro';
+          const partnerUsername = partnerData.username || '';
+          
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: #f8f9fa; border-radius: 8px; flex-wrap: wrap; gap: 10px;">
+              <div>
+                <strong style="color: #495057;">${partnerName}</strong>
+                ${partnerUsername ? `<span style="color: #6c757d; font-size: 0.9em;"> @${partnerUsername}</span>` : ''}
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button onclick="selectPartnerForReport('${partnerId}')" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 0.85em; cursor: pointer;">
+                  📊 Gerar Relatório
+                </button>
+                <button onclick="deleteConnectionFromRelatorio('${doc.id}', '${partnerName.replace(/'/g, "\\'")}')" style="padding: 6px 12px; background: #fff5f5; color: #dc3545; border: 2px solid #dc3545; border-radius: 6px; font-size: 0.85em; cursor: pointer;" title="Remover conexão">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }
+      
+      connectionsList.innerHTML = html || '<p style="text-align: center; color: #999;">Erro ao carregar conexões</p>';
+      
+    } catch (error) {
+      console.error('Erro ao carregar conexões:', error);
+      connectionsList.innerHTML = '<p style="text-align: center; color: #dc3545;">Erro ao carregar conexões</p>';
+    }
+  }
+  
+  function selectPartnerForReport(partnerId) {
+    const partnerSelect = document.getElementById('partnerSelect');
+    if (partnerSelect) {
+      partnerSelect.value = partnerId;
+      // Scroll para a secção cloud e gerar
+      document.getElementById('cloudSection').scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => generateCloudReport(), 500);
+    }
+  }
+  
+  function openAddConnectionModal() {
+    const modal = document.getElementById('addConnectionModal');
+    if (modal) modal.style.display = 'flex';
+  }
+  
+  function closeAddConnectionModal() {
+    const modal = document.getElementById('addConnectionModal');
+    if (modal) modal.style.display = 'none';
+  }
+  
+  function copyUsername() {
+    const username = currentUserUsername ? `@${currentUserUsername}` : '';
+    if (username) {
+      navigator.clipboard.writeText(username).then(() => {
+        alert('Username copiado! Partilha com o teu parceiro 💕');
+      });
+    }
+  }
+  
+  async function searchPartnerUser(event) {
+    event.preventDefault();
+    const searchInput = document.getElementById('searchUsername');
+    const resultsDiv = document.getElementById('searchResults');
+    const username = searchInput.value.replace('@', '').toLowerCase().trim();
+    
+    if (!username) {
+      resultsDiv.innerHTML = '<p style="color: #dc3545;">Por favor, insere um username.</p>';
+      return;
+    }
+    
+    resultsDiv.innerHTML = '<p style="color: #6c757d;">🔍 A procurar...</p>';
+    
+    try {
+      const usersSnapshot = await db.collection('users')
+        .where('username', '==', username)
+        .limit(1)
+        .get();
+      
+      if (usersSnapshot.empty) {
+        resultsDiv.innerHTML = '<p style="color: #dc3545;">Utilizador não encontrado. Verifica o username.</p>';
+        return;
+      }
+      
+      const userDoc = usersSnapshot.docs[0];
+      const userData = userDoc.data();
+      const foundUserId = userDoc.id;
+      
+      // Verificar se não é o próprio user
+      if (foundUserId === auth.currentUser.uid) {
+        resultsDiv.innerHTML = '<p style="color: #dc3545;">Não podes adicionar-te a ti mesmo!</p>';
+        return;
+      }
+      
+      resultsDiv.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #e8f5e9; border-radius: 8px; margin-top: 10px;">
+          <div>
+            <strong>${userData.name || 'Utilizador'}</strong>
+            <span style="color: #6c757d; font-size: 0.9em;"> @${userData.username}</span>
+          </div>
+          <button onclick="sendConnectionRequest('${foundUserId}', '${userData.name || 'Utilizador'}')" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+            ➕ Enviar Pedido
+          </button>
+        </div>
+      `;
+      
+    } catch (error) {
+      console.error('Erro ao procurar utilizador:', error);
+      resultsDiv.innerHTML = '<p style="color: #dc3545;">Erro na pesquisa. Tenta novamente.</p>';
+    }
+  }
+  
+  async function sendConnectionRequest(toUserId, toUserName) {
+    const resultsDiv = document.getElementById('searchResults');
+    
+    try {
+      const user = auth.currentUser;
+      
+      // Verificar se já existe conexão
+      const existingConnection = await db.collection('connections')
+        .where('users', 'array-contains', user.uid)
+        .get();
+      
+      let alreadyConnected = false;
+      existingConnection.forEach(doc => {
+        if (doc.data().users.includes(toUserId)) {
+          alreadyConnected = true;
+        }
+      });
+      
+      if (alreadyConnected) {
+        resultsDiv.innerHTML = '<p style="color: #ffc107; font-weight: 600;">⚠️ Já tens conexão com este utilizador!</p>';
+        return;
+      }
+      
+      // Verificar se já existe pedido pendente
+      const existingRequest = await db.collection('connection_requests')
+        .where('fromUserId', '==', user.uid)
+        .where('toUserId', '==', toUserId)
+        .where('status', '==', 'pending')
+        .get();
+      
+      if (!existingRequest.empty) {
+        resultsDiv.innerHTML = '<p style="color: #ffc107; font-weight: 600;">⚠️ Já enviaste um pedido para este utilizador!</p>';
+        return;
+      }
+      
+      // Obter nome do user atual
+      const myUserDoc = await db.collection('users').doc(user.uid).get();
+      const myName = myUserDoc.exists ? (myUserDoc.data().name || user.email.split('@')[0]) : user.email.split('@')[0];
+      
+      // Criar pedido de conexão
+      await db.collection('connection_requests').add({
+        fromUserId: user.uid,
+        fromUserName: myName,
+        toUserId: toUserId,
+        toUserName: toUserName,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      
+      resultsDiv.innerHTML = `
+        <div style="background: #d4edda; padding: 15px; border-radius: 8px; text-align: center;">
+          <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
+          <strong style="color: #155724;">Pedido enviado!</strong>
+          <p style="margin: 10px 0 0 0; color: #155724;">Aguarda que ${toUserName} aceite o teu pedido.</p>
+        </div>
+      `;
+      
+      setTimeout(() => closeAddConnectionModal(), 2000);
+      
+    } catch (error) {
+      console.error('Erro ao enviar pedido:', error);
+      resultsDiv.innerHTML = '<p style="color: #dc3545;">Erro ao enviar pedido. Tenta novamente.</p>';
+    }
+  }
   
   // ========================================
   // FUNÇÃO DE LOGOUT
@@ -705,6 +1153,42 @@
         console.error('❌ Erro no logout:', error);
         alert('Erro ao fazer logout. Por favor tenta novamente.');
       });
+    }
+  }
+  
+  // ========================================
+  // ELIMINAR CONEXÃO COM PARCEIRO
+  // ========================================
+  async function deleteConnectionFromRelatorio(connectionId, partnerName) {
+    // Primeiro aviso
+    if (!confirm(`Tens a certeza que queres remover a conexão com ${partnerName}?`)) {
+      return;
+    }
+    
+    // Segundo aviso (dupla confirmação)
+    if (!confirm(`⚠️ ATENÇÃO: Ao remover a conexão:\n\n• Vocês deixam de poder ver as respostas um do outro\n• Para se reconectarem, terão de enviar novo pedido\n\nTens a certeza ABSOLUTA que queres remover ${partnerName}?`)) {
+      return;
+    }
+    
+    try {
+      // Apagar o documento de conexão
+      await db.collection('connections').doc(connectionId).delete();
+      
+      console.log(`✅ Conexão ${connectionId} eliminada com sucesso`);
+      
+      // Recarregar conexões
+      await loadUserConnections(auth.currentUser.uid);
+      
+      // Atualizar também o dropdown de parceiros
+      if (typeof loadConnectedPartners === 'function') {
+        await loadConnectedPartners(auth.currentUser.uid);
+      }
+      
+      alert(`✅ Conexão com ${partnerName} removida.`);
+      
+    } catch (error) {
+      console.error('Erro ao eliminar conexão:', error);
+      alert('❌ Erro ao remover conexão. Tenta novamente.');
     }
   }
   

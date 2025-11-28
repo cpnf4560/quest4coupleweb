@@ -598,9 +598,9 @@ async function loadConnectedPartners(userId) {
   const partnerSelect = document.getElementById('partnerSelect');
   
   try {
-    // Buscar parceiros conectados no Firebase
+    // Buscar conexões onde o utilizador participa
     const db = firebase.firestore();
-    const connectionsRef = db.collection('connections').where('userId', '==', userId);
+    const connectionsRef = db.collection('connections').where('users', 'array-contains', userId);
     const snapshot = await connectionsRef.get();
     
     if (snapshot.empty) {
@@ -611,13 +611,32 @@ async function loadConnectedPartners(userId) {
     // Limpar select e adicionar parceiros
     partnerSelect.innerHTML = '<option value="">Selecione um/a parceiro/a...</option>';
     
-    snapshot.forEach(doc => {
+    // Para cada conexão, buscar os dados do parceiro
+    for (const doc of snapshot.docs) {
       const connection = doc.data();
-      const option = document.createElement('option');
-      option.value = connection.partnerId;
-      option.textContent = `${connection.partnerName} (${connection.partnerEmail})`;
-      partnerSelect.appendChild(option);
-    });
+      // O parceiro é o outro utilizador no array users
+      const partnerId = connection.users.find(id => id !== userId);
+      
+      if (partnerId) {
+        // Buscar dados do parceiro
+        const partnerDoc = await db.collection('users').doc(partnerId).get();
+        const partnerData = partnerDoc.exists ? partnerDoc.data() : {};
+        
+        const option = document.createElement('option');
+        option.value = partnerId;
+        option.dataset.connectionId = doc.id; // Guardar ID da conexão para referência
+        option.textContent = partnerData.name || partnerData.email || 'Parceiro';
+        if (partnerData.username) {
+          option.textContent += ` (@${partnerData.username})`;
+        }
+        partnerSelect.appendChild(option);
+      }
+    }
+    
+    // Se não encontrou nenhum parceiro válido
+    if (partnerSelect.options.length <= 1) {
+      partnerSelect.innerHTML = '<option value="">Nenhum parceiro conectado ainda</option>';
+    }
     
   } catch (error) {
     console.error('Erro ao carregar parceiros:', error);
@@ -651,12 +670,33 @@ async function generateCloudReport() {
   try {
     const user = firebase.auth().currentUser;
     
+    console.log('🔍 Gerando relatório cloud...');
+    console.log('👤 Meu UID:', user.uid);
+    console.log('👥 Partner UID:', partnerId);
+    
     // Buscar respostas de ambos os usuários
     const myData = await loadAnswersFromFirebase(user.uid);
     const partnerData = await loadAnswersFromFirebase(partnerId);
     
-    if (!myData || !partnerData) {
-      throw new Error('Não foi possível carregar as respostas. Certifique-se de que ambos responderam aos questionários.');
+    console.log('📊 Meus dados:', myData);
+    console.log('📊 Dados do parceiro:', partnerData);
+    
+    // Verificar se há dados
+    if (!myData) {
+      throw new Error('Não encontrámos as tuas respostas. Responde a alguns questionários primeiro.');
+    }
+    
+    if (!partnerData) {
+      throw new Error('Não encontrámos respostas do teu parceiro. O parceiro ainda não respondeu a nenhum questionário.');
+    }
+    
+    // Verificar se há respostas nos dados
+    if (!myData.answers || Object.keys(myData.answers).length === 0) {
+      throw new Error('As tuas respostas estão vazias. Responde a alguns questionários primeiro.');
+    }
+    
+    if (!partnerData.answers || Object.keys(partnerData.answers).length === 0) {
+      throw new Error('O teu parceiro ainda não respondeu a nenhum questionário.');
     }
     
     // Gerar relatório com os dados
@@ -676,7 +716,18 @@ async function generateCloudReport() {
           <strong>Não foi possível gerar o relatório pela cloud.</strong><br><br>
           ${error.message}
         </div>
+        <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 8px; font-size: 0.9em; color: #6c757d;">
+          <strong style="color: #495057;">💡 Dicas:</strong>
+          <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+            <li>Ambos precisam de ter <strong>respondido</strong> a pelo menos um pack</li>
+            <li>As respostas são guardadas automaticamente quando respondes</li>
+            <li>Verifica se o parceiro também já respondeu aos questionários</li>
+          </ul>
+        </div>
         <div style="text-align: center; margin-top: 20px;">
+          <button onclick="window.location.href='app.html'" style="padding: 12px 25px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em; margin-right: 10px;">
+            📝 Responder Questionários
+          </button>
           <button onclick="location.reload()" style="padding: 12px 25px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
             🔄 Tentar Novamente
           </button>
@@ -688,21 +739,75 @@ async function generateCloudReport() {
 
 /**
  * Busca respostas de um usuário no Firebase
+ * Retorna estrutura: { userName, answers: {...}, customQuestions: {...} }
  */
 async function loadAnswersFromFirebase(userId) {
+  console.log(`🔍 loadAnswersFromFirebase - Iniciando para userId: ${userId}`);
+  
   try {
     const db = firebase.firestore();
-    const answersRef = db.collection('answers').doc(userId);
+    
+    // Buscar dados do utilizador (nome)
+    console.log(`📄 Buscando perfil do utilizador...`);
+    const userDoc = await db.collection('users').doc(userId).get();
+    let userName = 'Utilizador';
+    
+    if (userDoc.exists) {
+      const userData = userDoc.data();
+      userName = userData.name || userData.displayName || userData.email?.split('@')[0] || 'Utilizador';
+      console.log(`✅ Perfil encontrado: ${userName}`);
+    } else {
+      console.log(`⚠️ Perfil não encontrado para ${userId}`);
+    }
+    
+    // Buscar respostas: users/{userId}/answers/all
+    console.log(`📄 Buscando respostas em: users/${userId}/answers/all`);
+    const answersRef = db.collection('users').doc(userId).collection('answers').doc('all');
     const doc = await answersRef.get();
     
+    console.log(`📊 Documento existe? ${doc.exists}`);
+    
     if (!doc.exists) {
+      console.log(`⚠️ Nenhuma resposta encontrada para userId: ${userId}`);
+      console.log(`💡 Caminho verificado: users/${userId}/answers/all`);
       return null;
     }
     
-    return doc.data();
+    const answersData = doc.data();
+    const packIds = Object.keys(answersData || {});
+    console.log(`✅ Respostas carregadas para ${userId} (${userName})`);
+    console.log(`📦 Packs encontrados: ${packIds.join(', ')}`);
+    console.log(`📊 Total de respostas por pack:`, packIds.map(p => `${p}: ${Object.keys(answersData[p] || {}).length}`).join(', '));
     
-  } catch (error) {
-    console.error('Erro ao buscar respostas:', error);
+    // Buscar custom questions se existirem
+    let customQuestions = {};
+    try {
+      const customRef = db.collection('users').doc(userId).collection('customQuestions').doc('all');
+      const customDoc = await customRef.get();
+      if (customDoc.exists) {
+        customQuestions = customDoc.data() || {};
+        console.log(`✅ Custom questions encontradas`);
+      }
+    } catch (e) {
+      console.log('ℹ️ Sem custom questions');
+    }
+    
+    // Retornar estrutura esperada pelo generateCompatibilityReport
+    return {
+      userName: userName,
+      answers: answersData,
+      customQuestions: customQuestions
+    };
+      } catch (error) {
+    console.error('❌ Erro ao buscar respostas:', error);
+    console.error('❌ Código do erro:', error.code);
+    console.error('❌ Mensagem:', error.message);
+    
+    // Verificar se é erro de permissão (conexão não aceite)
+    if (error.code === 'permission-denied') {
+      throw new Error('Não tens permissão para ver as respostas deste utilizador. A conexão precisa de ser aceite antes de poderes ver as respostas.');
+    }
+    
     return null;
   }
 }
