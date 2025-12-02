@@ -641,40 +641,39 @@
 <body>
     
     <!-- Header -->
-    <div class="header">
-        <!-- Logo e Título -->
+    <div class="header">        <!-- Logo e Título -->
         <div class="logo-section">
             <a href="index.html">
                 <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;" style="height: 40px; width: auto; margin-right: 10px;">
             </a>
             <div>
-                <h1 style="font-size: 1.3em; margin: 0;">Quest4Couple</h1>
-                <p style="font-size: 0.75em; color: #888; margin: 0;">Descubram-se juntos 💕</p>
+                <h1 style="font-size: 1.3em; margin: 0;" data-i18n="home.title">Quest4Couple</h1>
+                <p style="font-size: 0.75em; color: #888; margin: 0;" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
             </div>
         </div>
           <!-- Navigation Buttons -->
         <div class="auth-buttons">
-            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
+            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" data-i18n="header.tutorial" title="Ver Tutorial">
                 🎓 Tutorial
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='app.html'" title="Ver Questionários">
+            <button class="header-btn btn-login" onclick="window.location.href='app.html'" data-i18n="header.questionnaire" title="Ver Questionários">
                 📝 Questionários
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+            <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" data-i18n="header.report" title="Ver Relatório">
                 💑 Relatório
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" title="Dashboard" id="dashboardBtn" style="display: none;">
+            <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" data-i18n="header.dashboard" title="Dashboard" id="dashboardBtn" style="display: none;">
                 📊 Dashboard
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='auth.html'" title="Fazer Login" id="loginBtn">
+            <button class="header-btn btn-login" onclick="window.location.href='auth.html'" data-i18n="header.login" title="Fazer Login" id="loginBtn">
                 🔐 Login
             </button>
             
-            <button class="header-btn btn-logout" onclick="handleLogout()" title="Sair" id="logoutBtn" style="display: none;">
+            <button class="header-btn btn-logout" onclick="handleLogout()" data-i18n="header.logout" title="Sair" id="logoutBtn" style="display: none;">
                 🚪 Sair
             </button>
         </div>
@@ -718,22 +717,21 @@
             <span style="margin: 0 10px;">✓ 5 packs temáticos</span>
             <span style="margin: 0 10px;">✓ Comparação automática</span>
         </div>-->
-        
-        <div class="features">
+          <div class="features">
             <div class="feature-card">
                 <div class="feature-icon">🔐</div>
-                <div class="feature-title">100% Privado</div>
-                <div class="feature-text">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
+                <div class="feature-title" data-i18n="home.features.private.title">100% Privado</div>
+                <div class="feature-text" data-i18n="home.features.private.description">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
             </div>            <div class="feature-card">
                 <div class="feature-icon">🎯</div>
-                <div class="feature-title">5 Packs Temáticos</div>
-                <div class="feature-text">💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong></div>
+                <div class="feature-title" data-i18n="home.packs.title">5 Packs Temáticos</div>
+                <div class="feature-text" data-i18n-html="home.packs.description">💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong></div>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">💖</div>
-                <div class="feature-title">Compatibilidade Instantânea</div>
-                <div class="feature-text">Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal.</div>
+                <div class="feature-title" data-i18n="home.features.compare.title">Compatibilidade Instantânea</div>
+                <div class="feature-text" data-i18n-html="home.features.compare.description">Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal.</div>
             </div>
         </div>
     </div>

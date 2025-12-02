@@ -21,22 +21,21 @@
       "login": "🔐 Já tenho conta"
     },
     "features": {
-      "title": "Como Funciona?",
-      "private": {
-        "title": "Privacidade Total",
-        "description": "As tuas respostas são encriptadas. Nem nós conseguimos ver!"
+      "title": "Como Funciona?",      "private": {
+        "title": "100% Privado",
+        "description": "As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking."
       },
       "compare": {
-        "title": "Comparação Inteligente",
-        "description": "O sistema só mostra o que ambos estão interessados."
+        "title": "Compatibilidade Instantânea",
+        "description": "Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal."
       },
       "free": {
         "title": "100% Gratuito",
         "description": "Sem custos escondidos. Tudo incluído!"
       }
-    },
-    "packs": {
+    },    "packs": {
       "title": "5 Packs Temáticos",
+      "description": "💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong>",
       "romantic": "Pack Romântico",
       "exploration": "Exploração",
       "spicy": "Pimentinha",

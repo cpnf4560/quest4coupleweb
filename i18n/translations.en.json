@@ -21,22 +21,21 @@
       "login": "🔐 I already have an account"
     },
     "features": {
-      "title": "How Does It Work?",
-      "private": {
-        "title": "Total Privacy",
-        "description": "Your answers are encrypted. Not even we can see them!"
+      "title": "How Does It Work?",      "private": {
+        "title": "100% Private",
+        "description": "Your answers are <strong>locally encrypted</strong>. Nothing is shared without permission. Zero tracking."
       },
       "compare": {
-        "title": "Smart Comparison",
-        "description": "The system only shows what both are interested in."
+        "title": "Instant Compatibility",
+        "description": "Smart comparison system reveals <strong>Super Matches, Matches and Possibilities</strong> unique to the couple."
       },
       "free": {
         "title": "100% Free",
         "description": "No hidden costs. Everything included!"
       }
-    },
-    "packs": {
+    },    "packs": {
       "title": "5 Thematic Packs",
+      "description": "💝 Romantic, 🌍 Experience, 🔥 Spicy, 💞 Polyamory and ⛓️ Fetishes. <strong>300 free questions!</strong>",
       "romantic": "Romantic Pack",
       "exploration": "Exploration",
       "spicy": "Spicy",
