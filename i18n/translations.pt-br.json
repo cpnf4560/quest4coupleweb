@@ -1,0 +1,194 @@
+{
+  "lang": "pt-br",
+  "pageTitle": "Quest4Couple - Descubram juntos 💑",
+  
+  "header": {
+    "login": "Fazer Login",
+    "logout": "Sair",
+    "dashboard": "Dashboard",
+    "questionnaire": "Questionário",
+    "report": "Relatório",
+    "tutorial": "Tutorial",
+    "support": "Apoiar"
+  },
+  
+  "home": {
+    "title": "Quest4Couple",
+    "subtitle": "Descubram-se melhor 💑",
+    "description": "Uma ferramenta interativa e <strong>100% gratuita</strong> para casais explorarem desejos, fantasias e afinidades de forma <strong>privada e segura</strong>.",
+    "cta": {
+      "start": "🚀 Começar Agora",
+      "login": "🔐 Já tenho conta"
+    },
+    "features": {
+      "title": "Como Funciona?",
+      "private": {
+        "title": "Privacidade Total",
+        "description": "Suas respostas são criptografadas. Nem nós conseguimos ver!"
+      },
+      "compare": {
+        "title": "Comparação Inteligente",
+        "description": "O sistema só mostra o que ambos estão interessados."
+      },
+      "free": {
+        "title": "100% Gratuito",
+        "description": "Sem custos escondidos. Tudo incluído!"
+      }
+    },
+    "packs": {
+      "title": "5 Packs Temáticos",
+      "romantic": "Pack Romântico",
+      "exploration": "Exploração",
+      "spicy": "Pimentinha",
+      "polyamory": "Poliamor",
+      "fetishes": "Fetiches",
+      "questions": "perguntas"
+    },
+    "stats": {
+      "title": "Em Números",
+      "packs": "Packs Temáticos",
+      "questions": "Perguntas",
+      "categories": "Categorias",
+      "users": "Usuários Ativos"
+    }
+  },
+  
+  "auth": {
+    "login": {
+      "title": "Fazer Login",
+      "email": "Email",
+      "password": "Senha",
+      "submit": "Entrar",
+      "noAccount": "Não tem conta?",
+      "createAccount": "Criar conta"
+    },
+    "register": {
+      "title": "Criar Conta",
+      "name": "Nome",
+      "email": "Email",
+      "password": "Senha",
+      "confirmPassword": "Confirmar Senha",
+      "country": "País (opcional)",
+      "city": "Cidade (opcional)",
+      "submit": "Criar Conta",
+      "hasAccount": "Já tem conta?",
+      "login": "Fazer login"
+    },
+    "errors": {
+      "invalidEmail": "Email inválido",
+      "passwordMismatch": "As senhas não coincidem",
+      "weakPassword": "Senha muito fraca (mínimo 6 caracteres)",
+      "emailInUse": "Este email já está em uso",
+      "wrongPassword": "Senha incorreta",
+      "userNotFound": "Usuário não encontrado"
+    }
+  },
+  
+  "dashboard": {
+    "title": "Meu Dashboard",
+    "welcome": "Olá, {name}!",
+    "accessCode": "Seu código de acesso",
+    "progress": "Progresso",
+    "connections": {
+      "title": "Conexões",
+      "addPartner": "Adicionar Parceiro",
+      "noPending": "Sem pedidos pendentes",
+      "noConnections": "Ainda não tem parceiros conectados",
+      "pending": "Pedidos Pendentes",
+      "connected": "Parceiros Conectados",
+      "accept": "Aceitar",
+      "reject": "Rejeitar",
+      "remove": "Remover"
+    },
+    "packs": {
+      "romantic": "Romântico",
+      "exploration": "Exploração",
+      "spicy": "Pimentinha",
+      "polyamory": "Poliamor",
+      "fetishes": "Fetiches"
+    }
+  },
+  
+  "tutorial": {
+    "title": "Como Funciona o Quest4Couple",
+    "subtitle": "Guia completo para se descobrirem juntos",
+    "navigation": {
+      "intro": "Introdução",
+      "register": "Registro",
+      "answers": "Respostas",
+      "save": "Salvar",
+      "custom": "Custom",
+      "connections": "Conexões",
+      "compare": "Comparar",
+      "code": "Código"
+    }
+  },
+  
+  "support": {
+    "title": "Apoiar o Projeto",
+    "intro": "O Quest4Couple é um projeto de paixão criado para ajudar casais a se descobrirem mutuamente de forma segura e sem julgamentos. No momento, <strong>todo o conteúdo é gratuito</strong>.",
+    "transparency": {
+      "title": "Transparência Total",
+      "description": "Estamos em uma fase inicial e queremos crescer de forma sustentável. Seu apoio nos ajuda a:",
+      "items": [
+        "Manter o serviço online e privado",
+        "Desenvolver novas funcionalidades",
+        "Criar mais conteúdo de qualidade",
+        "Garantir segurança e privacidade máxima"
+      ]
+    },
+    "ways": {
+      "title": "Como Apoiar",
+      "donate": {
+        "title": "Ofereça um Café",
+        "description": "Um pequeno gesto de apoio que nos motiva a continuar. Qualquer valor é bem-vindo!",
+        "button": "Doar Agora"
+      },
+      "feedback": {
+        "title": "Compartilhe Feedback",
+        "description": "Compartilhe sua experiência e nos ajude a melhorar a plataforma.",
+        "button": "Dar Feedback"
+      },
+      "share": {
+        "title": "Compartilhe",
+        "description": "Recomende o Quest4Couple aos seus amigos e ajude mais casais!",
+        "button": "Compartilhar"
+      }
+    }
+  },
+  
+  "banner": {
+    "title": "Ajude-nos a crescer!",
+    "description": "O Quest4Couple é <strong>100% gratuito</strong>, mas desenvolvê-lo e mantê-lo requer tempo e custos. Se gostou, considere nos apoiar de uma destas formas:",
+    "donate": "Ofereça um Café",
+    "feedback": "Deixe seu Feedback",
+    "share": "Compartilhe"
+  },
+  
+  "footer": {
+    "copyright": "© 2025 Quest4Couple",
+    "links": {
+      "home": "Início",
+      "about": "Sobre",
+      "faq": "FAQ",
+      "privacy": "Privacidade",
+      "terms": "Termos",
+      "support": "Apoiar"
+    }
+  },
+  
+  "common": {
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "yes": "Sim",
+    "no": "Não",
+    "or": "ou"
+  }
+}

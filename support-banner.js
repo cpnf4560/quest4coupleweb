@@ -6,7 +6,7 @@
 const SupportBanner = {
     // Configurações
     config: {
-        buyMeCoffeeUrl: 'https://buymeacoffee.com/quest4couple',
+        buyMeCoffeeUrl: '/pages/apoiar.html', // Redireciona para página de apoio
         feedbackFormUrl: '/pages/apoiar.html#feedback-form',
         shareUrls: {
             whatsapp: 'whatsapp://send?text=',
@@ -254,11 +254,11 @@ const SupportBanner = {
                 <div class="support-banner-header">
                     <div class="support-banner-title">
                         <span>💝</span>
-                        <span>Ajude-nos a Crescer!</span>
+                        <span>Ajuda-nos a crescer!</span>
                     </div>
                     <div class="support-banner-subtitle">
                         O Quest4Couple é <strong>100% gratuito</strong>, mas desenvolvê-lo e mantê-lo requer tempo e custos. 
-                        Se gostou, considere apoiar-nos de uma destas formas:
+                        Se gostaste, considera apoiar-nos de uma destas formas:
                     </div>
                 </div>
 
@@ -266,9 +266,9 @@ const SupportBanner = {
                     <!-- Donativo -->
                     <div class="support-card donate" onclick="SupportBanner.openDonation()">
                         <div class="support-card-icon">☕</div>
-                        <div class="support-card-title">Ofereça um Café</div>
+                        <div class="support-card-title">Oferece um Café</div>
                         <div class="support-card-description">
-                            Apoie o desenvolvimento com um pequeno donativo. Cada contribuição ajuda!
+                            Apoia o desenvolvimento com um pequeno donativo. Cada contribuição ajuda!
                         </div>
                         <button class="support-card-btn">💰 Doar Agora</button>
                     </div>
@@ -276,9 +276,9 @@ const SupportBanner = {
                     <!-- Feedback -->
                     <div class="support-card feedback" onclick="SupportBanner.openFeedback()">
                         <div class="support-card-icon">📝</div>
-                        <div class="support-card-title">Deixe Feedback</div>
+                        <div class="support-card-title">Deixa Feedback</div>
                         <div class="support-card-description">
-                            Partilhe a sua experiência e ajude-nos a melhorar a plataforma.
+                            Partilha a tua experiência e ajuda-nos a melhorar a plataforma.
                         </div>
                         <button class="support-card-btn">💬 Dar Feedback</button>
                     </div>
@@ -286,9 +286,9 @@ const SupportBanner = {
                     <!-- Partilhar -->
                     <div class="support-card share">
                         <div class="support-card-icon">📢</div>
-                        <div class="support-card-title">Partilhe</div>
+                        <div class="support-card-title">Partilha</div>
                         <div class="support-card-description">
-                            Recomende o Quest4Couple aos seus amigos e ajude mais casais!
+                            Recomenda o Quest4Couple aos teus amigos e ajuda mais casais!
                         </div>                        <div class="share-buttons">
                             <a href="#" class="share-btn whatsapp" onclick="SupportBanner.share('whatsapp'); return false;" title="WhatsApp">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -327,7 +327,7 @@ const SupportBanner = {
                 <div class="support-banner-header">
                     <div class="support-banner-title">
                         <span>💝</span>
-                        <span>Gostou? Apoie o projeto!</span>
+                        <span>Gostaste? Apoia o projeto!</span>
                     </div>
                 </div>
 
@@ -344,7 +344,7 @@ const SupportBanner = {
                         <button class="support-card-btn">💬 Opinar</button>
                     </div>                    <div class="support-card share">
                         <div class="support-card-icon">📢</div>
-                        <div class="support-card-title">Partilhar</div>
+                        <div class="support-card-title">Partilha</div>
                         <div class="share-buttons" style="margin-top: 10px;">
                             <a href="#" class="share-btn whatsapp" onclick="SupportBanner.share('whatsapp'); return false;" title="WhatsApp">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
