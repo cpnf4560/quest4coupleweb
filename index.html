@@ -680,10 +680,104 @@
         body:has(.beta-banner:not([style*="display: none"])) .container {
             margin-top: 160px;
         }
-        
-        @media (max-width: 768px) {
+          @media (max-width: 768px) {
             body:has(.beta-banner:not([style*="display: none"])) .container {
                 margin-top: 200px;
+            }
+        }
+        
+        /* Update Notice Styles */
+        .update-notice {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 700px;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.95), rgba(185, 28, 28, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+            z-index: 1001;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        .update-notice-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .update-icon {
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        
+        .update-text {
+            flex: 1;
+            color: white;
+        }
+        
+        .update-text h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        
+        .update-text p {
+            margin: 0 0 5px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .update-text ul {
+            padding-left: 20px;
+        }
+        
+        .update-text li {
+            margin-bottom: 3px;
+        }
+        
+        .update-text a {
+            color: #ffc107;
+            font-weight: 600;
+        }
+        
+        .update-close {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .update-close:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .update-notice {
+                top: 95px;
+                width: 95%;
+                padding: 12px 15px;
+            }
+            
+            .update-text h3 {
+                font-size: 0.95em;
+            }
+            
+            .update-text p, .update-text li {
+                font-size: 0.8em;
             }
         }</style>
 </head>
@@ -743,6 +837,25 @@
                 <p data-i18n-html="beta.description">Estamos em fase de testes! Se encontrares bugs ou tiveres sugestões, <a href='pages/apoiar.html#feedback'>envia-nos feedback</a> e ajuda a melhorar 💪</p>
             </div>
             <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso" data-i18n="beta.close">✕</button>
+        </div>
+    </div>
+    
+    <!-- Aviso de Correção de Questões (apenas para utilizadores logados) -->
+    <div class="update-notice" id="updateNotice" style="display: none;">
+        <div class="update-notice-content">
+            <div class="update-icon">⚠️</div>
+            <div class="update-text">
+                <h3>Aviso Importante - Correção de Questões</h3>
+                <p>Devido a um erro de atualização, algumas questões alteradas anteriormente, apenas ficaram disponíveis hoje (3 Dez). 
+                Se respondeste recentemente, por favor <strong>revê as tuas respostas</strong> nas seguintes questões:</p>
+                <ul style="text-align: left; margin: 10px auto; max-width: 500px; font-size: 0.85em;">
+                    <li><strong>Pack Romântico:</strong> Q1, Q6, Q14, Q15</li>
+                    <li><strong>Pack Experiência:</strong> Q17, Q21, Q23, Q24</li>
+                    <li><strong>Pack Pimentinha:</strong> Q5, Q14</li>
+                </ul>
+                <p style="font-size: 0.85em;">Dúvidas? <a href="mailto:info@quest4couple.pt">info@quest4couple.pt</a></p>
+            </div>
+            <button class="update-close" onclick="closeUpdateNotice()" title="Fechar aviso">✕</button>
         </div>
     </div>
     
@@ -1084,6 +1197,12 @@
             if (freeBadge) {
                 freeBadge.innerHTML = '✅ Login efetuado • Pode responder';
             }
+
+            // Mostrar aviso de correção de questões
+            const updateNotice = document.getElementById('updateNotice');
+            if (updateNotice) {
+                updateNotice.style.display = 'block';
+            }
         }
           // Handle Logout
         async function handleLogout() {
@@ -1124,6 +1243,15 @@
             
             alert(message);
         }
+
+        // Close update notice
+        function closeUpdateNotice() {
+            const updateNotice = document.getElementById('updateNotice');
+            if (updateNotice) {
+                updateNotice.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
+``` 
