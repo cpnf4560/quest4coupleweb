@@ -240,6 +240,7 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
         username: username,
         photoURL: user.photoURL || null,
         gender: mergedData.gender || null,
+        age: mergedData.age || null,
         ageRange: mergedData.ageRange || null,
         country: mergedData.country || null,
         countryName: mergedData.countryName || null,
@@ -247,7 +248,8 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
         authProvider: user.providerData[0]?.providerId || 'password',
-        isAdmin: false
+        isAdmin: false,
+        profileComplete: !!(mergedData.age && mergedData.country && mergedData.city)
       };
       
       console.log('📝 Dados do perfil a criar:', profileData);

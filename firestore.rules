@@ -30,12 +30,12 @@ service cloud.firestore {
         // Utilizador pode escrever suas próprias respostas
         allow write: if request.auth != null && request.auth.uid == userId;
         
-        // Leitura: próprias respostas OU parceiros com conexão ACEITE
-        // O ID da conexão é criado ordenando os dois user IDs e juntando com underscore
-        // Exemplo: se userA < userB, o ID será "userA_userB"
+        // Leitura: próprias respostas OU parceiros com conexão ACEITE OU admin
         allow read: if request.auth != null && (
           // Próprias respostas
           request.auth.uid == userId ||
+          // Admin pode ler todas as respostas para analytics
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true ||
           // Parceiro com conexão aceite - verifica se existe documento de conexão
           // Testa as duas ordenações possíveis dos IDs
           (request.auth.uid < userId && 

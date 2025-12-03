@@ -638,61 +638,116 @@ async function getQuestionAnalytics(packId = null) {
   
   try {
     // 1. Buscar todas as respostas dos utilizadores
-    const answersSnapshot = await db.collection('userAnswers').get();
-    console.log('📝 Documentos de respostas encontrados:', answersSnapshot.size);
+    // As respostas estão em: users/{userId}/answers/all
+    const usersSnapshot = await db.collection('users').get();
+    console.log('👥 Total de utilizadores:', usersSnapshot.size);
     
     // 2. Agregar respostas por questão
     const questionStats = {};
+    let totalAnswerDocs = 0;
     
-    answersSnapshot.forEach(doc => {
-      const userData = doc.data();
-      
-      // Iterar pelos packs do utilizador
-      Object.keys(userData).forEach(pack => {
-        // Filtrar por packId se especificado
-        if (packId && pack !== packId) return;
+    // Iterar por cada utilizador e buscar suas respostas
+    for (const userDoc of usersSnapshot.docs) {
+      try {
+        const answersDoc = await db.collection('users').doc(userDoc.id).collection('answers').doc('all').get();
         
-        const packAnswers = userData[pack];
-        if (typeof packAnswers !== 'object' || !packAnswers) return;
+        if (!answersDoc.exists) continue;
         
-        // Iterar pelas respostas
-        Object.keys(packAnswers).forEach(questionKey => {
-          const answer = packAnswers[questionKey];
-          if (!answer || !answer.answer) return;
+        totalAnswerDocs++;
+        const userData = answersDoc.data();
+        
+        // Iterar pelos packs do utilizador
+        Object.keys(userData).forEach(pack => {
+          // Filtrar por packId se especificado
+          if (packId && pack !== packId) return;
           
-          // Criar chave única: pack_questionKey
-          const uniqueKey = `${pack}_${questionKey}`;
+          const packAnswers = userData[pack];
+          if (typeof packAnswers !== 'object' || !packAnswers) return;
           
-          if (!questionStats[uniqueKey]) {
-            questionStats[uniqueKey] = {
-              packId: pack,
-              questionKey: questionKey,
-              totalResponses: 0,
-              byAnswer: {
-                'porfavor': 0,
-                'yup': 0,
-                'talvez': 0,
-                'meh': 0
-              }
-            };
-          }
-          
-          questionStats[uniqueKey].totalResponses++;
-          
-          // Contar por tipo de resposta (normalizar para minúsculas)
-          const answerType = answer.answer.toLowerCase();
-          if (questionStats[uniqueKey].byAnswer.hasOwnProperty(answerType)) {
-            questionStats[uniqueKey].byAnswer[answerType]++;
-          }
+          // Iterar pelas respostas
+          Object.keys(packAnswers).forEach(questionKey => {
+            const answer = packAnswers[questionKey];
+            if (!answer || !answer.answer) return;
+            
+            // Criar chave única: pack_questionKey
+            const uniqueKey = `${pack}_${questionKey}`;
+            
+            if (!questionStats[uniqueKey]) {
+              questionStats[uniqueKey] = {
+                packId: pack,
+                questionKey: questionKey,
+                totalResponses: 0,
+                byAnswer: {
+                  'porfavor': 0,
+                  'yup': 0,
+                  'talvez': 0,
+                  'meh': 0
+                }
+              };
+            }
+            
+            questionStats[uniqueKey].totalResponses++;
+            
+            // Contar por tipo de resposta (normalizar para minúsculas)
+            const answerType = answer.answer.toLowerCase();
+            if (questionStats[uniqueKey].byAnswer.hasOwnProperty(answerType)) {
+              questionStats[uniqueKey].byAnswer[answerType]++;
+            }
+          });
         });
-      });
-    });
-    
+      } catch (err) {
+        console.warn(`⚠️ Erro ao buscar respostas do user ${userDoc.id}:`, err.message);
+      }
+    }
+      console.log('📝 Documentos de respostas encontrados:', totalAnswerDocs);
     console.log('📊 Questões agregadas:', Object.keys(questionStats).length);
     
+    // Se não há respostas, retornar cedo
+    if (Object.keys(questionStats).length === 0) {
+      console.warn('⚠️ Nenhuma resposta encontrada na base de dados');
+      return [];
+    }
+    
     // 3. Carregar textos das perguntas do packs_data_clean.json
-    const packsResponse = await fetch('../data/packs_data_clean.json');
-    const packsData = await packsResponse.json();
+    // Tentar múltiplos caminhos para compatibilidade com diferentes páginas
+    const possiblePaths = [
+      '../data/packs_data_clean.json',
+      './data/packs_data_clean.json',
+      'data/packs_data_clean.json',
+      '/data/packs_data_clean.json'
+    ];
+    
+    let packsData = null;
+    for (const path of possiblePaths) {
+      try {
+        const response = await fetch(path);
+        if (response.ok) {
+          packsData = await response.json();
+          console.log('✅ JSON carregado de:', path);
+          break;
+        }
+      } catch (e) {
+        console.log('❌ Falha ao carregar de:', path);
+      }
+    }
+    
+    if (!packsData) {
+      console.error('❌ Não foi possível carregar packs_data_clean.json');
+      // Retornar dados sem texto das perguntas
+      return Object.keys(questionStats).map(key => {
+        const stat = questionStats[key];
+        return {
+          packId: stat.packId,
+          packName: stat.packId,
+          questionKey: stat.questionKey,
+          questionNumber: parseInt(stat.questionKey.replace('q', '')),
+          questionText: `Questão ${stat.questionKey}`,
+          totalResponses: stat.totalResponses,
+          byAnswer: stat.byAnswer,
+          hasInvertMatching: false
+        };
+      }).sort((a, b) => b.totalResponses - a.totalResponses);
+    }
     
     // Mapear pack names
     const packNames = {
@@ -820,7 +875,7 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
       </div>
       
       <!-- Toggle View -->
-      <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+      <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
         <button onclick="setQuestionView('table')" id="btnTableView" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
           📋 Vista Tabela
         </button>
@@ -830,78 +885,45 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
         <button onclick="exportAllQuestionsCSV()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-left: auto;">
           📊 Exportar Todos
         </button>
+        <span style="font-size: 0.8em; color: #6c757d; margin-left: 10px;">💡 Clica nos cabeçalhos para ordenar</span>
       </div>
       
       <!-- Table View -->
       <div id="questionTableView" style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <table id="questionsTable" style="width: 100%; border-collapse: collapse; font-size: 0.9em; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <thead style="background: #495057;">
             <tr>
-              <th style="padding: 15px 12px; text-align: left; font-weight: 600;">#</th>
-              <th style="padding: 15px 12px; text-align: left; font-weight: 600;">Pack</th>
-              <th style="padding: 15px 12px; text-align: left; font-weight: 600; min-width: 250px;">Questão</th>
-              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">Total</th>
-              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">😍 Porfavor</th>
-              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">👍 Yup</th>
-              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">🤷 Talvez</th>
-              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">😑 Meh</th>
+              <th onclick="sortQuestionsTable('questionNumber')" style="padding: 15px 12px; text-align: left; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none;" title="Ordenar por número">
+                # <span class="sort-icon" data-col="questionNumber">⇅</span>
+              </th>
+              <th onclick="sortQuestionsTable('packId')" style="padding: 15px 12px; text-align: left; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none;" title="Ordenar por pack">
+                Pack <span class="sort-icon" data-col="packId">⇅</span>
+              </th>
+              <th style="padding: 15px 12px; text-align: left; font-weight: 600; color: #ffffff; min-width: 250px;">
+                Questão
+              </th>
+              <th onclick="sortQuestionsTable('totalResponses')" style="padding: 15px 12px; text-align: center; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none;" title="Ordenar por total">
+                Total <span class="sort-icon" data-col="totalResponses">⇅</span>
+              </th>
+              <th onclick="sortQuestionsTable('porfavor')" style="padding: 15px 12px; text-align: center; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none; background: rgba(76, 175, 80, 0.3);" title="Ordenar por Porfavor">
+                😍 Porfavor <span class="sort-icon" data-col="porfavor">⇅</span>
+              </th>
+              <th onclick="sortQuestionsTable('yup')" style="padding: 15px 12px; text-align: center; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none; background: rgba(139, 195, 74, 0.3);" title="Ordenar por Yup">
+                👍 Yup <span class="sort-icon" data-col="yup">⇅</span>
+              </th>
+              <th onclick="sortQuestionsTable('talvez')" style="padding: 15px 12px; text-align: center; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none; background: rgba(255, 152, 0, 0.3);" title="Ordenar por Talvez">
+                🤷 Talvez <span class="sort-icon" data-col="talvez">⇅</span>
+              </th>
+              <th onclick="sortQuestionsTable('meh')" style="padding: 15px 12px; text-align: center; font-weight: 600; color: #ffffff; cursor: pointer; user-select: none; background: rgba(244, 67, 54, 0.3);" title="Ordenar por Meh">
+                😑 Meh <span class="sort-icon" data-col="meh">⇅</span>
+              </th>
             </tr>
           </thead>
           <tbody>
+          </tbody>
+        </table>
+      </div>
     `;
-    
-    questions.forEach((q, index) => {
-      const total = q.totalResponses;
-      const porfavor = q.byAnswer['porfavor'] || 0;
-      const yup = q.byAnswer['yup'] || 0;
-      const talvez = q.byAnswer['talvez'] || 0;
-      const meh = q.byAnswer['meh'] || 0;
-      
-      const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(0) : 0;
-      const pctYup = total > 0 ? ((yup / total) * 100).toFixed(0) : 0;
-      const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(0) : 0;
-      const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(0) : 0;
-      
-      const packIcon = packNames[q.packId]?.split(' ')[0] || '📦';
-      const questionShort = q.questionText?.length > 60 ? q.questionText.substring(0, 60) + '...' : q.questionText;
-      
-      // Color row based on predominant response
-      const maxPct = Math.max(pctPorfavor, pctYup, pctTalvez, pctMeh);
-      let rowBg = '#fff';
-      if (maxPct == pctPorfavor && pctPorfavor > 40) rowBg = '#f1f8f1';
-      else if (maxPct == pctMeh && pctMeh > 40) rowBg = '#fff5f5';
-      
-      html += `
-        <tr style="border-bottom: 1px solid #f1f3f5; background: ${rowBg};" title="${q.questionText}">
-          <td style="padding: 12px; color: #6c757d; font-weight: 500;">${q.questionNumber || index + 1}</td>
-          <td style="padding: 12px; font-size: 1.2em;">${packIcon}</td>
-          <td style="padding: 12px; color: #495057;">${questionShort || 'N/A'}</td>
-          <td style="padding: 12px; text-align: center; font-weight: 700; color: #667eea;">${total}</td>
-          <td style="padding: 12px; text-align: center;">
-            <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
-              ${pctPorfavor}%
-            </span>
-          </td>
-          <td style="padding: 12px; text-align: center;">
-            <span style="background: #f1f8e9; color: #558b2f; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
-              ${pctYup}%
-            </span>
-          </td>
-          <td style="padding: 12px; text-align: center;">
-            <span style="background: #fff3e0; color: #ef6c00; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
-              ${pctTalvez}%
-            </span>
-          </td>
-          <td style="padding: 12px; text-align: center;">
-            <span style="background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
-              ${pctMeh}%
-            </span>
-          </td>
-        </tr>
-      `;
-    });
-    
-    html += '</tbody></table></div>';
     
     // Cards View (hidden by default)
     html += '<div id="questionCardsView" style="display: none;">';
@@ -971,6 +993,9 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
     // Store questions data globally for export
     window.questionsData = questions;
     
+    // Renderizar a tabela com os dados
+    renderQuestionsTableBody(questions);
+    
   } catch (error) {
     console.error('Erro ao carregar analytics de questões:', error);
     container.innerHTML = `
@@ -1014,6 +1039,164 @@ function setQuestionView(view) {
     btnTable.style.color = '#495057';
     btnTable.style.border = '2px solid #e0e0e0';
   }
+}
+
+// Estado de ordenação da tabela
+let questionsSortState = {
+  column: 'totalResponses',
+  ascending: false
+};
+
+/**
+ * Ordena a tabela de questões por coluna
+ */
+function sortQuestionsTable(column) {
+  if (!window.questionsData || window.questionsData.length === 0) return;
+  
+  // Toggle direction se clicar na mesma coluna
+  if (questionsSortState.column === column) {
+    questionsSortState.ascending = !questionsSortState.ascending;
+  } else {
+    questionsSortState.column = column;
+    questionsSortState.ascending = true;
+  }
+  
+  const sortedData = [...window.questionsData];
+  
+  sortedData.sort((a, b) => {
+    let valA, valB;
+    
+    switch (column) {
+      case 'questionNumber':
+        valA = a.questionNumber || 0;
+        valB = b.questionNumber || 0;
+        break;
+      case 'packId':
+        valA = a.packId || '';
+        valB = b.packId || '';
+        break;
+      case 'totalResponses':
+        valA = a.totalResponses || 0;
+        valB = b.totalResponses || 0;
+        break;
+      case 'porfavor':
+        valA = a.totalResponses > 0 ? (a.byAnswer['porfavor'] || 0) / a.totalResponses : 0;
+        valB = b.totalResponses > 0 ? (b.byAnswer['porfavor'] || 0) / b.totalResponses : 0;
+        break;
+      case 'yup':
+        valA = a.totalResponses > 0 ? (a.byAnswer['yup'] || 0) / a.totalResponses : 0;
+        valB = b.totalResponses > 0 ? (b.byAnswer['yup'] || 0) / b.totalResponses : 0;
+        break;
+      case 'talvez':
+        valA = a.totalResponses > 0 ? (a.byAnswer['talvez'] || 0) / a.totalResponses : 0;
+        valB = b.totalResponses > 0 ? (b.byAnswer['talvez'] || 0) / b.totalResponses : 0;
+        break;
+      case 'meh':
+        valA = a.totalResponses > 0 ? (a.byAnswer['meh'] || 0) / a.totalResponses : 0;
+        valB = b.totalResponses > 0 ? (b.byAnswer['meh'] || 0) / b.totalResponses : 0;
+        break;
+      default:
+        valA = 0;
+        valB = 0;
+    }
+    
+    // Comparar strings vs números
+    if (typeof valA === 'string') {
+      return questionsSortState.ascending 
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    }
+    
+    return questionsSortState.ascending 
+      ? valA - valB 
+      : valB - valA;
+  });
+  
+  // Atualizar ícones de ordenação
+  document.querySelectorAll('.sort-icon').forEach(icon => {
+    icon.textContent = '⇅';
+  });
+  const activeIcon = document.querySelector(`.sort-icon[data-col="${column}"]`);
+  if (activeIcon) {
+    activeIcon.textContent = questionsSortState.ascending ? '↑' : '↓';
+  }
+  
+  // Re-renderizar apenas o tbody
+  renderQuestionsTableBody(sortedData);
+}
+
+/**
+ * Renderiza o corpo da tabela de questões
+ */
+function renderQuestionsTableBody(questions) {
+  const table = document.getElementById('questionsTable');
+  if (!table) return;
+  
+  const tbody = table.querySelector('tbody');
+  if (!tbody) return;
+  
+  const packNames = {
+    'romantico': '💕 Pack Romântico',
+    'experiencia': '🌍 Exploração',
+    'pimentinha': '🌶️ Pimentinha',
+    'poliamor': '💜 Poliamor',
+    'kinks': '🔥 Fetiches'
+  };
+  
+  let html = '';
+  
+  questions.forEach((q, index) => {
+    const total = q.totalResponses;
+    const porfavor = q.byAnswer['porfavor'] || 0;
+    const yup = q.byAnswer['yup'] || 0;
+    const talvez = q.byAnswer['talvez'] || 0;
+    const meh = q.byAnswer['meh'] || 0;
+    
+    const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(0) : 0;
+    const pctYup = total > 0 ? ((yup / total) * 100).toFixed(0) : 0;
+    const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(0) : 0;
+    const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(0) : 0;
+    
+    const packIcon = packNames[q.packId]?.split(' ')[0] || '📦';
+    const questionShort = q.questionText?.length > 60 ? q.questionText.substring(0, 60) + '...' : q.questionText;
+    
+    // Color row based on predominant response
+    const maxPct = Math.max(parseInt(pctPorfavor), parseInt(pctYup), parseInt(pctTalvez), parseInt(pctMeh));
+    let rowBg = '#fff';
+    if (maxPct == pctPorfavor && pctPorfavor > 40) rowBg = '#f1f8f1';
+    else if (maxPct == pctMeh && pctMeh > 40) rowBg = '#fff5f5';
+    
+    html += `
+      <tr style="border-bottom: 1px solid #f1f3f5; background: ${rowBg};" title="${q.questionText}">
+        <td style="padding: 12px; color: #6c757d; font-weight: 500;">${q.questionNumber || index + 1}</td>
+        <td style="padding: 12px; font-size: 1.2em;">${packIcon}</td>
+        <td style="padding: 12px; color: #495057;">${questionShort || 'N/A'}</td>
+        <td style="padding: 12px; text-align: center; font-weight: 700; color: #667eea;">${total}</td>
+        <td style="padding: 12px; text-align: center;">
+          <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+            ${pctPorfavor}%
+          </span>
+        </td>
+        <td style="padding: 12px; text-align: center;">
+          <span style="background: #f1f8e9; color: #558b2f; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+            ${pctYup}%
+          </span>
+        </td>
+        <td style="padding: 12px; text-align: center;">
+          <span style="background: #fff3e0; color: #ef6c00; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+            ${pctTalvez}%
+          </span>
+        </td>
+        <td style="padding: 12px; text-align: center;">
+          <span style="background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+            ${pctMeh}%
+          </span>
+        </td>
+      </tr>
+    `;
+  });
+  
+  tbody.innerHTML = html;
 }
 
 /**
