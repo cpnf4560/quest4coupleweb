@@ -185,6 +185,36 @@ service cloud.firestore {
     }
     
     // ========================================
+    // USER ANSWERS (Respostas dos utilizadores)
+    // ========================================
+    match /userAnswers/{docId} {
+      // Utilizador pode ler/escrever suas próprias respostas
+      allow read, write: if request.auth != null && request.auth.uid == docId;
+      
+      // Admins podem ler todas as respostas (para analytics)
+      allow read: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    
+    // ========================================
+    // PARTNER CONNECTIONS (Conexões de parceiros)
+    // ========================================
+    match /partnerConnections/{connectionId} {
+      // Utilizador pode criar conexões
+      allow create: if request.auth != null;
+      
+      // Utilizador pode ler/atualizar conexões onde participa
+      allow read, update: if request.auth != null;
+      
+      // Admins podem ler todas as conexões (para analytics)
+      allow read: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      
+      // Utilizador pode apagar suas conexões
+      allow delete: if request.auth != null;
+    }
+    
+    // ========================================
     // AUDIT LOG COLLECTION
     // ========================================
     match /audit_log/{logId} {
