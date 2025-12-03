@@ -499,6 +499,50 @@ async function generateCompatibilityReport(myData, partnerData) {
   reportContainer.innerHTML = html;
   reportContainer.style.display = 'block';
   window.scrollTo({ top: reportContainer.offsetTop - 100, behavior: 'smooth' });
+  
+  // ========================================
+  // REGISTAR ANALYTICS DO RELATÓRIO
+  // ========================================
+  try {
+    // Contar estatísticas totais
+    let totalSuperMatches = 0;
+    let totalMatchesCount = 0;
+    let totalMismatches = 0;
+    const packIdsUsed = [];
+    
+    packConfigs.forEach(config => {
+      const myAnswers = myData.answers[config.id] || {};
+      const partnerAnswers = partnerData.answers[config.id] || {};
+      
+      // Se o pack foi respondido por ambos
+      if (Object.keys(myAnswers).length > 0 && Object.keys(partnerAnswers).length > 0) {
+        packIdsUsed.push(config.id);
+      }
+    });
+    
+    // Chamar função de analytics se existir
+    if (typeof logFullReport === 'function') {
+      const reportData = {
+        userName1: myData.userName,
+        userName2: partnerData.userName,
+        questions: [] // Opcional: adicionar detalhes das questões
+      };
+      
+      const matchCounts = {
+        superMatch: document.querySelectorAll('.super-match').length,
+        match: document.querySelectorAll('.excellent, .good-match').length,
+        mismatch: document.querySelectorAll('.possible, .reflection').length
+      };
+      
+      await logFullReport(reportData, matchCounts, packIdsUsed);
+      console.log('📊 Analytics: Relatório registado com sucesso');
+    } else {
+      console.warn('⚠️ logFullReport não disponível - analytics não registadas');
+    }
+  } catch (analyticsError) {
+    console.error('❌ Erro ao registar analytics:', analyticsError);
+    // Não bloquear a geração do relatório
+  }
 }
 
 function getAnswerText(value) {

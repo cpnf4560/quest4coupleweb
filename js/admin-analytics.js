@@ -24,6 +24,13 @@ async function loadFullReports(filters = {}) {
   `;
   
   try {
+    // Verificar se Firebase está disponível
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+      throw new Error('Firebase não está inicializado');
+    }
+    
+    const db = firebase.firestore();
+    
     // Aplicar filtros
     let startDate = null;
     let endDate = null;
@@ -38,8 +45,35 @@ async function loadFullReports(filters = {}) {
       startDate = new Date();
       startDate.setMonth(startDate.getMonth() - 1);
     }
-      // Buscar relatórios do Firebase
-    let reports = await getFullReports(50, startDate, endDate);
+    
+    // Buscar relatórios diretamente do Firebase
+    console.log('📊 Buscando relatórios completos...');
+    let reports = [];
+    
+    try {
+      const snapshot = await db.collection('analytics_full_reports')
+        .orderBy('timestamp', 'desc')
+        .limit(50)
+        .get();
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        // Filtrar por data se necessário
+        if (startDate) {
+          const timestamp = data.timestamp?.toDate();
+          if (timestamp && timestamp < startDate) return;
+        }
+        reports.push({
+          id: doc.id,
+          ...data
+        });
+      });
+      
+      console.log(`✅ Encontrados ${reports.length} relatórios`);
+    } catch (fbError) {
+      console.error('❌ Erro Firebase:', fbError);
+      throw new Error(`Erro ao acessar Firebase: ${fbError.message}`);
+    }
     
     // Aplicar filtro de compatibilidade
     if (filters.compatibility) {
@@ -153,6 +187,8 @@ async function loadFullReports(filters = {}) {
       <div style="text-align: center; padding: 40px; color: #dc3545;">
         <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
         <p>Erro ao carregar relatórios.</p>
+        <p style="font-size: 0.85em; color: #6c757d; margin-top: 10px;">${error.message}</p>
+        <p style="font-size: 0.75em; color: #999; margin-top: 5px;">Verifique se tem permissões de admin e se a collection existe.</p>
         <button onclick="loadFullReports()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
           🔄 Tentar Novamente
         </button>
@@ -354,11 +390,11 @@ async function showReportDetails(reportId) {
 }
 
 // ========================================
-// TAB: RELATÓRIOS PARCIAIS (1 Pack Only)
+// TAB: RELATÓRIOS PARCIAIS (Casais com pelo menos 1 pack)
 // ========================================
 
 /**
- * Carrega e exibe relatórios parciais (casais que completaram apenas 1 pack)
+ * Carrega e exibe relatórios parciais (casais que completaram pelo menos 1 pack em comum)
  */
 async function loadPartialReports(filters = {}) {
   const container = document.getElementById('partialReportsContainer');
@@ -370,23 +406,31 @@ async function loadPartialReports(filters = {}) {
   container.innerHTML = `
     <div style="text-align: center; padding: 40px; color: #6c757d;">
       <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
-      <p>Carregando relatórios parciais...</p>
+      <p>Carregando relatórios...</p>
     </div>
   `;
   
   try {
-    // Buscar relatórios com apenas 1 pack
+    // Verificar Firebase
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+      throw new Error('Firebase não está inicializado');
+    }
+    
+    // Buscar relatórios (pelo menos 1 pack)
     let reports = await getPartialReports(100, filters);
     
-    // Estatísticas
+    // Estatísticas por pack
     const stats = {
       total: reports.length,
       byPack: {}
     };
     
     reports.forEach(r => {
-      const packId = r.stats?.packIds?.[0] || 'unknown';
-      stats.byPack[packId] = (stats.byPack[packId] || 0) + 1;
+      // Contar cada pack no relatório
+      const packIds = r.stats?.packIds || [];
+      packIds.forEach(packId => {
+        stats.byPack[packId] = (stats.byPack[packId] || 0) + 1;
+      });
     });
     
     // Render stats
@@ -424,8 +468,8 @@ async function loadPartialReports(filters = {}) {
       container.innerHTML = `
         <div style="text-align: center; padding: 60px 20px; color: #6c757d;">
           <div style="font-size: 3em; margin-bottom: 15px;">📝</div>
-          <h3 style="margin-bottom: 10px;">Nenhum relatório parcial encontrado</h3>
-          <p>Não há casais que tenham completado apenas 1 pack.</p>
+          <h3 style="margin-bottom: 10px;">Nenhum relatório encontrado</h3>
+          <p>Ainda não foram gerados relatórios de casais ou não há dados para o filtro selecionado.</p>
         </div>
       `;
       return;
@@ -435,11 +479,11 @@ async function loadPartialReports(filters = {}) {
     let html = `
       <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
-          <thead style="background: #f8f9fa;">
+          <thead style="background: #495057; color: white;">
             <tr>
               <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">#</th>
               <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Casal</th>
-              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Pack</th>
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Packs</th>
               <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Questões</th>
               <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">⭐ Super</th>
               <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">💚 Match</th>
@@ -467,7 +511,11 @@ async function loadPartialReports(filters = {}) {
         year: '2-digit'
       }) : '-';
       
-      const packId = report.stats?.packIds?.[0] || 'unknown';
+      // Mostrar todos os packs do relatório
+      const packIds = report.stats?.packIds || [];
+      const packsDisplay = packIds.map(p => packNames[p] || p).join(', ') || 'N/A';
+      const packCount = report.stats?.packCount || packIds.length || 1;
+      
       const compatibility = calculateCompatibility(report.stats);
       const compatColor = compatibility >= 80 ? '#2e7d32' : compatibility >= 60 ? '#fb8c00' : '#d32f2f';
       
@@ -475,7 +523,7 @@ async function loadPartialReports(filters = {}) {
         <tr style="border-bottom: 1px solid #f1f3f5;">
           <td style="padding: 12px; color: #6c757d;">${index + 1}</td>
           <td style="padding: 12px; font-weight: 500;">${report.couple?.name1 || '?'} ❤️ ${report.couple?.name2 || '?'}</td>
-          <td style="padding: 12px;">${packNames[packId] || packId}</td>
+          <td style="padding: 12px; font-size: 0.85em;">${packsDisplay} <span style="color: #6c757d;">(${packCount})</span></td>
           <td style="padding: 12px; text-align: center;">${report.stats?.totalQuestions || 0}</td>
           <td style="padding: 12px; text-align: center; color: #4caf50; font-weight: 600;">${report.stats?.superMatches || 0}</td>
           <td style="padding: 12px; text-align: center; color: #8bc34a; font-weight: 600;">${report.stats?.matches || 0}</td>
@@ -490,11 +538,11 @@ async function loadPartialReports(filters = {}) {
     container.innerHTML = html;
     
   } catch (error) {
-    console.error('Erro ao carregar relatórios parciais:', error);
+    console.error('Erro ao carregar relatórios:', error);
     container.innerHTML = `
       <div style="text-align: center; padding: 40px; color: #dc3545;">
         <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
-        <p>Erro ao carregar relatórios parciais.</p>
+        <p>Erro ao carregar relatórios.</p>
         <p style="font-size: 0.85em; color: #6c757d; margin-top: 10px;">${error.message}</p>
         <button onclick="loadPartialReports()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
           🔄 Tentar Novamente
@@ -505,76 +553,17 @@ async function loadPartialReports(filters = {}) {
 }
 
 /**
- * Busca relatórios parciais (apenas 1 pack) do Firebase
+ * Busca relatórios parciais (pelo menos 1 pack) do Firebase
+ * Nota: Relatórios parciais são relatórios onde o casal completou pelo menos 1 pack
  */
 async function getPartialReports(limit = 100, filters = {}) {
   try {
     const db = firebase.firestore();
     
-    // Buscar relatórios com packCount === 1
-    let query = db.collection('analytics_full_reports')
-      .where('stats.packCount', '==', 1)
-      .orderBy('timestamp', 'desc')
-      .limit(limit);
+    console.log('📊 Buscando relatórios parciais...');
     
-    const snapshot = await query.get();
-    let reports = [];
-    
-    snapshot.forEach(doc => {
-      reports.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-    
-    // Aplicar filtros adicionais em memória
-    if (filters.packId) {
-      reports = reports.filter(r => r.stats?.packIds?.includes(filters.packId));
-    }
-    
-    if (filters.period) {
-      const now = new Date();
-      let startDate = null;
-      
-      if (filters.period === 'today') {
-        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      } else if (filters.period === 'week') {
-        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      } else if (filters.period === 'month') {
-        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      }
-      
-      if (startDate) {
-        reports = reports.filter(r => {
-          const timestamp = r.timestamp?.toDate();
-          return timestamp && timestamp >= startDate;
-        });
-      }
-    }
-    
-    return reports;
-    
-  } catch (error) {
-    console.error('❌ Erro ao obter relatórios parciais:', error);
-    
-    // Se der erro de índice, tentar busca sem filtro
-    if (error.code === 'failed-precondition') {
-      console.warn('⚠️ Índice não existe, buscando todos os relatórios...');
-      return await getPartialReportsFallback(limit, filters);
-    }
-    
-    throw error;
-  }
-}
-
-/**
- * Fallback para buscar relatórios parciais (sem índice composto)
- */
-async function getPartialReportsFallback(limit = 100, filters = {}) {
-  try {
-    const db = firebase.firestore();
-    
-    // Buscar todos os relatórios e filtrar em memória
+    // Buscar todos os relatórios e filtrar
+    // Parciais = relatórios com pelo menos 1 pack (packCount >= 1)
     const snapshot = await db.collection('analytics_full_reports')
       .orderBy('timestamp', 'desc')
       .limit(500)
@@ -584,16 +573,16 @@ async function getPartialReportsFallback(limit = 100, filters = {}) {
     
     snapshot.forEach(doc => {
       const data = doc.data();
-      // Filtrar apenas relatórios com 1 pack
-      if (data.stats?.packCount === 1) {
-        reports.push({
-          id: doc.id,
-          ...data
-        });
-      }
+      // Incluir todos os relatórios (todos têm pelo menos 1 pack)
+      reports.push({
+        id: doc.id,
+        ...data
+      });
     });
     
-    // Aplicar filtros
+    console.log(`✅ Encontrados ${reports.length} relatórios totais`);
+    
+    // Aplicar filtros adicionais em memória
     if (filters.packId) {
       reports = reports.filter(r => r.stats?.packIds?.includes(filters.packId));
     }
@@ -621,7 +610,7 @@ async function getPartialReportsFallback(limit = 100, filters = {}) {
     return reports.slice(0, limit);
     
   } catch (error) {
-    console.error('❌ Erro no fallback de relatórios parciais:', error);
+    console.error('❌ Erro ao obter relatórios parciais:', error);
     throw error;
   }
 }
