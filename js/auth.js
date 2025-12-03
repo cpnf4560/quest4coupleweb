@@ -219,17 +219,25 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
     console.log('📖 Verificando se perfil já existe...');
     const doc = await userRef.get();
     console.log('📖 Documento existe?', doc.exists);
-    
-    if (!doc.exists) {
+      if (!doc.exists) {
       // Criar novo perfil
       console.log('🔵 Perfil não existe, criando novo...');
+      
+      // ⭐ GERAR USERNAME ÚNICO AUTOMATICAMENTE
+      let username = mergedData.username || null;
+      if (!username) {
+        const displayName = user.displayName || mergedData.displayName || mergedData.name || 'User';
+        console.log('🔄 Gerando username único para:', displayName);
+        username = await generateUniqueUsername(displayName);
+        console.log('✅ Username gerado:', username);
+      }
       
       const profileData = {
         uid: user.uid,
         email: user.email,
         displayName: user.displayName || mergedData.displayName || 'User',
         name: user.displayName || mergedData.name || 'User',
-        username: mergedData.username || null,
+        username: username,
         photoURL: user.photoURL || null,
         gender: mergedData.gender || null,
         ageRange: mergedData.ageRange || null,
