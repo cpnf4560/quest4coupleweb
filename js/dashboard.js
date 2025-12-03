@@ -9,6 +9,7 @@ let userProfile = null;
 let userAnswers = {};
 let userConnections = [];
 let packsData = [];
+let currentResetPackId = null; // Pack selecionado para reset
 // auth e db já são declarados em firebase-config.js
 
 // ========================================
@@ -17,7 +18,7 @@ let packsData = [];
 let userName, userDisplayName, logoutBtn, packsGrid, connectionsList, loadingOverlay;
 
 // Modals
-let addConnectionModal, shareModal, addConnectionBtn, closeModalBtn, closeShareModalBtn, searchUserForm, searchResults;
+let addConnectionModal, shareModal, resetPackModal, addConnectionBtn, closeModalBtn, closeShareModalBtn, searchUserForm, searchResults;
 
 // Stats
 let totalAnswersEl, completedPacksEl, totalConnectionsEl, sharedReportsEl;
@@ -127,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inicializar modais
   addConnectionModal = document.getElementById('addConnectionModal');
   shareModal = document.getElementById('shareModal');
+  resetPackModal = document.getElementById('resetPackModal');
   addConnectionBtn = document.getElementById('addConnectionBtn');
   closeModalBtn = document.getElementById('closeModalBtn');
   closeShareModalBtn = document.getElementById('closeShareModalBtn');
@@ -407,6 +409,7 @@ function renderPacks() {
   const startText = t('dashboard.packs.start', 'Começar');
   const continueText = t('dashboard.packs.continue', 'Continuar');
   const viewAnswersText = t('dashboard.packs.viewAnswers', 'Ver Respostas');
+  const resetText = t('dashboard.reset.button', 'Resetar');
   const ofText = t('common.of', 'de');
 
   packsData.forEach(pack => {
@@ -439,10 +442,13 @@ function renderPacks() {
           </div>
         </div>
         <div class="pack-actions">
-          <button class="btn-pack btn-answer" onclick="goToQuiz('${pack.id}')">
-            ${answeredCount === 0 ? startText : continueText}
-          </button>
-          ${answeredCount > 0 ? '<button class="btn-pack btn-view" onclick="viewAnswers(\'' + pack.id + '\')">' + viewAnswersText + '</button>' : ''}
+          <div class="pack-actions-row">
+            <button class="btn-pack btn-answer" onclick="goToQuiz('${pack.id}')">
+              ${answeredCount === 0 ? startText : continueText}
+            </button>
+            ${answeredCount > 0 ? '<button class="btn-pack btn-view" onclick="viewAnswers(\'' + pack.id + '\')">' + viewAnswersText + '</button>' : ''}
+          </div>
+          ${answeredCount > 0 ? `<button class="btn-reset" onclick="openResetPackModal('${pack.id}', '${packName.replace(/'/g, "\\'")}')">🗑️ ${resetText}</button>` : ''}
         </div>
       </div>
     `;
@@ -743,6 +749,93 @@ async function connectWithUser(partnerId, partnerName) {
 // Make functions global
 window.connectWithUser = connectWithUser;
 window.sendConnectionRequest = sendConnectionRequest;
+
+// ========================================
+// RESET PACK MODAL
+// ========================================
+
+function openResetPackModal(packId, packName) {
+  currentResetPackId = packId;
+  
+  // Atualizar nome do pack no modal
+  const packNameDisplay = document.getElementById('resetPackName');
+  if (packNameDisplay) {
+    packNameDisplay.textContent = packName;
+  }
+  
+  // Mostrar modal
+  if (resetPackModal) {
+    resetPackModal.classList.add('active');
+  }
+  
+  // Configurar botão de confirmação
+  const confirmBtn = document.getElementById('confirmResetBtn');
+  if (confirmBtn) {
+    confirmBtn.onclick = confirmResetPack;
+  }
+}
+
+function closeResetPackModal() {
+  if (resetPackModal) {
+    resetPackModal.classList.remove('active');
+  }
+  currentResetPackId = null;
+}
+
+async function confirmResetPack() {
+  if (!currentResetPackId || !auth.currentUser) {
+    console.error('❌ Pack ID ou utilizador não definido');
+    return;
+  }
+  
+  showLoading();
+  
+  try {
+    const userId = auth.currentUser.uid;
+    
+    // Remover as respostas do pack do objeto local
+    if (userAnswers[currentResetPackId]) {
+      delete userAnswers[currentResetPackId];
+    }
+    
+    // Atualizar no Firestore - remover o campo do pack
+    await db.collection('users').doc(userId).collection('answers').doc('all').update({
+      [currentResetPackId]: firebase.firestore.FieldValue.delete()
+    });
+    
+    console.log('✅ Pack resetado com sucesso:', currentResetPackId);
+    
+    // Fechar modal
+    closeResetPackModal();
+    
+    // Atualizar estatísticas e re-renderizar packs
+    updateStats();
+    renderPacks();
+    
+    hideLoading();
+    
+    // Mostrar mensagem de sucesso
+    const t = (key, fallback) => {
+      if (typeof I18n !== 'undefined' && I18n.t) {
+        const result = I18n.t(key);
+        return result !== key ? result : fallback;
+      }
+      return fallback;
+    };
+    
+    alert(t('dashboard.reset.success', '✅ Pack resetado com sucesso! Podes começar de novo.'));
+    
+  } catch (error) {
+    console.error('❌ Erro ao resetar pack:', error);
+    hideLoading();
+    alert('❌ Erro ao resetar pack. Tenta novamente.');
+  }
+}
+
+// Make reset functions global
+window.openResetPackModal = openResetPackModal;
+window.closeResetPackModal = closeResetPackModal;
+window.confirmResetPack = confirmResetPack;
 
 // ========================================
 // SHARE MODAL

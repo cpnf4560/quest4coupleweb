@@ -141,6 +141,21 @@ function renderPackQuestions(containerId, packId, categories) {
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question';
 
+        // Obter traduções das opções de resposta
+        const t = (key, fallback) => {
+          if (typeof I18n !== 'undefined' && I18n.t) {
+            const result = I18n.t(key);
+            return result !== key ? result : fallback;
+          }
+          return fallback;
+        };
+
+        const optPorfavor = t('answers.porfavor', 'Por favor!');
+        const optYup = t('answers.yup', 'Yup');
+        const optMeh = t('answers.meh', 'Meh...');
+        const optTalvez = t('answers.talvez', 'Talvez');
+        const commentPlaceholder = t('answers.commentPlaceholder', 'Comentários (opcional)');
+
         questionDiv.innerHTML = `
           <div class="question-row">
             <div class="question-content">
@@ -148,24 +163,24 @@ function renderPackQuestions(containerId, packId, categories) {
             </div>
             <div class="question-options">
               <div class="option-item">
-                <span class="option-label">Por favor!</span>
+                <span class="option-label">${optPorfavor}</span>
                 <input type="radio" name="${packId}_q${qNum}" value="porfavor">
               </div>
               <div class="option-item">
-                <span class="option-label">Yup</span>
+                <span class="option-label">${optYup}</span>
                 <input type="radio" name="${packId}_q${qNum}" value="yup">
               </div>
               <div class="option-item">
-                <span class="option-label">Meh...</span>
+                <span class="option-label">${optMeh}</span>
                 <input type="radio" name="${packId}_q${qNum}" value="meh">
               </div>
               <div class="option-item">
-                <span class="option-label">Talvez</span>
+                <span class="option-label">${optTalvez}</span>
                 <input type="radio" name="${packId}_q${qNum}" value="talvez">
               </div>
             </div>
           </div>          <div class="question-comment">
-            <textarea name="${packId}_q${qNum}_comment" placeholder="Comentários (opcional)"></textarea>
+            <textarea name="${packId}_q${qNum}_comment" placeholder="${commentPlaceholder}"></textarea>
           </div>        `;
           questionsContainer.appendChild(questionDiv);
       });
@@ -208,6 +223,21 @@ function renderPackQuestions(containerId, packId, categories) {
       const qNum = questionCounter;
       const questionDiv = document.createElement('div');
       questionDiv.className = 'question custom-question';
+
+      // Obter traduções das opções de resposta
+      const t = (key, fallback) => {
+        if (typeof I18n !== 'undefined' && I18n.t) {
+          const result = I18n.t(key);
+          return result !== key ? result : fallback;
+        }
+        return fallback;
+      };
+
+      const optPorfavor = t('answers.porfavor', 'Por favor!');
+      const optYup = t('answers.yup', 'Yup');
+      const optMeh = t('answers.meh', 'Meh...');
+      const optTalvez = t('answers.talvez', 'Talvez');
+      const commentPlaceholder = t('answers.commentPlaceholder', 'Comentários (opcional)');
       
       questionDiv.innerHTML = `
         <div class="question-row">
@@ -220,24 +250,24 @@ function renderPackQuestions(containerId, packId, categories) {
           </div>
           <div class="question-options">
             <div class="option-item">
-              <span class="option-label">Por favor!</span>
+              <span class="option-label">${optPorfavor}</span>
               <input type="radio" name="${packId}_q${qNum}" value="porfavor">
             </div>
             <div class="option-item">
-              <span class="option-label">Yup</span>
+              <span class="option-label">${optYup}</span>
               <input type="radio" name="${packId}_q${qNum}" value="yup">
             </div>
             <div class="option-item">
-              <span class="option-label">Meh...</span>
+              <span class="option-label">${optMeh}</span>
               <input type="radio" name="${packId}_q${qNum}" value="meh">
             </div>
             <div class="option-item">
-              <span class="option-label">Talvez</span>
+              <span class="option-label">${optTalvez}</span>
               <input type="radio" name="${packId}_q${qNum}" value="talvez">
             </div>
           </div>
         </div>        <div class="question-comment">
-          <textarea name="${packId}_q${qNum}_comment" placeholder="Comentários (opcional)"></textarea>
+          <textarea name="${packId}_q${qNum}_comment" placeholder="${commentPlaceholder}"></textarea>
         </div>`;
       
       customQuestionsContainer.appendChild(questionDiv);

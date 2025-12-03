@@ -290,6 +290,14 @@
       "viewReport": "Ver Relatório",
       "viewAnswers": "Ver Respostas"
     },
+    "reset": {
+      "title": "Resetar Pack",
+      "button": "Resetar",
+      "warning": "Tens a certeza que queres apagar todas as respostas deste pack?",
+      "note": "Esta ação não pode ser desfeita!",
+      "confirm": "Sim, Apagar",
+      "success": "✅ Pack resetado com sucesso! Podes começar de novo."
+    },
     "modal": {
       "yourUsername": "O teu username para partilhar:",
       "shareUsername": "Partilha este username com o teu parceiro",
@@ -688,7 +696,9 @@
       "partnerFile": "📁 Ficheiro .q4c do/a parceiro/a:",
       "securityCode": "🔑 Código de segurança:",
       "securityCodePlaceholder": "Código utilizado ao guardar...",
-      "generateButton": "🎯 Gerar Relatório"
+      "generateButton": "🎯 Gerar Relatório",
+      "chooseFile": "Escolher ficheiro",
+      "noFileSelected": "Nenhum ficheiro selecionado"
     },
     "cloud": {
       "title": "Gerar com Conta Quest4Couple",
@@ -787,6 +797,14 @@
     "or": "ou",
     "visitor": "Visitante",
     "selectLanguage": "Escolhe o idioma"
+  },
+
+  "answers": {
+    "porfavor": "Por favor!",
+    "yup": "Yup",
+    "meh": "Meh...",
+    "talvez": "Talvez",
+    "commentPlaceholder": "Comentários (opcional)"
   },
 
   "pages": {

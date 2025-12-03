@@ -422,16 +422,17 @@ const I18n = {
         document.addEventListener('click', () => {
             dropdown.style.display = 'none';
         });
-        
-        // Adicionar CSS
+          // Adicionar CSS
         if (!document.getElementById('lang-selector-styles')) {
             const style = document.createElement('style');
             style.id = 'lang-selector-styles';
             style.textContent = `
                 #language-selector { flex-shrink: 0; }
                 @media (max-width: 768px) {
-                    #lang-toggle { font-size: 1.5em !important; padding: 6px 10px !important; }
-                    #lang-dropdown { min-width: 160px !important; right: -10px !important; }
+                    #lang-toggle { font-size: 0.85em !important; padding: 5px 8px !important; gap: 4px !important; }
+                    #lang-toggle .fi { width: 18px !important; height: 14px !important; }
+                    #lang-dropdown { min-width: 160px !important; right: 0 !important; }
+                    #lang-dropdown .lang-dropdown-item { padding: 10px 12px !important; font-size: 0.9em !important; }
                 }
             `;
             document.head.appendChild(style);

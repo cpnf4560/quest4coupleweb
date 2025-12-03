@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relatório de Compatibilidade - Quest4Couple 💕</title>
+  <title data-i18n="report.pageTitle">Relatório de Compatibilidade - Quest4Couple 💕</title>
   
   <!-- Microsoft Clarity -->
   <script type="text/javascript">
@@ -36,7 +36,82 @@
       margin: 0 auto;
       padding: 20px;
     }
+
+    /* ========================================
+       CUSTOM FILE INPUT - Traduzível
+       ======================================== */
+    .custom-file-input {
+      position: relative;
+      width: 100%;
+    }
     
+    .custom-file-input input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+    
+    .custom-file-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 15px;
+      border: 2px dashed #667eea;
+      border-radius: 12px;
+      background: #f8f9ff;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .custom-file-label.partner {
+      border-color: #d63384;
+      background: #fff8fa;
+    }
+    
+    .custom-file-input:hover .custom-file-label {
+      background: #eef2ff;
+      border-color: #5a6fd6;
+    }
+    
+    .custom-file-input:hover .custom-file-label.partner {
+      background: #ffeff5;
+      border-color: #c1296d;
+    }
+    
+    .file-button {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9em;
+      white-space: nowrap;
+    }
+    
+    .custom-file-label.partner .file-button {
+      background: linear-gradient(135deg, #d63384 0%, #e83e8c 100%);
+    }
+    
+    .file-name {
+      flex: 1;
+      color: #6c757d;
+      font-size: 0.95em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .file-name.has-file {
+      color: #28a745;
+      font-weight: 500;
+    }
+
     /* ========================================
        CATEGORIAS - Design Minimalista
        ======================================== */
@@ -474,34 +549,34 @@
       <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
     </a>
     <h1>Quest4Couple</h1>
-    <p class="tagline">Relatório de Compatibilidade 💕</p>
+    <p class="tagline" data-i18n="report.tagline">Relatório de Compatibilidade 💕</p>
   </div>
   
   <!-- User Section (Canto Superior Direito) -->
   <div class="user-section-top">
     <span class="user-info" id="userInfo">
-      👤 <span id="currentUserName">Visitante</span>
+      👤 <span id="currentUserName" data-i18n="common.visitor">Visitante</span>
     </span>
     
-    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard" id="dashboardBtn" style="display: none;">
-      📊 Dashboard
+    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard" id="dashboardBtn" style="display: none;" data-i18n="[title]report.buttons.dashboardTitle">
+      📊 <span data-i18n="header.dashboard">Dashboard</span>
     </button>
     
-    <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário">
-      📝 Questionário
+    <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário" data-i18n="[title]report.buttons.questionnaireTitle">
+      📝 <span data-i18n="header.questionnaire">Questionário</span>
     </button>
     
-    <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início">
-      🏠 Início
+    <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início" data-i18n="[title]report.buttons.homeTitle">
+      🏠 <span data-i18n="common.home">Início</span>
     </button>
     
-    <button class="btn btn-logout" onclick="logout()" title="Sair" id="logoutBtn" style="display: none;">
-      🚪 Sair
+    <button class="btn btn-logout" onclick="logout()" title="Sair" id="logoutBtn" style="display: none;" data-i18n="[title]report.buttons.logoutTitle">
+      🚪 <span data-i18n="header.logout">Sair</span>
     </button>
   </div>
   
   <div class="free-badge-small">
-    ✨ 100% Gratuito
+    ✨ <span data-i18n="report.freeBadge">100% Gratuito</span>
   </div>
 </div>
 
@@ -512,25 +587,37 @@
   <div id="uploadSection" style="max-width: 700px; margin: 0 auto; padding: 40px; background: white; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
     <div style="text-align: center; margin-bottom: 30px;">
       <div style="font-size: 4em; margin-bottom: 15px;">💑</div>
-      <h2 style="color: #667eea; font-size: 2em; margin-bottom: 10px;">Gerar Relatório de Compatibilidade</h2>
-      <p style="color: #6c757d; font-size: 1.1em;">Carreguem os vossos ficheiros .q4c para descobrir a compatibilidade!</p>
+      <h2 style="color: #667eea; font-size: 2em; margin-bottom: 10px;" data-i18n="report.upload.title">Gerar Relatório de Compatibilidade</h2>
+      <p style="color: #6c757d; font-size: 1.1em;" data-i18n="report.upload.subtitle">Carreguem os vossos ficheiros .q4c para descobrir a compatibilidade!</p>
     </div>
     
     <div style="margin: 25px 0;">
-      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">📁 O teu ficheiro .q4c:</label>
-      <input type="file" id="myFile" accept=".q4c" style="width: 100%; padding: 15px; border: 2px dashed #667eea; border-radius: 12px; cursor: pointer; font-size: 1em;">
+      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;" data-i18n="report.upload.yourFile">📁 O teu ficheiro .q4c:</label>
+      <div class="custom-file-input">
+        <input type="file" id="myFile" accept=".q4c" onchange="updateFileName(this, 'myFileName')">
+        <div class="custom-file-label">
+          <span class="file-button" data-i18n="report.upload.chooseFile">Escolher ficheiro</span>
+          <span class="file-name" id="myFileName" data-i18n="report.upload.noFileSelected">Nenhum ficheiro selecionado</span>
+        </div>
+      </div>
     </div>
     
     <div style="margin: 25px 0;">
-      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">📁 Ficheiro .q4c do/a parceiro/a:</label>
-      <input type="file" id="partnerFile" accept=".q4c" style="width: 100%; padding: 15px; border: 2px dashed #d63384; border-radius: 12px; cursor: pointer; font-size: 1em;">
+      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;" data-i18n="report.upload.partnerFile">📁 Ficheiro .q4c do/a parceiro/a:</label>
+      <div class="custom-file-input">
+        <input type="file" id="partnerFile" accept=".q4c" onchange="updateFileName(this, 'partnerFileName')">
+        <div class="custom-file-label partner">
+          <span class="file-button" data-i18n="report.upload.chooseFile">Escolher ficheiro</span>
+          <span class="file-name" id="partnerFileName" data-i18n="report.upload.noFileSelected">Nenhum ficheiro selecionado</span>
+        </div>
+      </div>
     </div>
     
     <div style="margin: 25px 0;">
-      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">🔑 Código de segurança:</label>
-      <input type="password" id="securityCode" placeholder="Código utilizado ao guardar..." style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1em;">
+      <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;" data-i18n="report.upload.securityCode">🔑 Código de segurança:</label>
+      <input type="password" id="securityCode" data-i18n="[placeholder]report.upload.securityCodePlaceholder" placeholder="Código utilizado ao guardar..." style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 1em;">
     </div>
-      <button onclick="compareEncryptedAnswers()" style="width: 100%; padding: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; font-size: 1.2em; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 10px;">
+      <button onclick="compareEncryptedAnswers()" style="width: 100%; padding: 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; font-size: 1.2em; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 10px;" data-i18n="report.upload.generateButton">
       🎯 Gerar Relatório
     </button>
     
@@ -538,16 +625,16 @@
     <div style="margin: 35px 0 25px; padding: 25px; background: linear-gradient(135deg, #e0f7fa 0%, #e8eaf6 100%); border-radius: 12px; border: 2px solid #667eea;">
       <div style="text-align: center; margin-bottom: 15px;">
         <div style="font-size: 2.5em; margin-bottom: 5px;">☁️</div>
-        <h3 style="color: #667eea; margin: 0 0 5px 0; font-size: 1.3em;">Gerar com Conta Quest4Couple</h3>
-        <p style="color: #6c757d; margin: 0; font-size: 0.9em;">Sem ficheiros! Direto pela cloud 🚀</p>
+        <h3 style="color: #667eea; margin: 0 0 5px 0; font-size: 1.3em;" data-i18n="report.cloud.title">Gerar com Conta Quest4Couple</h3>
+        <p style="color: #6c757d; margin: 0; font-size: 0.9em;" data-i18n="report.cloud.subtitle">Sem ficheiros! Direto pela cloud 🚀</p>
       </div>
       
       <div id="cloudSection">        <!-- Estado: Não autenticado -->
         <div id="cloudNotAuth" style="text-align: center;">
-          <p style="color: #495057; margin-bottom: 15px;">
+          <p style="color: #495057; margin-bottom: 15px;" data-i18n-html="report.cloud.notAuthDesc">
             <strong>✨ Novo!</strong> Se ambos têm conta Quest4Couple, podem gerar o relatório diretamente sem ficheiros .q4c!
           </p>
-          <button onclick="window.location.href='auth.html?redirect=relatorio.html'" style="padding: 12px 25px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;">
+          <button onclick="window.location.href='auth.html?redirect=relatorio.html'" style="padding: 12px 25px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 1em;" data-i18n="report.cloud.loginButton">
             🔐 Fazer Login para Usar Cloud
           </button>
         </div>
@@ -555,17 +642,17 @@
         <!-- Estado: Autenticado (escondido por padrão) -->
         <div id="cloudAuth" style="display: none;">
           <div style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">👥 Escolher parceiro/a:</label>
+            <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;" data-i18n="report.cloud.selectPartner">👥 Escolher parceiro/a:</label>
             <select id="partnerSelect" style="width: 100%; padding: 12px; border: 2px solid #667eea; border-radius: 8px; font-size: 1em; cursor: pointer;">
-              <option value="">Carregando parceiros...</option>
+              <option value="" data-i18n="report.cloud.loadingPartners">Carregando parceiros...</option>
             </select>
           </div>
           
-          <button onclick="generateCloudReport()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00bcd4 0%, #667eea 100%); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 700; cursor: pointer; transition: all 0.3s;">
+          <button onclick="generateCloudReport()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #00bcd4 0%, #667eea 100%); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: 700; cursor: pointer; transition: all 0.3s;" data-i18n="report.cloud.generateButton">
             ☁️ Gerar Relatório pela Cloud
           </button>
           
-          <p style="color: #6c757d; font-size: 0.85em; margin-top: 10px; text-align: center;">
+          <p style="color: #6c757d; font-size: 0.85em; margin-top: 10px; text-align: center;" data-i18n="report.cloud.fastHint">
             ⚡ Rápido e sem código de segurança!
           </p>
         </div>
@@ -577,26 +664,26 @@
     <div id="connectionRequestsSection" style="display: none; margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%); border-radius: 12px; border: 2px solid #667eea;">
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
         <span style="font-size: 1.5em;">📬</span>
-        <h3 style="margin: 0; color: #667eea; font-size: 1.2em;">Pedidos de Conexão</h3>
+        <h3 style="margin: 0; color: #667eea; font-size: 1.2em;" data-i18n="report.connections.requests">Pedidos de Conexão</h3>
         <span id="requestsBadge" style="background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600;">0</span>
       </div>
       <div id="connectionRequestsList" style="display: flex; flex-direction: column; gap: 10px;">
         <!-- Pedidos serão carregados aqui -->
-        <p style="text-align: center; color: #999; padding: 15px;">Carregando pedidos...</p>
+        <p style="text-align: center; color: #999; padding: 15px;" data-i18n="report.connections.loadingRequests">Carregando pedidos...</p>
       </div>
     </div>
     
     <!-- SECÇÃO CONEXÕES (visível só para autenticados) -->
     <div id="connectionsSection" style="display: none; margin-top: 25px; padding: 20px; background: white; border-radius: 12px; border: 1px solid #e9ecef;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-        <h3 style="margin: 0; color: #495057; font-size: 1.2em;">👥 As tuas Conexões</h3>
-        <button onclick="openAddConnectionModal()" style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;">
+        <h3 style="margin: 0; color: #495057; font-size: 1.2em;" data-i18n="report.connections.title">👥 As tuas Conexões</h3>
+        <button onclick="openAddConnectionModal()" style="padding: 8px 15px; background: #667eea; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;" data-i18n="report.connections.addPartner">
           + Adicionar Parceiro
         </button>
       </div>
       <div id="connectionsList" style="display: flex; flex-direction: column; gap: 10px;">
         <!-- Conexões serão carregadas aqui -->
-        <p style="text-align: center; color: #999; padding: 15px;">Carregando conexões...</p>
+        <p style="text-align: center; color: #999; padding: 15px;" data-i18n="report.connections.loadingConnections">Carregando conexões...</p>
       </div>
     </div>
     
@@ -604,23 +691,23 @@
     <div id="addConnectionModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
       <div style="background: white; padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 90vh; overflow-y: auto;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h3 style="margin: 0; color: #495057;">Adicionar Parceiro</h3>
+          <h3 style="margin: 0; color: #495057;" data-i18n="report.modal.addPartner">Adicionar Parceiro</h3>
           <button onclick="closeAddConnectionModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">&times;</button>
         </div>
         
         <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-          <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 O teu username:</p>
+          <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;" data-i18n="report.modal.yourUsername">📱 O teu username:</p>
           <div style="display: flex; align-items: center; gap: 10px;">
             <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
             <button type="button" onclick="copyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer;">📋</button>
           </div>
         </div>
         
-        <p style="font-weight: 500; margin-bottom: 10px;">🔍 Procura pelo username do parceiro:</p>
+        <p style="font-weight: 500; margin-bottom: 10px;" data-i18n="report.modal.searchPartner">🔍 Procura pelo username do parceiro:</p>
         <form onsubmit="searchPartnerUser(event)">
           <div style="display: flex; gap: 10px;">
             <input type="text" id="searchUsername" placeholder="@username" required style="flex: 1; padding: 10px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1em;">
-            <button type="submit" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Procurar</button>
+            <button type="submit" style="padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;" data-i18n="common.search">Procurar</button>
           </div>
         </form>
         
@@ -631,13 +718,13 @@
     </div>
     
     <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #17a2b8;">
-      <div style="font-weight: 700; margin-bottom: 10px; color: #0c5460;">💡 Como funciona:</div>
+      <div style="font-weight: 700; margin-bottom: 10px; color: #0c5460;" data-i18n="report.howItWorks.title">💡 Como funciona:</div>
       <ol style="margin: 10px 0 0 20px; line-height: 1.8; color: #6c757d;">
-        <li>Cada pessoa responde aos questionários no <a href="app.html" style="color: #667eea; font-weight: 600;">app.html</a></li>
-        <li>Guardam as respostas num ficheiro .q4c</li>
-        <li>Partilham os ficheiros entre si</li>
-        <li>Carregam ambos aqui para ver a compatibilidade!</li>
-        <li>Usem o <strong>mesmo código de segurança</strong></li>
+        <li data-i18n-html="report.howItWorks.step1">Cada pessoa responde aos questionários no <a href="app.html" style="color: #667eea; font-weight: 600;">app.html</a></li>
+        <li data-i18n="report.howItWorks.step2">Guardam as respostas num ficheiro .q4c</li>
+        <li data-i18n="report.howItWorks.step3">Partilham os ficheiros entre si</li>
+        <li data-i18n="report.howItWorks.step4">Carregam ambos aqui para ver a compatibilidade!</li>
+        <li data-i18n-html="report.howItWorks.step5">Usem o <strong>mesmo código de segurança</strong></li>
       </ol>
     </div>
   </div>
@@ -647,13 +734,13 @@
   
   <!-- Botões de ação (aparecem após gerar relatório) -->
   <div id="actionButtons" style="display: none;" class="action-buttons">
-    <button onclick="window.print()" class="btn-action btn-primary">
+    <button onclick="window.print()" class="btn-action btn-primary" data-i18n="report.actions.print">
       🖨️ Imprimir Relatório
     </button>
-    <button onclick="window.location.href='app.html'" class="btn-action btn-secondary">
+    <button onclick="window.location.href='app.html'" class="btn-action btn-secondary" data-i18n="report.actions.answerAgain">
       🔄 Responder Novamente
     </button>
-    <a href="index.html" class="btn-action btn-outline">
+    <a href="index.html" class="btn-action btn-outline" data-i18n="report.actions.backHome">
       🏠 Voltar ao Início
     </a>
   </div>
@@ -664,15 +751,15 @@
 <footer style="margin-top: 60px; padding: 30px 20px; background: rgba(255,255,255,0.9); border-top: 2px solid #d63384; text-align: center;">
   <div style="max-width: 1200px; margin: 0 auto;">
     <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
-      <a href="pages/sobre.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Sobre</a>
-      <a href="pages/faq.html" style="color: #d63384; text-decoration: none; font-weight: 600;">FAQ</a>
-      <a href="tutorial.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Tutorial</a>
-      <a href="pages/privacidade.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Privacidade</a>
+      <a href="pages/sobre.html" style="color: #d63384; text-decoration: none; font-weight: 600;" data-i18n="footer.links.about">Sobre</a>
+      <a href="pages/faq.html" style="color: #d63384; text-decoration: none; font-weight: 600;" data-i18n="footer.links.faq">FAQ</a>
+      <a href="tutorial.html" style="color: #d63384; text-decoration: none; font-weight: 600;" data-i18n="header.tutorial">Tutorial</a>
+      <a href="pages/privacidade.html" style="color: #d63384; text-decoration: none; font-weight: 600;" data-i18n="footer.links.privacy">Privacidade</a>
     </div>
-    <p style="color: #6c757d; font-size: 0.9em; margin: 10px 0;">
+    <p style="color: #6c757d; font-size: 0.9em; margin: 10px 0;" data-i18n="report.footer.tagline">
       💕 Quest4Couple - Descubram-se juntos
     </p>
-    <p style="color: #999; font-size: 0.8em;">
+    <p style="color: #999; font-size: 0.8em;" data-i18n="footer.copyright">
       © 2025 Quest4Couple. Todos os direitos reservados.
     </p>
   </div>
@@ -696,6 +783,32 @@
 <script src="js/comparison.js"></script>
 
 <script>
+  // ========================================
+  // HELPER PARA TRADUÇÕES
+  // ========================================
+  function t(key, params = {}) {
+    if (window.I18n && typeof window.I18n.t === 'function') {
+      return window.I18n.t(key, params);
+    }
+    return key; // Fallback
+  }
+
+  // ========================================
+  // ATUALIZAR NOME DO FICHEIRO NO INPUT CUSTOMIZADO
+  // ========================================
+  function updateFileName(input, labelId) {
+    const label = document.getElementById(labelId);
+    if (label) {
+      if (input.files && input.files.length > 0) {
+        label.textContent = input.files[0].name;
+        label.classList.add('has-file');
+      } else {
+        label.textContent = t('report.upload.noFileSelected', 'Nenhum ficheiro selecionado');
+        label.classList.remove('has-file');
+      }
+    }
+  }
+
   // ========================================
   // CARREGAR CONFIGURAÇÃO DE INVERT MATCHING
   // ========================================
@@ -818,7 +931,7 @@
       }
       
       if (requests.length === 0) {
-        requestsList.innerHTML = '<p style="text-align: center; color: #999; padding: 10px;">Nenhum pedido pendente</p>';
+        requestsList.innerHTML = `<p style="text-align: center; color: #999; padding: 10px;">${t('report.connections.noPending')}</p>`;
         return;
       }
       
@@ -826,7 +939,7 @@
       let html = '';
       requests.forEach(request => {
         const initials = request.fromUserName ? request.fromUserName.substring(0, 2).toUpperCase() : '??';
-        const timeAgo = request.createdAt ? getTimeAgo(request.createdAt.toDate()) : 'agora';
+        const timeAgo = request.createdAt ? getTimeAgo(request.createdAt.toDate()) : t('report.time.now');
         
         html += `
           <div style="background: white; border: 1px solid #e0e7ff; border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -839,10 +952,10 @@
             </div>
             <div style="display: flex; gap: 8px;">
               <button onclick="acceptRequest('${request.id}', '${request.fromUserId}', '${request.fromUserName.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: #10b981; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                ✅ Aceitar
+                ${t('report.connections.accept')}
               </button>
               <button onclick="rejectRequest('${request.id}', '${request.fromUserName.replace(/'/g, "\\'")}')" style="padding: 8px 16px; background: white; color: #ef4444; border: 2px solid #ef4444; border-radius: 6px; font-weight: 600; cursor: pointer;">
-                ❌
+                ${t('report.connections.reject')}
               </button>
             </div>
           </div>
@@ -886,17 +999,17 @@
         await loadConnectedPartners(currentUserId);
       }
       
-      alert(`✅ Conectado com ${fromUserName}!`);
+      alert(t('report.alerts.connectedWith', { name: fromUserName }));
       
     } catch (error) {
       console.error('Erro ao aceitar pedido:', error);
-      alert('❌ Erro ao aceitar pedido. Tenta novamente.');
+      alert(t('report.alerts.errorAccept'));
     }
   }
   
   // Recusar pedido de conexão
   async function rejectRequest(requestId, fromUserName) {
-    if (!confirm(`Tens a certeza que queres recusar o pedido de ${fromUserName}?`)) {
+    if (!confirm(t('report.alerts.confirmReject', { name: fromUserName }))) {
       return;
     }
     
@@ -907,28 +1020,28 @@
       });
       
       await loadConnectionRequests(auth.currentUser.uid);
-      alert('Pedido recusado.');
+      alert(t('report.alerts.requestRejected'));
       
     } catch (error) {
       console.error('Erro ao recusar pedido:', error);
-      alert('❌ Erro ao recusar pedido. Tenta novamente.');
+      alert(t('report.alerts.errorReject'));
     }
   }
   
   // Helper: tempo relativo
   function getTimeAgo(date) {
-    if (!date) return 'agora';
+    if (!date) return t('report.time.now');
     const now = new Date();
     const diff = now - date;
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
     const days = Math.floor(diff / 86400000);
     
-    if (minutes < 1) return 'agora';
-    if (minutes < 60) return `há ${minutes}m`;
-    if (hours < 24) return `há ${hours}h`;
-    if (days < 7) return `há ${days}d`;
-    return date.toLocaleDateString('pt-PT');
+    if (minutes < 1) return t('report.time.now');
+    if (minutes < 60) return t('report.time.minutesAgo', { n: minutes });
+    if (hours < 24) return t('report.time.hoursAgo', { n: hours });
+    if (days < 7) return t('report.time.daysAgo', { n: days });
+    return date.toLocaleDateString();
   }
   
   async function loadMyUsername(userId) {
@@ -959,7 +1072,7 @@
         connectionsList.innerHTML = `
           <div style="text-align: center; padding: 20px; color: #6c757d;">
             <div style="font-size: 2em; margin-bottom: 10px;">💑</div>
-            <p style="margin: 0;">Nenhuma conexão ainda. Adiciona o teu parceiro!</p>
+            <p style="margin: 0;">${t('report.connections.noConnections')}</p>
           </div>
         `;
         return;
@@ -973,7 +1086,7 @@
         if (partnerId) {
           const partnerDoc = await db.collection('users').doc(partnerId).get();
           const partnerData = partnerDoc.exists ? partnerDoc.data() : {};
-          const partnerName = partnerData.name || partnerData.email?.split('@')[0] || 'Parceiro';
+          const partnerName = partnerData.name || partnerData.email?.split('@')[0] || t('common.user');
           const partnerUsername = partnerData.username || '';
           
           html += `
@@ -984,9 +1097,9 @@
               </div>
               <div style="display: flex; gap: 8px;">
                 <button onclick="selectPartnerForReport('${partnerId}')" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 0.85em; cursor: pointer;">
-                  📊 Gerar Relatório
+                  ${t('report.connections.generateReport')}
                 </button>
-                <button onclick="deleteConnectionFromRelatorio('${doc.id}', '${partnerName.replace(/'/g, "\\'")}')" style="padding: 6px 12px; background: #fff5f5; color: #dc3545; border: 2px solid #dc3545; border-radius: 6px; font-size: 0.85em; cursor: pointer;" title="Remover conexão">
+                <button onclick="deleteConnectionFromRelatorio('${doc.id}', '${partnerName.replace(/'/g, "\\'")}')" style="padding: 6px 12px; background: #fff5f5; color: #dc3545; border: 2px solid #dc3545; border-radius: 6px; font-size: 0.85em; cursor: pointer;" title="${t('report.connections.remove')}">
                   🗑️
                 </button>
               </div>
@@ -1027,7 +1140,7 @@
     const username = currentUserUsername ? `@${currentUserUsername}` : '';
     if (username) {
       navigator.clipboard.writeText(username).then(() => {
-        alert('Username copiado! Partilha com o teu parceiro 💕');
+        alert(t('report.modal.usernameCopied'));
       });
     }
   }
@@ -1039,11 +1152,11 @@
     const username = searchInput.value.replace('@', '').toLowerCase().trim();
     
     if (!username) {
-      resultsDiv.innerHTML = '<p style="color: #dc3545;">Por favor, insere um username.</p>';
+      resultsDiv.innerHTML = `<p style="color: #dc3545;">${t('report.modal.userNotFound')}</p>`;
       return;
     }
     
-    resultsDiv.innerHTML = '<p style="color: #6c757d;">🔍 A procurar...</p>';
+    resultsDiv.innerHTML = `<p style="color: #6c757d;">🔍 ${t('common.loading')}</p>`;
     
     try {
       const usersSnapshot = await db.collection('users')
@@ -1052,7 +1165,7 @@
         .get();
       
       if (usersSnapshot.empty) {
-        resultsDiv.innerHTML = '<p style="color: #dc3545;">Utilizador não encontrado. Verifica o username.</p>';
+        resultsDiv.innerHTML = `<p style="color: #dc3545;">${t('report.modal.userNotFound')}</p>`;
         return;
       }
       
@@ -1062,25 +1175,25 @@
       
       // Verificar se não é o próprio user
       if (foundUserId === auth.currentUser.uid) {
-        resultsDiv.innerHTML = '<p style="color: #dc3545;">Não podes adicionar-te a ti mesmo!</p>';
+        resultsDiv.innerHTML = `<p style="color: #dc3545;">${t('report.modal.cantAddSelf')}</p>`;
         return;
       }
       
       resultsDiv.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #e8f5e9; border-radius: 8px; margin-top: 10px;">
           <div>
-            <strong>${userData.name || 'Utilizador'}</strong>
+            <strong>${userData.name || t('common.user')}</strong>
             <span style="color: #6c757d; font-size: 0.9em;"> @${userData.username}</span>
           </div>
-          <button onclick="sendConnectionRequest('${foundUserId}', '${userData.name || 'Utilizador'}')" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
-            ➕ Enviar Pedido
+          <button onclick="sendConnectionRequest('${foundUserId}', '${userData.name || t('common.user')}')" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+            ${t('report.modal.sendRequest')}
           </button>
         </div>
       `;
       
     } catch (error) {
       console.error('Erro ao procurar utilizador:', error);
-      resultsDiv.innerHTML = '<p style="color: #dc3545;">Erro na pesquisa. Tenta novamente.</p>';
+      resultsDiv.innerHTML = `<p style="color: #dc3545;">${t('report.modal.userNotFound')}</p>`;
     }
   }
   
@@ -1103,7 +1216,7 @@
       });
       
       if (alreadyConnected) {
-        resultsDiv.innerHTML = '<p style="color: #ffc107; font-weight: 600;">⚠️ Já tens conexão com este utilizador!</p>';
+        resultsDiv.innerHTML = `<p style="color: #ffc107; font-weight: 600;">${t('report.modal.alreadyConnected')}</p>`;
         return;
       }
       
@@ -1115,7 +1228,7 @@
         .get();
       
       if (!existingRequest.empty) {
-        resultsDiv.innerHTML = '<p style="color: #ffc107; font-weight: 600;">⚠️ Já enviaste um pedido para este utilizador!</p>';
+        resultsDiv.innerHTML = `<p style="color: #ffc107; font-weight: 600;">${t('report.modal.alreadyConnected')}</p>`;
         return;
       }
       
@@ -1136,8 +1249,8 @@
       resultsDiv.innerHTML = `
         <div style="background: #d4edda; padding: 15px; border-radius: 8px; text-align: center;">
           <div style="font-size: 2em; margin-bottom: 10px;">✅</div>
-          <strong style="color: #155724;">Pedido enviado!</strong>
-          <p style="margin: 10px 0 0 0; color: #155724;">Aguarda que ${toUserName} aceite o teu pedido.</p>
+          <strong style="color: #155724;">${t('report.modal.requestSent')}</strong>
+          <p style="margin: 10px 0 0 0; color: #155724;">${t('report.modal.waitAccept', { name: toUserName })}</p>
         </div>
       `;
       
@@ -1145,7 +1258,7 @@
       
     } catch (error) {
       console.error('Erro ao enviar pedido:', error);
-      resultsDiv.innerHTML = '<p style="color: #dc3545;">Erro ao enviar pedido. Tenta novamente.</p>';
+      resultsDiv.innerHTML = `<p style="color: #dc3545;">${t('report.modal.userNotFound')}</p>`;
     }
   }
   
@@ -1154,13 +1267,13 @@
   // ========================================
   
   function logout() {
-    if (confirm('Tens a certeza que queres sair?')) {
+    if (confirm(t('report.alerts.confirmLogout'))) {
       auth.signOut().then(() => {
         console.log('✅ Logout com sucesso');
         window.location.href = 'index.html';
       }).catch((error) => {
         console.error('❌ Erro no logout:', error);
-        alert('Erro ao fazer logout. Por favor tenta novamente.');
+        alert(t('report.alerts.logoutError'));
       });
     }
   }
@@ -1170,12 +1283,12 @@
   // ========================================
   async function deleteConnectionFromRelatorio(connectionId, partnerName) {
     // Primeiro aviso
-    if (!confirm(`Tens a certeza que queres remover a conexão com ${partnerName}?`)) {
+    if (!confirm(t('report.alerts.confirmRemove', { name: partnerName }))) {
       return;
     }
     
     // Segundo aviso (dupla confirmação)
-    if (!confirm(`⚠️ ATENÇÃO: Ao remover a conexão:\n\n• Vocês deixam de poder ver as respostas um do outro\n• Para se reconectarem, terão de enviar novo pedido\n\nTens a certeza ABSOLUTA que queres remover ${partnerName}?`)) {
+    if (!confirm(t('report.alerts.confirmRemove2', { name: partnerName }))) {
       return;
     }
     
@@ -1193,11 +1306,11 @@
         await loadConnectedPartners(auth.currentUser.uid);
       }
       
-      alert(`✅ Conexão com ${partnerName} removida.`);
+      alert(t('report.alerts.connectionRemoved', { name: partnerName }));
       
     } catch (error) {
       console.error('Erro ao eliminar conexão:', error);
-      alert('❌ Erro ao remover conexão. Tenta novamente.');
+      alert(t('report.alerts.errorRemove'));
     }
   }
   
@@ -1207,14 +1320,16 @@
   
   // Mostrar botões de ação após gerar relatório
   const originalGenerateReport = window.generateCompatibilityReport;
-  if (originalGenerateReport) {
-    window.generateCompatibilityReport = async function(...args) {
+  if (originalGenerateReport) {    window.generateCompatibilityReport = async function(...args) {
       await originalGenerateReport.apply(this, args);
       document.getElementById('actionButtons').style.display = 'flex';
       document.getElementById('uploadSection').style.display = 'none';
     };
   }
 </script>
+
+<!-- i18n System -->
+<script src="js/i18n.js"></script>
 
 </body>
 </html>

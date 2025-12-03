@@ -200,6 +200,10 @@ function attachProgressListeners() {
   document.addEventListener('change', function(e) {
     if (e.target.type === 'radio') {
       updateThemeProgress();
+      // Atualizar também o contador de perguntas por categoria
+      if (typeof updateAllCategoriesProgress === 'function') {
+        updateAllCategoriesProgress();
+      }
     }
   });
 }

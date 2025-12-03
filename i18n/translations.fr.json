@@ -286,6 +286,14 @@
       "viewReport": "Voir le Rapport",
       "viewAnswers": "Voir les Réponses"
     },
+    "reset": {
+      "title": "Réinitialiser le Pack",
+      "button": "Réinitialiser",
+      "warning": "Êtes-vous sûr de vouloir supprimer toutes les réponses de ce pack ?",
+      "note": "Cette action ne peut pas être annulée !",
+      "confirm": "Oui, Supprimer",
+      "success": "✅ Pack réinitialisé avec succès ! Vous pouvez recommencer."
+    },
     "modal": {
       "yourUsername": "Votre nom d'utilisateur à partager :",
       "shareUsername": "Partagez ce nom d'utilisateur avec votre partenaire",
@@ -718,6 +726,14 @@
     "forgotPassword": "Mot de passe oublié?",
     "visitor": "Visiteur"
   },
+
+  "answers": {
+    "porfavor": "S'il te plaît !",
+    "yup": "Oui !",
+    "meh": "Bof...",
+    "talvez": "Peut-être",
+    "commentPlaceholder": "Commentaires (optionnel)"
+  },
   
   "report": {
     "pageTitle": "Rapport de Compatibilité - Quest4Couple 💕",
@@ -736,7 +752,9 @@
       "partnerFile": "📁 Fichier .q4c du partenaire :",
       "securityCode": "🔑 Code de sécurité :",
       "securityCodePlaceholder": "Code utilisé lors de l'enregistrement...",
-      "generateButton": "🎯 Générer le Rapport"
+      "generateButton": "🎯 Générer le Rapport",
+      "chooseFile": "Choisir un fichier",
+      "noFileSelected": "Aucun fichier sélectionné"
     },
     "cloud": {
       "title": "Générer avec un Compte Quest4Couple",

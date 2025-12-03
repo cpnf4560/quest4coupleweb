@@ -54,13 +54,18 @@ const SupportBanner = {
                     font-size: 1em;
                     color: #666;
                     line-height: 1.6;
-                }
-
-                .support-actions {
+                }                .support-actions {
                     display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    grid-template-columns: repeat(3, 1fr);
                     gap: 15px;
                     margin-top: 20px;
+                    align-items: stretch;
+                }
+                
+                @media (max-width: 900px) {
+                    .support-actions {
+                        grid-template-columns: 1fr;
+                    }
                 }
 
                 .support-card {
@@ -250,46 +255,44 @@ const SupportBanner = {
     getFullTemplate() {
         return `
             ${this.getStyles()}
-            <div class="support-banner">
-                <div class="support-banner-header">
+            <div class="support-banner">                <div class="support-banner-header">
                     <div class="support-banner-title">
                         <span>💝</span>
-                        <span>Ajuda-nos a crescer!</span>
+                        <span data-i18n="banner.title">Ajuda-nos a crescer!</span>
                     </div>
-                    <div class="support-banner-subtitle">
+                    <div class="support-banner-subtitle" data-i18n-html="banner.description">
                         O Quest4Couple é <strong>100% gratuito</strong>, mas desenvolvê-lo e mantê-lo requer tempo e custos. 
                         Se gostaste, considera apoiar-nos de uma destas formas:
                     </div>
                 </div>
 
-                <div class="support-actions">
-                    <!-- Donativo -->
+                <div class="support-actions">                    <!-- Donativo -->
                     <div class="support-card donate" onclick="SupportBanner.openDonation()">
                         <div class="support-card-icon">☕</div>
-                        <div class="support-card-title">Oferece um Café</div>
-                        <div class="support-card-description">
+                        <div class="support-card-title" data-i18n="banner.donate">Oferece um Café</div>
+                        <div class="support-card-description" data-i18n="support.ways.donate.description">
                             Apoia o desenvolvimento com um pequeno donativo. Cada contribuição ajuda!
                         </div>
-                        <button class="support-card-btn">💰 Doar Agora</button>
+                        <button class="support-card-btn" data-i18n="support.ways.donate.button">💰 Doar Agora</button>
                     </div>
 
                     <!-- Feedback -->
                     <div class="support-card feedback" onclick="SupportBanner.openFeedback()">
                         <div class="support-card-icon">📝</div>
-                        <div class="support-card-title">Deixa Feedback</div>
-                        <div class="support-card-description">
+                        <div class="support-card-title" data-i18n="banner.feedback">Deixa Feedback</div>
+                        <div class="support-card-description" data-i18n="support.ways.feedback.description">
                             Partilha a tua experiência e ajuda-nos a melhorar a plataforma.
                         </div>
-                        <button class="support-card-btn">💬 Dar Feedback</button>
+                        <button class="support-card-btn" data-i18n="support.ways.feedback.button">💬 Dar Feedback</button>
                     </div>
 
                     <!-- Partilhar -->
                     <div class="support-card share">
                         <div class="support-card-icon">📢</div>
-                        <div class="support-card-title">Partilha</div>
-                        <div class="support-card-description">
+                        <div class="support-card-title" data-i18n="banner.share">Partilha</div>
+                        <div class="support-card-description" data-i18n="support.ways.share.description">
                             Recomenda o Quest4Couple aos teus amigos e ajuda mais casais!
-                        </div>                        <div class="share-buttons">
+                        </div><div class="share-buttons">
                             <a href="#" class="share-btn whatsapp" onclick="SupportBanner.share('whatsapp'); return false;" title="WhatsApp">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" fill="#25D366"/>
@@ -435,9 +438,13 @@ const SupportBanner = {
                 styleElement.innerHTML = this.getStyles();
                 document.head.appendChild(styleElement.firstChild);
             }
-            
-            // Injetar template HTML
+              // Injetar template HTML
             element.innerHTML = compact ? this.getCompactTemplate() : this.getFullTemplate();
+              // Escutar mudanças de idioma (REMOVIDO: applyTranslations já é chamado automaticamente)
+            document.addEventListener('languageChanged', () => {
+                console.log('✅ Support banner detectou mudança de idioma');
+                // NÃO chamar applyTranslations() aqui - isso cria loop infinito!
+            });
         } else {
             console.error(`❌ Elemento com ID "${elementId}" não encontrado!`);
         }

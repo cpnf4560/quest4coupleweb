@@ -86,10 +86,39 @@
         .logo-section a:hover {
             transform: scale(1.05);
         }
-        
-        .logo-section img {
+          .logo-section img {
             height: 60px;
             width: auto;
+        }
+        
+        /* Quest4You - Coming Soon styling */
+        .quest4you-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0.7;
+            cursor: default;
+            transition: opacity 0.3s ease;
+        }
+        
+        .quest4you-link:hover {
+            opacity: 0.85;
+            transform: none !important;
+        }
+        
+        .logo-separator {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #ddd, transparent);
+            margin: 0 20px;
+        }
+        
+        /* Esconder Quest4You em mobile */
+        @media (max-width: 900px) {
+            .logo-separator,
+            .quest4you-link {
+                display: none !important;
+            }
         }
         
         .auth-buttons {
@@ -619,10 +648,9 @@
             background: rgba(255, 255, 255, 0.5);
             transform: rotate(90deg);
         }
-        
-        @media (max-width: 768px) {
+          @media (max-width: 768px) {
             .beta-banner {
-                top: 60px;
+                top: 95px;
                 width: 95%;
                 padding: 12px 15px;
             }
@@ -644,22 +672,42 @@
             }
             
             .container {
-                margin-top: 180px !important;
+                margin-top: 100px !important;
             }
-        }    </style>
+        }
+        
+        /* Quando o banner beta está visível, ajustar margin do container */
+        body:has(.beta-banner:not([style*="display: none"])) .container {
+            margin-top: 160px;
+        }
+        
+        @media (max-width: 768px) {
+            body:has(.beta-banner:not([style*="display: none"])) .container {
+                margin-top: 200px;
+            }
+        }</style>
 </head>
 <body>
-    
-    <!-- Header -->
-    <div class="header">        <!-- Logo e Título -->
+      <!-- Header -->    <div class="header">        <!-- Logo e Título -->
         <div class="logo-section">
-            <a href="index.html">
+            <!-- Quest4Couple -->
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
                 <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;" style="height: 40px; width: auto; margin-right: 10px;">
+                <div>
+                    <h1 style="font-size: 1.3em; margin: 0;" data-i18n="home.title">Quest4Couple</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
+                </div>
             </a>
-            <div>
-                <h1 style="font-size: 1.3em; margin: 0;" data-i18n="home.title">Quest4Couple</h1>
-                <p style="font-size: 0.75em; color: #888; margin: 0;" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
-            </div>
+            
+            <!-- Separador -->
+            <div class="logo-separator"></div>            <!-- Quest4You - Coming Soon -->
+            <a href="#" class="quest4you-link" title="Brevemente...">
+                <img src="./assets/quest4you_transp.png" alt="Quest4You Logo" style="height: 40px; width: auto; margin-right: 10px; filter: grayscale(30%);">
+                <div>
+                    <h1 style="font-size: 1.3em; margin: 0; background: linear-gradient(135deg, #e63946, #f4a261, #8ac926); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Quest4You</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;">Brevemente... 🔮</p>
+                </div>
+            </a>
         </div>
           <!-- Navigation Buttons -->
         <div class="auth-buttons">            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
