@@ -214,3 +214,4 @@ Envie screenshot de:
 **Siga estes passos e vai funcionar!** 🚀
 
 **Tempo estimado:** 2 minutos + 2 minutos de propagação = **4 minutos total**
+

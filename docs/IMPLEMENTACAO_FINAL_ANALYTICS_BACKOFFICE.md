@@ -266,7 +266,7 @@ Renderiza cards com estatísticas detalhadas
 
 - [ ] **Login no BackOffice**
   - Aceder a `pages/admin.html`
-  - Login com: `carlos.sousacorreia` / `rzq7xgq8`
+  - Login com: `carlos.sousacorreia` / `[PASSWORD_REMOVIDA]`
 
 - [ ] **Tab Dashboard**
   - Estatísticas gerais a funcionar
@@ -414,3 +414,4 @@ O sistema de Analytics Completas está **100% implementado e funcional**.
 **Implementado por:** GitHub Copilot  
 **Data:** 20 de Novembro de 2025  
 **Versão:** 1.0.0
+

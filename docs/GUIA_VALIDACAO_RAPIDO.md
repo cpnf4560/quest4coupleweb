@@ -228,3 +228,4 @@ O projeto **Quest4Couple v2.0** está **100% funcional** e pronto para testes fi
 
 **Última atualização:** 18 de Novembro de 2025
 **Versão:** 2.0.0 Free Edition
+

@@ -242,3 +242,4 @@ Usa sempre **Live Server** no VS Code para testar:
 ---
 
 **Precisas de ajuda?** Grita! 😄
+

@@ -188,7 +188,7 @@ Dashboard completo mostrando estatísticas de cada questão:
    ```
    URL: pages/admin.html
    Username: carlos.sousacorreia
-   Password: rzq7xgq8
+   Password: [PASSWORD_REMOVIDA]
    ```
 
 2. **Ver Relatórios Completos**
@@ -441,3 +441,4 @@ db.collection('analytics_full_reports')
 **Desenvolvido com ❤️ por GitHub Copilot**  
 **Data:** 20 de Novembro de 2025  
 **Versão:** 1.0.0 - Production Ready ✨
+

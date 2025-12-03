@@ -463,3 +463,4 @@ Se chegaste aqui e seguiste todos os passos, o **Quest4Couple** está ONLINE em 
 **Desenvolvido com ❤️ por Carlos Sousa Correia**  
 **Data:** 19 de novembro de 2025  
 **Versão:** Quest4Couple v2.0 Free
+

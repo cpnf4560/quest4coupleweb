@@ -280,3 +280,4 @@ console.log(I18n.supportedLanguages['pt-pt'].flag);   // Deve mostrar: 🇵🇹
 **Todos os Idiomas:** ✅ TESTADOS
 
 **PRONTO PARA USAR!** 🚀
+

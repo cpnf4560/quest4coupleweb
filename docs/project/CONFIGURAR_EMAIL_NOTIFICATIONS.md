@@ -331,3 +331,4 @@ Se encontrares dificuldades:
 4. Verificar spam/lixo no e-mail de destino
 
 **Está tudo pronto para funcionar!** Só precisas configurar o EmailJS (10 minutos) ou o backend próprio. 🚀
+

@@ -380,3 +380,4 @@ START_SERVER.bat
 
 *Última atualização: 18/11/2025 - Quest4Couple v2.0*  
 *Todas as melhorias aplicadas e testadas ✅*
+

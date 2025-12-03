@@ -213,3 +213,4 @@ DEPOIS: ~200px altura (redução de ~30%)
 **Data:** 20 de Novembro de 2025  
 **Versão:** 1.0.0  
 **Status:** ✅ Pronto para commit
+

@@ -222,3 +222,4 @@ O Netlify precisa de:
 6. **Testar site** quando SSL estiver ativo
 
 **Em 1 hora o site deve estar 100% funcional!** 🚀
+

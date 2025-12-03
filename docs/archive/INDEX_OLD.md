@@ -154,3 +154,4 @@ Esta pasta contém toda a documentação técnica, guias e registos de alteraç�
 ---
 
 **Quest4Couple** - Descubram-se juntos 💕
+

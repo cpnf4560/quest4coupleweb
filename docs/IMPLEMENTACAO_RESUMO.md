@@ -273,3 +273,4 @@ Se encontrares algum problema:
 **🎊 Implementação Concluída com Sucesso!**
 
 *Sistema Quest4Couple agora suporta geração de relatórios direta pela cloud, mantendo total compatibilidade com o método tradicional de ficheiros encriptados.*
+

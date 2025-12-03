@@ -75,3 +75,4 @@ Tel: https://quest4couple.netlify.app/app.html
 
 **Tempo:** 2 minutos  
 **Recomendação:** Usar Netlify para testes multi-dispositivo
+

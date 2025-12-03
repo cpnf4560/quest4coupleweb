@@ -131,7 +131,7 @@ Log de ações na plataforma:
 
 1. Login em `http://localhost:8080/pages/admin.html`
    - Username: `carlos.sousacorreia`
-   - Password: `rzq7xgq8`
+   - Password: `[PASSWORD_REMOVIDA]`
 
 2. Ver estatísticas REAIS nas tabs
 
@@ -144,3 +144,4 @@ O sistema está **completamente funcional** e pronto para produção! 🚀
 **Data de Implementação:** 20 de Novembro de 2025  
 **Status:** ✅ COMPLETO  
 **Versão:** 1.0.0
+

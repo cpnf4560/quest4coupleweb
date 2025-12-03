@@ -328,3 +328,4 @@ Após publicar as rules:
 ---
 
 **Rules prontas para copiar e colar!** 🚀
+

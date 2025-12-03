@@ -223,3 +223,4 @@ Se o problema persistir após 48h:
 ---
 
 **Próximo Passo:** Seguir as instruções acima no painel do Netlify para provisionar o certificado SSL.
+

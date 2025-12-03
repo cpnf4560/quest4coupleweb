@@ -309,3 +309,4 @@ Criei um ficheiro de teste: **`test_firestore_permissions.html`**
 **Data:** 27 de Novembro de 2025  
 **Versão:** Quest4Couple v2 Free  
 **Estado:** 🐛 Debugging permissões
+

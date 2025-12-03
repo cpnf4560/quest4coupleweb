@@ -320,3 +320,4 @@ Se não conseguires debug remoto do telemóvel:
 ---
 
 **IMPORTANTE:** Executar TODOS os testes acima e reportar resultados! 🎯
+

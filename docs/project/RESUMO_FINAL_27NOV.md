@@ -427,3 +427,4 @@ const porfavor = data['porfavor'] || 0;   // ✅
 **Desenvolvido por:** GitHub Copilot  
 **Data:** 27 de Novembro de 2025  
 **Projeto:** Quest4Couple v2 Free
+

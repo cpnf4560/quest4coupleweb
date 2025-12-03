@@ -256,3 +256,4 @@ Os utilizadores podem:
 ---
 
 **Próximo passo sugerido:** Testar em ambiente real e coletar feedback dos utilizadores.
+

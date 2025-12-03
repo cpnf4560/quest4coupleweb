@@ -289,3 +289,4 @@ Se encontrar problemas:
 **Data:** 2024
 **Versão:** Quest4Couple v2 Free
 **Estado:** ✅ Correções implementadas e testadas
+

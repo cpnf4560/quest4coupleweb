@@ -198,3 +198,4 @@ if ($ip -match "75.2.60.5") {
 4. **Testar** website quando NS mudarem para host-redirect.com
 
 **Tempo total estimado: 1-2 horas** (não 24-48h!) 🚀
+

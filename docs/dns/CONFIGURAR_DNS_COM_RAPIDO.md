@@ -176,3 +176,4 @@ Após configuração completa, terás:
 
 O .COM **não precisa de esperar** o .PT propagar!
 Podes configurar ambos em paralelo - são independentes! 🚀
+

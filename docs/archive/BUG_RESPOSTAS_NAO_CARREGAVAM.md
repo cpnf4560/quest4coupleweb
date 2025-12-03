@@ -466,3 +466,4 @@ Se um utilizador já tinha respostas guardadas no formato antigo:
 ---
 
 *Última Atualização: 20 Novembro 2025*
+

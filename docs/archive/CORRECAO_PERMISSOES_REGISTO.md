@@ -382,3 +382,4 @@ Esta correção **não afeta** outros métodos de autenticação:
 
 **Desenvolvido por:** GitHub Copilot  
 **Projeto:** Quest4Couple v2 Free
+

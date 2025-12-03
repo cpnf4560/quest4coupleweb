@@ -181,3 +181,4 @@ Para validar que o Clarity está a funcionar:
 
 **Implementado por:** Sistema Quest4Couple  
 **Última atualização:** 20 de Novembro de 2024
+

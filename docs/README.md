@@ -1,6 +1,6 @@
-﻿# 💕 Quest4Couple v2.0
+# ?? Quest4Couple v2.0
 
-## 🚀 INÍCIO RÁPIDO
+## ?? IN�CIO R�PIDO
 
 ### Windows
 1. **Duplo-clique** em `START_SERVER.bat`
@@ -13,30 +13,31 @@ python -m http.server 8000
 ```
 Depois acede: **http://localhost:8000/app.html**
 
-## ⚠️ IMPORTANTE
-**NÃO abras `app.html` diretamente!**  
+## ?? IMPORTANTE
+**N�O abras `app.html` diretamente!**  
 Usa sempre um servidor HTTP local (porta 8000)
 
-## 📚 Documentação Completa
-- `GUIA_RAPIDO.md` - Manual de utilização
-- `REESTRUTURACAO_COMPLETA.md` - Documentação técnica
-- `DEBUG_CORRECOES.md` - Resolução de problemas
+## ?? Documenta��o Completa
+- `GUIA_RAPIDO.md` - Manual de utiliza��o
+- `REESTRUTURACAO_COMPLETA.md` - Documenta��o t�cnica
+- `DEBUG_CORRECOES.md` - Resolu��o de problemas
 
-## 📁 Estrutura
+## ?? Estrutura
 ```
 Quest4Couple_v2_free/
-├── app.html              ← Aplicação principal
-├── index.html            ← Página inicial
-├── START_SERVER.bat      ← Inicia servidor (Windows)
-├── css/                  ← Estilos
-├── js/                   ← JavaScript modular
-├── data/                 ← Questionários JSON
-├── pages/                ← Páginas secundárias
-└── assets/               ← Imagens e recursos
++-- app.html              ? Aplica��o principal
++-- index.html            ? P�gina inicial
++-- START_SERVER.bat      ? Inicia servidor (Windows)
++-- css/                  ? Estilos
++-- js/                   ? JavaScript modular
++-- data/                 ? Question�rios JSON
++-- pages/                ? P�ginas secund�rias
++-- assets/               ? Imagens e recursos
 ```
 
-## 🆘 Ajuda
-Se as perguntas não aparecerem:
-1. Verifica que estás a usar **http://localhost:8000**
+## ?? Ajuda
+Se as perguntas n�o aparecerem:
+1. Verifica que est�s a usar **http://localhost:8000**
 2. Abre o Console do browser (F12)
 3. Consulta `DEBUG_CORRECOES.md`
+

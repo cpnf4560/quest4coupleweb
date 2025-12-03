@@ -273,3 +273,4 @@ O sistema agora tem:
 - ✅ Download melhorado
 
 **Por favor, testar e reportar qualquer erro que apareça na consola!** 🚀
+

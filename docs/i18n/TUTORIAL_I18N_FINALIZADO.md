@@ -192,3 +192,4 @@ Se quiseres expandir o sistema i18n:
 **Desenvolvido por:** Quest4Couple Team  
 **Data:** 2 Dezembro 2024  
 **Versão:** 1.0.0
+

@@ -342,3 +342,4 @@ Separar **autenticação** (Firebase Auth) de **criação de perfil** (Firestore
 ---
 
 **Status Final:** ✅ **PRONTO PARA TESTAR**
+

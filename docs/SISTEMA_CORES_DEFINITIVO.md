@@ -217,3 +217,4 @@ Pergunta: "Gostarias de experimentar X?"
 *Última correção: 18/11/2025*  
 *Ficheiro: css/questions.css*  
 *Status: ✅ DEFINITIVO*
+

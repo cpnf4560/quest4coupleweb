@@ -90,3 +90,4 @@ nslookup quest4couple.pt 8.8.8.8
 - [ ] Website carrega em https://quest4couple.pt (SSL válido)
 - [ ] Email continua funcional (enviar/receber teste)
 - [ ] Netlify mostra status "Active" (não "Pending DNS")
+

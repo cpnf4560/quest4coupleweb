@@ -87,3 +87,4 @@ Se retornar o IP correto, aceda a `https://quest4couple.pt` e confirme que:
 - Site carrega sem erros SSL ✅
 - Certificado é emitido por Let's Encrypt ✅
 - Conteúdo é do Netlify ✅
+

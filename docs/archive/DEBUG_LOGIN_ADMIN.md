@@ -154,7 +154,7 @@ https://quest4couple.com/pages/admin.html
 ### 3. **Inserir Credenciais**
 ```
 Username: carlos.sousacorreia
-Password: rzq7xgq8
+Password: [PASSWORD_REMOVIDA]
 ```
 
 ### 4. **Clicar "Entrar" e Verificar Logs**
@@ -229,7 +229,7 @@ Browser:
 
 **Solução:**
 - Verificar username: `carlos.sousacorreia`
-- Verificar password: `rzq7xgq8`
+- Verificar password: `[PASSWORD_REMOVIDA]`
 - Verificar se não há espaços extras
 
 ---
@@ -353,3 +353,4 @@ console.log('Admin Username:', sessionStorage.getItem('adminUsername'));
 
 **📊 Status:** Correções aplicadas, aguardando testes  
 **🎯 Objetivo:** Identificar causa exata do problema de login
+

@@ -242,3 +242,4 @@ Este sistema **substitui** completamente o sistema antigo de collapse no pack in
 ---
 
 ✅ **Sistema 100% funcional e testado!**
+

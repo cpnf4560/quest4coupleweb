@@ -63,7 +63,7 @@ function loadDashboardData() {
 
 ### Credenciais Admin:
 - **Username:** `carlos.sousacorreia`
-- **Password:** `rzq7xgq8`
+- **Password:** `[PASSWORD_REMOVIDA]`
 - **Hash SHA-256:** `4effc02996e897cf24f0869b35d39ccff710cd90fcc9c0820ec52803b07aa382`
 
 ---
@@ -383,7 +383,7 @@ redditLoginBtn.addEventListener('click', () => {
 ```
 1. Abrir: http://localhost:8080/pages/admin.html
 2. Username: carlos.sousacorreia
-3. Password: rzq7xgq8
+3. Password: [PASSWORD_REMOVIDA]
 4. ✅ Deve entrar no dashboard
 ```
 
@@ -480,3 +480,4 @@ Todas as melhorias foram implementadas com sucesso!
 **Desenvolvedor:** Carlos Sousa Correia
 **Versão:** Quest4Couple v2.0 Free
 **Status:** ✅ CONCLUÍDO
+

@@ -195,7 +195,7 @@ Firebase Console → Firestore Database → Data
 **⚠️ ATENÇÃO:** 
 - Este campo indica o **método de autenticação**
 - `password` = login com email/password
-- **NÃO** colocar a senha `rzq7xgq8` aqui!
+- **NÃO** colocar a senha `[PASSWORD_REMOVIDA]` aqui!
 - A senha já está no Firebase Authentication
 
 ---
@@ -258,7 +258,7 @@ Document ID: sK3mP9xYz2AbC8dEfGhI (o UID copiado)
 - **MARCAR** o checkbox/toggle para `true`
 - Verificar que mostra ☑ true ou ON
 
-### ❌ Problema: "Coloquei rzq7xgq8 no authProvider"
+### ❌ Problema: "Coloquei [PASSWORD_REMOVIDA] no authProvider"
 **Solução:**
 - **ERRADO!** Isso é a senha do admin
 - `authProvider` deve ser a palavra `password`
@@ -285,3 +285,4 @@ authProvider   | string    | password (a palavra, não a senha!)
 **Dificuldade:** ⭐⭐ Médio  
 **Tempo:** 5 minutos  
 **Mais importante:** `isAdmin: true` ✅
+

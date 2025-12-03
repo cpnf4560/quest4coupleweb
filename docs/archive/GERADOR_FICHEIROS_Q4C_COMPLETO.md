@@ -250,3 +250,4 @@ Detecta automaticamente perguntas complementares (ex: dar vs receber):
 **Última Atualização:** 27 de Novembro de 2025  
 **Autor:** GitHub Copilot + Utilizador  
 **Versão:** 2.0.0
+

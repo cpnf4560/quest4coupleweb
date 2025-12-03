@@ -443,3 +443,4 @@ Todas as alterações são responsivas:
 
 *Última atualização: 18/11/2025 - Quest4Couple v2.0*  
 *Design System v3.0 - Cores Sóbrias & UX Intuitiva*
+

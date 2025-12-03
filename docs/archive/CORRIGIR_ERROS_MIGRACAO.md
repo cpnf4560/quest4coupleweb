@@ -166,3 +166,4 @@ Verificar que TODOS os documentos têm o campo `username`:
 **Tempo Estimado:** 5 minutos  
 **Dificuldade:** 🟢 Fácil  
 **Documentação Completa:** `docs/CORRIGIR_PERMISSOES_FIREBASE.md`
+

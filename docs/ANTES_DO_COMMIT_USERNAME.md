@@ -234,3 +234,4 @@ Se encontrares algum problema:
 
 **Criado:** 20 Novembro 2025  
 **Autor:** GitHub Copilot
+

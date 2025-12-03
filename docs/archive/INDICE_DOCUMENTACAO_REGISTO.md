@@ -247,3 +247,4 @@ Quest4Couple_v2_free/
 ---
 
 **Use este índice como ponto de partida para navegar na documentação!** 🗺️
+

@@ -662,3 +662,4 @@ eliminando fricção e melhorando drasticamente a UX para utilizadores autentica
 
 **Proposta criada em:** 20 de Novembro de 2025  
 **Status:** 📋 AGUARDANDO APROVAÇÃO
+

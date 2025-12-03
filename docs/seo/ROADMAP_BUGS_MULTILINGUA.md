@@ -325,3 +325,4 @@ Vou:
 4. Começar traduções
 
 **Confirmas que posso avançar?** 🚀
+

@@ -308,3 +308,4 @@ Banner usa CSS inline para não depender de arquivos externos.
 **Status:** ✅ IMPLEMENTADO  
 **Impacto:** 🟢 ALTO (Aumenta conversão)  
 **Teste:** Abra em modo privado e veja!
+

@@ -86,7 +86,7 @@
 
 ### 1. Login
 - [ ] Abrir `pages/admin.html`
-- [ ] Fazer login (carlos.sousacorreia / rzq7xgq8)
+- [ ] Fazer login (carlos.sousacorreia / [PASSWORD_REMOVIDA])
 - [ ] Dashboard carrega sem erros
 
 ### 2. Tab Relatórios Completos
@@ -329,3 +329,4 @@ db.collection('analytics_full_reports').limit(1).get()
 **Última Verificação:** 20/11/2025 - ✅ TUDO OK  
 **Responsável:** GitHub Copilot  
 **Versão:** 1.0.0 - FINAL
+

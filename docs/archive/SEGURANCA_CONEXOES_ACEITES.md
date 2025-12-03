@@ -80,3 +80,4 @@ Para testar:
 - Conexões antigas (com ID automático) continuam a funcionar porque o `loadConnectedPartners` usa `array-contains`
 - Novas conexões usam IDs previsíveis para as regras do Firestore verificarem
 - O dropdown de parceiros só mostra conexões **aceites** (documentos em `connections`)
+

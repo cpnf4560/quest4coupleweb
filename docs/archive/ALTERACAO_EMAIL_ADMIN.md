@@ -31,7 +31,7 @@ Troquei o email do admin de `carlos.sousacorreia@quest4couple.pt` para `admin@qu
 ### Passo 1: Criar Utilizador no Firebase Auth
 ```
 Email: admin@quest4couple.com
-Password: rzq7xgq8
+Password: [PASSWORD_REMOVIDA]
 ```
 
 ### Passo 2: Criar Perfil no Firestore
@@ -100,3 +100,4 @@ Pode usar:
 **Email Anterior:** `carlos.sousacorreia@quest4couple.pt`  
 **Email Novo:** `admin@quest4couple.com` ✅  
 **Domínio:** `@quest4couple.com` (novo domínio)
+

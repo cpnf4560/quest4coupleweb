@@ -169,3 +169,4 @@ R: Sim! Sistema valida antes de guardar.
 **Próximo Passo:** Executar Opção 1 (recomendada)  
 **Tempo:** ~2 minutos  
 **Depois:** Commit & Push 🚀
+

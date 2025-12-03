@@ -325,3 +325,4 @@ Obrigado!
 ---
 
 **⚠️ IMPORTANTE:** Não apagar registos MX (email) se existirem! Só alterar registos A e CNAME mencionados.
+

@@ -9,7 +9,7 @@
 
 ### Passo 2: Verificar Analytics no Admin (3 min)
 1. Clicar em **"🔐 Abrir BackOffice Admin"**
-2. Login: `carlos.sousacorreia` / `rzq7xgq8`
+2. Login: `carlos.sousacorreia` / `[PASSWORD_REMOVIDA]`
 3. Ir para **"📊 Analytics Anónimo"** no menu lateral
 4. Selecionar um pack (ex: ❤️ Pack Romântico)
 5. Verificar tabela com estatísticas
@@ -82,7 +82,7 @@
 ### "Credenciais inválidas"
 **Solução:** Verificar username e password:
 - Username: `carlos.sousacorreia`
-- Password: `rzq7xgq8`
+- Password: `[PASSWORD_REMOVIDA]`
 
 ### Tabela não carrega
 **Solução:** 
@@ -226,3 +226,4 @@ Se todos os passos funcionarem:
 **Criado:** 19 de novembro de 2025  
 **Versão:** Quest4Couple v2.0 Free  
 **Tempo estimado:** 5-10 minutos
+

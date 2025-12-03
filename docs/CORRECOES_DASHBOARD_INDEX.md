@@ -388,3 +388,4 @@ console.log('CTA href:', document.getElementById('ctaButton').href)
 **Data:** 19 NOV 2025  
 **Status:** ✅ IMPLEMENTADO  
 **Pronto para:** 🧪 TESTES
+

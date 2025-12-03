@@ -72,3 +72,4 @@ Após ~5 segundos → **Redirect para dashboard.html**
 ---
 
 **TESTAR AGORA!** 🚀
+

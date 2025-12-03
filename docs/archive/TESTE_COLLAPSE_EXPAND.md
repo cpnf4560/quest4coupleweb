@@ -135,3 +135,4 @@ console.log(`💾 Estado salvo: ${packId} = false`)
 ...
 ✅ Sistema de collapse/expand inicializado com sucesso
 ```
+

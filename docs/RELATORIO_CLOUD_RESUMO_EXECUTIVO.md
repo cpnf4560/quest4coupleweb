@@ -335,3 +335,4 @@ document.addEventListener('DOMContentLoaded', () => {
 **Decisão:** Qual opção implementar? 🤔
 
 A, B ou C?
+

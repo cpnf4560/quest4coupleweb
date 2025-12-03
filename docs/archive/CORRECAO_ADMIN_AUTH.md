@@ -27,7 +27,7 @@ Modificar o admin login para usar Firebase Auth:
 ```
 1. Firebase Console → Authentication → Add User
 2. Email: admin@quest4couple.com
-3. Password: rzq7xgq8
+3. Password: [PASSWORD_REMOVIDA]
 4. Copiar UID do utilizador
 ```
 
@@ -134,7 +134,7 @@ start https://console.firebase.google.com
 # Ir para:
 # 1. Authentication → Users → Add User
 # 2. Email: admin@quest4couple.com
-# 3. Password: rzq7xgq8
+# 3. Password: [PASSWORD_REMOVIDA]
 # 4. Copiar UID
 ```
 
@@ -213,3 +213,4 @@ db.collection('users').doc(userId).update({
 **Data:** 27 de Novembro de 2025  
 **Prioridade:** 🔴 URGENTE  
 **Tempo de Implementação:** ~5 minutos
+

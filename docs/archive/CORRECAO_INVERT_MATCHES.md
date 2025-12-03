@@ -344,3 +344,4 @@ Console:
 - [`data/invert_matching_config.json`](../data/invert_matching_config.json) - Configuração de pares
 - [`js/comparison.js`](../js/comparison.js) - Lógica de comparação
 - [`SISTEMA_INVERT_MATCHING.md`](SISTEMA_INVERT_MATCHING.md) - Documentação técnica completa
+

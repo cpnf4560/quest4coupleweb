@@ -355,3 +355,4 @@ Funcionalidade de expand/collapse adicionada com sucesso:
 
 **Ver demonstração em:** `preview_design.html`  
 **Teste real em:** `relatorio.html`
+

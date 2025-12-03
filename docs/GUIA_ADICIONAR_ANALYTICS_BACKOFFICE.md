@@ -243,7 +243,7 @@ async function exportAllQuestionsCSV() {
 
 ```
 1. Abrir admin.html
-2. Fazer login (carlos.sousacorreia / rzq7xgq8)
+2. Fazer login (carlos.sousacorreia / [PASSWORD_REMOVIDA])
 3. Clicar no tab "📋 Relatórios"
 4. Verificar se os relatórios aparecem
 5. Clicar em "Ver Detalhes" de um relatório
@@ -338,3 +338,4 @@ const packColors = {
 
 **Última atualização:** 15/12/2024  
 **Status:** ✅ Pronto para implementar
+

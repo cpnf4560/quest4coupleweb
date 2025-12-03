@@ -87,3 +87,4 @@ Contacte: **suporte@dns.pt** (Associação DNS.PT)
 - Explique que precisa recuperar acesso ao domínio
 - Forneça dados de identificação
 - Eles podem ajudar a identificar o registrar
+

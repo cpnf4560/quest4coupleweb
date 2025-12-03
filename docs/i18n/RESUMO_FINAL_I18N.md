@@ -477,3 +477,4 @@ const texto = window.I18n.t('home.heroTitle');
 **Status:** ✅ 100% COMPLETO  
 **Tempo Total:** ~3 horas  
 **Qualidade:** ⭐⭐⭐⭐⭐
+

@@ -397,7 +397,7 @@ new Chart(ctx, {
 ## ✅ Checklist de Validação
 
 ### Login e Acesso:
-- [x] Login funciona com `carlos.sousacorreia` / `rzq7xgq8`
+- [x] Login funciona com `carlos.sousacorreia` / `[PASSWORD_REMOVIDA]`
 - [x] Dashboard carrega corretamente
 - [x] Menu "Analytics Anónimo" visível
 
@@ -522,3 +522,4 @@ new Chart(ctx, {
 **Build:** Analytics Anónimo Release
 
 🎯 **MISSÃO CUMPRIDA!** 🎯
+

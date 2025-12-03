@@ -172,3 +172,4 @@ Utilizadores autenticados agora veem corretamente a funcionalidade Cloud na pág
 **Implementado por:** GitHub Copilot  
 **Data:** 26 Nov 2025  
 **Status:** ✅ Concluído e Testado
+

@@ -21,7 +21,7 @@ Modifiquei o código em `pages/admin.html` para usar Firebase Auth.
 4. Clicar: "Add user"
 5. Preencher:
    - Email: admin@quest4couple.com
-   - Password: rzq7xgq8
+   - Password: [PASSWORD_REMOVIDA]
 6. Clicar: "Add user"
 7. ⚠️ COPIAR O UID DO UTILIZADOR (precisaremos no próximo passo)
 ```
@@ -89,7 +89,7 @@ Para adicionar cada campo no Firestore Console:
 
 **📝 NOTA:** 
 - `authProvider` = `password` significa que o utilizador usa **email/password** para login (não Google, não Facebook, etc.)
-- **NÃO** é para colocar a senha `rzq7xgq8` aqui!
+- **NÃO** é para colocar a senha `[PASSWORD_REMOVIDA]` aqui!
 - Se não conseguir adicionar `createdAt`, pode pular este campo (será adicionado automaticamente)
 
 ---
@@ -104,7 +104,7 @@ Para adicionar cada campo no Firestore Console:
    - Username: admin
    (ambos funcionam!)
    
-   - Password: rzq7xgq8
+   - Password: [PASSWORD_REMOVIDA]
    
 3. Clicar: "Login"
 4. Abrir DevTools (F12) → Console
@@ -236,3 +236,4 @@ Depois disso, admin login e registo email devem funcionar perfeitamente!
 **Prioridade:** 🔴 CRÍTICO  
 **Tempo:** 5 minutos  
 **Estado:** ✅ Código corrigido | ⏳ Aguardando configuração Firebase
+

@@ -263,3 +263,4 @@ Se não tiveres 2 dispositivos, podes testar com 2 tabs:
 
 **Tempo estimado:** 5 minutos  
 **Dificuldade:** 🟢 Fácil (agora com logs detalhados!)
+

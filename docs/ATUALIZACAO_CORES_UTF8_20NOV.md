@@ -371,3 +371,4 @@ Por favor! [💙 Azul]  Yup [💚 Verde]  Talvez [💛 Amarelo]  Meh [❤️ Ver
 **Preview em:** `preview_design.html`  
 **Relatório real em:** `relatorio.html`  
 **Teste com ficheiros .q4c reais para validar UTF-8!**
+

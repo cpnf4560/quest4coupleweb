@@ -294,3 +294,4 @@ Sugestões de melhorias futuras:
 3. Trocar para Français 🇫🇷
 4. Verificar que os 3 cards ficam alinhados horizontalmente
 5. Redimensionar janela e testar responsividade
+

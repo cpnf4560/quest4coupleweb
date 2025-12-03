@@ -239,3 +239,4 @@ function initializePackCollapse() {
 **Data:** 20 Novembro 2025  
 **Versão:** 2.0 - Sistema de Collapse/Expand por Subcategorias  
 **Status:** ✅ Testado e funcionando
+

@@ -73,7 +73,7 @@
 **Passos:**
 1. Firebase Console → Authentication → Add User
    - Email: `admin@quest4couple.com`
-   - Password: `rzq7xgq8`
+   - Password: `[PASSWORD_REMOVIDA]`
    - Copiar UID gerado
 
 2. Firestore Database → Collection: `users` → Add Document
@@ -125,7 +125,7 @@
 1. Ir para `pages/admin.html`
 2. Login:
    - Username: `admin` (ou `admin@quest4couple.com`)
-   - Password: `rzq7xgq8`
+   - Password: `[PASSWORD_REMOVIDA]`
 3. Verificar acesso ao dashboard admin
 
 ---
@@ -224,7 +224,7 @@ service cloud.firestore {
 
 ### Admin
 - **Email:** `admin@quest4couple.com`
-- **Password:** `rzq7xgq8`
+- **Password:** `[PASSWORD_REMOVIDA]`
 - **Username:** `admin`
 - **isAdmin:** `true`
 
@@ -293,3 +293,4 @@ COMPLETUDE DO PROJETO: 85%
 **Status Geral:** ✅ **CÓDIGO PRONTO - AGUARDANDO TESTES**
 
 🚀 **Próxima ação:** Seguir `TESTAR_REGISTO_EMAIL.md` ou `ACAO_URGENTE_ADMIN.md`
+

@@ -386,3 +386,4 @@ await I18n.loadTranslations(I18n.currentLang);
 ---
 
 **Desenvolvido para Quest4Couple 💑**
+

@@ -380,3 +380,4 @@ font-family: 'Playfair Display', serif;
 ---
 
 **Próximo passo:** Discutir e escolher direção! 🚀
+

@@ -105,3 +105,4 @@ if (emailSignupForm) {
 - [ ] Aplicar correções
 - [ ] Testar auth.html
 - [ ] Verificar console (sem erros)
+

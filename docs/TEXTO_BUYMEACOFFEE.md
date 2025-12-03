@@ -263,3 +263,4 @@ Cada apoio mantém o projeto 100% gratuito para todos! 💖
 **BOA SORTE COM O REGISTO! ☕💖**
 
 Qualquer dúvida, avisa! 🚀
+

@@ -199,3 +199,4 @@ Por favor, informa:
 5. 🖱️ **Click?** O que acontece ao clicar?
 
 Com essas informações, posso corrigir rapidamente! 🚀
+

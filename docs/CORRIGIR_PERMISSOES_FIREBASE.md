@@ -241,3 +241,4 @@ allow update: if request.auth != null && request.auth.uid == userId;
 **Criado:** 20 Novembro 2025  
 **Autor:** GitHub Copilot  
 **Status:** Aguardando atualização de regras
+

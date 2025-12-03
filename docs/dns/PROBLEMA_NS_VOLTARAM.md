@@ -236,3 +236,4 @@ Assim que os NS mudarem para host-redirect.com, o resto vai funcionar automatica
 ---
 
 **AÇÃO IMEDIATA:** Ir ao painel e alterar NS novamente, **COM ATENÇÃO aos passos acima!**
+

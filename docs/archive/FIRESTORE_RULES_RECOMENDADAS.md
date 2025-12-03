@@ -340,3 +340,4 @@ Projeto Quest4Couple → Firestore Database → Rules
 **Data:** 2024
 **Versão:** Quest4Couple v2 Free
 **Estado:** ✅ Regras recomendadas documentadas
+

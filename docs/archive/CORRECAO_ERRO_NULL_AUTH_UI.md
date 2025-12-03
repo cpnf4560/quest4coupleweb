@@ -268,3 +268,4 @@ const backToLoginBtn = document.getElementById('backToLoginBtn'); // ✅ Coincid
 ---
 
 **Erro corrigido e testado!** 🎉
+

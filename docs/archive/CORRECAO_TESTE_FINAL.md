@@ -145,3 +145,4 @@ Depois:
 **Data:** 27 de Novembro de 2025 22:35  
 **Status:** ✅ Código corrigido (agora carrega auth.js)  
 **Próximo:** Testar e ver logs detalhados
+

@@ -327,3 +327,4 @@ Perfeito para app de casais!
 *Última atualização: 18/11/2025*  
 *Design System v4.5 - Emoji 🫶 + Imagens Personalizadas*  
 **Status:** ✅ COMPLETO E POLIDO! 🎉
+

@@ -292,3 +292,4 @@ categoryHtml += `
 **🚀 IMPLEMENTAÇÃO CONCLUÍDA**
 
 Design compacto em tabela com cores sóbrias implementado com sucesso!
+

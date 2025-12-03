@@ -268,3 +268,4 @@ Procurar: `IPv4 Address........: 192.168.X.X`
 3. ✅ ou ❌ Dados aparecem no Firebase Console
 4. ✅ ou ❌ Sincronização funciona PC → Telemóvel
 5. ✅ ou ❌ Sincronização funciona Telemóvel → PC
+

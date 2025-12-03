@@ -395,3 +395,4 @@ A página Apoiar agora tem:
 
 **URL de Teste:** http://localhost:8000/pages/apoiar.html
 **Última atualização:** 18/11/2025 - 15:15
+

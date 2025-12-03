@@ -235,3 +235,4 @@ Scripts BAT para diagnóstico (Windows):
 ---
 
 *Este índice é atualizado automaticamente. Última verificação: 02/Dez/2025 13:05*
+

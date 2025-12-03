@@ -184,3 +184,4 @@ FINAL:
 4. [ ] Aguardar 15-30 min
 5. [ ] Testar https://quest4couple.com
 6. [ ] Quando .PT funcionar, configurar redirect
+

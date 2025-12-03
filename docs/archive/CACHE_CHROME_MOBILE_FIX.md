@@ -207,3 +207,4 @@ Problema de cache no Chrome mobile **identificado e corrigido** com múltiplas c
 **Desenvolvido por:** GitHub Copilot & Carlos Sousa  
 **Data:** 20/11/2025  
 **Commit:** `FIX: Cache busting agressivo para Chrome mobile - meta tags, versioning e SW cleanup`
+

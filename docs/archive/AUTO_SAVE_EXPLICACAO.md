@@ -349,3 +349,4 @@ Mas podes:
 ---
 
 *Última Atualização: 20 Novembro 2025*
+

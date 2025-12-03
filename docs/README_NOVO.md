@@ -179,3 +179,4 @@ O teu projeto está agora:
 *Quest4Couple v2.0 - Refactored Edition*  
 *18 de Novembro de 2025 - 17:15*  
 *"Do caos à clareza em 30 minutos" ✨*
+

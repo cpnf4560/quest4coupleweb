@@ -299,3 +299,4 @@ Exemplo: carlos → carlos1, carlos2, etc.
 
 **Criado:** 20 Novembro 2025  
 **Última Atualização:** 20 Novembro 2025
+

@@ -241,3 +241,4 @@ Descubram-se juntos 💕 (gradiente rosa→roxo, negrito)
 
 **Desenvolvido com ❤️ para o Quest4Couple**  
 *19 de Novembro de 2025*
+

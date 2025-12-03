@@ -385,3 +385,4 @@ Se encontrares problemas:
 
 *Quest4Couple v2.0 - Refactored Edition*  
 *Última atualização: 18 Nov 2025*
+

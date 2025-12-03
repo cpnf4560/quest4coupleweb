@@ -273,3 +273,4 @@ O projeto **Quest4Couple v2** está agora com uma estrutura **profissional, orga
 
 *Documento criado em: 02/Dez/2025 13:10*  
 *Por: GitHub Copilot*
+

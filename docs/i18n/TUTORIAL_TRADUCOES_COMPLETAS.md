@@ -165,3 +165,4 @@
 ## Total de traduções necessárias: ~100 chaves por idioma!
 
 Vou agora implementar de forma incremental.
+

@@ -219,3 +219,4 @@ Vários termos técnicos em inglês sem tradução:
 ---
 
 **AGUARDANDO APROVAÇÃO PARA CORRIGIR!** 🚀
+

@@ -98,3 +98,4 @@ Todos os ficheiros mantêm a mesma estrutura:
 2. Mudar de idioma e verificar se as questões são recarregadas
 3. Responder a questões, mudar de idioma e verificar se as respostas são mantidas
 4. Gerar relatório de comparação e verificar se os textos estão no idioma correto
+

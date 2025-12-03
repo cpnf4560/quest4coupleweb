@@ -243,3 +243,4 @@ Trocar para FR → ✅ "Découvrez-vous ensemble 💕"
 **Problema:** Traduções faltantes em francês  
 **Status:** ✅ RESOLVIDO  
 **Tempo:** ~15 minutos  
+

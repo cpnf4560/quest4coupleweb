@@ -6,7 +6,7 @@
 
 - [ ] Abrir `http://localhost:8080/pages/admin.html`
 - [ ] Inserir username: `carlos.sousacorreia`
-- [ ] Inserir password: `rzq7xgq8`
+- [ ] Inserir password: `[PASSWORD_REMOVIDA]`
 - [ ] Clicar em "Entrar no BackOffice"
 - [ ] ✅ **Dashboard deve aparecer**
 - [ ] Verificar se mostra "5 Packs Disponíveis" (não 7)
@@ -172,7 +172,7 @@
 ### Credenciais Admin:
 ```
 Username: carlos.sousacorreia
-Password: rzq7xgq8
+Password: [PASSWORD_REMOVIDA]
 ```
 
 ### URLs de Teste:
@@ -197,3 +197,4 @@ Ctrl+Shift+C        - Element picker
 **Data:** 19 de novembro de 2025
 **Versão:** Quest4Couple v2.0 Free
 **Status:** Pronto para validação ✅
+

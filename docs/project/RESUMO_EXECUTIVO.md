@@ -143,3 +143,4 @@ Após implementação:
 ## 📞 PRÓXIMO PASSO
 
 **👉 Configurar Firestore Security Rules (ver `FIRESTORE_RULES_RECOMENDADAS.md`)**
+

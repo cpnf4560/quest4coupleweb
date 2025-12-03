@@ -54,3 +54,4 @@
 **Prioridade:** 🔴 **CRÍTICO**  
 **Tempo de Teste:** 2 minutos  
 **Documentação Completa:** `BUG_RESPOSTAS_NAO_CARREGAVAM.md`
+

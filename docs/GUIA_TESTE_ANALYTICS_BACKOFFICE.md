@@ -12,7 +12,7 @@
 2. Navegar para: file:///G:/O%20meu%20disco/Formação%20JAVA%20-%20Projetos/Quest4Couple_v2_free/pages/admin.html
 3. Fazer login:
    Username: carlos.sousacorreia
-   Password: rzq7xgq8
+   Password: [PASSWORD_REMOVIDA]
 ```
 
 ### 2. Verificar Novos Tabs
@@ -354,3 +354,4 @@ db.collection('analytics_full_reports')
 
 **Última atualização:** 20 de Novembro de 2025  
 **Versão:** 1.0.0
+

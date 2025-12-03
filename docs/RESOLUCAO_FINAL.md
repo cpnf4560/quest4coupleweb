@@ -269,3 +269,4 @@ test_debug.html         ← Debug visual
 ---
 
 _Gerado automaticamente em 18/11/2025 17:30_
+

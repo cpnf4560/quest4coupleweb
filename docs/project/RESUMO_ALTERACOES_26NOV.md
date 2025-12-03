@@ -276,3 +276,4 @@ Se encontrares algum problema:
 **Desenvolvedor:** GitHub Copilot  
 **Status:** ✅ Concluído, Testado e Deployed  
 **Commit Hash:** (ver `git log`)
+

@@ -318,3 +318,4 @@ O **Invert Matching** agora está:
 ---
 
 **🔄 Feature implementada com sucesso! O matching invertido agora brilha no relatório! ✨**
+

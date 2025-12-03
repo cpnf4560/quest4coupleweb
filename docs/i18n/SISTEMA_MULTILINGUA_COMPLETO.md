@@ -173,3 +173,4 @@ O sistema está funcional. Testa e reporta qualquer problema encontrado.
 
 **Última atualização:** 2 Dezembro 2025
 **Status:** ✅ COMPLETO para index.html
+

@@ -228,3 +228,4 @@ PC (automático):
 
 **Tempo estimado:** 5 minutos de testes  
 **Prioridade:** 🔥 Alta - Funcionalidade core
+

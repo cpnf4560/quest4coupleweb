@@ -338,3 +338,4 @@ As novas cores são **muito mais vibrantes** e **alegres** do que o azul petról
 **Versão**: Quest4Couple v2.0  
 **Status**: ✅ **COMPLETO E TESTÁVEL**
 
+

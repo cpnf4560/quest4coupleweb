@@ -299,3 +299,4 @@ Sistema de **collapse/expand** implementado com **SUCESSO**! 🎉
 **Desenvolvido por:** GitHub Copilot & Carlos Sousa  
 **Data:** 20/11/2025  
 **Commit:** `FEAT: Implementar sistema de collapse/expand nas subcategorias dos questionários`
+

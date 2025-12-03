@@ -260,3 +260,4 @@ Se Email/Password funciona mas Google não, é 100% problema de configuração d
 ## 🎯 PRÓXIMO PASSO
 
 **Abre agora:** `test_firebase.html` e diz-me o que aparece! 🔍
+
