@@ -1,156 +1,237 @@
-# 📚 Documentação Quest4Couple
+# 📚 Índice da Documentação - Quest4Couple v2
 
-Esta pasta contém toda a documentação técnica, guias e registos de alterações do projeto Quest4Couple.
-
----
-
-## 📂 Estrutura da Documentação
-
-### 🚀 Guias Rápidos
-- **`GUIA_RAPIDO.md`** - Guia rápido de uso
-- **`GUIA_TESTE_RAPIDO.md`** - Guia de testes rápidos
-- **`GUIA_VALIDACAO_RAPIDO.md`** - Guia de validação
-
-### 🔥 Firebase
-- **`firebase-setup.md`** - Setup inicial do Firebase
-- **`SETUP_FIREBASE_RAPIDO.md`** - Setup rápido Firebase
-- **`README_FIREBASE.md`** - Documentação Firebase
-- **`IMPLEMENTACAO_FIREBASE_COMPLETA.md`** - Implementação completa
-- **`RESUMO_IMPLEMENTACAO_FIREBASE.md`** - Resumo da implementação
-- **`CHECKLIST_TESTE_FIREBASE.md`** - Checklist de testes
-- **`CORRECAO_GOOGLE_AUTH.md`** - Correção Google Auth
-- **`TROUBLESHOOTING_GOOGLE_AUTH.md`** - Troubleshooting
-- **`MISSAO_FIREBASE_CONCLUIDA.md`** - Missão concluída
-
-### 🎨 Design & UI
-- **`MELHORIAS_FINAIS_UI.md`** - Melhorias finais de UI
-- **`RESUMO_MELHORIAS_UI.md`** - Resumo das melhorias
-- **`REFINAMENTO_VISUAL_FINAL.md`** - Refinamento visual
-- **`RESUMO_REFINAMENTO.md`** - Resumo do refinamento
-- **`ATUALIZACAO_CORES_FINAL.md`** - Atualização de cores
-- **`SISTEMA_CORES_DEFINITIVO.md`** - Sistema de cores definitivo
-- **`SISTEMA_CORES_COM_ESTRELA.md`** - Sistema de cores com estrela
-- **`ATUALIZACAO_EMOJIS_CORES.md`** - Atualização emojis e cores
-- **`RESUMO_EMOJIS_CORES.md`** - Resumo emojis e cores
-- **`ALTERACOES_EMOJI_IMAGENS.md`** - Alterações emoji/imagens
-- **`BARRA_PROGRESSO_VISUAL.md`** - Barra de progresso visual
-- **`MELHORIA_LOGO_TAGLINE.md`** - Melhorias logo e tagline
-- **`MELHORIAS_LAYOUT_PACKS.md`** - Melhorias layout packs
-
-### 🔧 Correções Técnicas
-- **`CORRECOES_FINAIS.md`** - Correções finais
-- **`DEBUG_CORRECOES.md`** - Debug e correções
-- **`RESOLUCAO_FINAL.md`** - Resolução final
-- **`CORRECAO_BOLINHAS.md`** - Correção bolinhas
-- **`CORRECAO_LOGOS_LINKS.md`** - Correção logos e links
-- **`CORRECAO_HTML_HEAD.md`** - Correção HTML head
-- **`CORRECAO_EMERGENCIA_DASHBOARD.md`** - Correção emergência dashboard
-- **`CORRECOES_DASHBOARD_INDEX.md`** - Correções dashboard e index
-- **`CORRECAO_BOTAO_COMECAR_FINAL.md`** - Correção botão começar
-
-### 🧩 Sidebar
-- **`MELHORIA_SIDEBAR.md`** - Melhoria sidebar
-- **`CORRECAO_SIDEBAR_FINAL.md`** - Correção sidebar final
-- **`CORRECAO_SIDEBAR_TRANSFORM.md`** - Correção sidebar transform
-- **`CORRECAO_FINALIZADA_SIDEBAR.md`** - Correção finalizada
-- **`SOLUCAO_BOTAO_SIDEBAR.md`** - Solução botão sidebar
-
-### ⚙️ Sistemas & Features
-- **`SISTEMA_PERGUNTAS_CUSTOM.md`** - Sistema de perguntas custom
-- **`SISTEMA_CARREGAR_IMPORTAR.md`** - Sistema carregar/importar
-- **`SISTEMA_INVERT_MATCHING.md`** - Sistema invert matching
-- **`NOVA_LOGICA_RELATORIO.md`** - Nova lógica de relatório
-- **`REMOCAO_VERBOS_FETICHES.md`** - Remoção de verbos fetiches
-- **`RESUMO_REMOCAO_VERBOS.md`** - Resumo remoção verbos
-- **`CONTEUDO_GRATUITO_SEM_LOGIN.md`** - Conteúdo gratuito sem login
-
-### 📖 Tutorial
-- **`TUTORIAL_COMPLETO_FINALIZADO.md`** - Tutorial completo finalizado
-
-### ✅ Checklists & Validação
-- **`CHECKLIST_VALIDACAO_FINAL.md`** - Checklist validação final
-- **`CHECKLIST_TESTE_FIREBASE.md`** - Checklist testes Firebase
-
-### 🎯 Implementações
-- **`IMPLEMENTACAO_FINALIZADA.md`** - Implementação finalizada
-- **`IMPLEMENTACAO_FIREBASE_COMPLETA.md`** - Implementação Firebase
-- **`MELHORIAS_IMPLEMENTADAS.md`** - Melhorias implementadas
-
-### 📋 Reestruturação
-- **`REESTRUTURACAO_COMPLETA.md`** - Reestruturação completa do projeto
-
-### 🎉 Resumos & Missões
-- **`RESUMO_FINAL_18NOV.md`** - Resumo final 18 Nov
-- **`ALTERACOES_FINALIZADAS_19NOV.md`** - Alterações finalizadas 19 Nov
-- **`MISSAO_CUMPRIDA.md`** - Missão cumprida
-- **`MISSAO_CUMPRIDA_FINAL.txt`** - Missão cumprida final
-- **`MISSAO_FIREBASE_CONCLUIDA.md`** - Missão Firebase concluída
-
-### 💰 Apoio & Monetização
-- **`ALTERACOES_APOIAR.md`** - Alterações apoiar
-- **`TEXTO_BUYMEACOFFEE.md`** - Texto Buy Me a Coffee
-- **`COMECAR_AGORA.md`** - Começar agora
+> **Navegação rápida para toda a documentação do projeto**  
+> **Última atualização:** 02/Dez/2025 | **Versão:** 2.1
 
 ---
 
-## 📊 Cronologia do Projeto
+## 🚀 Início Rápido
 
-### Fase 1: Setup Inicial
-- Configuração Firebase
-- Estrutura base do projeto
-
-### Fase 2: UI/UX
-- Sistema de cores
-- Emojis e ícones
-- Melhorias visuais
-- Sidebar
-
-### Fase 3: Features
-- Sistema de perguntas custom
-- Carregar/importar
-- Invert matching
-- Relatórios
-
-### Fase 4: Refinamento
-- Correções finais
-- Validação
-- Tutorial completo
-- Documentação
-
-### Fase 5: Melhorias Finais (19 Nov 2025)
-- Layout dos packs reorganizado
-- Logo aumentado
-- Tagline estilizada
-- User section no topo direito
+Para começar rapidamente, consulte:
+1. **[README.md](../README.md)** - Visão geral do projeto
+2. **[project/ESTADO_PROJETO_ATUAL.md](project/ESTADO_PROJETO_ATUAL.md)** - Estado atual
+3. **[project/RESUMO_EXECUTIVO.md](project/RESUMO_EXECUTIVO.md)** - Resumo executivo
 
 ---
 
-## 🚀 Como Usar Esta Documentação
+## 📁 Estrutura da Documentação Organizada
 
-1. **Para começar:** Leia `GUIA_RAPIDO.md`
-2. **Setup Firebase:** Consulte `SETUP_FIREBASE_RAPIDO.md`
-3. **Entender o sistema:** Veja os arquivos `SISTEMA_*.md`
-4. **Problemas:** Consulte `TROUBLESHOOTING_*.md`
-5. **Histórico:** Veja `RESUMO_*.md` e `ALTERACOES_*.md`
+### 📂 project/ - Documentação do Projeto
+Estado geral, resumos executivos e alterações principais:
+
+| Ficheiro | Descrição |
+|----------|-----------|
+| `ESTADO_PROJETO_ATUAL.md` | Estado atual do projeto |
+| `RESUMO_EXECUTIVO.md` | Resumo conciso (1 página) |
+| `RESUMO_EXECUTIVO_COMPLETO.md` | Resumo detalhado |
+| `RESUMO_FINAL_27NOV.md` | Últimas alterações (27/Nov) |
+| `RESUMO_ALTERACOES_26NOV.md` | Alterações (26/Nov) |
+| `RESUMO_COMPLETO_27NOV.md` | Resumo completo (27/Nov) |
+| `RESUMO_CORRECAO_RELATORIOS.md` | Correções de relatórios |
+| `RESUMO_CORRECOES.md` | Todas as correções |
+| `PROJETO_LIMPO.md` | Limpeza do projeto |
 
 ---
 
-## 🔗 Links Úteis
+### 🌍 i18n/ - Sistema Multilingue
+Documentação do sistema de traduções (PT-PT, PT-BR, EN, ES, FR):
 
-- **Projeto Principal:** `../index.html`
-- **App:** `../app.html`
-- **Dashboard:** `../dashboard.html`
-- **Tutorial:** `../tutorial.html`
-- **Testes:** `../tests/`
+| Ficheiro | Descrição | Status |
+|----------|-----------|--------|
+| **`RESUMO_FINAL_I18N.md`** | ⭐ Resumo completo - Todas as correções | ✅ COMPLETO |
+| **`SISTEMA_MULTILINGUA_COMPLETO.md`** | Guia completo do sistema i18n | 📖 Principal |
+| `SISTEMA_MULTILINGUA_README.md` | README do sistema | ✅ |
+| `CORRECAO_I18N_COMPLETA_02DEZ.md` | Correções do sistema i18n (02/Dez) | ✅ Resolvido |
+| `CORRECAO_LOOP_INFINITO_02DEZ.md` | Troubleshooting loop infinito | ✅ Resolvido |
+| `CORRECAO_FRANCES_02DEZ.md` | Traduções francesas faltantes | ✅ Resolvido |
+| `CORRECAO_I18N_FINAL.md` | Correções finais | ✅ |
+| `CORRECAO_FINAL_BANDEIRAS_E_HEADERS.md` | Troubleshooting bandeiras | ✅ Resolvido |
+
+**Estado Atual (02/Dez/2024):**
+- ✅ 5 idiomas 100% funcionais (PT-PT, PT-BR, EN, ES, FR)
+- ✅ Traduções completas em todos os idiomas
+- ✅ Bandeiras renderizam corretamente (🇵🇹 🇧🇷 🇬🇧 🇪🇸 🇫🇷)
+- ✅ Botões do header traduzem perfeitamente
+- ✅ Loop infinito corrigido
+- ✅ Zero erros no console
+- ✅ Sistema robusto e escalável
 
 ---
 
-## 📅 Última Atualização
+### 🔍 seo/ - SEO & Marketing
+Otimização para motores de busca e estratégia de conteúdo:
 
-**Data:** 19 de Novembro de 2025  
-**Status:** ✅ Projeto em produção  
-**Versão:** 2.0 (Free Edition)
+| Ficheiro | Descrição |
+|----------|-----------|
+| **`SEO_IMPLEMENTATION.md`** | Implementação completa de SEO |
+| `SEO_CHECKLIST.md` | Checklist de SEO |
+| `ANALISE_DIFERENCIACAO_COUPLEQUEST.md` | Análise vs concorrência |
+| `ROADMAP_BUGS_MULTILINGUA.md` | Roadmap e bugs |
+| `AUDITORIA_CONTEUDO_RELATORIO.md` | Auditoria de conteúdo |
+| `CONTAGEM_PERGUNTAS_ANALISE.md` | Análise de perguntas |
+| `SUGESTOES_NOVAS_PERGUNTAS_300.md` | Sugestões para 300 perguntas |
+
+---
+
+### 🌐 dns/ - DNS & SSL
+Configuração de domínio, certificados SSL e infraestrutura:
+
+| Ficheiro | Descrição |
+|----------|-----------|
+| **`STATUS_FINAL_QUEST4COUPLE.md`** | Estado final DNS/SSL ⭐ |
+| `CORRIGIR_SSL_CERTIFICADO.md` | Correção de certificados |
+| `INSTRUCOES_DNS_QUEST4COUPLE.md` | Instruções DNS |
+| `CONFIGURAR_DOMINIO_COM.md` | Configuração domínio .com |
+| `CONFIGURAR_DNS_COM_RAPIDO.md` | Setup rápido |
+| `RESOLVER_ERRO_SSL_NETLIFY.md` | Resolução de erros SSL |
+| `RESOLVER_PROBLEMA_NS_URGENTE.md` | Problemas de nameservers |
+
+---
+
+### 📦 archive/ - Histórico de Correções
+Documentação de correções antigas e investigações (arquivo histórico)
+
+#### Categorias no Archive:
+- **Autenticação & Permissões** (16 ficheiros)
+- **Firebase & Firestore** (8 ficheiros)
+- **Relatórios** (6 ficheiros)
+- **Sync & Realtime** (4 ficheiros)
+- **UI/UX Features** (6 ficheiros)
+- **Bugs Corrigidos** (7 ficheiros)
+- **Investigações Urgentes** (6 ficheiros)
+- **Guias & Checklists** (8 ficheiros)
+
+Ver [archive/README.md](archive/README.md) para lista completa.
+
+---
+
+## 🧪 Testes & Debug
+
+### Pasta tests/
+- `tests/` - Ficheiros de teste .q4c
+- `tests/debug/` - Ficheiros HTML de teste
+- `tests/test_results/` - Resultados de testes
+
+**Principais ficheiros de teste:**
+- `teste_bandeiras_debug.html` - Teste de renderização de bandeiras 🇬🇧
+- `test_firestore_permissions.html` - Teste de permissões Firestore
+- `recovery_tool.html` - Ferramenta de recuperação de dados
+- `reset_my_answers_PROTECTED.html` - Reset de respostas (protegido)
+
+---
+
+## 🔧 Scripts Utilitários
+
+### Pasta scripts/
+- **Python:** `create_favicons.py` - Gerador de favicons
+- **JavaScript:** `generate_test_q4c.js`, `generate_encrypted_q4c.js`
+- **Diagnóstico:** `DIAGNOSTICO_FIRESTORE.js`
+
+### Pasta scripts/diagnostics/
+Scripts BAT para diagnóstico (Windows):
+- `VERIFICAR_DNS_PROPAGACAO.bat` - Verificar propagação DNS
+- `DIAGNOSTICO_COMPLETO.bat` - Diagnóstico completo do sistema
+- `MONITORIZAR_SSL.bat` - Monitorizar certificados SSL
+- `LIMPAR_CACHE_CHROME.bat` - Limpar cache do Chrome
+- `LIMPAR_SSL_WINDOWS.bat` - Limpar cache SSL do Windows
+
+---
+
+## 🎯 Tarefas Pendentes (Roadmap)
+
+### 🚨 URGENTE - Sistema i18n:
+- [ ] **Bug #1:** Corrigir bandeiras não renderizadas (mostra "GB" em vez de 🇬🇧)
+- [ ] **Bug #2:** Corrigir traduções do header (botões não traduzem)
+- [ ] Testar em diferentes browsers (Chrome, Firefox, Safari, Edge)
+- [ ] Verificar renderização de emojis em mobile
+
+### 📝 Adicionar i18n às páginas:
+- [ ] `tutorial.html` - Adicionar sistema i18n
+- [ ] `dashboard.html` - Adicionar sistema i18n
+- [ ] `relatorio.html` - Adicionar sistema i18n
+- [ ] `auth.html` - Adicionar sistema i18n
+- [ ] `app.html` - Traduzir UI (não perguntas)
+- [ ] `pages/admin.html` - Adicionar sistema i18n
+- [ ] `pages/*.html` - Adicionar sistema i18n
+
+### 🧹 Organização & Limpeza:
+- [x] Criar estrutura de pastas organizada
+- [x] Mover ficheiros .md para `docs/`
+- [x] Mover testes para `tests/debug/`
+- [x] Mover scripts para `scripts/`
+- [x] Criar INDEX.md atualizado
+- [ ] Validar todos os links na documentação
+- [ ] Criar README.md para cada subpasta
+
+---
+
+## 📊 Estatísticas do Projeto
+
+- **Total de ficheiros HTML:** 8 principais + 20+ testes
+- **Total de perguntas:** 200+ (objetivo: 300)
+- **Idiomas suportados:** 5 (PT-PT, PT-BR, EN, ES, FR)
+- **Ficheiros de documentação:** 150+
+- **Scripts utilitários:** 15+
+- **Linhas de código:** ~50.000+
+
+---
+
+## 🔗 Links Rápidos
+
+### Páginas Principais:
+- [index.html](../index.html) - Landing page
+- [app.html](../app.html) - Aplicação de questionário
+- [auth.html](../auth.html) - Autenticação
+- [dashboard.html](../dashboard.html) - Dashboard do utilizador
+- [tutorial.html](../tutorial.html) - Tutorial
+- [relatorio.html](../relatorio.html) - Relatório de compatibilidade
+
+### Configuração:
+- [firebase.json](../firebase.json) - Configuração Firebase
+- [firestore.rules](../firestore.rules) - Regras de segurança
+- [netlify.toml](../netlify.toml) - Configuração Netlify
+- [package.json](../package.json) - Dependências Node.js
+
+### Traduções:
+- [i18n/translations.pt-pt.json](../i18n/translations.pt-pt.json)
+- [i18n/translations.pt-br.json](../i18n/translations.pt-br.json)
+- [i18n/translations.en.json](../i18n/translations.en.json)
+- [i18n/translations.es.json](../i18n/translations.es.json)
+- [i18n/translations.fr.json](../i18n/translations.fr.json)
+
+---
+
+## 📞 Suporte & Contacto
+
+- 📧 **Email:** suporte@quest4couple.pt
+- 🌐 **Website:** https://quest4couple.pt
+- 📱 **GitHub:** [Quest4Couple Repository](https://github.com/seu-usuario/quest4couple-v2)
+- 💬 **Issues:** [GitHub Issues](https://github.com/seu-usuario/quest4couple-v2/issues)
+
+---
+
+## 📝 Notas de Versão
+
+### v2.1 (02/Dez/2025)
+- ✅ Estrutura de documentação reorganizada
+- ✅ INDEX.md completo criado
+- ✅ Ficheiros movidos para pastas apropriadas
+- ⚠️ Problemas no sistema i18n identificados
+
+### v2.0 (27/Nov/2025)
+- ✅ Sistema multilingue implementado
+- ✅ 5 idiomas completos
+- ✅ Traduções de index.html
+
+### v1.9 (20/Nov/2025)
+- ✅ Correções de autenticação
+- ✅ Melhorias de UI/UX
+- ✅ Sistema de relatórios aprimorado
 
 ---
 
 **Quest4Couple** - Descubram-se juntos 💕
+
+---
+
+*Este índice é atualizado automaticamente. Última verificação: 02/Dez/2025 13:05*

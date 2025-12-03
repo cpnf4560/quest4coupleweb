@@ -1,0 +1,219 @@
+{
+  "lang": "en",
+  "pageTitle": "Quest4Couple - Discover Together 💑",
+    "header": {
+    "login": "🔐 Login",
+    "logout": "🚪 Sign Out",
+    "dashboard": "📊 Dashboard",
+    "questionnaire": "📝 Questionnaires",
+    "report": "💑 Report",
+    "tutorial": "🎓 Tutorial",
+    "support": "💝 Support"
+  },
+    "home": {
+    "title": "Quest4Couple",
+    "subtitle": "Discover Together 💕",
+    "heroTitle": "Discover Together 💕",
+    "heroSubtitle": "Explore <span class=\"highlight\">desires</span>, <span class=\"highlight\">fantasies</span> and <span class=\"highlight\">affinities</span> as a couple.<br>In a <strong>private, secure</strong> and judgment-free way.",
+    "description": "An interactive and <strong>100% free</strong> tool for couples to explore desires, fantasies and affinities in a <strong>private and secure</strong> way.",
+    "cta": {
+      "start": "🚀 Start Now",
+      "viewQuestions": "👀 View Questionnaires",
+      "login": "🔐 I already have an account"
+    },
+    "badge": {
+      "free": "✨ 100% Free • View without login"
+    },
+    "links": {
+      "howItWorks": "🎓 How Does It Work? • Tutorial",
+      "viewReport": "💑 View Couple Report"
+    },
+    "features": {
+      "title": "How Does It Work?",      "private": {
+        "title": "100% Private",
+        "description": "Your answers are <strong>locally encrypted</strong>. Nothing is shared without permission. Zero tracking."
+      },
+      "compare": {
+        "title": "Instant Compatibility",
+        "description": "Smart comparison system reveals <strong>Super Matches, Matches and Possibilities</strong> unique to the couple."
+      },
+      "free": {
+        "title": "100% Free",
+        "description": "No hidden costs. Everything included!"
+      }
+    },    "packs": {
+      "title": "5 Thematic Packs",
+      "description": "💝 Romantic, 🌍 Experience, 🔥 Spicy, 💞 Polyamory and ⛓️ Fetishes. <strong>300 free questions!</strong>",
+      "romantic": "Romantic Pack",
+      "exploration": "Exploration",
+      "spicy": "Spicy",
+      "polyamory": "Polyamory",
+      "fetishes": "Fetishes",
+      "questions": "questions"
+    },
+    "stats": {
+      "title": "In Numbers",
+      "packs": "Thematic Packs",
+      "questions": "Questions",
+      "categories": "Categories",
+      "users": "Active Users"
+    }
+  },
+    "auth": {
+    "login": {
+      "title": "🔐 Sign In",
+      "subtitle": "Access your Quest4Couple account",
+      "email": "Email",
+      "emailPlaceholder": "youremail@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "submit": "Sign In",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Register now"
+    },
+    "register": {
+      "title": "✨ Create Account",
+      "subtitle": "Register for free and start now!",
+      "socialOptions": "or with email",
+      "googleBtn": "Register with Google",
+      "redditBtn": "Register with Reddit",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "youremail@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Minimum 6 characters",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat password",
+      "country": "Country (optional - for statistics)",
+      "countryPlaceholder": "Ex: United States",
+      "city": "City (optional - for statistics)",
+      "cityPlaceholder": "Ex: New York",
+      "submit": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in"
+    },
+    "errors": {
+      "invalidEmail": "Invalid email",
+      "passwordMismatch": "Passwords don't match",
+      "weakPassword": "Password too weak (minimum 6 characters)",
+      "emailInUse": "This email is already in use",
+      "wrongPassword": "Incorrect password",
+      "userNotFound": "User not found"
+    }
+  },
+  
+  "dashboard": {
+    "title": "My Dashboard",
+    "welcome": "Hello, {name}!",
+    "accessCode": "Your access code",
+    "progress": "Progress",
+    "connections": {
+      "title": "Connections",
+      "addPartner": "Add Partner",
+      "noPending": "No pending requests",
+      "noConnections": "You don't have connected partners yet",
+      "pending": "Pending Requests",
+      "connected": "Connected Partners",
+      "accept": "Accept",
+      "reject": "Reject",
+      "remove": "Remove"
+    },
+    "packs": {
+      "romantic": "Romantic",
+      "exploration": "Exploration",
+      "spicy": "Spicy",
+      "polyamory": "Polyamory",
+      "fetishes": "Fetishes"
+    }
+  },
+  
+  "tutorial": {
+    "title": "How Quest4Couple Works",
+    "subtitle": "Complete guide to discover each other",
+    "navigation": {
+      "intro": "Introduction",
+      "register": "Register",
+      "answers": "Answers",
+      "save": "Save",
+      "custom": "Custom",
+      "connections": "Connections",
+      "compare": "Compare",
+      "code": "Code"
+    }
+  },
+  
+  "support": {
+    "title": "Support the Project",
+    "intro": "Quest4Couple is a passion project created to help couples discover each other safely and without judgment. Currently, <strong>all content is free</strong>.",
+    "transparency": {
+      "title": "Total Transparency",
+      "description": "We are in an early stage and want to grow sustainably. Your support helps us:",
+      "items": [
+        "Keep the service online and private",
+        "Develop new features",
+        "Create more quality content",
+        "Ensure maximum security and privacy"
+      ]
+    },
+    "ways": {
+      "title": "How to Support",
+      "donate": {
+        "title": "Buy Me a Coffee",
+        "description": "A small gesture of support that motivates us to continue. Any amount is welcome!",
+        "button": "Donate Now"
+      },
+      "feedback": {
+        "title": "Share Feedback",
+        "description": "Share your experience and help us improve the platform.",
+        "button": "Give Feedback"
+      },
+      "share": {
+        "title": "Share",
+        "description": "Recommend Quest4Couple to your friends and help more couples!",
+        "button": "Share"
+      }
+    }
+  },
+  
+  "banner": {
+    "title": "Help us grow!",
+    "description": "Quest4Couple is <strong>100% free</strong>, but developing and maintaining it requires time and costs. If you liked it, consider supporting us in one of these ways:",
+    "donate": "Buy Me a Coffee",
+    "feedback": "Leave Feedback",
+    "share": "Share"
+  },
+    "footer": {
+    "copyright": "© 2025 Quest4Couple - All rights reserved",
+    "links": {
+      "home": "Home",
+      "about": "About",      "faq": "FAQ",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "support": "Support the Project",
+      "admin": "Admin"
+    }
+  },
+  
+  "beta": {
+    "icon": "🚀",
+    "title": "Beta Version • Under Development",
+    "description": "We're in testing phase! If you find bugs or have suggestions, <a href='pages/apoiar.html#feedback'>send us feedback</a> and help improve 💪",
+    "close": "×"
+  },
+  
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "next": "Next",
+    "previous": "Previous",
+    "yes": "Yes",
+    "no": "No",
+    "or": "or"
+  }
+}

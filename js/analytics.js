@@ -521,28 +521,77 @@ async function enrichQuestionTexts(questionStats) {
 // ========================================
 async function getFullReports(limit = 50, startDate = null, endDate = null) {
   try {
-    let query = db.collection('analytics_full_reports')
-      .orderBy('timestamp', 'desc')
-      .limit(limit);
-    
-    if (startDate) {
-      query = query.where('timestamp', '>=', startDate);
-    }
-    if (endDate) {
-      query = query.where('timestamp', '<=', endDate);
-    }
-    
-    const snapshot = await query.get();
-    const reports = [];
-    
-    snapshot.forEach(doc => {
-      reports.push({
-        id: doc.id,
-        ...doc.data()
+    // Se não há filtros de data, busca simples
+    if (!startDate && !endDate) {
+      const snapshot = await db.collection('analytics_full_reports')
+        .orderBy('timestamp', 'desc')
+        .limit(limit)
+        .get();
+      
+      const reports = [];
+      snapshot.forEach(doc => {
+        reports.push({
+          id: doc.id,
+          ...doc.data()
+        });
       });
-    });
+      
+      return reports;
+    }
     
-    return reports;
+    // Com filtros de data - tentar query composta
+    try {
+      let query = db.collection('analytics_full_reports')
+        .orderBy('timestamp', 'desc');
+      
+      if (startDate) {
+        query = query.where('timestamp', '>=', startDate);
+      }
+      if (endDate) {
+        query = query.where('timestamp', '<=', endDate);
+      }
+      
+      query = query.limit(limit);
+      
+      const snapshot = await query.get();
+      const reports = [];
+      
+      snapshot.forEach(doc => {
+        reports.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      return reports;
+      
+    } catch (indexError) {
+      // Fallback: buscar tudo e filtrar em memória
+      console.warn('⚠️ Índice composto não existe, usando fallback...');
+      
+      const snapshot = await db.collection('analytics_full_reports')
+        .orderBy('timestamp', 'desc')
+        .limit(500)
+        .get();
+      
+      let reports = [];
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const timestamp = data.timestamp?.toDate();
+        
+        // Filtrar por data em memória
+        if (startDate && timestamp && timestamp < startDate) return;
+        if (endDate && timestamp && timestamp > endDate) return;
+        
+        reports.push({
+          id: doc.id,
+          ...data
+        });
+      });
+      
+      return reports.slice(0, limit);
+    }
     
   } catch (error) {
     console.error('❌ Erro ao obter relatórios completos:', error);

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <title>🔍 Debug i18n - Quest4Couple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .status {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .ok { border-left-color: #28a745; }
+        .error { border-left-color: #dc3545; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover { background: #5568d3; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        h2 { color: #764ba2; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Sistema i18n</h1>
+    
+    <div class="status">
+        <h2>📊 Estado Atual</h2>
+        <p><strong>Idioma atual:</strong> <span id="currentLang">carregando...</span></p>
+        <p><strong>Idioma guardado:</strong> <span id="savedLang">carregando...</span></p>
+        <p><strong>Traduções carregadas:</strong> <span id="translationsLoaded">carregando...</span></p>
+    </div>
+    
+    <div class="status">
+        <h2>🎯 Trocar Idioma</h2>
+        <button onclick="testLanguage('pt-pt')">🇵🇹 PT-PT</button>
+        <button onclick="testLanguage('pt-br')">🇧🇷 PT-BR</button>
+        <button onclick="testLanguage('en')">🇬🇧 EN</button>
+        <button onclick="testLanguage('es')">🇪🇸 ES</button>
+        <button onclick="testLanguage('fr')">🇫🇷 FR</button>
+    </div>
+    
+    <div class="status">
+        <h2>📝 Elemento de Teste</h2>
+        <h1 id="testTitle" data-i18n="home.heroTitle" style="color: #764ba2;">
+            (aguardando tradução...)
+        </h1>
+        <p id="testSubtitle" data-i18n-html="home.heroSubtitle" style="font-size: 1.1em;">
+            (aguardando tradução...)
+        </p>
+    </div>
+    
+    <div class="status">
+        <h2>🔍 Tradução Específica: home.heroTitle</h2>
+        <pre id="heroTitleTranslations">(carregando...)</pre>
+    </div>
+    
+    <div class="status">
+        <h2>📋 Log de Eventos</h2>
+        <pre id="log"></pre>
+    </div>
+    
+    <script src="../js/i18n.js"></script>
+    <script>
+        let logDiv = document.getElementById('log');
+        
+        function log(msg) {
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.textContent += `[${timestamp}] ${msg}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(msg);
+        }
+        
+        async function testLanguage(lang) {
+            log(`🔄 Trocando para ${lang}...`);
+            
+            try {
+                await window.I18n.setLanguage(lang);
+                log(`✅ Idioma trocado para ${lang}`);
+                updateStatus();
+                await checkTranslations();
+            } catch (error) {
+                log(`❌ Erro ao trocar idioma: ${error.message}`);
+            }
+        }
+        
+        function updateStatus() {
+            document.getElementById('currentLang').textContent = window.I18n.currentLang;
+            document.getElementById('savedLang').textContent = localStorage.getItem('quest4couple_lang') || '(nenhum)';
+            document.getElementById('translationsLoaded').textContent = Object.keys(window.I18n.translations).length + ' chaves';
+        }
+        
+        async function checkTranslations() {
+            log('🔍 Verificando traduções de home.heroTitle em todos os idiomas...');
+            
+            const langs = ['pt-pt', 'pt-br', 'en', 'es', 'fr'];
+            let output = '';
+            
+            for (const lang of langs) {
+                try {
+                    const response = await fetch(`../i18n/translations.${lang}.json`);
+                    const data = await response.json();
+                    const heroTitle = data.home?.heroTitle || '❌ NÃO EXISTE';
+                    output += `${lang.toUpperCase()}: ${heroTitle}\n`;
+                    
+                    if (!data.home?.heroTitle) {
+                        log(`❌ FALTA: home.heroTitle em ${lang}`);
+                    }
+                } catch (error) {
+                    output += `${lang.toUpperCase()}: ❌ ERRO: ${error.message}\n`;
+                    log(`❌ Erro ao carregar ${lang}: ${error.message}`);
+                }
+            }
+            
+            document.getElementById('heroTitleTranslations').textContent = output;
+            
+            // Verificar elemento atual
+            const testTitle = document.getElementById('testTitle');
+            log(`📝 Texto atual do elemento: "${testTitle.textContent}"`);
+            
+            const translation = window.I18n.t('home.heroTitle');
+            log(`🔤 Tradução retornada por I18n.t(): "${translation}"`);
+        }
+        
+        // Quando i18n inicializar
+        document.addEventListener('DOMContentLoaded', async () => {
+            log('🚀 Página carregada');
+            
+            // Aguardar inicialização
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            log('🔧 Sistema i18n inicializado');
+            updateStatus();
+            await checkTranslations();
+        });
+        
+        // Escutar mudanças de idioma
+        document.addEventListener('languageChanged', (e) => {
+            log(`🌍 Evento languageChanged disparado: ${e.detail?.lang || 'sem detalhes'}`);
+            updateStatus();
+        });
+    </script>
+</body>
+</html>

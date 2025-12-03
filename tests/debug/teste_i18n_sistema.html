@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste i18n - Quest4Couple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        button {
+            padding: 10px 15px;
+            border: 2px solid #d63384;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #d63384;
+            color: white;
+        }
+        .info {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .info h3 {
+            color: #d63384;
+            margin-top: 15px;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste do Sistema i18n</h1>
+    
+    <div class="header">
+        <div>
+            <h2 data-i18n="home.title">Quest4Couple</h2>
+        </div>
+        
+        <div class="auth-buttons">
+            <button>
+                <span>🎓</span> <span data-i18n="header.tutorial">Tutorial</span>
+            </button>
+            
+            <button>
+                <span>📝</span> <span data-i18n="header.questionnaire">Questionários</span>
+            </button>
+            
+            <button>
+                <span>💑</span> <span data-i18n="header.report">Relatório</span>
+            </button>
+            
+            <button>
+                <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="info">
+        <h3>📊 Status do Sistema</h3>
+        <p><strong>Idioma atual:</strong> <span id="current-lang">-</span></p>
+        <p><strong>Traduções carregadas:</strong> <span id="translations-loaded">-</span></p>
+        
+        <h3>🔍 Console Logs</h3>
+        <p>Abra o console do browser (F12) para ver os logs detalhados</p>
+        
+        <h3>✅ Teste Manual</h3>
+        <ol>
+            <li>Verifique se o seletor de idioma aparece no header acima</li>
+            <li>Troque o idioma (deve mostrar PT, BR, GB, ES, FR)</li>
+            <li>Verifique se os botões mudam de texto</li>
+            <li>Verifique se os emojis são preservados</li>
+        </ol>
+        
+        <h3>🐛 Debug Info</h3>
+        <button onclick="showDebugInfo()">Mostrar Info de Debug</button>
+        <pre id="debug-info" style="display: none;"></pre>    </div>
+
+    <script src="../../js/i18n.js"></script>
+    <script>
+        // Atualizar status quando idioma mudar
+        document.addEventListener('languageChanged', (e) => {
+            console.log('✅ Evento languageChanged recebido:', e.detail);
+            updateStatus();
+        });
+
+        // Atualizar status inicial
+        setTimeout(() => {
+            updateStatus();
+        }, 1000);
+
+        function updateStatus() {
+            document.getElementById('current-lang').textContent = I18n.currentLang;
+            document.getElementById('translations-loaded').textContent = 
+                Object.keys(I18n.translations).length > 0 ? 'Sim ✅' : 'Não ❌';
+        }
+
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+            
+            const info = {
+                'Idioma Atual': I18n.currentLang,
+                'Idiomas Suportados': Object.keys(I18n.supportedLanguages),
+                'Traduções Carregadas': Object.keys(I18n.translations).length > 0,
+                'Header Encontrado': !!document.querySelector('.header'),
+                'Seletor Criado': !!document.getElementById('language-selector'),
+                'Botão Toggle Criado': !!document.getElementById('lang-toggle'),
+                'Número de elementos [data-i18n]': document.querySelectorAll('[data-i18n]').length,
+                'Exemplo de tradução (header.tutorial)': I18n.t('header.tutorial')
+            };
+            
+            debugDiv.textContent = JSON.stringify(info, null, 2);
+        }
+    </script>
+</body>
+</html>

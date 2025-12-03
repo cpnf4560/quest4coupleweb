@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Teste Bandeiras</title>
+</head>
+<body>
+    <h1>Teste de Bandeiras</h1>
+    <div id="test"></div>
+    <script>
+        const flags = {
+            'pt-pt': String.fromCodePoint(0x1F1F5, 0x1F1F9),
+            'pt-br': String.fromCodePoint(0x1F1E7, 0x1F1F7),
+            'en': String.fromCodePoint(0x1F1EC, 0x1F1E7),
+            'es': String.fromCodePoint(0x1F1EA, 0x1F1F8),
+            'fr': String.fromCodePoint(0x1F1EB, 0x1F1F7)
+        };
+        
+        let html = '';
+        for (const [code, flag] of Object.entries(flags)) {
+            html += <p style="font-size: 2em;">: </p>;
+        }
+        
+        document.getElementById('test').innerHTML = html;
+        
+        console.log('Bandeiras:', flags);
+    </script>
+</body>
+</html>

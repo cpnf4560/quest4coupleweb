@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Login - Quest4Couple</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title data-i18n="auth.pageTitle">Login - Quest4Couple</title>
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/auth.css">
   
@@ -25,21 +25,21 @@
         <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
       </a>
       <h1>Quest4Couple</h1>
-      <p class="tagline">Autenticação 🔐</p>
+      <p class="tagline" data-i18n="auth.tagline">Autenticação 🔐</p>
     </div>
     
     <!-- User Section (Canto Superior Direito) -->
     <div class="user-section-top">
       <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário">
-        📝 Questionário
+        <span>📝</span> <span data-i18n="header.questionnaire">Questionário</span>
       </button>
       
       <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início">
-        🏠 Início
+        <span>🏠</span> <span data-i18n="common.home">Início</span>
       </button>
     </div>
     
-    <div class="free-badge-small">
+    <div class="free-badge-small" data-i18n="home.badge.free">
       ✨ 100% Gratuito
     </div>
   </div>
@@ -50,18 +50,18 @@
       <div class="auth-logo">
         <img src="./assets/logo.png" alt="Quest4Couple">
         <h1>Quest4Couple</h1>
-        <p class="tagline">Descubram-se juntos ❤️</p>
+        <p class="tagline" data-i18n="auth.taglineHeart">Descubram-se juntos ❤️</p>
       </div>
 
       <!-- Tabs -->
       <div class="auth-tabs">
-        <button class="auth-tab active" data-tab="login">Login</button>
-        <button class="auth-tab" data-tab="signup">Registar</button>
+        <button class="auth-tab active" data-tab="login" data-i18n="auth.login.title">Login</button>
+        <button class="auth-tab" data-tab="signup" data-i18n="auth.register.tabTitle">Registar</button>
       </div>
 
       <!-- Login Form -->
       <div class="auth-form active" id="loginForm">
-        <h2>Bem-vindo de volta!</h2>
+        <h2 data-i18n="auth.login.welcome">Bem-vindo de volta!</h2>
           <!-- Social Login Buttons -->
         <div class="social-buttons">
           <!-- Google Sign-In -->
@@ -73,37 +73,37 @@
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
               <path fill="none" d="M0 0h48v48H0z"></path>
             </svg>
-            Continuar com Google
+            <span data-i18n="auth.continueWithGoogle">Continuar com Google</span>
           </button>
         </div>
 
         <div class="divider">
-          <span>ou</span>
+          <span data-i18n="common.or">ou</span>
         </div>
 
         <!-- Email/Password -->
         <form id="emailLoginForm">
           <div class="form-group">
-            <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" required placeholder="teu@email.com">
+            <label for="loginEmail" data-i18n="auth.login.email">Email</label>
+            <input type="email" id="loginEmail" required data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="teu@email.com">
           </div>
 
           <div class="form-group">
-            <label for="loginPassword">Password</label>
+            <label for="loginPassword" data-i18n="auth.login.password">Password</label>
             <input type="password" id="loginPassword" required placeholder="••••••••">
           </div>
 
           <div class="form-actions">
-            <a href="#" class="forgot-password" id="forgotPasswordLink">Esqueci a password</a>
+            <a href="#" class="forgot-password" id="forgotPasswordLink" data-i18n="auth.login.forgotPassword">Esqueci a password</a>
           </div>
 
-          <button type="submit" class="btn-primary">Entrar</button>
+          <button type="submit" class="btn-primary" data-i18n="auth.login.submit">Entrar</button>
         </form>
       </div>
 
       <!-- Signup Form -->
       <div class="auth-form" id="signupForm">
-        <h2>Criar Conta</h2>
+        <h2 data-i18n="auth.register.title">Criar Conta</h2>
         
         <!-- Social Login Buttons -->
         <div class="social-buttons">
@@ -116,102 +116,102 @@
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
               <path fill="none" d="M0 0h48v48H0z"></path>
             </svg>
-            Continuar com Google
+            <span data-i18n="auth.continueWithGoogle">Continuar com Google</span>
           </button>
         </div>
 
         <div class="divider">
-          <span>ou</span>
+          <span data-i18n="common.or">ou</span>
         </div>
 
         <!-- Email/Password -->
         <form id="emailSignupForm">
           <div class="form-group">
-            <label for="signupName">Nome</label>
-            <input type="text" id="signupName" required placeholder="O teu nome">
+            <label for="signupName" data-i18n="auth.register.name">Nome</label>
+            <input type="text" id="signupName" required data-i18n-placeholder="auth.register.namePlaceholder" placeholder="O teu nome">
           </div>
           
           <div class="form-group">
-            <label for="signupUsername">Username (para adicionar parceiros) *</label>
+            <label for="signupUsername"><span data-i18n="auth.register.username">Username (para adicionar parceiros)</span> *</label>
             <input type="text" id="signupUsername" required placeholder="username" pattern="[a-z0-9._]+" title="Apenas letras minúsculas, números, ponto e underscore">
-            <small>Apenas letras minúsculas, números, ponto (.) e underscore (_)</small>
+            <small data-i18n="auth.register.usernameHint">Apenas letras minúsculas, números, ponto (.) e underscore (_)</small>
           </div>
 
           <div class="form-group">
-            <label for="signupEmail">Email</label>
-            <input type="email" id="signupEmail" required placeholder="teu@email.com">
+            <label for="signupEmail" data-i18n="auth.register.email">Email</label>
+            <input type="email" id="signupEmail" required data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="teu@email.com">
           </div>          <div class="form-group">
-            <label for="signupPassword">Password</label>
+            <label for="signupPassword" data-i18n="auth.register.password">Password</label>
             <input type="password" id="signupPassword" required placeholder="••••••••" minlength="6">
-            <small>Mínimo 6 caracteres</small>
+            <small data-i18n="auth.register.passwordHint">Mínimo 6 caracteres</small>
           </div>
 
           <div class="form-group">
-            <label for="signupConfirmPassword">Confirmar Password</label>
+            <label for="signupConfirmPassword" data-i18n="auth.register.confirmPassword">Confirmar Password</label>
             <input type="password" id="signupConfirmPassword" required placeholder="••••••••" minlength="6">
           </div>
 
           <div class="form-group">
-            <label for="signupGender">Sexo *</label>
+            <label for="signupGender"><span data-i18n="auth.register.gender">Sexo</span> *</label>
             <select id="signupGender" required>
-              <option value="">Selecione o sexo</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-              <option value="outro">Outro</option>
+              <option value="" data-i18n="auth.register.selectGender">Selecione o sexo</option>
+              <option value="M" data-i18n="auth.register.male">Masculino</option>
+              <option value="F" data-i18n="auth.register.female">Feminino</option>
+              <option value="outro" data-i18n="auth.register.other">Outro</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="signupAgeRange">Faixa Etária *</label>
+            <label for="signupAgeRange"><span data-i18n="auth.register.ageRange">Faixa Etária</span> *</label>
             <select id="signupAgeRange" required>
-              <option value="">Selecione a faixa etária</option>
-              <option value="18-23">18-23 anos</option>
-              <option value="24-29">24-29 anos</option>
-              <option value="30-35">30-35 anos</option>
-              <option value="36-40">36-40 anos</option>
-              <option value="41-49">41-49 anos</option>
-              <option value="50+">+50 anos</option>
+              <option value="" data-i18n="auth.register.selectAgeRange">Selecione a faixa etária</option>
+              <option value="18-23">18-23 <span data-i18n="common.years">anos</span></option>
+              <option value="24-29">24-29 <span data-i18n="common.years">anos</span></option>
+              <option value="30-35">30-35 <span data-i18n="common.years">anos</span></option>
+              <option value="36-40">36-40 <span data-i18n="common.years">anos</span></option>
+              <option value="41-49">41-49 <span data-i18n="common.years">anos</span></option>
+              <option value="50+">+50 <span data-i18n="common.years">anos</span></option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="signupCountry">País *</label>
+            <label for="signupCountry"><span data-i18n="auth.register.country">País</span> *</label>
             <select id="signupCountry" required>
-              <option value="">Selecione o país</option>
+              <option value="" data-i18n="auth.register.selectCountry">Selecione o país</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="signupCity">Cidade *</label>
-            <input type="text" id="signupCity" list="citySuggestions" required placeholder="Escolha ou escreva a cidade" autocomplete="off">
+            <label for="signupCity"><span data-i18n="auth.register.city">Cidade</span> *</label>
+            <input type="text" id="signupCity" list="citySuggestions" required data-i18n-placeholder="auth.register.cityPlaceholder" placeholder="Escolha ou escreva a cidade" autocomplete="off">
             <datalist id="citySuggestions"></datalist>
-            <small>Escreva para pesquisar cidades</small>
+            <small data-i18n="auth.register.cityHint">Escreva para pesquisar cidades</small>
           </div>
 
           <div class="form-group">
             <label>
               <input type="checkbox" id="agreeTerms" required>
-              Aceito os <a href="pages/termos.html" target="_blank">Termos de Uso</a> e <a href="pages/privacidade.html" target="_blank">Política de Privacidade</a>
+              <span data-i18n-html="auth.register.agreeTerms">Aceito os <a href="pages/termos.html" target="_blank">Termos de Uso</a> e <a href="pages/privacidade.html" target="_blank">Política de Privacidade</a></span>
             </label>
           </div>
 
-          <button type="submit" class="btn-primary">Criar Conta</button>
+          <button type="submit" class="btn-primary" data-i18n="auth.register.submit">Criar Conta</button>
         </form>
       </div>
 
       <!-- Forgot Password Form -->
       <div class="auth-form" id="forgotPasswordForm">
-        <h2>Recuperar Password</h2>
-        <p>Insere o teu email e enviaremos um link para redefinir a password.</p>
+        <h2 data-i18n="auth.forgotPassword.title">Recuperar Password</h2>
+        <p data-i18n="auth.forgotPassword.description">Insere o teu email e enviaremos um link para redefinir a password.</p>
         
         <form id="resetPasswordForm">
           <div class="form-group">
-            <label for="resetEmail">Email</label>
-            <input type="email" id="resetEmail" required placeholder="teu@email.com">
+            <label for="resetEmail" data-i18n="auth.login.email">Email</label>
+            <input type="email" id="resetEmail" required data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="teu@email.com">
           </div>
 
-          <button type="submit" class="btn-primary">Enviar Link</button>
-          <button type="button" class="btn-secondary" id="backToLoginBtn">Voltar ao Login</button>
+          <button type="submit" class="btn-primary" data-i18n="auth.forgotPassword.submit">Enviar Link</button>
+          <button type="button" class="btn-secondary" id="backToLoginBtn" data-i18n="auth.forgotPassword.backToLogin">Voltar ao Login</button>
         </form>
       </div>
     </div>
@@ -220,34 +220,34 @@
   <!-- Loading Overlay -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="loading-spinner"></div>
-    <p>A processar...</p>
+    <p data-i18n="common.processing">A processar...</p>
   </div>
   <!-- Location Modal (for Google/Reddit signup) -->
   <div class="modal-overlay hidden" id="locationModal">
-    <div class="modal-box"><h2>📍 Complete o teu Perfil</h2>
-      <p>Para melhorar a tua experiência, precisamos de alguns dados:</p>
+    <div class="modal-box"><h2><span>📍</span> <span data-i18n="auth.modal.completeProfile">Complete o teu Perfil</span></h2>
+      <p data-i18n="auth.modal.needData">Para melhorar a tua experiência, precisamos de alguns dados:</p>
       
       <form id="locationForm">
         <div class="form-group">
-          <label for="modalUsername">Username (para adicionar parceiros) *</label>
+          <label for="modalUsername"><span data-i18n="auth.register.username">Username (para adicionar parceiros)</span> *</label>
           <input type="text" id="modalUsername" required placeholder="username" pattern="[a-z0-9._]+" title="Apenas letras minúsculas, números, ponto e underscore">
-          <small>Apenas letras minúsculas, números, ponto (.) e underscore (_)</small>
+          <small data-i18n="auth.register.usernameHint">Apenas letras minúsculas, números, ponto (.) e underscore (_)</small>
         </div>
         
         <div class="form-group">
-          <label for="modalGender">Sexo *</label>
+          <label for="modalGender"><span data-i18n="auth.register.gender">Sexo</span> *</label>
           <select id="modalGender" required>
-            <option value="">Selecione o sexo</option>
-            <option value="M">Masculino</option>
-            <option value="F">Feminino</option>
-            <option value="outro">Outro</option>
+            <option value="" data-i18n="auth.register.selectGender">Selecione o sexo</option>
+            <option value="M" data-i18n="auth.register.male">Masculino</option>
+            <option value="F" data-i18n="auth.register.female">Feminino</option>
+            <option value="outro" data-i18n="auth.register.other">Outro</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="modalAgeRange">Faixa Etária *</label>
+          <label for="modalAgeRange"><span data-i18n="auth.register.ageRange">Faixa Etária</span> *</label>
           <select id="modalAgeRange" required>
-            <option value="">Selecione a faixa etária</option>
+            <option value="" data-i18n="auth.register.selectAgeRange">Selecione a faixa etária</option>
             <option value="18-23">18-23 anos</option>
             <option value="24-29">24-29 anos</option>
             <option value="30-35">30-35 anos</option>
@@ -258,20 +258,20 @@
         </div>
 
         <div class="form-group">
-          <label for="modalCountry">País *</label>
+          <label for="modalCountry"><span data-i18n="auth.register.country">País</span> *</label>
           <select id="modalCountry" required>
-            <option value="">Selecione o país</option>
+            <option value="" data-i18n="auth.register.selectCountry">Selecione o país</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="modalCity">Cidade *</label>
-          <input type="text" id="modalCity" list="modalCitySuggestions" required placeholder="Escolha ou escreva a cidade" autocomplete="off">
+          <label for="modalCity"><span data-i18n="auth.register.city">Cidade</span> *</label>
+          <input type="text" id="modalCity" list="modalCitySuggestions" required data-i18n-placeholder="auth.register.cityPlaceholder" placeholder="Escolha ou escreva a cidade" autocomplete="off">
           <datalist id="modalCitySuggestions"></datalist>
-          <small>Escreva para pesquisar cidades</small>
+          <small data-i18n="auth.register.cityHint">Escreva para pesquisar cidades</small>
         </div>
 
-        <button type="submit" class="btn-primary">Continuar</button>
+        <button type="submit" class="btn-primary" data-i18n="common.continue">Continuar</button>
       </form>
     </div>
   </div>
@@ -280,11 +280,13 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <!-- App Scripts -->
-  <script src="js/firebase-config.js"></script>
+    <!-- App Scripts -->  <script src="js/firebase-config.js"></script>
   <script src="js/geonames.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/notifications.js"></script>
   <script src="js/auth-ui.js"></script>
+  
+  <!-- i18n System -->
+  <script src="js/i18n.js"></script>
 </body>
 </html>

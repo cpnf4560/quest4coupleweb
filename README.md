@@ -5,18 +5,20 @@
 [![Firebase](https://img.shields.io/badge/Firebase-v8.10.0-orange)](https://firebase.google.com/)
 [![License](https://img.shields.io/badge/License-Free-green)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-Active-success)](https://quest4couple.pt)
+[![i18n](https://img.shields.io/badge/i18n-5%20Languages-blue)](i18n/)
 
 ---
 
 ## 📋 Sobre o Projeto
 
-**Quest4Couple** é uma plataforma interativa que ajuda casais a conhecerem-se melhor através de:
+**Quest4Couple** é uma plataforma interativa multilingue que ajuda casais a conhecerem-se melhor através de:
 
 - 🎯 **Questionários Personalizados** - Perguntas adaptadas aos interesses do casal
 - 💝 **Compatibilidade** - Análise de respostas e matching
 - 🎨 **Relatórios Visuais** - Gráficos e estatísticas detalhadas
 - 📊 **Dashboard Personalizado** - Acompanhamento de progresso
 - 🔐 **Admin Dashboard** - Gestão completa de utilizadores e atividades
+- 🌍 **Suporte Multilingue** - PT-PT, PT-BR, EN, ES, FR
 
 ---
 
@@ -60,15 +62,76 @@ Ver: **`TESTE_CORRECOES.md`**
 
 ---
 
+## 📁 Estrutura do Projeto
+
+```
+Quest4Couple_v2_free/
+│
+├── 📄 index.html              # Página principal
+├── 📄 app.html                # Aplicação de questionário
+├── 📄 auth.html               # Autenticação
+├── 📄 dashboard.html          # Dashboard do utilizador
+├── 📄 tutorial.html           # Tutorial
+├── 📄 relatorio.html          # Relatório de compatibilidade
+│
+├── 📂 css/                    # Estilos CSS
+├── 📂 js/                     # Scripts JavaScript
+│   └── i18n.js               # Sistema de traduções
+├── 📂 data/                   # Dados de perguntas JSON
+├── 📂 assets/                 # Imagens e recursos
+├── 📂 pages/                  # Páginas adicionais (admin, etc)
+│
+├── 📂 i18n/                   # Traduções (5 idiomas)
+│   ├── translations.pt-pt.json
+│   ├── translations.pt-br.json
+│   ├── translations.en.json
+│   ├── translations.es.json
+│   └── translations.fr.json
+│
+├── 📂 docs/                   # 📚 Documentação organizada
+│   ├── archive/              # Documentação de correções antigas
+│   ├── project/              # Resumos executivos e estado do projeto
+│   ├── i18n/                 # Documentação sistema multilingue
+│   ├── seo/                  # Documentação SEO e conteúdo
+│   └── dns/                  # Documentação configuração domínio
+│
+├── 📂 tests/                  # 🧪 Testes e debug
+│   ├── debug/                # Ficheiros HTML de teste
+│   └── test_results/         # Resultados de testes
+│
+├── 📂 scripts/                # 🔧 Scripts utilitários
+│   ├── diagnostics/          # Scripts BAT de diagnóstico
+│   ├── create_favicons.py    # Gerador de favicons
+│   └── generate_*.js         # Geradores de ficheiros .q4c
+│
+└── 📂 .firebase/              # Configuração Firebase
+```
+
+---
+
 ## 📚 Documentação Completa
 
+### Documentação Principal (docs/project/):
 | Ficheiro | Descrição |
 |----------|-----------|
 | **`RESUMO_EXECUTIVO.md`** | Resumo conciso (1 página) |
-| **`RESUMO_CORRECOES.md`** | Correções detalhadas |
-| **`FIRESTORE_RULES_RECOMENDADAS.md`** | Regras de segurança |
-| **`TESTE_CORRECOES.md`** | Guia de testes completo |
-| **`GUIA_RAPIDO_IMPLEMENTACAO.md`** | Setup em 5 minutos |
+| **`ESTADO_PROJETO_ATUAL.md`** | Estado atual do projeto |
+| **`RESUMO_FINAL_27NOV.md`** | Últimas alterações |
+
+### Sistema i18n (docs/i18n/):
+| Ficheiro | Descrição |
+|----------|-----------|
+| **`SISTEMA_MULTILINGUA_COMPLETO.md`** | Guia completo i18n |
+| **`CORRECAO_FINAL_BANDEIRAS_E_HEADERS.md`** | Troubleshooting bandeiras |
+
+### SEO & DNS (docs/seo/ e docs/dns/):
+| Ficheiro | Descrição |
+|----------|-----------|
+| **`SEO_IMPLEMENTATION.md`** | Implementação SEO |
+| **`STATUS_FINAL_QUEST4COUPLE.md`** | Estado DNS e SSL |
+
+### Correções Antigas (docs/archive/):
+Histórico de correções e investigações de bugs.
 
 ---
 

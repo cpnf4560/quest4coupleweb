@@ -354,6 +354,279 @@ async function showReportDetails(reportId) {
 }
 
 // ========================================
+// TAB: RELATÓRIOS PARCIAIS (1 Pack Only)
+// ========================================
+
+/**
+ * Carrega e exibe relatórios parciais (casais que completaram apenas 1 pack)
+ */
+async function loadPartialReports(filters = {}) {
+  const container = document.getElementById('partialReportsContainer');
+  const statsContainer = document.getElementById('partialReportsStats');
+  
+  if (!container) return;
+  
+  // Mostrar loading
+  container.innerHTML = `
+    <div style="text-align: center; padding: 40px; color: #6c757d;">
+      <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+      <p>Carregando relatórios parciais...</p>
+    </div>
+  `;
+  
+  try {
+    // Buscar relatórios com apenas 1 pack
+    let reports = await getPartialReports(100, filters);
+    
+    // Estatísticas
+    const stats = {
+      total: reports.length,
+      byPack: {}
+    };
+    
+    reports.forEach(r => {
+      const packId = r.stats?.packIds?.[0] || 'unknown';
+      stats.byPack[packId] = (stats.byPack[packId] || 0) + 1;
+    });
+    
+    // Render stats
+    if (statsContainer) {
+      const packNames = {
+        'romantico': 'Pack Romântico',
+        'experiencia': 'Exploração e Aventura',
+        'pimentinha': 'Pimentinha',
+        'poliamor': 'Poliamor',
+        'kinks': 'Fetiches'
+      };
+      
+      let statsHtml = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;">
+            <div style="font-size: 2em; font-weight: 700;">${stats.total}</div>
+            <div style="font-size: 0.85em; opacity: 0.9;">Total Parciais</div>
+          </div>
+      `;
+      
+      Object.entries(stats.byPack).forEach(([packId, count]) => {
+        statsHtml += `
+          <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; text-align: center; border-left: 4px solid #667eea;">
+            <div style="font-size: 1.5em; font-weight: 600; color: #495057;">${count}</div>
+            <div style="font-size: 0.8em; color: #6c757d;">${packNames[packId] || packId}</div>
+          </div>
+        `;
+      });
+      
+      statsHtml += '</div>';
+      statsContainer.innerHTML = statsHtml;
+    }
+    
+    if (reports.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px; color: #6c757d;">
+          <div style="font-size: 3em; margin-bottom: 15px;">📝</div>
+          <h3 style="margin-bottom: 10px;">Nenhum relatório parcial encontrado</h3>
+          <p>Não há casais que tenham completado apenas 1 pack.</p>
+        </div>
+      `;
+      return;
+    }
+    
+    // Renderizar relatórios
+    let html = `
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+          <thead style="background: #f8f9fa;">
+            <tr>
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">#</th>
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Casal</th>
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Pack</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Questões</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">⭐ Super</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">💚 Match</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">😐 Mismatch</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid #dee2e6;">Compat.</th>
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Data</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    const packNames = {
+      'romantico': '💕 Romântico',
+      'experiencia': '🌍 Exploração',
+      'pimentinha': '🌶️ Pimentinha',
+      'poliamor': '💜 Poliamor',
+      'kinks': '🔥 Fetiches'
+    };
+    
+    reports.forEach((report, index) => {
+      const date = report.timestamp?.toDate();
+      const dateStr = date ? date.toLocaleDateString('pt-PT', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+      }) : '-';
+      
+      const packId = report.stats?.packIds?.[0] || 'unknown';
+      const compatibility = calculateCompatibility(report.stats);
+      const compatColor = compatibility >= 80 ? '#2e7d32' : compatibility >= 60 ? '#fb8c00' : '#d32f2f';
+      
+      html += `
+        <tr style="border-bottom: 1px solid #f1f3f5;">
+          <td style="padding: 12px; color: #6c757d;">${index + 1}</td>
+          <td style="padding: 12px; font-weight: 500;">${report.couple?.name1 || '?'} ❤️ ${report.couple?.name2 || '?'}</td>
+          <td style="padding: 12px;">${packNames[packId] || packId}</td>
+          <td style="padding: 12px; text-align: center;">${report.stats?.totalQuestions || 0}</td>
+          <td style="padding: 12px; text-align: center; color: #4caf50; font-weight: 600;">${report.stats?.superMatches || 0}</td>
+          <td style="padding: 12px; text-align: center; color: #8bc34a; font-weight: 600;">${report.stats?.matches || 0}</td>
+          <td style="padding: 12px; text-align: center; color: #ff9800; font-weight: 600;">${report.stats?.mismatches || 0}</td>
+          <td style="padding: 12px; text-align: center; font-weight: 700; color: ${compatColor};">${compatibility}%</td>
+          <td style="padding: 12px; color: #6c757d; font-size: 0.85em;">${dateStr}</td>
+        </tr>
+      `;
+    });
+    
+    html += '</tbody></table></div>';
+    container.innerHTML = html;
+    
+  } catch (error) {
+    console.error('Erro ao carregar relatórios parciais:', error);
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px; color: #dc3545;">
+        <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+        <p>Erro ao carregar relatórios parciais.</p>
+        <p style="font-size: 0.85em; color: #6c757d; margin-top: 10px;">${error.message}</p>
+        <button onclick="loadPartialReports()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+          🔄 Tentar Novamente
+        </button>
+      </div>
+    `;
+  }
+}
+
+/**
+ * Busca relatórios parciais (apenas 1 pack) do Firebase
+ */
+async function getPartialReports(limit = 100, filters = {}) {
+  try {
+    const db = firebase.firestore();
+    
+    // Buscar relatórios com packCount === 1
+    let query = db.collection('analytics_full_reports')
+      .where('stats.packCount', '==', 1)
+      .orderBy('timestamp', 'desc')
+      .limit(limit);
+    
+    const snapshot = await query.get();
+    let reports = [];
+    
+    snapshot.forEach(doc => {
+      reports.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    
+    // Aplicar filtros adicionais em memória
+    if (filters.packId) {
+      reports = reports.filter(r => r.stats?.packIds?.includes(filters.packId));
+    }
+    
+    if (filters.period) {
+      const now = new Date();
+      let startDate = null;
+      
+      if (filters.period === 'today') {
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      } else if (filters.period === 'week') {
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      } else if (filters.period === 'month') {
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      }
+      
+      if (startDate) {
+        reports = reports.filter(r => {
+          const timestamp = r.timestamp?.toDate();
+          return timestamp && timestamp >= startDate;
+        });
+      }
+    }
+    
+    return reports;
+    
+  } catch (error) {
+    console.error('❌ Erro ao obter relatórios parciais:', error);
+    
+    // Se der erro de índice, tentar busca sem filtro
+    if (error.code === 'failed-precondition') {
+      console.warn('⚠️ Índice não existe, buscando todos os relatórios...');
+      return await getPartialReportsFallback(limit, filters);
+    }
+    
+    throw error;
+  }
+}
+
+/**
+ * Fallback para buscar relatórios parciais (sem índice composto)
+ */
+async function getPartialReportsFallback(limit = 100, filters = {}) {
+  try {
+    const db = firebase.firestore();
+    
+    // Buscar todos os relatórios e filtrar em memória
+    const snapshot = await db.collection('analytics_full_reports')
+      .orderBy('timestamp', 'desc')
+      .limit(500)
+      .get();
+    
+    let reports = [];
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      // Filtrar apenas relatórios com 1 pack
+      if (data.stats?.packCount === 1) {
+        reports.push({
+          id: doc.id,
+          ...data
+        });
+      }
+    });
+    
+    // Aplicar filtros
+    if (filters.packId) {
+      reports = reports.filter(r => r.stats?.packIds?.includes(filters.packId));
+    }
+    
+    if (filters.period) {
+      const now = new Date();
+      let startDate = null;
+      
+      if (filters.period === 'today') {
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      } else if (filters.period === 'week') {
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      } else if (filters.period === 'month') {
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      }
+      
+      if (startDate) {
+        reports = reports.filter(r => {
+          const timestamp = r.timestamp?.toDate();
+          return timestamp && timestamp >= startDate;
+        });
+      }
+    }
+    
+    return reports.slice(0, limit);
+    
+  } catch (error) {
+    console.error('❌ Erro no fallback de relatórios parciais:', error);
+    throw error;
+  }
+}
+
+// ========================================
 // TAB: ANALYTICS POR QUESTÃO
 // ========================================
 
@@ -507,9 +780,133 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
       return;
     }
     
-    // Renderizar questões
-    let html = '';
-      questions.forEach((q, index) => {
+    // Estatísticas gerais
+    const totalResponses = questions.reduce((sum, q) => sum + q.totalResponses, 0);
+    const avgResponses = questions.length > 0 ? Math.round(totalResponses / questions.length) : 0;
+    
+    // Agrupar por pack
+    const byPack = {};
+    questions.forEach(q => {
+      if (!byPack[q.packId]) {
+        byPack[q.packId] = { count: 0, totalResponses: 0 };
+      }
+      byPack[q.packId].count++;
+      byPack[q.packId].totalResponses += q.totalResponses;
+    });
+    
+    const packNames = {
+      'romantico': '💕 Pack Romântico',
+      'experiencia': '🌍 Exploração',
+      'pimentinha': '🌶️ Pimentinha',
+      'poliamor': '💜 Poliamor',
+      'kinks': '🔥 Fetiches'
+    };
+    
+    // Header com estatísticas
+    let html = `
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 25px;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;">
+          <div style="font-size: 2em; font-weight: 700;">${questions.length}</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">Questões</div>
+        </div>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #4caf50;">
+          <div style="font-size: 2em; font-weight: 700; color: #4caf50;">${totalResponses}</div>
+          <div style="font-size: 0.85em; color: #6c757d;">Total Respostas</div>
+        </div>
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #2196f3;">
+          <div style="font-size: 2em; font-weight: 700; color: #2196f3;">${avgResponses}</div>
+          <div style="font-size: 0.85em; color: #6c757d;">Média/Questão</div>
+        </div>
+      </div>
+      
+      <!-- Toggle View -->
+      <div style="margin-bottom: 20px; display: flex; gap: 10px;">
+        <button onclick="setQuestionView('table')" id="btnTableView" style="padding: 8px 16px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+          📋 Vista Tabela
+        </button>
+        <button onclick="setQuestionView('cards')" id="btnCardsView" style="padding: 8px 16px; background: #f8f9fa; color: #495057; border: 2px solid #e0e0e0; border-radius: 6px; cursor: pointer; font-weight: 600;">
+          🃏 Vista Cards
+        </button>
+        <button onclick="exportAllQuestionsCSV()" style="padding: 8px 16px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-left: auto;">
+          📊 Exportar Todos
+        </button>
+      </div>
+      
+      <!-- Table View -->
+      <div id="questionTableView" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <thead style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <tr>
+              <th style="padding: 15px 12px; text-align: left; font-weight: 600;">#</th>
+              <th style="padding: 15px 12px; text-align: left; font-weight: 600;">Pack</th>
+              <th style="padding: 15px 12px; text-align: left; font-weight: 600; min-width: 250px;">Questão</th>
+              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">Total</th>
+              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">😍 Porfavor</th>
+              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">👍 Yup</th>
+              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">🤷 Talvez</th>
+              <th style="padding: 15px 12px; text-align: center; font-weight: 600;">😑 Meh</th>
+            </tr>
+          </thead>
+          <tbody>
+    `;
+    
+    questions.forEach((q, index) => {
+      const total = q.totalResponses;
+      const porfavor = q.byAnswer['porfavor'] || 0;
+      const yup = q.byAnswer['yup'] || 0;
+      const talvez = q.byAnswer['talvez'] || 0;
+      const meh = q.byAnswer['meh'] || 0;
+      
+      const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(0) : 0;
+      const pctYup = total > 0 ? ((yup / total) * 100).toFixed(0) : 0;
+      const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(0) : 0;
+      const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(0) : 0;
+      
+      const packIcon = packNames[q.packId]?.split(' ')[0] || '📦';
+      const questionShort = q.questionText?.length > 60 ? q.questionText.substring(0, 60) + '...' : q.questionText;
+      
+      // Color row based on predominant response
+      const maxPct = Math.max(pctPorfavor, pctYup, pctTalvez, pctMeh);
+      let rowBg = '#fff';
+      if (maxPct == pctPorfavor && pctPorfavor > 40) rowBg = '#f1f8f1';
+      else if (maxPct == pctMeh && pctMeh > 40) rowBg = '#fff5f5';
+      
+      html += `
+        <tr style="border-bottom: 1px solid #f1f3f5; background: ${rowBg};" title="${q.questionText}">
+          <td style="padding: 12px; color: #6c757d; font-weight: 500;">${q.questionNumber || index + 1}</td>
+          <td style="padding: 12px; font-size: 1.2em;">${packIcon}</td>
+          <td style="padding: 12px; color: #495057;">${questionShort || 'N/A'}</td>
+          <td style="padding: 12px; text-align: center; font-weight: 700; color: #667eea;">${total}</td>
+          <td style="padding: 12px; text-align: center;">
+            <span style="background: #e8f5e9; color: #2e7d32; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+              ${pctPorfavor}%
+            </span>
+          </td>
+          <td style="padding: 12px; text-align: center;">
+            <span style="background: #f1f8e9; color: #558b2f; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+              ${pctYup}%
+            </span>
+          </td>
+          <td style="padding: 12px; text-align: center;">
+            <span style="background: #fff3e0; color: #ef6c00; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+              ${pctTalvez}%
+            </span>
+          </td>
+          <td style="padding: 12px; text-align: center;">
+            <span style="background: #ffebee; color: #c62828; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.85em;">
+              ${pctMeh}%
+            </span>
+          </td>
+        </tr>
+      `;
+    });
+    
+    html += '</tbody></table></div>';
+    
+    // Cards View (hidden by default)
+    html += '<div id="questionCardsView" style="display: none;">';
+    
+    questions.forEach((q, index) => {
       const total = q.totalResponses;
       const porfavor = q.byAnswer['porfavor'] || 0;
       const yup = q.byAnswer['yup'] || 0;
@@ -521,104 +918,58 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
       const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(1) : 0;
       const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(1) : 0;
       
-      const invertBadge = q.hasInvertMatching ? '<span style="background: #667eea; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7em; margin-left: 10px;">🔄 INVERT</span>' : '';
-      
       html += `
-        <div class="question-analytics-card" style="background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-          <!-- Header -->
-          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
+        <div class="question-analytics-card" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
             <div style="flex: 1;">
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <span style="background: #667eea; color: white; padding: 4px 12px; border-radius: 6px; font-weight: 600; font-size: 0.85em;">
-                  #${index + 1}
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="background: #667eea; color: white; padding: 3px 10px; border-radius: 6px; font-weight: 600; font-size: 0.8em;">
+                  Q${q.questionNumber || index + 1}
                 </span>
-                <span style="color: #6c757d; font-size: 0.9em;">
-                  ${q.packName || q.packId}
-                </span>
-                ${invertBadge}
+                <span style="color: #6c757d; font-size: 0.85em;">${q.packName || q.packId}</span>
               </div>
-              <h3 style="margin: 0; font-size: 1.1em; color: #495057;">
+              <p style="margin: 0; font-size: 0.95em; color: #495057; line-height: 1.4;">
                 ${q.questionText || 'Texto não disponível'}
-              </h3>
+              </p>
             </div>
-            <div style="text-align: right; min-width: 100px;">
-              <div style="font-size: 1.8em; font-weight: 700; color: #667eea;">${total}</div>
-              <div style="font-size: 0.75em; color: #6c757d;">respostas</div>
-            </div>
-          </div>
-          
-          <!-- Distribuição Geral -->
-          <div style="margin-bottom: 20px;">
-            <h4 style="color: #495057; font-size: 0.95em; margin-bottom: 12px;">📊 Distribuição Geral</h4>
-              <div style="margin-bottom: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">😍 Por favor!</span>
-                <span style="font-weight: 600; color: #2e7d32;">${pctPorfavor}% (${porfavor})</span>
-              </div>
-              <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #4caf50; height: 100%; width: ${pctPorfavor}%; transition: width 0.3s;"></div>
-              </div>
-            </div>
-            
-            <div style="margin-bottom: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">👍 Yup</span>
-                <span style="font-weight: 600; color: #2e7d32;">${pctYup}% (${yup})</span>
-              </div>
-              <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #8bc34a; height: 100%; width: ${pctYup}%; transition: width 0.3s;"></div>
-              </div>
-            </div>
-            
-            <div style="margin-bottom: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">🤷 Talvez</span>
-                <span style="font-weight: 600; color: #fb8c00;">${pctTalvez}% (${talvez})</span>
-              </div>
-              <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #ffa726; height: 100%; width: ${pctTalvez}%; transition: width 0.3s;"></div>
-              </div>
-            </div>
-              <div>
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                <span style="font-size: 0.9em; color: #495057;">😑 Meh...</span>
-                <span style="font-weight: 600; color: #d32f2f;">${pctMeh}% (${meh})</span>
-              </div>
-              <div style="background: #e0e0e0; border-radius: 10px; height: 8px; overflow: hidden;">
-                <div style="background: #f44336; height: 100%; width: ${pctMeh}%; transition: width 0.3s;"></div>
-              </div>
+            <div style="text-align: right; min-width: 80px;">
+              <div style="font-size: 1.5em; font-weight: 700; color: #667eea;">${total}</div>
+              <div style="font-size: 0.7em; color: #6c757d;">respostas</div>
             </div>
           </div>
           
-          <!-- Por Género -->
-          <div style="margin-bottom: 20px;">
-            <h4 style="color: #495057; font-size: 0.95em; margin-bottom: 12px;">👥 Por Género</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
-              ${renderGenderStats(q.byGender.M, '👨 Homens')}
-              ${renderGenderStats(q.byGender.F, '👩 Mulheres')}
-              ${q.byGender.outro.total > 0 ? renderGenderStats(q.byGender.outro, '🧑 Outro') : ''}
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+            <div style="text-align: center; padding: 10px; background: #e8f5e9; border-radius: 8px;">
+              <div style="font-size: 1.2em;">😍</div>
+              <div style="font-weight: 700; color: #2e7d32;">${pctPorfavor}%</div>
+              <div style="font-size: 0.7em; color: #6c757d;">${porfavor}</div>
             </div>
-          </div>
-          
-          <!-- Por Idade -->
-          <div>
-            <h4 style="color: #495057; font-size: 0.95em; margin-bottom: 12px;">🎂 Por Faixa Etária</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
-              ${renderAgeRangeStats(q.byAgeRange)}
+            <div style="text-align: center; padding: 10px; background: #f1f8e9; border-radius: 8px;">
+              <div style="font-size: 1.2em;">👍</div>
+              <div style="font-weight: 700; color: #558b2f;">${pctYup}%</div>
+              <div style="font-size: 0.7em; color: #6c757d;">${yup}</div>
             </div>
-          </div>
-          
-          <!-- Action Button -->
-          <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #e0e0e0;">
-            <button onclick="exportQuestionCSV('${q.packId}', '${q.questionId}')" style="width: 100%; padding: 10px; background: white; color: #667eea; border: 2px solid #667eea; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;">
-              📊 Exportar Dados
-            </button>
+            <div style="text-align: center; padding: 10px; background: #fff3e0; border-radius: 8px;">
+              <div style="font-size: 1.2em;">🤷</div>
+              <div style="font-weight: 700; color: #ef6c00;">${pctTalvez}%</div>
+              <div style="font-size: 0.7em; color: #6c757d;">${talvez}</div>
+            </div>
+            <div style="text-align: center; padding: 10px; background: #ffebee; border-radius: 8px;">
+              <div style="font-size: 1.2em;">😑</div>
+              <div style="font-weight: 700; color: #c62828;">${pctMeh}%</div>
+              <div style="font-size: 0.7em; color: #6c757d;">${meh}</div>
+            </div>
           </div>
         </div>
       `;
     });
     
+    html += '</div>';
+    
     container.innerHTML = html;
+    
+    // Store questions data globally for export
+    window.questionsData = questions;
     
   } catch (error) {
     console.error('Erro ao carregar analytics de questões:', error);
@@ -626,12 +977,73 @@ async function loadQuestionAnalytics(packId = null, minResponses = 0) {
       <div style="text-align: center; padding: 40px; color: #dc3545;">
         <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
         <p>Erro ao carregar analytics.</p>
+        <p style="font-size: 0.85em; color: #6c757d; margin-top: 10px;">${error.message}</p>
         <button onclick="loadQuestionAnalytics()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
           🔄 Tentar Novamente
         </button>
       </div>
     `;
   }
+}
+
+/**
+ * Alterna entre vista tabela e cards
+ */
+function setQuestionView(view) {
+  const tableView = document.getElementById('questionTableView');
+  const cardsView = document.getElementById('questionCardsView');
+  const btnTable = document.getElementById('btnTableView');
+  const btnCards = document.getElementById('btnCardsView');
+  
+  if (view === 'table') {
+    tableView.style.display = 'block';
+    cardsView.style.display = 'none';
+    btnTable.style.background = '#667eea';
+    btnTable.style.color = 'white';
+    btnTable.style.border = 'none';
+    btnCards.style.background = '#f8f9fa';
+    btnCards.style.color = '#495057';
+    btnCards.style.border = '2px solid #e0e0e0';
+  } else {
+    tableView.style.display = 'none';
+    cardsView.style.display = 'block';
+    btnCards.style.background = '#667eea';
+    btnCards.style.color = 'white';
+    btnCards.style.border = 'none';
+    btnTable.style.background = '#f8f9fa';
+    btnTable.style.color = '#495057';
+    btnTable.style.border = '2px solid #e0e0e0';
+  }
+}
+
+/**
+ * Exporta todas as questões para CSV
+ */
+function exportAllQuestionsCSV() {
+  if (!window.questionsData || window.questionsData.length === 0) {
+    alert('Não há dados para exportar');
+    return;
+  }
+  
+  let csv = 'Pack,Questão Nº,Texto,Total Respostas,PorFavor (%),PorFavor (n),Yup (%),Yup (n),Talvez (%),Talvez (n),Meh (%),Meh (n)\n';
+  
+  window.questionsData.forEach(q => {
+    const total = q.totalResponses;
+    const porfavor = q.byAnswer['porfavor'] || 0;
+    const yup = q.byAnswer['yup'] || 0;
+    const talvez = q.byAnswer['talvez'] || 0;
+    const meh = q.byAnswer['meh'] || 0;
+    
+    const pctPorfavor = total > 0 ? ((porfavor / total) * 100).toFixed(1) : 0;
+    const pctYup = total > 0 ? ((yup / total) * 100).toFixed(1) : 0;
+    const pctTalvez = total > 0 ? ((talvez / total) * 100).toFixed(1) : 0;
+    const pctMeh = total > 0 ? ((meh / total) * 100).toFixed(1) : 0;
+    
+    const questionText = (q.questionText || '').replace(/"/g, '""');
+    
+    csv += `"${q.packId}",${q.questionNumber},"${questionText}",${total},${pctPorfavor},${porfavor},${pctYup},${yup},${pctTalvez},${talvez},${pctMeh},${meh}\n`;
+  });
+    downloadCSV(csv, `questoes_analytics_${new Date().toISOString().split('T')[0]}.csv`);
 }
 
 // ========================================

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Teste i18n Francês - Quest4Couple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        
+        .lang-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .lang-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .current-lang {
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            font-weight: 600;
+            color: #1976d2;
+        }
+        
+        .test-section {
+            margin-bottom: 40px;
+        }
+        
+        .test-section h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .test-item {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .test-item strong {
+            color: #764ba2;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+        
+        .test-item div {
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status.ok {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .hero-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .hero-preview h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .hero-preview p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #764ba2;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .free-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        
+        .console-log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .console-log div {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste i18n Francês</h1>
+        <p class="subtitle">Validação das traduções adicionadas em translations.fr.json</p>
+        
+        <div class="controls">
+            <div class="lang-buttons">
+                <button class="lang-btn active" data-lang="pt-pt">🇵🇹 PT-PT</button>
+                <button class="lang-btn" data-lang="pt-br">🇧🇷 PT-BR</button>
+                <button class="lang-btn" data-lang="en">🇬🇧 EN</button>
+                <button class="lang-btn" data-lang="es">🇪🇸 ES</button>
+                <button class="lang-btn" data-lang="fr">🇫🇷 FR</button>
+            </div>
+            <div class="current-lang">
+                📍 Idioma atual: <span id="currentLang">pt-pt</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Traduções Testadas</h2>
+            
+            <div class="test-item">
+                <strong>home.heroTitle</strong>
+                <div data-i18n="home.heroTitle">Descubram-se juntos 💕</div>
+            </div>
+            
+            <div class="test-item">
+                <strong>home.heroSubtitle (HTML)</strong>
+                <div data-i18n-html="home.heroSubtitle">
+                    Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>De forma <strong>privada, segura</strong> e sem julgamentos.
+                </div>
+            </div>
+            
+            <div class="test-item">
+                <strong>home.cta.viewQuestions</strong>
+                <div data-i18n="home.cta.viewQuestions">👀 Ver Questionários</div>
+            </div>
+            
+            <div class="test-item">
+                <strong>home.badge.free</strong>
+                <div data-i18n="home.badge.free">✨ 100% Gratuito • Veja sem login</div>
+            </div>
+            
+            <div class="test-item">
+                <strong>home.links.howItWorks</strong>
+                <div data-i18n="home.links.howItWorks">🎓 Como Funciona? • Tutorial</div>
+            </div>
+            
+            <div class="test-item">
+                <strong>home.links.viewReport</strong>
+                <div data-i18n="home.links.viewReport">💑 Ver Relatório do Casal</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎨 Preview do Hero Section</h2>
+            <div class="hero-preview">
+                <h1 data-i18n="home.heroTitle">Descubram-se juntos 💕</h1>
+                <p data-i18n-html="home.heroSubtitle">
+                    Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>De forma <strong>privada, segura</strong> e sem julgamentos.
+                </p>
+                <a href="#" class="cta-button" data-i18n="home.cta.viewQuestions">👀 Ver Questionários</a>
+                <div class="free-badge" data-i18n="home.badge.free">✨ 100% Gratuito • Veja sem login</div>
+            </div>
+        </div>
+        
+        <div class="console-log" id="consoleLog">
+            <div>🔧 Console de Debug:</div>
+            <div>Carregando sistema i18n...</div>
+        </div>
+    </div>
+    
+    <script src="../js/i18n.js"></script>
+    <script>
+        // Inicializar sistema
+        const log = (msg, type = 'info') => {
+            const consoleLog = document.getElementById('consoleLog');
+            const color = type === 'error' ? '#ff5555' : type === 'success' ? '#50fa7b' : '#00ff00';
+            const icon = type === 'error' ? '❌' : type === 'success' ? '✅' : '📝';
+            consoleLog.innerHTML += `<div style="color: ${color}">${icon} ${msg}</div>`;
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        };
+        
+        // Quando i18n carregar
+        document.addEventListener('DOMContentLoaded', async () => {
+            log('Sistema i18n carregado', 'success');
+            
+            // Configurar botões de idioma
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const currentLangSpan = document.getElementById('currentLang');
+            
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const lang = btn.getAttribute('data-lang');
+                    log(`Trocando para ${lang.toUpperCase()}...`);
+                    
+                    // Remover active de todos
+                    langButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Trocar idioma
+                    try {
+                        await window.I18n.changeLanguage(lang);
+                        currentLangSpan.textContent = lang;
+                        log(`Idioma trocado para ${lang.toUpperCase()}`, 'success');
+                        
+                        // Verificar traduções
+                        setTimeout(() => {
+                            const heroTitle = document.querySelector('[data-i18n="home.heroTitle"]');
+                            if (heroTitle) {
+                                log(`✓ home.heroTitle = "${heroTitle.textContent}"`);
+                            }
+                        }, 500);
+                    } catch (error) {
+                        log(`Erro ao trocar idioma: ${error.message}`, 'error');
+                    }
+                });
+            });
+            
+            // Log inicial
+            log('Idioma padrão: pt-pt', 'success');
+            log('📍 Clique nos botões acima para testar', 'success');
+            log('🎯 Foque especialmente no botão 🇫🇷 FR', 'success');
+        });
+    </script>
+</body>
+</html>

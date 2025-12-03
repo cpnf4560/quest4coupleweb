@@ -693,6 +693,9 @@
       </button>      <button class="tab-btn" onclick="showTab('reports')">
         📈 Relatórios
       </button>
+      <button class="tab-btn" onclick="showTab('partialReports')">
+        📝 Parciais (1 Pack)
+      </button>
       <button class="tab-btn" onclick="showTab('fullReports')">
         📋 Relatórios Completos
       </button>
@@ -866,12 +869,58 @@
             <div class="stat-label">relatórios por casal</div>
           </div>
         </div>
-        
-        <h3 style="margin: 30px 0 15px 0; color: #495057;">📋 Questionários Mais Respondidos</h3>
+          <h3 style="margin: 30px 0 15px 0; color: #495057;">📋 Questionários Mais Respondidos</h3>
         <div id="packStats"></div>
       </div>
     </div>
-      <!-- TAB: FULL REPORTS -->
+
+    <!-- TAB: PARTIAL REPORTS (1 Pack Only) -->
+    <div id="tab-partialReports" class="tab-content">
+      <div class="content-card">
+        <h2>
+          📝 Relatórios Parciais (1 Pack)
+          <span style="font-size: 0.7em; color: #6c757d; font-weight: normal; margin-left: 15px;">
+            Casais que completaram apenas 1 pack
+          </span>
+        </h2>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label>📦 Pack Completado</label>
+            <select id="filterPartialPack" onchange="loadPartialReportsWithFilters()">
+              <option value="">Todos os Packs</option>
+              <option value="romantico">Pack Romântico</option>
+              <option value="experiencia">Exploração e Aventura</option>
+              <option value="pimentinha">Pimentinha</option>
+              <option value="poliamor">Poliamor</option>
+              <option value="kinks">Fetiches</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>📅 Período</label>
+            <select id="filterPartialPeriod" onchange="loadPartialReportsWithFilters()">
+              <option value="">Todos</option>
+              <option value="today">Hoje</option>
+              <option value="week">Última Semana</option>
+              <option value="month">Último Mês</option>
+            </select>
+          </div>
+          <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
+            <button class="btn-reset" onclick="resetPartialReportFilters()">🔄 Limpar</button>
+          </div>
+        </div>
+        
+        <div id="partialReportsStats" style="margin-bottom: 20px;">
+          <!-- Stats will be loaded here -->
+        </div>
+        
+        <div id="partialReportsContainer">
+          <!-- Partial reports will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: FULL REPORTS -->
     <div id="tab-fullReports" class="tab-content">
       <div class="content-card">
         <h2>
@@ -1171,12 +1220,13 @@
       
       // Highlight active button
       event.target.classList.add('active');
-      
-      // Load data for specific tabs when they are opened
+        // Load data for specific tabs when they are opened
       if (tabName === 'fullReports') {
         loadFullReportsWithFilters();
       } else if (tabName === 'questions') {
         loadQuestionAnalyticsWithFilters();
+      } else if (tabName === 'partialReports') {
+        loadPartialReportsWithFilters();
       }
     }
     
@@ -1200,6 +1250,37 @@
     function resetFullReportFilters() {
       document.getElementById('filterReportPeriod').value = '';      document.getElementById('filterReportCompat').value = '';
       loadFullReportsWithFilters();
+    }
+    
+    // ===========================
+    // PARTIAL REPORTS TAB FUNCTIONS
+    // ===========================
+    function loadPartialReportsWithFilters() {
+      const packId = document.getElementById('filterPartialPack').value;
+      const period = document.getElementById('filterPartialPeriod').value;
+      
+      const filters = {};
+      if (packId) filters.packId = packId;
+      if (period) filters.period = period;
+      
+      // Call function from admin-analytics.js
+      if (typeof loadPartialReports === 'function') {
+        loadPartialReports(filters);
+      } else {
+        console.warn('loadPartialReports function not found');
+        document.getElementById('partialReportsContainer').innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #6c757d;">
+            <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+            <p>A funcionalidade será carregada em breve...</p>
+          </div>
+        `;
+      }
+    }
+    
+    function resetPartialReportFilters() {
+      document.getElementById('filterPartialPack').value = '';
+      document.getElementById('filterPartialPeriod').value = '';
+      loadPartialReportsWithFilters();
     }
     
     // ===========================
@@ -2011,3 +2092,4 @@ ${error.stack || 'Sem stack trace'}
 
 </body>
 </html>
+``` 

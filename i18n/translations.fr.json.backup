@@ -1,0 +1,247 @@
+{
+  "lang": "fr",
+  "pageTitle": "Quest4Couple - Découvrez-vous ensemble 💑",
+  
+  "header": {
+    "login": "Se Connecter",
+    "logout": "Déconnexion",
+    "dashboard": "Tableau de Bord",
+    "questionnaire": "Questionnaire",
+    "report": "Rapport",
+    "tutorial": "Tutoriel",
+    "support": "Soutenir"
+  },
+  
+  "home": {
+    "title": "Quest4Couple",
+    "subtitle": "Découvrez-vous mieux 💑",
+        "heroTitle": "Découvrez-vous ensemble 💕",
+    "heroSubtitle": "Explorez <span class=\"highlight\">désirs</span>, <span class=\"highlight\">fantasmes</span> et <span class=\"highlight\">affinités</span> en couple.<br>De manière <strong>privée, sécurisée</strong> et sans jugement.",
+    "description": "Un outil interactif et <strong>100% gratuit</strong> pour les couples qui explorent leurs désirs, fantasmes et affinités de manière <strong>privée et sécurisée</strong>.",
+        "cta": {
+      "start": "Commencer Maintenant",
+      "viewQuestions": "Voir les Questionnaires",
+      "login": "J'ai déjà un compte"
+    },
+    "badge": {
+      "free": "✨ 100% Gratuit • Voir sans connexion"
+    },
+    "links": {
+      "howItWorks": "🎓 Comment ça marche ? • Tutoriel",
+      "viewReport": "💑 Voir le Rapport de Couple"
+    },
+    "features": {
+      "title": "Comment Ça Marche?",
+      "private": {
+        "title": "100% Privé",
+        "description": "Vos réponses sont <strong>chiffrées localement</strong>. Rien n'est partagé sans permission. Zéro tracking."
+      },
+      "compare": {
+        "title": "Compatibilité Instantanée",
+        "description": "Système intelligent de comparaison révèle les <strong>Super Matches, Matches et Possibilités</strong> uniques du couple."
+      },
+      "free": {
+        "title": "100% Gratuit",
+        "description": "Pas de frais cachés. Tout est inclus!"
+      }
+    },
+    "packs": {
+      "title": "5 Packs Thématiques",
+      "description": "💝 Romantique, 🌍 Exploration, 🔥 Épicé, 💞 Polyamour et ⛓️ Fétiches. <strong>300 questions gratuites!</strong>",
+      "romantic": "Pack Romantique",
+      "exploration": "Exploration",
+      "spicy": "Épicé",
+      "polyamory": "Polyamour",
+      "fetishes": "Fétiches",
+      "questions": "questions"
+    },
+    "stats": {
+      "title": "En Chiffres",
+      "packs": "Packs Thématiques",
+      "questions": "Questions",
+      "categories": "Catégories",
+      "users": "Utilisateurs Actifs"
+    }
+  },
+  
+  "auth": {
+    "login": {
+      "title": "Se Connecter",
+      "email": "Email",
+      "password": "Mot de Passe",
+      "submit": "Connexion",
+      "noAccount": "Pas de compte?",
+      "createAccount": "Créer un compte"
+    },
+    "register": {
+      "title": "Créer un Compte",
+      "name": "Nom",
+      "email": "Email",
+      "password": "Mot de Passe",
+      "confirmPassword": "Confirmer Mot de Passe",
+      "country": "Pays (optionnel)",
+      "city": "Ville (optionnel)",
+      "submit": "Créer le Compte",
+      "hasAccount": "Vous avez déjà un compte?",
+      "login": "Se connecter"
+    },
+    "errors": {
+      "invalidEmail": "Email invalide",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "weakPassword": "Mot de passe trop faible (minimum 6 caractères)",
+      "emailInUse": "Cet email est déjà utilisé",
+      "wrongPassword": "Mot de passe incorrect",
+      "userNotFound": "Utilisateur non trouvé"
+    }
+  },
+  
+  "dashboard": {
+    "title": "Mon Tableau de Bord",
+    "welcome": "Salut, {name}!",
+    "accessCode": "Votre code d'accès",
+    "progress": "Progrès",
+    "connections": {
+      "title": "Connexions",
+      "addPartner": "Ajouter un Partenaire",
+      "noPending": "Aucune demande en attente",
+      "noConnections": "Vous n'avez pas encore de partenaires connectés",
+      "pending": "Demandes en Attente",
+      "connected": "Partenaires Connectés",
+      "accept": "Accepter",
+      "reject": "Rejeter",
+      "remove": "Supprimer"
+    },
+    "packs": {
+      "title": "Packs Disponibles",
+      "completed": "Complété",
+      "inProgress": "En Cours",
+      "locked": "Verrouillé",
+      "start": "Commencer",
+      "continue": "Continuer",
+      "viewReport": "Voir le Rapport"
+    }
+  },
+  
+  "tutorial": {
+    "title": "Tutoriel Interactif",
+    "subtitle": "Apprenez à utiliser Quest4Couple en 5 minutes",
+    "navigation": {
+      "next": "Suivant",
+      "previous": "Précédent",
+      "skip": "Passer",
+      "finish": "Terminer"
+    },
+    "steps": {
+      "welcome": {
+        "title": "Bienvenue! 👋",
+        "description": "Dans ce tutoriel, tu vas apprendre comment Quest4Couple fonctionne et comment explorer vos désirs en couple de manière sûre et privée."
+      },
+      "privacy": {
+        "title": "Confidentialité Totale 🔒",
+        "description": "Toutes vos réponses sont chiffrées localement. Rien n'est partagé sans votre permission explicite."
+      },
+      "questionnaire": {
+        "title": "Le Questionnaire 📋",
+        "description": "Répondez honnêtement aux questions. Vous pouvez les marquer comme 'Oui', 'Peut-être' ou 'Non'."
+      },
+      "matching": {
+        "title": "Compatibilité 💚",
+        "description": "Après que vous et votre partenaire ayez répondu, vous verrez vos affinités: Super Matches, Matches et Possibilités."
+      },
+      "report": {
+        "title": "Rapport Détaillé 📊",
+        "description": "Consultez votre rapport de compatibilité avec statistiques et insights personnalisés."
+      }
+    }
+  },
+  
+  "support": {
+    "title": "Soutenez Quest4Couple ❤️",
+    "intro": "Quest4Couple est <strong>100% gratuit</strong> et le restera toujours. Mais si vous souhaitez soutenir le projet, voici comment vous pouvez aider:",
+    "transparency": {
+      "title": "Transparence Totale",
+      "description": "Tous les coûts et dons sont publics. Nous croyons en l'honnêteté et la transparence."
+    },
+    "ways": {
+      "title": "Comment Soutenir",
+      "donate": {
+        "title": "💰 Faire un Don",
+        "description": "Votre contribution aide à maintenir les serveurs actifs et à améliorer la plateforme.",
+        "button": "Faire un Don"
+      },
+      "feedback": {
+        "title": "💬 Donner votre Avis",
+        "description": "Partagez vos suggestions et aidez-nous à améliorer l'expérience.",
+        "button": "Envoyer Avis"
+      },
+      "share": {
+        "title": "📢 Partager",
+        "description": "Recommandez Quest4Couple à d'autres couples qui pourraient bénéficier de l'outil.",
+        "button": "Partager"
+      }
+    }
+  },
+  
+  "banner": {
+    "title": "Soutenez Quest4Couple",
+    "description": "100% gratuit, mais vous pouvez nous aider!",
+    "donate": "Faire un Don",
+    "feedback": "Donner votre Avis",
+    "share": "Partager"
+  },
+  
+  "footer": {
+    "copyright": "© 2024 Quest4Couple. Tous droits réservés.",
+    "links": {
+      "about": "À Propos",
+      "faq": "FAQ",
+      "privacy": "Confidentialité",
+      "terms": "Conditions",
+      "support": "Soutenir",
+      "contact": "Contact"
+    }
+  },
+  
+  "common": {
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "yes": "Oui",
+    "no": "Non",
+    "or": "ou",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "export": "Exporter",
+    "import": "Importer",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "refresh": "Actualiser",
+    "back": "Retour",
+    "continue": "Continuer",
+    "skip": "Passer",
+    "finish": "Terminer",
+    "start": "Commencer",
+    "stop": "Arrêter",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Attention",
+    "info": "Info",
+    "help": "Aide",
+    "about": "À Propos",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "register": "Inscription",
+    "forgotPassword": "Mot de passe oublié?"
+  }
+}

@@ -1,0 +1,441 @@
+﻿/**
+ * Sistema de InternacionalizaÃ§Ã£o (i18n) para Quest4Couple
+ * Gere traduÃ§Ãµes em PT-PT, PT-BR, EN, ES, FR
+ */
+
+const I18n = {
+    currentLang: 'pt-pt',
+    translations: {},
+    fallbackLang: 'pt-pt',    // Idiomas suportados
+    supportedLanguages: {
+        'pt-pt': { name: 'Portugues (PT)', flag: String.fromCodePoint(0x1F1F5, 0x1F1F9) },
+        'pt-br': { name: 'Portugues (BR)', flag: String.fromCodePoint(0x1F1E7, 0x1F1F7) },
+        'en': { name: 'English', flag: String.fromCodePoint(0x1F1EC, 0x1F1E7) },
+        'es': { name: 'Espanol', flag: String.fromCodePoint(0x1F1EA, 0x1F1F8) },
+        'fr': { name: 'Francais', flag: String.fromCodePoint(0x1F1EB, 0x1F1F7) }
+    },
+
+    // Detectar idioma do browser
+    detectLanguage() {
+        const browserLang = navigator.language.toLowerCase();
+        if (browserLang.startsWith('pt-br')) return 'pt-br';
+        if (browserLang.startsWith('pt')) return 'pt-pt';
+        if (browserLang.startsWith('es')) return 'es';
+        if (browserLang.startsWith('en')) return 'en';
+        if (browserLang.startsWith('fr')) return 'fr';
+        return this.fallbackLang;
+    },
+
+    // Inicializar sistema
+    async init() {
+        // Verificar se jÃ¡ existe idioma guardado
+        let savedLang = localStorage.getItem('quest4couple_lang');
+        
+        if (!savedLang) {
+            // Detectar automaticamente
+            savedLang = this.detectLanguage();
+            
+            // Mostrar modal de confirmaÃ§Ã£o
+            const confirmed = await this.showLanguageModal(savedLang);
+            if (confirmed) {
+                this.setLanguage(savedLang);
+            }
+        } else {
+            this.currentLang = savedLang;
+            await this.loadTranslations(savedLang);
+        }
+        
+        // Criar seletor de idioma no header
+        this.createLanguageSelector();
+    },    // Carregar ficheiro de traduÃ§Ãµes
+    async loadTranslations(lang) {        try {
+            const response = await fetch(`./i18n/translations.${lang}.json`);
+            if (!response.ok) throw new Error('Translation file not found');
+            this.translations = await response.json();
+            this.applyTranslations();
+            
+            // Atualizar atributo lang do HTML
+            document.documentElement.lang = lang;
+            
+            return true;
+        } catch (error) {
+            console.error(`Failed to load translations for ${lang}:`, error);
+            
+            // Tentar fallback
+            if (lang !== this.fallbackLang) {
+                console.log(`Trying fallback language: ${this.fallbackLang}`);
+                return this.loadTranslations(this.fallbackLang);
+            }
+            return false;
+        }
+    },    // Aplicar traduÃ§Ãµes Ã  pÃ¡gina
+    applyTranslations() {
+        // Traduzir elementos com data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const translation = this.t(key);
+            
+            if (translation && translation !== key) {
+                // Verificar se Ã© placeholder, title ou conteÃºdo
+                if (element.hasAttribute('placeholder')) {
+                    element.placeholder = translation;
+                } else if (element.hasAttribute('title')) {
+                    element.title = translation;
+                } else {
+                    element.textContent = translation;
+                }
+            }
+        });        // Traduzir elementos com data-i18n-html (permite HTML)
+        document.querySelectorAll('[data-i18n-html]').forEach(element => {
+            const key = element.getAttribute('data-i18n-html');
+            const translation = this.t(key);
+            
+            if (translation && translation !== key) {
+                element.innerHTML = translation;
+            }
+        });
+
+        // Traduzir placeholders com data-i18n-placeholder
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+            const key = element.getAttribute('data-i18n-placeholder');
+            const translation = this.t(key);
+            
+            if (translation) {
+                element.placeholder = translation;
+            }
+        });
+
+        // Atualizar title da pÃ¡gina
+        if (this.translations.pageTitle) {
+            document.title = this.translations.pageTitle;
+        }
+
+        // Disparar evento custom para componentes que precisam atualizar
+        document.dispatchEvent(new CustomEvent('languageChanged', { 
+            detail: { lang: this.currentLang, translations: this.translations }
+        }));
+    },
+
+    // Obter traduÃ§Ã£o por chave (com suporte a nested keys)
+    t(key, params = {}) {
+        const keys = key.split('.');
+        let value = this.translations;
+          for (const k of keys) {
+            if (value && typeof value === 'object' && k in value) {
+                value = value[k];
+            } else {
+                // Chave nÃ£o encontrada - retornar a chave original
+                return key;
+            }
+        }
+        
+        // Substituir parÃ¢metros {name} no texto
+        if (typeof value === 'string' && Object.keys(params).length > 0) {
+            return value.replace(/\{(\w+)\}/g, (match, param) => {
+                return params[param] !== undefined ? params[param] : match;
+            });
+        }
+        
+        return value;
+    },
+
+    // Alterar idioma
+    async setLanguage(lang) {
+        if (!this.supportedLanguages[lang]) {
+            console.error(`Language ${lang} is not supported`);
+            return false;
+        }
+        
+        this.currentLang = lang;
+        localStorage.setItem('quest4couple_lang', lang);
+        
+        const success = await this.loadTranslations(lang);
+        
+        if (success) {
+            // Atualizar seletor visual
+            this.updateLanguageSelector();
+        }
+        
+        return success;
+    },
+
+    // Mostrar modal de seleÃ§Ã£o de idioma
+    showLanguageModal(detectedLang = 'pt-pt') {
+        return new Promise((resolve) => {
+            // Criar modal
+            const modal = document.createElement('div');
+            modal.id = 'language-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease;
+            `;
+
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                padding: 40px 30px;
+                border-radius: 16px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+                animation: slideIn 0.4s ease;
+            `;
+
+            modalContent.innerHTML = `
+                <div style="font-size: 3em; margin-bottom: 15px;">ðŸŒ</div>
+                <h2 style="color: #667eea; margin-bottom: 10px; font-size: 1.5em;">Choose your language</h2>
+                <p style="color: #666; margin-bottom: 25px;">Escolhe o idioma / Selecciona idioma</p>
+                
+                <div id="lang-options" style="display: flex; flex-direction: column; gap: 12px;">
+                    ${Object.entries(this.supportedLanguages).map(([code, info]) => `
+                        <button 
+                            class="lang-option" 
+                            data-lang="${code}"
+                            style="
+                                padding: 15px 20px;
+                                border: 2px solid ${code === detectedLang ? '#667eea' : '#e0e0e0'};
+                                background: ${code === detectedLang ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'white'};
+                                color: ${code === detectedLang ? 'white' : '#333'};
+                                border-radius: 10px;
+                                font-size: 1.1em;
+                                cursor: pointer;
+                                transition: all 0.3s;
+                                font-weight: ${code === detectedLang ? '600' : '500'};
+                            "
+                            onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 12px rgba(102, 126, 234, 0.3)';"
+                            onmouseout="this.style.transform='translateX(0)'; this.style.boxShadow='none';"
+                        >
+                            <span style="font-size: 1.3em;">${info.flag}</span> ${info.name}
+                            ${code === detectedLang ? '<span style="margin-left: 8px;">âœ“</span>' : ''}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+
+            // Adicionar animaÃ§Ãµes CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideIn {
+                    from { transform: translateY(-30px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Event listeners
+            modalContent.querySelectorAll('.lang-option').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const selectedLang = button.getAttribute('data-lang');
+                    modal.style.animation = 'fadeOut 0.3s ease';
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                        resolve(selectedLang);
+                    }, 300);
+                });
+            });
+        });
+    },    // Criar seletor de idioma no header
+    createLanguageSelector() {
+        console.log('ðŸŒ Creating language selector...');
+        
+        const selector = document.createElement('div');
+        selector.id = 'language-selector';
+        selector.style.cssText = `
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-left: 10px;
+        `;        const currentLangInfo = this.supportedLanguages[this.currentLang];
+        console.log(`Current language: ${this.currentLang}`, currentLangInfo);
+          selector.innerHTML = `
+            <button id="lang-toggle" style="
+                background: rgba(255, 255, 255, 0.95);
+                border: 2px solid #d63384;
+                padding: 8px 14px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 1.8em;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                transition: all 0.3s;
+                box-shadow: 0 2px 8px rgba(214, 51, 132, 0.15);
+            " 
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(214, 51, 132, 0.25)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 8px rgba(214, 51, 132, 0.15)'"
+            title="${currentLangInfo.name}">
+                <span>${currentLangInfo.flag}</span>
+                <span style="font-size: 0.45em; color: #d63384; font-weight: bold;">â–¼</span>
+            </button>
+              <div id="lang-dropdown" style="
+                position: absolute;
+                top: 100%;
+                right: 0;
+                margin-top: 10px;
+                background: white;
+                border: 2px solid #d63384;
+                border-radius: 12px;
+                box-shadow: 0 8px 25px rgba(214, 51, 132, 0.2);
+                min-width: 200px;
+                display: none;
+                z-index: 1001;
+                overflow: hidden;
+                animation: dropdownSlide 0.3s ease-out;
+            ">
+                ${Object.entries(this.supportedLanguages).map(([code, info]) => `
+                    <button 
+                        class="lang-dropdown-item" 
+                        data-lang="${code}"
+                        style="
+                            width: 100%;
+                            padding: 14px 18px;
+                            border: none;
+                            background: ${code === this.currentLang ? 'linear-gradient(135deg, rgba(214, 51, 132, 0.1), rgba(111, 66, 193, 0.1))' : 'white'};
+                            text-align: left;
+                            cursor: pointer;
+                            font-size: 1em;
+                            transition: all 0.2s;
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            font-weight: ${code === this.currentLang ? '700' : '500'};
+                            color: ${code === this.currentLang ? '#d63384' : '#333'};
+                            border-bottom: 1px solid rgba(214, 51, 132, 0.1);
+                        "
+                        onmouseover="this.style.background='linear-gradient(135deg, rgba(214, 51, 132, 0.15), rgba(111, 66, 193, 0.15))'; this.style.paddingLeft='22px'"
+                        onmouseout="this.style.background='${code === this.currentLang ? 'linear-gradient(135deg, rgba(214, 51, 132, 0.1), rgba(111, 66, 193, 0.1))' : 'white'}'; this.style.paddingLeft='18px'"
+                    >
+                        <span style="font-size: 1.5em;">${info.flag}</span>
+                        <span>${info.name}</span>
+                        ${code === this.currentLang ? '<span style="margin-left: auto; color: #d63384;">âœ“</span>' : ''}
+                    </button>
+                `).join('')}</div>
+        `;
+          // Adicionar animaÃ§Ã£o CSS para o dropdown
+        if (!document.getElementById('lang-selector-styles')) {
+            const style = document.createElement('style');
+            style.id = 'lang-selector-styles';
+            style.textContent = `
+                @keyframes dropdownSlide {
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                #language-selector {
+                    flex-shrink: 0;
+                }
+                
+                @media (max-width: 768px) {
+                    #lang-toggle {
+                        font-size: 1.5em !important;
+                        padding: 6px 10px !important;
+                    }
+                    
+                    #lang-dropdown {
+                        min-width: 160px !important;
+                        right: -10px !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Adicionar ao header (se existir)
+        const header = document.querySelector('.header, header');
+        if (header) {
+            const authButtons = header.querySelector('.auth-buttons');
+            if (authButtons) {
+                // Adicionar como Ãºltimo elemento nos botÃµes de auth
+                authButtons.appendChild(selector);
+                console.log('âœ… Language selector added to auth buttons');
+            } else {
+                header.appendChild(selector);
+                console.log('âœ… Language selector added to header');
+            }
+        } else {
+            console.error('âŒ Header not found! Cannot add language selector.');
+            // Fallback: adicionar ao body
+            document.body.appendChild(selector);
+            selector.style.position = 'fixed';
+            selector.style.top = '20px';
+            selector.style.right = '20px';
+            selector.style.zIndex = '10000';
+        }
+
+        // Toggle dropdown
+        const toggle = selector.querySelector('#lang-toggle');
+        const dropdown = selector.querySelector('#lang-dropdown');
+        
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', () => {
+            dropdown.style.display = 'none';
+        });
+
+        // Trocar idioma
+        selector.querySelectorAll('.lang-dropdown-item').forEach(item => {
+            item.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const lang = item.getAttribute('data-lang');
+                await this.setLanguage(lang);
+                dropdown.style.display = 'none';
+            });
+        });
+    },    // Atualizar seletor visual
+    updateLanguageSelector() {
+        const toggle = document.querySelector('#lang-toggle');
+        if (toggle) {
+            const currentLangInfo = this.supportedLanguages[this.currentLang];
+            toggle.innerHTML = `
+                <span>${currentLangInfo.flag}</span>
+                <span style="font-size: 0.5em; color: #666;">â–¼</span>
+            `;
+            toggle.title = currentLangInfo.name;
+        }
+
+        // Atualizar estado ativo no dropdown
+        document.querySelectorAll('.lang-dropdown-item').forEach(item => {
+            const lang = item.getAttribute('data-lang');
+            item.style.background = lang === this.currentLang ? '#f0f0f0' : 'white';
+            item.style.fontWeight = lang === this.currentLang ? '600' : '400';
+        });
+    }
+};
+
+// Inicializar quando DOM estiver pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => I18n.init());
+} else {
+    I18n.init();
+}
+
+// Exportar para uso global
+window.I18n = I18n;
