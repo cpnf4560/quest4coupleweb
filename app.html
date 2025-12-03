@@ -37,19 +37,19 @@
 <div class="modal-overlay active" id="ageModal">
   <div class="age-modal">
     <div class="age-modal-icon">🔞</div>
-    <h2>Verificação de Idade</h2>
-    <p>Este site contém conteúdo adulto.<br>Tens 18 anos ou mais?</p>
+    <h2 data-i18n="app.ageModal.title">Verificação de Idade</h2>
+    <p data-i18n-html="app.ageModal.question">Este site contém conteúdo adulto.<br>Tens 18 anos ou mais?</p>
     
     <div class="age-buttons">
-      <button class="age-btn age-btn-yes" onclick="confirmAge(true)">
+      <button class="age-btn age-btn-yes" onclick="confirmAge(true)" data-i18n="app.ageModal.yes">
         ✓ Sim, tenho +18
       </button>
-      <button class="age-btn age-btn-no" onclick="confirmAge(false)">
+      <button class="age-btn age-btn-no" onclick="confirmAge(false)" data-i18n="app.ageModal.no">
         ✗ Não, sou menor
       </button>
     </div>
     
-    <div class="age-warning">
+    <div class="age-warning" data-i18n="app.ageModal.warning">
       ⚠️ Ao confirmar, declaras que tens idade legal para aceder a este conteúdo.
     </div>
   </div>
@@ -63,32 +63,32 @@
       <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
     </a>
     <h1>Quest4Couple</h1>
-    <p class="tagline">Descubram-se juntos 💕</p>
+    <p class="tagline" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
   </div>
     <!-- User Section (Canto Superior Direito) -->  <div class="user-section-top">
     <span class="user-info" id="userInfo">
-      👤 <span id="currentUserName">Carregando...</span>
+      👤 <span id="currentUserName" data-i18n="common.loading">Carregando...</span>
     </span>
     
     <!-- ✅ NOVO: Indicador de sincronização -->
     <span id="syncStatus" class="sync-status" style="display: none;">
       <span class="sync-icon">✅</span>
-      <span class="sync-text">Guardado</span>
+      <span class="sync-text" data-i18n="app.saved">Guardado</span>
     </span>
     
     <button class="btn btn-primary" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
-      📊 Relatório
+      <span>📊</span> <span data-i18n="header.report">Relatório</span>
     </button>
     
     <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard">
-      📊 Dashboard
+      <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
     </button>
     <button class="btn btn-logout" onclick="logout()" title="Sair">
-      🚪 Sair
+      <span>🚪</span> <span data-i18n="header.logout">Sair</span>
     </button>
   </div>
   
-  <div class="free-badge-small">
+  <div class="free-badge-small" data-i18n="home.badge.free">
     ✨ 100% Gratuito
   </div>
     <!-- Compare Section -->
@@ -140,42 +140,42 @@
 <!-- Couple Configuration -->
 <div class="couple-config-section" id="coupleConfig">
   <div class="couple-config-header">
-    <h2>👫 Configuração do Casal</h2>
-    <p>Seleciona o tipo de relação para personalizar as perguntas</p>
+    <h2><span>👫</span> <span data-i18n="app.coupleConfig.title">Configuração do Casal</span></h2>
+    <p data-i18n="app.coupleConfig.subtitle">Seleciona o tipo de relação para personalizar as perguntas</p>
   </div>
   
   <div class="couple-types-grid">
     <div class="couple-type-card" onclick="selectCoupleType('hetero')">
       <span class="couple-type-icon">👨‍❤️‍👩</span>
-      <h3>Homem + Mulher</h3>
-      <p>Casal heterossexual</p>
+      <h3 data-i18n="app.coupleConfig.hetero">Homem + Mulher</h3>
+      <p data-i18n="app.coupleConfig.heteroDesc">Casal heterossexual</p>
     </div>
     
     <div class="couple-type-card" onclick="selectCoupleType('lesbian')">
       <span class="couple-type-icon">👩‍❤️‍👩</span>
-      <h3>Mulher + Mulher</h3>
-      <p>Casal lésbico</p>
+      <h3 data-i18n="app.coupleConfig.lesbian">Mulher + Mulher</h3>
+      <p data-i18n="app.coupleConfig.lesbianDesc">Casal lésbico</p>
     </div>
     
     <div class="couple-type-card" onclick="selectCoupleType('gay')">
       <span class="couple-type-icon">👨‍❤️‍👨</span>
-      <h3>Homem + Homem</h3>
-      <p>Casal gay</p>
+      <h3 data-i18n="app.coupleConfig.gay">Homem + Homem</h3>
+      <p data-i18n="app.coupleConfig.gayDesc">Casal gay</p>
     </div>
     
     <div class="couple-type-card" onclick="selectCoupleType('other')">
       <span class="couple-type-icon">🌈</span>
-      <h3>Outro / Todas</h3>
-      <p>Não-binário ou ver tudo</p>
+      <h3 data-i18n="app.coupleConfig.other">Outro / Todas</h3>
+      <p data-i18n="app.coupleConfig.otherDesc">Não-binário ou ver tudo</p>
     </div>
   </div>
   
-  <button class="continue-btn" id="continueBtn" onclick="continueToThemes()" disabled>
+  <button class="continue-btn" id="continueBtn" onclick="continueToThemes()" disabled data-i18n="app.coupleConfig.continue">
     Continuar →
   </button>
   
   <div class="skip-config">
-    <a href="#" onclick="skipConfig(); return false;">Pular configuração</a>
+    <a href="#" onclick="skipConfig(); return false;" data-i18n="app.coupleConfig.skip">Pular configuração</a>
   </div>
 </div>
 
@@ -183,42 +183,42 @@
 <div id="themesView" class="themes-grid" style="display: none;">  <div class="theme-card" onclick="showTheme('romantico')">
     <div class="theme-card-header romantico">
       <span class="theme-icon">💞</span>
-      <h3>Romântico & Fantasias</h3>
-      <p class="theme-description">Velas, sedução, conexão profunda e momentos especiais a dois</p>
+      <h3 data-i18n="app.packs.romanticTitle">Romântico & Fantasias</h3>
+      <p class="theme-description" data-i18n="app.themes.romanticDesc">Velas, sedução, conexão profunda e momentos especiais a dois</p>
     </div>    <div class="theme-card-footer">
       <div class="footer-content">
-        <span class="question-count">📝 50 perguntas</span>
-        <span class="theme-free">✨ Grátis</span>
+        <span class="question-count">📝 50 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
       </div>      <div class="theme-progress">
         <div class="theme-progress-container">
           <div class="theme-progress-bar"></div>
         </div>
-        <div class="theme-progress-text">0 de 50 respondidas</div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
       </div>
     </div>
   </div>  <div class="theme-card" onclick="showTheme('experiencia')">
     <div class="theme-card-header experiencia">
       <img src="./assets/exp2.png" alt="Experiência a 2" class="theme-icon-img">
-      <h3>Experiência a 2</h3>
-      <p class="theme-description">Aventuras, locais diferentes e novas experiências juntos</p>
+      <h3 data-i18n="app.packs.experienceTitle">Experiência a 2</h3>
+      <p class="theme-description" data-i18n="app.themes.experienceDesc">Aventuras, locais diferentes e novas experiências juntos</p>
       <p class="theme-spacer">&nbsp;</p>
     </div>
     <div class="theme-card-footer">
       <div class="footer-content">
-        <span class="question-count">📝 50 perguntas</span>
-        <span class="theme-free">✨ Grátis</span>
+        <span class="question-count">📝 50 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
       </div>      <div class="theme-progress">
         <div class="theme-progress-container">
           <div class="theme-progress-bar"></div>
         </div>
-        <div class="theme-progress-text">0 de 50 respondidas</div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
       </div>
     </div>
   </div>  <div class="theme-card" onclick="showTheme('pimentinha')">
     <div class="theme-card-header pimentinha">
       <img src="./assets/pimentinha.png?v=1" alt="Pimentinha" class="theme-icon-img">
-      <h3>Pimentinha</h3>
-      <p class="theme-description">Adicione tempero, provocação e jogos sensuais</p>
+      <h3 data-i18n="app.packs.spicyTitle">Pimentinha</h3>
+      <p class="theme-description" data-i18n="app.themes.spicyDesc">Adicione tempero, provocação e jogos sensuais</p>
       <p class="theme-spacer">&nbsp;</p>
     </div>
     <div class="theme-card-footer">
@@ -229,54 +229,54 @@
         <div class="theme-progress-container">
           <div class="theme-progress-bar"></div>
         </div>
-        <div class="theme-progress-text">0 de 50 respondidas</div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
       </div>
     </div>
   </div>  <div class="theme-card" onclick="showTheme('poliamor')">
     <div class="theme-card-header poliamor">
       <img src="./assets/poliamor.png" alt="Poliamor" class="theme-icon-img">
-      <h3>Poliamor</h3>
-      <p class="theme-description">Múltiplos parceiros, swing e experiências em grupo</p>
+      <h3 data-i18n="app.packs.polyamoryTitle">Poliamor</h3>
+      <p class="theme-description" data-i18n="app.themes.polyamoryDesc">Múltiplos parceiros, swing e experiências em grupo</p>
       <p class="theme-spacer">&nbsp;</p>
     </div>
     <div class="theme-card-footer">
       <div class="footer-content">
-        <span class="question-count">📝 60 perguntas</span>
-        <span class="theme-free">✨ Grátis</span>
+        <span class="question-count">📝 60 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
       </div>      <div class="theme-progress">
         <div class="theme-progress-container">
           <div class="theme-progress-bar"></div>
         </div>
-        <div class="theme-progress-text">0 de 60 respondidas</div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 60 <span data-i18n="app.themes.answered">respondidas</span></div>
       </div>
     </div>
   </div><div class="theme-card" onclick="showTheme('kinks')">
     <div class="theme-card-header kinks">
       <img src="./assets/fetiches.png" alt="Kinks & Fetiches" class="theme-icon-img">
-      <h3>Kinks & Fetiches</h3>
-      <p class="theme-description">Fetiches específicos, práticas avançadas e preferências únicas</p>
+      <h3 data-i18n="app.packs.fetishesTitle">Kinks & Fetiches</h3>
+      <p class="theme-description" data-i18n="app.themes.fetishesDesc">Fetiches específicos, práticas avançadas e preferências únicas</p>
       <p class="theme-spacer">&nbsp;</p>
     </div>
     <div class="theme-card-footer">
       <div class="footer-content">
-        <span class="question-count">📝 90 perguntas</span>
-        <span class="theme-free">✨ Grátis</span>      </div>
+        <span class="question-count">📝 90 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>      </div>
       <div class="theme-progress">
         <div class="theme-progress-container">
           <div class="theme-progress-bar"></div>
         </div>
-        <div class="theme-progress-text">0 de 90 respondidas</div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 90 <span data-i18n="app.themes.answered">respondidas</span></div>
       </div>    </div>  </div>
 </div>
 
 <!-- Controls - Moved below themes -->
 <div class="controls-bottom" id="mainControls">
-  <button class="btn" onclick="saveAnswers()">💾 Guardar</button>
-  <button class="btn btn-load" onclick="showLoadModal()">📂 Carregar</button>
-  <button class="btn btn-import" onclick="showImportModal()">📥 Importar</button>
-  <button class="btn" onclick="showCompareSection()">🔀 Comparar</button>
-  <button class="btn btn-secondary" onclick="generatePDF()">📄 PDF</button>
-  <button class="btn btn-secondary" onclick="sendByEmail()">📧 E-mail</button>
+  <button class="btn" onclick="saveAnswers()"><span>💾</span> <span data-i18n="app.controls.save">Guardar</span></button>
+  <button class="btn btn-load" onclick="showLoadModal()"><span>📂</span> <span data-i18n="app.controls.load">Carregar</span></button>
+  <button class="btn btn-import" onclick="showImportModal()"><span>📥</span> <span data-i18n="app.controls.import">Importar</span></button>
+  <button class="btn" onclick="showCompareSection()"><span>🔀</span> <span data-i18n="app.controls.compare">Comparar</span></button>
+  <button class="btn btn-secondary" onclick="generatePDF()"><span>📄</span> <span data-i18n="app.controls.pdf">PDF</span></button>
+  <button class="btn btn-secondary" onclick="sendByEmail()"><span>📧</span> <span data-i18n="app.controls.email">E-mail</span></button>
 </div>
 
 <!-- Pack Navigation Sidebar -->
@@ -285,26 +285,26 @@
     <span class="toggle-icon">🫶</span>
   </button>
   <div class="pack-nav-content">
-    <h3>Navegar Packs</h3>    <button class="pack-nav-item romantico" onclick="showTheme('romantico')">
+    <h3 data-i18n="app.sidebar.navigate">Navegar Packs</h3>    <button class="pack-nav-item romantico" onclick="showTheme('romantico')">
       <span class="nav-emoji">💞</span>
-      <span class="nav-label">Romântico</span>
+      <span class="nav-label" data-i18n="app.packs.romantic">Romântico</span>
     </button><button class="pack-nav-item experiencia" onclick="showTheme('experiencia')">
       <span class="nav-emoji">🔥</span>
-      <span class="nav-label">Experiência</span>
+      <span class="nav-label" data-i18n="app.packs.experience">Experiência</span>
     </button>
     <button class="pack-nav-item pimentinha" onclick="showTheme('pimentinha')">
       <span class="nav-emoji">🌶️</span>
-      <span class="nav-label">Pimentinha</span>
+      <span class="nav-label" data-i18n="app.packs.spicy">Pimentinha</span>
     </button>
     <button class="pack-nav-item poliamor" onclick="showTheme('poliamor')">
       <span class="nav-emoji">🔀</span>
-      <span class="nav-label">Poliamor</span>
+      <span class="nav-label" data-i18n="app.packs.polyamory">Poliamor</span>
     </button>
     <button class="pack-nav-item kinks" onclick="showTheme('kinks')">
       <span class="nav-emoji">⛓️</span>
-      <span class="nav-label">Fetiches</span>
+      <span class="nav-label" data-i18n="app.packs.fetishes">Fetiches</span>
     </button>
-    <button class="pack-nav-back" onclick="backToThemes()">
+    <button class="pack-nav-back" onclick="backToThemes()" data-i18n="app.sidebar.backToThemes">
       ← Voltar aos Temas
     </button>
   </div>
@@ -313,115 +313,114 @@
 <!-- Pack Romântico -->
 <div class="pack romantico" id="pack-romantico">
   <div class="pack-header">
-    <h2>💝 Romântico & Fantasias</h2>
-    <button class="back-btn" onclick="backToThemes()">← Voltar</button>
+    <h2><span>💝</span> <span data-i18n="app.packs.romanticTitle">Romântico & Fantasias</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
   </div>
   
   <!-- Guia de Respostas -->
   <div class="response-guide">
-    <h3>📖 Guia de Respostas</h3>
-    <p><strong>Sejam honestos e claros nas vossas respostas!</strong></p>
+    <h3><span>📖</span> <span data-i18n="app.guide.title">Guia de Respostas</span></h3>
+    <p><strong data-i18n="app.guide.beHonest">Sejam honestos e claros nas vossas respostas!</strong></p>
     <div class="guide-options">
       <div class="guide-option">
         <span class="guide-emoji">😍</span>
-        <strong>Por favor!</strong>
-        <p>Usem apenas para algo que <u>realmente desejam muito</u>. Isto criará prioridades no relatório!</p>
+        <strong data-i18n="app.guide.please">Por favor!</strong>
+        <p data-i18n-html="app.guide.pleaseDesc">Usem apenas para algo que <u>realmente desejam muito</u>. Isto criará prioridades no relatório!</p>
       </div>
       <div class="guide-option">
         <span class="guide-emoji">👍</span>
-        <strong>Yup</strong>
-        <p>Estou aberto/a, gostaria de experimentar.</p>
+        <strong data-i18n="app.guide.yup">Yup</strong>
+        <p data-i18n="app.guide.yupDesc">Estou aberto/a, gostaria de experimentar.</p>
       </div>
       <div class="guide-option">
         <span class="guide-emoji">😑</span>
-        <strong>Meh...</strong>
-        <p>Não me interessa ou não me sinto confortável. Estas questões <u>não aparecerão</u> no relatório, EXCETO se o/a parceiro/a responder "Por favor!" (para reflexão do casal).</p>
+        <strong data-i18n="app.guide.meh">Meh...</strong>
+        <p data-i18n-html="app.guide.mehDesc">Não me interessa ou não me sinto confortável. Estas questões <u>não aparecerão</u> no relatório, EXCETO se o/a parceiro/a responder "Por favor!" (para reflexão do casal).</p>
       </div>
       <div class="guide-option">
         <span class="guide-emoji">🤔</span>
-        <strong>Talvez</strong>
-        <p>Preciso pensar melhor, não tenho certeza.</p>
+        <strong data-i18n="app.guide.maybe">Talvez</strong>
+        <p data-i18n="app.guide.maybeDesc">Preciso pensar melhor, não tenho certeza.</p>
       </div>
-    </div>
-    <button class="btn-understand" onclick="this.parentElement.style.display='none'">✓ Entendi, vamos começar!</button>
+    </div>    <button class="btn-understand" onclick="this.parentElement.style.display='none'" data-i18n="app.guide.understand">✓ Entendi, vamos começar!</button>
   </div>
     <div class="pack-content" id="pack-romantico-questions"></div>
   <div class="pack-footer">
-    <button class="btn-add-custom" onclick="openCustomQuestionModal('romantico')">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('romantico')" data-i18n="app.packFooter.addCustom">
       ➕ Adicionar Pergunta Personalizada
     </button>
-    <button class="btn-save-pack" onclick="saveAnswers()">
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
       💾 Guardar Respostas
     </button>
-    <p class="save-hint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
   </div>
 </div>
 
 <!-- Pack Experiência -->
 <div class="pack experiencia" id="pack-experiencia">
   <div class="pack-header">
-    <h2>🌍 Exploração e Aventura a Dois</h2>
-    <button class="back-btn" onclick="backToThemes()">← Voltar</button>
+    <h2><span>🌍</span> <span data-i18n="app.packs.experienceTitle">Exploração e Aventura a Dois</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
   </div>  <div class="pack-content" id="pack-experiencia-questions"></div>
   <div class="pack-footer">
-    <button class="btn-add-custom" onclick="openCustomQuestionModal('experiencia')">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('experiencia')" data-i18n="app.packFooter.addCustom">
       ➕ Adicionar Pergunta Personalizada
     </button>
-    <button class="btn-save-pack" onclick="saveAnswers()">
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
       💾 Guardar Respostas
     </button>
-    <p class="save-hint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
   </div>
 </div>
 
 <!-- Pack Pimentinha -->
 <div class="pack pimentinha" id="pack-pimentinha">
   <div class="pack-header">
-    <h2>🔥 Pimentinha</h2>
-    <button class="back-btn" onclick="backToThemes()">← Voltar</button>
+    <h2><span>🔥</span> <span data-i18n="app.packs.spicyTitle">Pimentinha</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
   </div>  <div class="pack-content" id="pack-pimentinha-questions"></div>
   <div class="pack-footer">
-    <button class="btn-add-custom" onclick="openCustomQuestionModal('pimentinha')">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('pimentinha')" data-i18n="app.packFooter.addCustom">
       ➕ Adicionar Pergunta Personalizada
     </button>
-    <button class="btn-save-pack" onclick="saveAnswers()">
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
       💾 Guardar Respostas
     </button>
-    <p class="save-hint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
   </div>
 </div>
 
 <!-- Pack Poliamor -->
 <div class="pack poliamor" id="pack-poliamor">
   <div class="pack-header">
-    <h2>💞 Poliamor & Múltiplos Parceiros</h2>
-    <button class="back-btn" onclick="backToThemes()">← Voltar</button>
+    <h2><span>💞</span> <span data-i18n="app.packs.polyamoryTitle">Poliamor & Múltiplos Parceiros</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
   </div>  <div class="pack-content" id="pack-poliamor-questions"></div>
   <div class="pack-footer">
-    <button class="btn-add-custom" onclick="openCustomQuestionModal('poliamor')">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('poliamor')" data-i18n="app.packFooter.addCustom">
       ➕ Adicionar Pergunta Personalizada
     </button>
-    <button class="btn-save-pack" onclick="saveAnswers()">
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
       💾 Guardar Respostas
     </button>
-    <p class="save-hint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
   </div>
 </div>
 
 <!-- Pack Fetiches -->
 <div class="pack kinks" id="pack-kinks">
   <div class="pack-header">
-    <h2>⛓️ Kinks & Fetiches</h2>
-    <button class="back-btn" onclick="backToThemes()">← Voltar</button>
+    <h2><span>⛓️</span> <span data-i18n="app.packs.fetishesTitle">Kinks & Fetiches</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
   </div>  <div class="pack-content" id="pack-kinks-questions"></div>
   <div class="pack-footer">
-    <button class="btn-add-custom" onclick="openCustomQuestionModal('kinks')">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('kinks')" data-i18n="app.packFooter.addCustom">
       ➕ Adicionar Pergunta Personalizada
     </button>
-    <button class="btn-save-pack" onclick="saveAnswers()">
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
       💾 Guardar Respostas
     </button>
-    <p class="save-hint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
   </div>
 </div>
 
@@ -429,22 +428,22 @@
 <div class="modal-overlay" id="customQuestionModal">
   <div class="custom-question-modal">
     <div class="custom-modal-header">
-      <h2>✏️ Adicionar Pergunta Personalizada</h2>
+      <h2 data-i18n="app.modals.customQuestion.title">✏️ Adicionar Pergunta Personalizada</h2>
       <button class="modal-close" onclick="closeCustomQuestionModal()">✕</button>
     </div>
     
     <div class="custom-modal-body">
-      <label for="customQuestionText">📝 Pergunta:</label>
-      <textarea id="customQuestionText" placeholder="Escreve a tua pergunta personalizada aqui..." rows="3"></textarea>
+      <label for="customQuestionText" data-i18n="app.modals.customQuestion.label">📝 Pergunta:</label>
+      <textarea id="customQuestionText" data-i18n-placeholder="app.modals.customQuestion.placeholder" placeholder="Escreve a tua pergunta personalizada aqui..." rows="3"></textarea>
       
-      <p class="custom-hint">
+      <p class="custom-hint" data-i18n-html="app.modals.customQuestion.hint">
         💡 <strong>Dica:</strong> Sê específico/a e claro/a. Esta pergunta aparecerá no questionário e no relatório de compatibilidade.
       </p>
     </div>
     
     <div class="custom-modal-footer">
-      <button class="btn-cancel" onclick="closeCustomQuestionModal()">❌ Cancelar</button>
-      <button class="btn-add" onclick="addCustomQuestion()">✅ Adicionar</button>
+      <button class="btn-cancel" onclick="closeCustomQuestionModal()" data-i18n="app.modals.customQuestion.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="addCustomQuestion()" data-i18n="app.modals.customQuestion.add">✅ Adicionar</button>
     </div>
   </div>
 </div>
@@ -453,25 +452,25 @@
 <div class="modal-overlay" id="loadAnswersModal">
   <div class="custom-question-modal">
     <div class="custom-modal-header">
-      <h2>📂 Carregar Respostas Guardadas</h2>
+      <h2 data-i18n="app.modals.loadAnswers.title">📂 Carregar Respostas Guardadas</h2>
       <button class="modal-close" onclick="closeLoadModal()">✕</button>
     </div>
     
     <div class="custom-modal-body">
-      <label for="loadAnswersFile">📁 Seleciona o ficheiro .q4c:</label>
+      <label for="loadAnswersFile" data-i18n="app.modals.loadAnswers.fileLabel">📁 Seleciona o ficheiro .q4c:</label>
       <input type="file" id="loadAnswersFile" accept=".q4c" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px dashed #d63384; border-radius: 10px; cursor: pointer;">
       
-      <label for="loadAnswersCode">🔑 Código de segurança:</label>
-      <input type="password" id="loadAnswersCode" placeholder="Código usado ao guardar..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
+      <label for="loadAnswersCode" data-i18n="app.modals.loadAnswers.codeLabel">🔑 Código de segurança:</label>
+      <input type="password" id="loadAnswersCode" data-i18n-placeholder="app.modals.loadAnswers.codePlaceholder" placeholder="Código usado ao guardar..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
       
-      <p class="custom-hint">
+      <p class="custom-hint" data-i18n-html="app.modals.loadAnswers.hint">
         💡 <strong>Como funciona:</strong> Carrega o ficheiro .q4c que guardaste anteriormente para continuar a responder de onde paraste. As tuas respostas aparecerão automaticamente!
       </p>
     </div>
     
     <div class="custom-modal-footer">
-      <button class="btn-cancel" onclick="closeLoadModal()">❌ Cancelar</button>
-      <button class="btn-add" onclick="loadAnswersFromFile()">✅ Carregar</button>
+      <button class="btn-cancel" onclick="closeLoadModal()" data-i18n="app.modals.loadAnswers.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="loadAnswersFromFile()" data-i18n="app.modals.loadAnswers.load">✅ Carregar</button>
     </div>
   </div>
 </div>
@@ -480,22 +479,22 @@
 <div class="modal-overlay" id="importQuestionsModal">
   <div class="custom-question-modal">
     <div class="custom-modal-header">
-      <h2>📥 Importar Perguntas do Parceiro</h2>
+      <h2 data-i18n="app.modals.importQuestions.title">📥 Importar Perguntas do Parceiro</h2>
       <button class="modal-close" onclick="closeImportModal()">✕</button>
     </div>
     
     <div class="custom-modal-body">
-      <label for="importQuestionsFile">📁 Ficheiro .q4c do parceiro:</label>
+      <label for="importQuestionsFile" data-i18n="app.modals.importQuestions.fileLabel">📁 Ficheiro .q4c do parceiro:</label>
       <input type="file" id="importQuestionsFile" accept=".q4c" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px dashed #28a745; border-radius: 10px; cursor: pointer;">
       
-      <label for="importQuestionsCode">🔑 Código de segurança dele/a:</label>
-      <input type="password" id="importQuestionsCode" placeholder="Código que ele/a usou..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
+      <label for="importQuestionsCode" data-i18n="app.modals.importQuestions.codeLabel">🔑 Código de segurança dele/a:</label>
+      <input type="password" id="importQuestionsCode" data-i18n-placeholder="app.modals.importQuestions.codePlaceholder" placeholder="Código que ele/a usou..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
       
-      <p class="custom-hint">
+      <p class="custom-hint" data-i18n-html="app.modals.importQuestions.hint">
         💡 <strong>Para que serve:</strong> Se o teu parceiro/a criou perguntas personalizadas, carrega o ficheiro .q4c dele/a aqui. As perguntas custom aparecerão automaticamente para tu poderes responder também!
       </p>
       
-      <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 12px; margin-top: 15px; border-radius: 5px;">
+      <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 12px; margin-top: 15px; border-radius: 5px;" data-i18n-html="app.modals.importQuestions.steps">
         <strong>📋 Passo a passo:</strong><br>
         1. Parceiro cria perguntas custom<br>
         2. Parceiro guarda ficheiro .q4c<br>
@@ -505,8 +504,8 @@
     </div>
     
     <div class="custom-modal-footer">
-      <button class="btn-cancel" onclick="closeImportModal()">❌ Cancelar</button>
-      <button class="btn-add" onclick="importPartnerQuestions()">✅ Importar</button>
+      <button class="btn-cancel" onclick="closeImportModal()" data-i18n="app.modals.importQuestions.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="importPartnerQuestions()" data-i18n="app.modals.importQuestions.import">✅ Importar</button>
     </div>
   </div>
 </div>
@@ -812,6 +811,9 @@
     SupportBanner.render('supportBanner', false);
   }
 </script>
+
+<!-- i18n System -->
+<script src="js/i18n.js"></script>
 
 </body>
 </html>

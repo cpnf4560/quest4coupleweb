@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre - Quest4Couple</title>
+    <title data-i18n="pages.about.pageTitle">Sobre - Quest4Couple</title>
     
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
@@ -29,6 +29,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
             display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 15px;
         }
@@ -77,59 +78,63 @@
             <img src="../assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='../logo.png'; this.onerror=null;">
             <span class="logo-text">Quest4Couple</span>
         </a>
+        <div class="auth-buttons"></div>
     </header>
     
     <div class="container">
-        <h1>Sobre o Quest4Couple</h1>
+        <h1 data-i18n="pages.about.title">Sobre o Quest4Couple</h1>
         
-        <p>
+        <p data-i18n-html="pages.about.intro">
             O <strong>Quest4Couple</strong> nasceu de uma necessidade real: ajudar casais a comunicarem 
             abertamente sobre desejos, fantasias e afinidades de forma segura e sem julgamentos.
         </p>
         
-        <h2> A Nossa Missão</h2>
-        <p>
+        <h2 data-i18n="pages.about.missionTitle">🎯 A Nossa Missão</h2>
+        <p data-i18n="pages.about.missionText">
             Queremos que todos os casais se sintam livres para explorar a sua intimidade sem medo, 
             vergonha ou desconforto. Através de questionários cuidadosamente elaborados, facilitamos 
             conversas que muitos acham difíceis de iniciar.
         </p>
         
-        <h2> Privacidade em Primeiro Lugar</h2>
-        <p>
+        <h2 data-i18n="pages.about.privacyTitle">🔒 Privacidade em Primeiro Lugar</h2>
+        <p data-i18n="pages.about.privacyText">
             A vossa privacidade é sagrada. Não vendemos dados, não partilhamos informações, 
             e tudo o que respondem fica entre vocês. Simples assim.
         </p>
         
-        <h2> Como Funciona</h2>
+        <h2 data-i18n="pages.about.howItWorksTitle">💡 Como Funciona</h2>
         <ul>
-            <li>Escolhem um dos 5 packs temáticos (ou fazem todos!)</li>
-            <li>Cada um responde às perguntas individualmente</li>
-            <li>Veem apenas o que têm em comum</li>
-            <li>Descobrem novas possibilidades juntos</li>
+            <li data-i18n="pages.about.howItWorks1">Escolhem um dos 5 packs temáticos (ou fazem todos!)</li>
+            <li data-i18n="pages.about.howItWorks2">Cada um responde às perguntas individualmente</li>
+            <li data-i18n="pages.about.howItWorks3">Veem apenas o que têm em comum</li>
+            <li data-i18n="pages.about.howItWorks4">Descobrem novas possibilidades juntos</li>
         </ul>
         
-        <h2> O Futuro</h2>
-        <p>
+        <h2 data-i18n="pages.about.futureTitle">🚀 O Futuro</h2>
+        <p data-i18n="pages.about.futureText">
             Estamos apenas a começar! Queremos adicionar mais funcionalidades, mais conteúdo, 
             e tornar-nos na ferramenta de referência para casais que querem crescer juntos.
         </p>
         
-        <h2> Contacto</h2>
-        <p>
-            Têm sugestões, dúvidas ou feedback? <br>
-            Email: <a href="mailto:info@quest4couple.pt" style="color: #d63384;">info@quest4couple.pt</a>
+        <h2 data-i18n="pages.about.contactTitle">📧 Contacto</h2>
+        <p data-i18n="pages.about.contactText">
+            Têm sugestões, dúvidas ou feedback?
         </p>
+        <p>Email: <a href="mailto:questforcouple@gmail.com" style="color: #d63384;" data-i18n="pages.about.contactEmail">questforcouple@gmail.com</a></p>
     </div>
     
     <footer>
-        <p>&copy; 2025 Quest4Couple</p>
+        <p data-i18n="pages.footer.copyright">&copy; 2025 Quest4Couple</p>
         <div>
-            <a href="index.html">Início</a>
-            <a href="faq.html">FAQ</a>
-            <a href="apoiar.html">Apoiar</a>
-            <a href="privacidade.html">Privacidade</a>
-            <a href="termos.html">Termos</a>
+            <a href="index.html" data-i18n="pages.footer.home">Início</a>
+            <a href="faq.html" data-i18n="pages.footer.faq">FAQ</a>
+            <a href="apoiar.html" data-i18n="pages.footer.support">Apoiar</a>
+            <a href="privacidade.html" data-i18n="pages.footer.privacy">Privacidade</a>
+            <a href="termos.html" data-i18n="pages.footer.terms">Termos</a>
         </div>
     </footer>
+    
+    <!-- i18n System -->
+    <script src="../js/i18n.js"></script>
 </body>
 </html>

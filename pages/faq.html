@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ - Quest4Couple</title>
+    <title data-i18n="pages.faq.pageTitle">FAQ - Quest4Couple</title>
     
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
@@ -29,6 +29,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
         .logo-container {
@@ -89,105 +90,95 @@
             <img src="../assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='../logo.png'; this.onerror=null;">
             <span class="logo-text">Quest4Couple</span>
         </a>
+        <div class="auth-buttons"></div>
     </header>
     
     <div class="container">
-        <h1> Perguntas Frequentes</h1>
+        <h1 data-i18n="pages.faq.title">❓ Perguntas Frequentes</h1>
         
         <div class="faq-item">
-            <div class="faq-question">É realmente gratuito?</div>
-            <div class="faq-answer">
-                Sim! Neste momento, todo o conteúdo do Quest4Couple é gratuito. 
-                No futuro, poderemos adicionar funcionalidades premium opcionais, 
-                mas o core do serviço continuará acessível a todos.
+            <div class="faq-question" data-i18n="pages.faq.q1">O que é o Quest4Couple?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a1">
+                Quest4Couple é uma plataforma de questionários íntimos para casais, desenhada para vos ajudar a descobrir compatibilidades, desejos escondidos e abrir diálogos sobre intimidade de forma segura e divertida.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">As minhas respostas são privadas?</div>
-            <div class="faq-answer">
-                Absolutamente! As vossas respostas são armazenadas localmente no vosso navegador. 
-                Não vendemos dados, não partilhamos informações com terceiros, e não temos acesso 
-                ao que respondem. A vossa privacidade é a nossa prioridade #1.
+            <div class="faq-question" data-i18n="pages.faq.q2">É realmente privado?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a2">
+                Sim! As vossas respostas nunca saem do vosso dispositivo a não ser que o decidam. Todo o processamento é feito localmente. Nós não temos acesso ao que respondem.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Como funciona o matching?</div>
-            <div class="faq-answer">
-                Cada pessoa responde ao questionário individualmente. No final, 
-                apenas veem o que têm em comum - as respostas em que ambos disseram "sim". 
-                Se um disser "não", essa pergunta não aparece no resultado final.
+            <div class="faq-question" data-i18n="pages.faq.q3">Como comparo as minhas respostas com o meu parceiro?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a3">
+                Cada um responde separadamente, guarda as suas respostas num ficheiro .q4c (com palavra-passe opcional), e depois ambos carregam os ficheiros na página de comparação para ver os resultados.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Quantos packs existem?</div>
+            <div class="faq-question" data-i18n="pages.faq.q4">Que questionários estão disponíveis?</div>
             <div class="faq-answer">
-                Temos 5 packs temáticos:
+                <span data-i18n="pages.faq.a4">Atualmente oferecemos 5 packs temáticos:</span>
                 <ul style="margin-top: 10px; margin-left: 20px;">
-                    <li><strong>Pack Romântico</strong> - 40 perguntas sobre sensualidade e conexão</li>
-                    <li><strong>Exploração e Aventura a Dois</strong> - 30 perguntas sobre experimentar coisas novas</li>
-                    <li><strong>Pimentinha</strong> - 32 perguntas para apimentar a relação</li>
-                    <li><strong>Poliamor</strong> - 50 perguntas sobre abertura e não-monogamia</li>
-                    <li><strong>Fetiches</strong> - 100 perguntas sobre kinks e práticas avançadas</li>
+                    <li data-i18n="pages.faq.a4Pack1">Romântico & Fantasias</li>
+                    <li data-i18n="pages.faq.a4Pack2">Exploração e Aventura a Dois</li>
+                    <li data-i18n="pages.faq.a4Pack3">Pimentinha</li>
+                    <li data-i18n="pages.faq.a4Pack4">Poliamor & Múltiplos Parceiros</li>
+                    <li data-i18n="pages.faq.a4Pack5">Kinks & Fetiches</li>
                 </ul>
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Preciso de criar conta?</div>
-            <div class="faq-answer">
-                Neste momento, sim. Criar conta permite-vos guardar as respostas, 
-                comparar resultados com o vosso parceiro/a, e aceder ao histórico. 
-                Mas não se preocupem - só pedimos o essencial (email e password).
+            <div class="faq-question" data-i18n="pages.faq.q5">Posso adicionar as minhas próprias perguntas?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a5">
+                Sim! Podem criar perguntas personalizadas dentro de cada pack. Também podem exportar/importar as vossas perguntas.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Posso fazer os questionários sozinho/a?</div>
-            <div class="faq-answer">
-                Sim! Podes fazer os questionários sozinho/a para explorares os teus próprios desejos. 
-                Mas a magia acontece quando comparam resultados com o/a parceiro/a! 
+            <div class="faq-question" data-i18n="pages.faq.q6">Funciona no telemóvel?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a6">
+                Sim! Quest4Couple é totalmente responsivo e funciona em qualquer dispositivo com navegador moderno.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Como posso apoiar o projeto?</div>
-            <div class="faq-answer">
-                Adoramos apoio! Podem fazer um donativo, partilhar feedback, 
-                ou simplesmente recomendar a outros casais. Vejam a página 
-                <a href="apoiar.html" style="color: #d63384;">Apoiar o Projeto</a> para mais detalhes.
+            <div class="faq-question" data-i18n="pages.faq.q7">Quanto custa?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a7">
+                Quest4Couple é 100% gratuito. Mantemo-nos através de donativos voluntários de utilizadores satisfeitos.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Têm uma app móvel?</div>
-            <div class="faq-answer">
-                Ainda não, mas o site é totalmente responsivo e funciona perfeitamente 
-                em telemóveis! Uma app nativa pode vir no futuro. 
+            <div class="faq-question" data-i18n="pages.faq.q8">Como posso apoiar o projeto?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a8">
+                Podem fazer um donativo através da página de Apoiar! Qualquer valor ajuda a manter o projeto ativo e em desenvolvimento.
             </div>
         </div>
         
         <div class="faq-item">
-            <div class="faq-question">Ainda tenho dúvidas, como posso contactar?</div>
-            <div class="faq-answer">
-                Têm mais questões? Enviem um email para 
-                <a href="mailto:info@quest4couple.pt" style="color: #d63384; font-weight: bold;">info@quest4couple.pt</a> 
-                e teremos todo o gosto em ajudar! 💕
+            <div class="faq-question" data-i18n="pages.faq.q9">Encontrei um bug, como reporto?</div>
+            <div class="faq-answer" data-i18n="pages.faq.a9">
+                Envia um email para questforcouple@gmail.com com a descrição do problema. Agradecemos muito o feedback!
             </div>
         </div>
     </div>
     
     <footer>
-        <p>&copy; 2025 Quest4Couple</p>
+        <p data-i18n="pages.footer.copyright">&copy; 2025 Quest4Couple</p>
         <div>
-            <a href="index.html">Início</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="apoiar.html">Apoiar</a>
-            <a href="privacidade.html">Privacidade</a>
-            <a href="termos.html">Termos</a>
+            <a href="../index.html" data-i18n="pages.footer.home">Início</a>
+            <a href="sobre.html" data-i18n="pages.footer.about">Sobre</a>
+            <a href="apoiar.html" data-i18n="pages.footer.support">Apoiar</a>
+            <a href="privacidade.html" data-i18n="pages.footer.privacy">Privacidade</a>
+            <a href="termos.html" data-i18n="pages.footer.terms">Termos</a>
         </div>
     </footer>
+    
+    <!-- i18n System -->
+    <script src="../js/i18n.js"></script>
 </body>
 </html>

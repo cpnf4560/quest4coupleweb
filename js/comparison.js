@@ -134,23 +134,40 @@ async function generateCompatibilityReport(myData, partnerData) {
           </div>
         </div>
       </div>
-    </div>
-  `;
+    </div>  `;
 
-  const allPacksResponse = await fetch('data/packs_data_clean.json?v=' + Date.now());
+  // Determinar ficheiro baseado no idioma atual
+  const currentLang = (typeof I18n !== 'undefined' && I18n.currentLang) 
+    ? I18n.currentLang 
+    : (localStorage.getItem('quest4couple_lang') || 'pt-pt');
+  
+  const langFileMap = {
+    'pt-pt': 'packs_data_clean.json',
+    'pt-br': 'packs_data_pt-br.json',
+    'en': 'packs_data_en.json',
+    'es': 'packs_data_es.json',
+    'fr': 'packs_data_fr.json'
+  };
+  
+  const jsonFile = langFileMap[currentLang] || 'packs_data_clean.json';
+  console.log('🌍 Comparison: Carregando ficheiro de idioma:', jsonFile);
+
+  const allPacksResponse = await fetch(`data/${jsonFile}?v=` + Date.now());
   const allPacksData = await allPacksResponse.json();
+  
+  // Usar 'color' (campo invariável) para identificar packs
   const packConfigs = [
-    { id: 'romantico', name: 'Pack Romântico', color: '#f082a9' },
-    { id: 'experiencia', name: 'Exploração e Aventura a Dois', color: '#006c80' },
-    { id: 'pimentinha', name: 'Pimentinha', color: '#ff6b6b' },
-    { id: 'poliamor', name: 'Poliamor', color: '#6f42c1' },
-    { id: 'kinks', name: 'Fetiches', color: '#1a1a1a' }
+    { id: 'romantico', colorKey: 'romantico', color: '#f082a9' },
+    { id: 'experiencia', colorKey: 'experiencia', color: '#006c80' },
+    { id: 'pimentinha', colorKey: 'pimentinha', color: '#ff6b6b' },
+    { id: 'poliamor', colorKey: 'poliamor', color: '#6f42c1' },
+    { id: 'kinks', colorKey: 'kinks', color: '#1a1a1a' }
   ];
   
   let totalMatches = 0;
   let totalQuestions = 0;
   packConfigs.forEach(config => {
-    const packData = allPacksData.find(p => p.name === config.name);
+    const packData = allPacksData.find(p => p.color === config.colorKey);
     if (!packData || !packData.categories) return;
 
     // Achatar as perguntas

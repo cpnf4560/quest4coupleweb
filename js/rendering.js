@@ -6,11 +6,29 @@
 function loadAndRenderAllPacks() {
   console.log('🚀 loadAndRenderAllPacks() chamado');
   
+  // Determinar ficheiro baseado no idioma atual
+  const currentLang = (typeof I18n !== 'undefined' && I18n.currentLang) 
+    ? I18n.currentLang 
+    : (localStorage.getItem('quest4couple_lang') || 'pt-pt');
+  
+  console.log('🌍 Idioma atual:', currentLang);
+  
+  // Mapeamento de idioma para ficheiro JSON
+  const langFileMap = {
+    'pt-pt': 'packs_data_clean.json',
+    'pt-br': 'packs_data_pt-br.json',
+    'en': 'packs_data_en.json',
+    'es': 'packs_data_es.json',
+    'fr': 'packs_data_fr.json'
+  };
+  
+  const jsonFile = langFileMap[currentLang] || 'packs_data_clean.json';
+  
   // Tentar múltiplos caminhos para o JSON
   const possiblePaths = [
-    './data/packs_data_clean.json?v=' + Date.now(),
-    'data/packs_data_clean.json?v=' + Date.now(),
-    '../data/packs_data_clean.json?v=' + Date.now()
+    `./data/${jsonFile}?v=` + Date.now(),
+    `data/${jsonFile}?v=` + Date.now(),
+    `../data/${jsonFile}?v=` + Date.now()
   ];
   
   let fetchPath = possiblePaths[0];
@@ -23,28 +41,26 @@ function loadAndRenderAllPacks() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       return response.json();
-    })
-    .then(packsData => {
+    })    .then(packsData => {
       console.log('✅ JSON parseado com sucesso!');
       console.log('📦 Total de packs:', packsData.length);
       console.log('📦 Packs disponíveis:', packsData.map(p => p.name));
       
+      // Usar 'color' para identificar packs (não varia por idioma)
       const packConfigs = [
-        { id: 'romantico', containerId: 'pack-romantico-questions', name: 'Pack Romântico' },
-        { id: 'experiencia', containerId: 'pack-experiencia-questions', name: 'Exploração e Aventura a Dois' },
-        { id: 'pimentinha', containerId: 'pack-pimentinha-questions', name: 'Pimentinha' },
-        { id: 'poliamor', containerId: 'pack-poliamor-questions', name: 'Poliamor' },
-        { id: 'kinks', containerId: 'pack-kinks-questions', name: 'Fetiches' }
-      ];
-
-      packConfigs.forEach(config => {
-        console.log(`🔍 Procurando pack: "${config.name}"`);
-        const packData = packsData.find(p => p.name === config.name);
+        { id: 'romantico', containerId: 'pack-romantico-questions', color: 'romantico' },
+        { id: 'experiencia', containerId: 'pack-experiencia-questions', color: 'experiencia' },
+        { id: 'pimentinha', containerId: 'pack-pimentinha-questions', color: 'pimentinha' },
+        { id: 'poliamor', containerId: 'pack-poliamor-questions', color: 'poliamor' },
+        { id: 'kinks', containerId: 'pack-kinks-questions', color: 'kinks' }
+      ];      packConfigs.forEach(config => {
+        console.log(`🔍 Procurando pack com color: "${config.color}"`);
+        const packData = packsData.find(p => p.color === config.color);
         if (packData && packData.categories) {
-          console.log(`✅ Pack encontrado: ${config.name} com ${packData.categories.length} categorias`);
+          console.log(`✅ Pack encontrado: ${packData.name} com ${packData.categories.length} categorias`);
           renderPackQuestions(config.containerId, config.id, packData.categories);
         } else {
-          console.error(`❌ Categorias do pack "${config.name}" não encontradas no JSON.`);
+          console.error(`❌ Pack com color "${config.color}" não encontrado no JSON.`);
         }
       });
       
@@ -353,3 +369,16 @@ console.log('   - togglePackCategory:', typeof window.togglePackCategory);
 console.log('   - updateCategoryProgress:', typeof window.updateCategoryProgress);
 console.log('   - updateAllCategoriesProgress:', typeof window.updateAllCategoriesProgress);
 console.log('   - restoreCategoryStates:', typeof window.restoreCategoryStates);
+
+// ========================================
+// LISTENER PARA MUDANÇA DE IDIOMA
+// ========================================
+document.addEventListener('languageChanged', (event) => {
+  console.log('🌍 Idioma alterado para:', event.detail.lang);
+  console.log('🔄 Recarregando questões no novo idioma...');
+  
+  // Recarregar questões com o novo idioma
+  loadAndRenderAllPacks();
+});
+
+console.log('✅ Listener de mudança de idioma configurado');

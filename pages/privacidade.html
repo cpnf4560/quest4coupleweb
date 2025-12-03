@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidade - Quest4Couple</title>
+    <title data-i18n="pages.privacy.pageTitle">Política de Privacidade - Quest4Couple</title>
     
     <!-- Microsoft Clarity -->
     <script type="text/javascript">
@@ -29,6 +29,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
         .logo-container {
@@ -78,100 +79,84 @@
             <img src="../assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='../logo.png'; this.onerror=null;">
             <span class="logo-text">Quest4Couple</span>
         </a>
+        <div class="auth-buttons"></div>
     </header>
     
     <div class="container">
-        <h1> Política de Privacidade</h1>
-        <div class="update-date">Última atualização: 17 de novembro de 2025</div>
+        <h1 data-i18n="pages.privacy.title">🔒 Política de Privacidade</h1>
+        <div class="update-date" data-i18n="pages.privacy.lastUpdate">Última atualização: Janeiro 2025</div>
         
-        <h2>1. Introdução</h2>
-        <p>
-            A privacidade dos nossos utilizadores é absolutamente fundamental. 
-            Esta política explica como tratamos (ou melhor, como NÃO tratamos) os vossos dados.
+        <h2 data-i18n="pages.privacy.s1Title">1. Introdução</h2>
+        <p data-i18n="pages.privacy.s1Text">
+            A vossa privacidade é a nossa prioridade máxima. Quest4Couple foi desenhado desde o início com o princípio de "privacidade por omissão".
         </p>
         
-        <h2>2. Dados que Recolhemos</h2>
-        <p>Recolhemos o mínimo absoluto necessário para o serviço funcionar:</p>
+        <h2 data-i18n="pages.privacy.s2Title">2. Dados que NÃO Recolhemos</h2>
+        <p data-i18n="pages.privacy.s2Text">Ao contrário da maioria dos sites, nós NÃO recolhemos:</p>
         <ul>
-            <li><strong>Email:</strong> Para criar conta e recuperar password</li>
-            <li><strong>Respostas aos questionários:</strong> Armazenadas localmente no vosso navegador</li>
-            <li><strong>Dados de navegação básicos:</strong> Para melhorar a experiência do site</li>
+            <li data-i18n="pages.privacy.s2Item1">As vossas respostas aos questionários</li>
+            <li data-i18n="pages.privacy.s2Item2">Informação pessoal identificável</li>
+            <li data-i18n="pages.privacy.s2Item3">Histórico de navegação dentro do site</li>
+            <li data-i18n="pages.privacy.s2Item4">Dados de localização</li>
+            <li data-i18n="pages.privacy.s2Item5">Cookies de tracking de terceiros</li>
         </ul>
         
-        <h2>3. Como Usamos os Dados</h2>
-        <p>Os vossos dados são usados APENAS para:</p>
-        <ul>
-            <li>Permitir que façam login</li>
-            <li>Guardar as vossas respostas (no vosso dispositivo)</li>
-            <li>Mostrar os resultados do matching</li>
-            <li>Melhorar o serviço (análise anónima agregada)</li>
-        </ul>
-        
-        <h2>4. O Que NÃO Fazemos</h2>
-        <p><strong>NUNCA fazemos isto:</strong></p>
-        <ul>
-            <li> Vender ou partilhar os vossos dados com terceiros</li>
-            <li> Usar os vossos dados para publicidade direcionada</li>
-            <li> Ler as vossas respostas individuais</li>
-            <li> Associar respostas a perfis identificáveis</li>
-            <li> Partilhar informação sem consentimento explícito</li>
-        </ul>
-        
-        <h2>5. Armazenamento de Dados</h2>
-        <p>
-            As vossas respostas aos questionários são armazenadas <strong>localmente no vosso navegador</strong> 
-            usando localStorage. Isto significa que:
-        </p>
-        <ul>
-            <li>Nós não temos acesso direto às vossas respostas</li>
-            <li>Os dados ficam no vosso dispositivo</li>
-            <li>Se limparem o histórico do navegador, as respostas são apagadas</li>
-        </ul>
-        
-        <h2>6. Segurança</h2>
-        <p>
-            Usamos encriptação HTTPS para todas as comunicações. 
-            As passwords são encriptadas e nunca são armazenadas em texto simples.
+        <h2 data-i18n="pages.privacy.s3Title">3. Dados que Recolhemos</h2>
+        <p data-i18n="pages.privacy.s3Text">
+            Recolhemos apenas dados anónimos básicos para melhorar o serviço: estatísticas agregadas de uso (número de visitas, páginas mais populares) através de ferramentas de analytics que respeitam a privacidade.
         </p>
         
-        <h2>7. Os Vossos Direitos (RGPD)</h2>
-        <p>De acordo com o RGPD, têm direito a:</p>
+        <h2 data-i18n="pages.privacy.s4Title">4. Armazenamento Local</h2>
+        <p data-i18n="pages.privacy.s4Text">
+            As vossas respostas são armazenadas exclusivamente no vosso dispositivo (localStorage do navegador) e em ficheiros .q4c que vocês criam e controlam. Nunca temos acesso a esses dados.
+        </p>
+        
+        <h2 data-i18n="pages.privacy.s5Title">5. Ficheiros .q4c</h2>
+        <p data-i18n="pages.privacy.s5Text">
+            Os ficheiros de respostas que geram são encriptados localmente. A palavra-passe (se definirem) nunca sai do vosso dispositivo. Nós não podemos recuperar ficheiros perdidos ou palavras-passe esquecidas.
+        </p>
+        
+        <h2 data-i18n="pages.privacy.s6Title">6. Partilha de Dados</h2>
+        <p data-i18n="pages.privacy.s6Text">
+            Como não recolhemos os vossos dados pessoais, não há nada para partilhar com terceiros. A troca de ficheiros entre casais é responsabilidade exclusiva dos utilizadores.
+        </p>
+        
+        <h2 data-i18n="pages.privacy.s7Title">7. Cookies</h2>
+        <p data-i18n="pages.privacy.s7Text">Usamos apenas cookies essenciais para:</p>
         <ul>
-            <li>Aceder aos vossos dados</li>
-            <li>Corrigir dados incorretos</li>
-            <li>Eliminar a vossa conta e todos os dados</li>
-            <li>Exportar os vossos dados</li>
-            <li>Opor-se ao processamento dos dados</li>
+            <li data-i18n="pages.privacy.s7Item1">Lembrar a vossa preferência de idioma</li>
+            <li data-i18n="pages.privacy.s7Item2">Manter a sessão ativa (se estiverem logados)</li>
+            <li data-i18n="pages.privacy.s7Item3">Lembrar a confirmação de idade</li>
         </ul>
         
-        <h2>8. Cookies</h2>
-        <p>
-            Usamos cookies essenciais para o funcionamento do site (ex: manter sessão ativa). 
-            Não usamos cookies de tracking ou publicidade.
+        <h2 data-i18n="pages.privacy.s8Title">8. Segurança</h2>
+        <p data-i18n="pages.privacy.s8Text">
+            Embora não armazenemos dados sensíveis, implementamos as melhores práticas de segurança web, incluindo HTTPS, proteção contra XSS e CSRF.
         </p>
         
-        <h2>9. Alterações a Esta Política</h2>
-        <p>
-            Podemos atualizar esta política ocasionalmente. Notificaremos sempre 
-            sobre mudanças significativas através do email registado.
+        <h2 data-i18n="pages.privacy.s9Title">9. Os Vossos Direitos</h2>
+        <p data-i18n="pages.privacy.s9Text">
+            Têm controlo total sobre os vossos dados. Podem apagar o vosso histórico local a qualquer momento através das configurações do navegador.
         </p>
         
-        <h2>10. Contacto</h2>
-        <p>
-            Dúvidas sobre privacidade? <br>
-            Email: <a href="mailto:info@quest4couple.pt" style="color: #d63384;">info@quest4couple.pt</a>
+        <h2 data-i18n="pages.privacy.s10Title">10. Contacto</h2>
+        <p data-i18n="pages.privacy.s10Text">
+            Para questões sobre privacidade, contactem-nos: questforcouple@gmail.com
         </p>
     </div>
     
     <footer>
-        <p>&copy; 2025 Quest4Couple</p>
+        <p data-i18n="pages.footer.copyright">&copy; 2025 Quest4Couple</p>
         <div>
-            <a href="index.html">Início</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="faq.html">FAQ</a>
-            <a href="apoiar.html">Apoiar</a>
-            <a href="termos.html">Termos</a>
+            <a href="../index.html" data-i18n="pages.footer.home">Início</a>
+            <a href="sobre.html" data-i18n="pages.footer.about">Sobre</a>
+            <a href="faq.html" data-i18n="pages.footer.faq">FAQ</a>
+            <a href="apoiar.html" data-i18n="pages.footer.support">Apoiar</a>
+            <a href="termos.html" data-i18n="pages.footer.terms">Termos</a>
         </div>
     </footer>
+    
+    <!-- i18n System -->
+    <script src="../js/i18n.js"></script>
 </body>
 </html>

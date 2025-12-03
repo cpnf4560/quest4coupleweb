@@ -278,7 +278,23 @@ async function loadUserConnections(userId) {
 
 async function loadPacksData() {
   try {
-    const response = await fetch('data/packs_data_clean.json?v=' + Date.now());
+    // Determinar ficheiro baseado no idioma atual
+    const currentLang = (typeof I18n !== 'undefined' && I18n.currentLang) 
+      ? I18n.currentLang 
+      : (localStorage.getItem('quest4couple_lang') || 'pt-pt');
+    
+    const langFileMap = {
+      'pt-pt': 'packs_data_clean.json',
+      'pt-br': 'packs_data_pt-br.json',
+      'en': 'packs_data_en.json',
+      'es': 'packs_data_es.json',
+      'fr': 'packs_data_fr.json'
+    };
+    
+    const jsonFile = langFileMap[currentLang] || 'packs_data_clean.json';
+    console.log('🌍 Dashboard: Carregando ficheiro de idioma:', jsonFile);
+
+    const response = await fetch(`data/${jsonFile}?v=` + Date.now());
     const data = await response.json();
     
     // O JSON é um array direto, não tem propriedade "packs"
@@ -348,12 +364,50 @@ function renderStats() {
 // RENDER PACKS
 // ========================================
 function renderPacks() {
+  // Obter traduções do i18n (se disponível)
+  const t = (key, fallback) => {
+    if (typeof I18n !== 'undefined' && I18n.t) {
+      const result = I18n.t(key);
+      return result !== key ? result : fallback;
+    }
+    return fallback;
+  };
+
+  // Mapeamento de nomes e descrições de packs para i18n
+  const packTranslations = {
+    'romantico': {
+      name: t('dashboard.packs.romantic', 'Pack Romântico'),
+      description: t('dashboard.packs.romanticDesc', 'Sensualidade, ambiente e conexão íntima')
+    },
+    'experiencia': {
+      name: t('dashboard.packs.exploration', 'Exploração e Aventura a Dois'),
+      description: t('dashboard.packs.explorationDesc', 'Cenários, ousadia e novas experiências')
+    },
+    'pimentinha': {
+      name: t('dashboard.packs.spicy', 'Pimentinha'),
+      description: t('dashboard.packs.spicyDesc', 'Adicione tempero, provocação e jogos sensuais')
+    },
+    'poliamor': {
+      name: t('dashboard.packs.polyamory', 'Poliamor'),
+      description: t('dashboard.packs.polyamoryDesc', 'Abertura, não-monogamia e exploração a múltiplos')
+    },
+    'kinks': {
+      name: t('dashboard.packs.fetishes', 'Fetiches'),
+      description: t('dashboard.packs.fetishesDesc', 'Fetiches específicos, práticas avançadas e kinks')
+    }
+  };
+
   packsGrid.innerHTML = '';
 
   if (packsData.length === 0) {
-    packsGrid.innerHTML = '<p>Nenhum pack disponível</p>';
+    packsGrid.innerHTML = `<p>${t('dashboard.packs.noPacks', 'Nenhum pack disponível')}</p>`;
     return;
   }
+
+  const startText = t('dashboard.packs.start', 'Começar');
+  const continueText = t('dashboard.packs.continue', 'Continuar');
+  const viewAnswersText = t('dashboard.packs.viewAnswers', 'Ver Respostas');
+  const ofText = t('common.of', 'de');
 
   packsData.forEach(pack => {
     const packAnswers = userAnswers[pack.id] || {};
@@ -361,18 +415,23 @@ function renderPacks() {
     const totalQuestions = pack.questions.length;
     const progress = Math.round((answeredCount / totalQuestions) * 100);
 
+    // Usar traduções se disponíveis, senão usar os dados originais
+    const packI18n = packTranslations[pack.id] || {};
+    const packName = packI18n.name || pack.name;
+    const packDescription = packI18n.description || pack.description || '';
+
     const card = document.createElement('div');
     card.className = 'pack-card';
     card.innerHTML = `
       <div class="pack-header" style="background: ${pack.color || '#667eea'}">
         <div class="pack-icon">${pack.icon || '📝'}</div>
-        <div class="pack-name">${pack.name}</div>
-        <div class="pack-description">${pack.description || ''}</div>
+        <div class="pack-name">${packName}</div>
+        <div class="pack-description">${packDescription}</div>
       </div>
       <div class="pack-body">
         <div class="pack-progress">
           <div class="pack-progress-text">
-            <span>${answeredCount} de ${totalQuestions}</span>
+            <span>${answeredCount} ${ofText} ${totalQuestions}</span>
             <span>${progress}%</span>
           </div>
           <div class="pack-progress-bar-container">
@@ -381,9 +440,9 @@ function renderPacks() {
         </div>
         <div class="pack-actions">
           <button class="btn-pack btn-answer" onclick="goToQuiz('${pack.id}')">
-            ${answeredCount === 0 ? 'Começar' : 'Continuar'}
+            ${answeredCount === 0 ? startText : continueText}
           </button>
-          ${answeredCount > 0 ? '<button class="btn-pack btn-view" onclick="viewAnswers(\'' + pack.id + '\')">Ver Respostas</button>' : ''}
+          ${answeredCount > 0 ? '<button class="btn-pack btn-view" onclick="viewAnswers(\'' + pack.id + '\')">' + viewAnswersText + '</button>' : ''}
         </div>
       </div>
     `;
@@ -396,22 +455,35 @@ function renderPacks() {
 // RENDER CONNECTIONS
 // ========================================
 function renderConnections() {
+  // Obter traduções do i18n (se disponível)
+  const t = (key, fallback) => {
+    if (typeof I18n !== 'undefined' && I18n.t) {
+      const result = I18n.t(key);
+      return result !== key ? result : fallback;
+    }
+    return fallback;
+  };
+
   if (userConnections.length === 0) {
     connectionsList.innerHTML = `
       <div class="empty-state">
         <div class="empty-icon">💑</div>
-        <h3>Nenhuma conexão ainda</h3>
-        <p>Adiciona o teu parceiro para partilharem respostas e gerarem relatórios juntos!</p>
+        <h3>${t('dashboard.connections.noConnectionsTitle', 'Nenhuma conexão ainda')}</h3>
+        <p>${t('dashboard.connections.noConnectionsDesc', 'Adiciona o teu parceiro para partilharem respostas e gerarem relatórios juntos!')}</p>
       </div>
     `;
     return;
   }
-
   connectionsList.innerHTML = '';
 
+  const shareText = t('dashboard.share.shareWith', 'Partilhar');
+  const viewReportText = t('dashboard.packs.viewReport', 'Ver Relatório');
+
   userConnections.forEach(connection => {
-    const partner = connection.partnerProfile;
-    const initials = partner.name ? partner.name.substring(0, 2).toUpperCase() : '??';
+    const partner = connection.partnerProfile || {}; // Fallback para objeto vazio se null
+    const partnerName = partner.name || t('common.user', 'Utilizador');
+    const partnerUsername = partner.username || t('common.unknown', 'desconhecido');
+    const initials = partnerName.substring(0, 2).toUpperCase();
 
     const card = document.createElement('div');
     card.className = 'connection-card';
@@ -419,16 +491,16 @@ function renderConnections() {
       <div class="connection-info">
         <div class="connection-avatar">${initials}</div>
         <div class="connection-details">
-          <h3>${partner.name || 'Utilizador'}</h3>
-          <p>@${partner.username}</p>
+          <h3>${partnerName}</h3>
+          <p>@${partnerUsername}</p>
         </div>
       </div>
       <div class="connection-actions">
-        <button class="btn-secondary" onclick="shareWithPartner('${connection.id}', '${partner.name}')">
-          Partilhar
+        <button class="btn-secondary" onclick="shareWithPartner('${connection.id}', '${partnerName.replace(/'/g, "\\'")}')">
+          ${shareText}
         </button>
-        ${connection.report ? '<button class="btn-secondary" onclick="viewReport(\'' + connection.id + '\')">Ver Relatório</button>' : ''}
-        <button class="btn-danger" onclick="deleteConnection('${connection.id}', '${partner.name || 'Utilizador'}')" title="Remover conexão">
+        ${connection.report ? '<button class="btn-secondary" onclick="viewReport(\'' + connection.id + '\')">' + viewReportText + '</button>' : ''}
+        <button class="btn-danger" onclick="deleteConnection('${connection.id}', '${partnerName.replace(/'/g, "\\'")}')" title="${t('dashboard.connections.remove', 'Remover conexão')}">
           🗑️
         </button>
       </div>
@@ -583,9 +655,9 @@ async function searchUser(searchText) {
                 <span style="color: #f59e0b; font-weight: 600;">⏳ Pedido enviado</span>
               </div>
             `;
-          }
-        } else {
+          }        } else {
           if (searchResults) {
+            const safeName = (userData.name || 'Utilizador').replace(/'/g, "\\'");
             searchResults.innerHTML = `
               <div class="user-result">
                 <div class="user-result-info">
@@ -595,7 +667,7 @@ async function searchUser(searchText) {
                     <p style="color: #666; font-size: 14px;">@${userData.username}</p>
                   </div>
                 </div>
-                <button class="btn-connect" onclick="sendConnectionRequest('${userId}', '${userData.name}', '${userData.username}')">
+                <button class="btn-connect" onclick="sendConnectionRequest('${userId}', '${safeName}', '${userData.username}')">
                   📨 Enviar Pedido
                 </button>
               </div>

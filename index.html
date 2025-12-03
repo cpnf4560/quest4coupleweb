@@ -219,13 +219,24 @@
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
-        }
-        
-        .features {
+        }        .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-top: 60px;
+            align-items: stretch; /* Força todos os cards a terem a mesma altura */
+        }
+        
+        @media (max-width: 900px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 901px) and (max-width: 1200px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr); /* Força 3 colunas mesmo em tablets */
+            }
         }
         
         .feature-card {
@@ -474,10 +485,9 @@
         
         .btn-logout:hover {
             background: #c82333 !important;
-        }          @media (max-width: 768px) {
+        }        @media (max-width: 768px) {
             h1 { font-size: 2em; }
             .subtitle { font-size: 1.1em; }
-            .features { grid-template-columns: 1fr; }
             .modal-content {
                 padding: 30px 20px;
             }
@@ -652,21 +662,20 @@
             </div>
         </div>
           <!-- Navigation Buttons -->
-        <div class="auth-buttons">
-            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" data-i18n="header.tutorial" title="Ver Tutorial">
-                🎓 Tutorial
+        <div class="auth-buttons">            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
+                <span>🎓</span> <span data-i18n="header.tutorial">Tutorial</span>
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='app.html'" data-i18n="header.questionnaire" title="Ver Questionários">
-                📝 Questionários
+            <button class="header-btn btn-login" onclick="window.location.href='app.html'" title="Ver Questionários">
+                <span>📝</span> <span data-i18n="header.questionnaire">Questionários</span>
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" data-i18n="header.report" title="Ver Relatório">
-                💑 Relatório
+            <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+                <span>💑</span> <span data-i18n="header.report">Relatório</span>
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" data-i18n="header.dashboard" title="Dashboard" id="dashboardBtn" style="display: none;">
-                📊 Dashboard
+            <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" title="Dashboard" id="dashboardBtn" style="display: none;">
+                <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
             </button>
             
             <button class="header-btn btn-login" onclick="window.location.href='auth.html'" data-i18n="header.login" title="Fazer Login" id="loginBtn">
@@ -679,34 +688,32 @@
         </div>
     </div>
     
-    <!-- Beta Banner -->
-    <div class="beta-banner" id="betaBanner">
+    <!-- Beta Banner -->    <div class="beta-banner" id="betaBanner">
         <div class="beta-banner-content">
-            <div class="beta-icon">🚧</div>            <div class="beta-text">
-                <h3>🔨 Site em Construção (Beta)</h3>
-                <p>O Quest4Couple ainda está em desenvolvimento. Poderás encontrar alguns bugs ou funcionalidades incompletas. Precisas de ajuda? Contacta-nos: <a href="mailto:info@quest4couple.pt">info@quest4couple.pt</a></p>
+            <div class="beta-icon" data-i18n="beta.icon">🚀</div>            <div class="beta-text">
+                <h3 data-i18n="beta.title">Versão Beta • Em Desenvolvimento</h3>
+                <p data-i18n-html="beta.description">Estamos em fase de testes! Se encontrares bugs ou tiveres sugestões, <a href='pages/apoiar.html#feedback'>envia-nos feedback</a> e ajuda a melhorar 💪</p>
             </div>
-            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso">✕</button>
+            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso" data-i18n="beta.close">✕</button>
         </div>
     </div>
     
     <div class="container">
         <div class="hero-logo">
             <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
-        </div>
-        <h1>Descubram-se juntos 💕</h1><p class="subtitle">
+        </div>        <h1 data-i18n="home.heroTitle">Descubram-se juntos 💕</h1><p class="subtitle" data-i18n-html="home.heroSubtitle">
             Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>
             De forma <strong>privada, segura</strong> e sem julgamentos.
-        </p>        <div style="text-align: center; margin-top: 30px;">            <a href="app.html" class="cta-button" id="ctaButton" style="display: inline-block;">👀 Ver Questionários</a>
+        </p>        <div style="text-align: center; margin-top: 30px;">            <a href="app.html" class="cta-button" id="ctaButton" style="display: inline-block;" data-i18n="home.cta.viewQuestions">👀 Ver Questionários</a>
             <br>
-            <div class="free-badge" id="freeBadge" style="font-size: 0.85em; padding: 5px 14px; margin-top: 12px; display: inline-block;">
+            <div class="free-badge" id="freeBadge" style="font-size: 0.85em; padding: 5px 14px; margin-top: 12px; display: inline-block;" data-i18n="home.badge.free">
                 ✨ 100% Gratuito • Veja sem login
             </div>
             <br>            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
-                <a href="tutorial.html" class="tutorial-link">
+                <a href="tutorial.html" class="tutorial-link" data-i18n="home.links.howItWorks">
                     🎓 Como Funciona? • Tutorial
                 </a>
-                <a href="relatorio.html" class="tutorial-link" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                <a href="relatorio.html" class="tutorial-link" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;" data-i18n="home.links.viewReport">
                     💑 Ver Relatório do Casal
                 </a>
             </div>
@@ -717,12 +724,11 @@
             <span style="margin: 0 10px;">✓ 5 packs temáticos</span>
             <span style="margin: 0 10px;">✓ Comparação automática</span>
         </div>-->
-          <div class="features">
-            <div class="feature-card">
+          <div class="features">            <div class="feature-card">
                 <div class="feature-icon">🔐</div>
                 <div class="feature-title" data-i18n="home.features.private.title">100% Privado</div>
-                <div class="feature-text" data-i18n="home.features.private.description">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
-            </div>            <div class="feature-card">
+                <div class="feature-text" data-i18n-html="home.features.private.description">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
+            </div><div class="feature-card">
                 <div class="feature-icon">🎯</div>
                 <div class="feature-title" data-i18n="home.packs.title">5 Packs Temáticos</div>
                 <div class="feature-text" data-i18n-html="home.packs.description">💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong></div>
@@ -735,27 +741,26 @@
             </div>
         </div>
     </div>
-    
-    <!-- Login Modal -->
+      <!-- Login Modal -->
     <div class="modal-overlay" id="loginModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
             <div class="modal-header">
-                <h2>🔐 Entrar</h2>
-                <p>Aceda à sua conta Quest4Couple</p>
+                <h2 data-i18n="auth.login.title">🔐 Entrar</h2>
+                <p data-i18n="auth.login.subtitle">Aceda à sua conta Quest4Couple</p>
             </div>
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" placeholder="seuemail@exemplo.com" required>
+                    <label for="loginEmail" data-i18n="auth.login.email">Email</label>
+                    <input type="email" id="loginEmail" data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="seuemail@exemplo.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" placeholder="Digite a sua password" required>
+                    <label for="loginPassword" data-i18n="auth.login.password">Password</label>
+                    <input type="password" id="loginPassword" data-i18n-placeholder="auth.login.passwordPlaceholder" placeholder="Digite a sua password" required>
                 </div>
-                <button type="submit" class="btn-modal">Entrar</button>
+                <button type="submit" class="btn-modal" data-i18n="auth.login.submit">Entrar</button>
                 <p class="modal-footer">
-                    Não tem conta? <a href="#" onclick="switchToRegister()">Registar agora</a>
+                    <span data-i18n="auth.login.noAccount">Não tem conta?</span> <a href="#" onclick="switchToRegister()" data-i18n="auth.login.createAccount">Registar agora</a>
                 </p>
             </form>
         </div>
@@ -764,49 +769,48 @@
     <!-- Register Modal -->
     <div class="modal-overlay" id="registerModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
-            <div class="modal-header">
-                <h2>✨ Criar Conta</h2>
-                <p>Registe-se gratuitamente e comece já!</p>
+            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>            <div class="modal-header">
+                <h2 data-i18n="auth.register.title">✨ Criar Conta</h2>
+                <p data-i18n="auth.register.subtitle">Registe-se gratuitamente e comece já!</p>
             </div>            <form onsubmit="handleRegister(event)">
                 <div class="social-login" style="margin-bottom: 25px;">
                     <button type="button" class="social-btn google-btn" onclick="registerWithGoogle()" style="width: 100%; padding: 12px; margin-bottom: 10px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
                         <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        Registar com Google
+                        <span data-i18n="auth.register.googleBtn">Registar com Google</span>
                     </button>
                     <button type="button" class="social-btn reddit-btn" onclick="registerWithReddit()" style="width: 100%; padding: 12px; background: #FF4500; color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
-                        Registar com Reddit
+                        <span data-i18n="auth.register.redditBtn">Registar com Reddit</span>
                     </button>
-                    <div style="text-align: center; margin: 15px 0; color: #999; font-size: 0.9em;">ou com email</div>
+                    <div style="text-align: center; margin: 15px 0; color: #999; font-size: 0.9em;" data-i18n="auth.register.socialOptions">ou com email</div>
                 </div>
                 <div class="form-group">
-                    <label for="registerName">Nome</label>
-                    <input type="text" id="registerName" placeholder="O seu nome" required>
+                    <label for="registerName" data-i18n="auth.register.name">Nome</label>
+                    <input type="text" id="registerName" data-i18n-placeholder="auth.register.namePlaceholder" placeholder="O seu nome" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" placeholder="seuemail@exemplo.com" required>
+                    <label for="registerEmail" data-i18n="auth.register.email">Email</label>
+                    <input type="email" id="registerEmail" data-i18n-placeholder="auth.register.emailPlaceholder" placeholder="seuemail@exemplo.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="registerPassword">Password</label>
-                    <input type="password" id="registerPassword" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    <label for="registerPassword" data-i18n="auth.register.password">Password</label>
+                    <input type="password" id="registerPassword" data-i18n-placeholder="auth.register.passwordPlaceholder" placeholder="Mínimo 6 caracteres" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="registerConfirmPassword">Confirmar Password</label>
-                    <input type="password" id="registerConfirmPassword" placeholder="Repita a password" required minlength="6">
+                    <label for="registerConfirmPassword" data-i18n="auth.register.confirmPassword">Confirmar Password</label>
+                    <input type="password" id="registerConfirmPassword" data-i18n-placeholder="auth.register.confirmPasswordPlaceholder" placeholder="Repita a password" required minlength="6">
                 </div>
                 <div class="form-group">
-                    <label for="registerCountry">País (opcional - para estatísticas)</label>
-                    <input type="text" id="registerCountry" placeholder="Ex: Portugal">
+                    <label for="registerCountry" data-i18n="auth.register.country">País (opcional - para estatísticas)</label>
+                    <input type="text" id="registerCountry" data-i18n-placeholder="auth.register.countryPlaceholder" placeholder="Ex: Portugal">
                 </div>
                 <div class="form-group">
-                    <label for="registerCity">Cidade (opcional - para estatísticas)</label>
-                    <input type="text" id="registerCity" placeholder="Ex: Lisboa">
+                    <label for="registerCity" data-i18n="auth.register.city">Cidade (opcional - para estatísticas)</label>
+                    <input type="text" id="registerCity" data-i18n-placeholder="auth.register.cityPlaceholder" placeholder="Ex: Lisboa">
                 </div>
-                <button type="submit" class="btn-modal">Criar Conta</button>
+                <button type="submit" class="btn-modal" data-i18n="auth.register.submit">Criar Conta</button>
                 <p class="modal-footer">
-                    Já tem conta? <a href="#" onclick="switchToLogin()">Entrar</a>
+                    <span data-i18n="auth.register.hasAccount">Já tem conta?</span> <a href="#" onclick="switchToLogin()" data-i18n="auth.register.login">Entrar</a>
                 </p>
             </form>
         </div>    </div>
@@ -814,16 +818,15 @@
     <!-- Support Banner -->
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
         <div id="supportBanner"></div>
-    </div>
-      <footer>
-        <p>&copy; 2025 Quest4Couple - Todos os direitos reservados</p>
+    </div>      <footer>
+        <p data-i18n="footer.copyright">&copy; 2025 Quest4Couple - Todos os direitos reservados</p>
         <div>
-            <a href="pages/sobre.html">Sobre</a>
-            <a href="pages/faq.html">FAQ</a>
-            <a href="pages/apoiar.html">Apoiar o Projeto</a>
-            <a href="pages/privacidade.html">Privacidade</a>
-            <a href="pages/termos.html">Termos</a>
-            <a href="pages/admin.html" style="opacity: 0.5;">Admin</a>
+            <a href="pages/sobre.html" data-i18n="footer.links.about">Sobre</a>
+            <a href="pages/faq.html" data-i18n="footer.links.faq">FAQ</a>
+            <a href="pages/apoiar.html" data-i18n="footer.links.support">Apoiar o Projeto</a>
+            <a href="pages/privacidade.html" data-i18n="footer.links.privacy">Privacidade</a>
+            <a href="pages/termos.html" data-i18n="footer.links.terms">Termos</a>
+            <a href="pages/admin.html" style="opacity: 0.5;" data-i18n="footer.links.admin">Admin</a>
         </div>    </footer>
     
     <!-- Support Banner Script -->
@@ -839,9 +842,8 @@
     <!-- Firebase Config -->
     <script src="js/firebase-config.js"></script>
     <script src="js/notifications.js"></script>
-    
-    <!-- Local Auth (fallback) -->
-    <script src="auth.js"></script>
+      <!-- Local Auth (fallback) -->
+    <script src="js/auth.js"></script>
     
     <script>        // Check if user is logged in on page load (Firebase Auth)
         document.addEventListener('DOMContentLoaded', function() {
