@@ -1008,6 +1008,7 @@
     
     <!-- Firebase Config -->
     <script src="js/firebase-config.js"></script>
+    <script src="js/profile-completion.js"></script>
     <script src="js/notifications.js"></script>
       <!-- Local Auth (fallback) -->
     <script src="js/auth.js"></script>
@@ -1021,7 +1022,7 @@
             
             // Tentar Firebase Auth primeiro
             if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
-                auth.onAuthStateChanged((user) => {
+                auth.onAuthStateChanged(async (user) => {
                     if (user) {
                         // User está autenticado no Firebase
                         console.log('✅ User autenticado (Firebase):', user.email);
@@ -1030,6 +1031,23 @@
                             email: user.email
                         };
                         updateHeaderForLoggedInUser(userData);
+                        
+                        // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+                        if (window.profileCompletion) {
+                            try {
+                                const userDoc = await db.collection('users').doc(user.uid).get();
+                                const userProfile = userDoc.exists ? userDoc.data() : {};
+                                
+                                if (!window.profileCompletion.isProfileComplete(userProfile)) {
+                                    console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+                                    await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+                                        console.log('✅ Perfil completado:', updatedData);
+                                    });
+                                }
+                            } catch (profileError) {
+                                console.warn('⚠️ Erro ao verificar perfil:', profileError);
+                            }
+                        }
                     } else {
                         console.log('❌ User não autenticado');
                     }

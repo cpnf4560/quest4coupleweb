@@ -509,6 +509,7 @@ async function generateCompatibilityReport(myData, partnerData) {
     let totalMatchesCount = 0;
     let totalMismatches = 0;
     const packIdsUsed = [];
+    const allQuestionsForAnalytics = [];
     
     packConfigs.forEach(config => {
       const myAnswers = myData.answers[config.id] || {};
@@ -517,6 +518,46 @@ async function generateCompatibilityReport(myData, partnerData) {
       // Se o pack foi respondido por ambos
       if (Object.keys(myAnswers).length > 0 && Object.keys(partnerAnswers).length > 0) {
         packIdsUsed.push(config.id);
+        
+        // Recolher detalhes das questões deste pack
+        config.categories.forEach((category, catIndex) => {
+          category.questions.forEach((question, qIndex) => {
+            const questionKey = `${catIndex}_${qIndex}`;
+            const myAns = myAnswers[questionKey];
+            const partnerAns = partnerAnswers[questionKey];
+            
+            if (myAns && partnerAns) {
+              // Determinar o tipo de match
+              const my = myAns.answer;
+              const partner = partnerAns.answer;
+              let matchType = 'unknown';
+              
+              // Mesma lógica de matching do relatório
+              if (my === 'meh' && partner === 'meh') matchType = 'hidden';
+              else if (my === 'porfavor' && partner === 'porfavor') matchType = 'SUPER MATCH';
+              else if ((my === 'porfavor' && partner === 'yup') || (my === 'yup' && partner === 'porfavor')) matchType = 'EXCELENTE';
+              else if (my === 'yup' && partner === 'yup') matchType = 'BOM MATCH';
+              else if ((my === 'porfavor' && partner === 'talvez') || (my === 'talvez' && partner === 'porfavor') ||
+                       (my === 'yup' && partner === 'talvez') || (my === 'talvez' && partner === 'yup') ||
+                       (my === 'talvez' && partner === 'talvez')) matchType = 'POSSÍVEL';
+              else if ((my === 'porfavor' && partner === 'meh') || (my === 'meh' && partner === 'porfavor')) matchType = 'NEUTRO';
+              else matchType = 'hidden';
+              
+              // Só adicionar se não for hidden
+              if (matchType !== 'hidden') {
+                allQuestionsForAnalytics.push({
+                  packId: config.id,
+                  questionIndex: qIndex,
+                  questionText: question,
+                  answer1: getAnswerText(my),
+                  answer2: getAnswerText(partner),
+                  matchType: matchType,
+                  isInvertMatching: false // TODO: detectar invert matching
+                });
+              }
+            }
+          });
+        });
       }
     });
     
@@ -525,7 +566,7 @@ async function generateCompatibilityReport(myData, partnerData) {
       const reportData = {
         userName1: myData.userName,
         userName2: partnerData.userName,
-        questions: [] // Opcional: adicionar detalhes das questões
+        questions: allQuestionsForAnalytics
       };
       
       const matchCounts = {

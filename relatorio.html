@@ -776,6 +776,7 @@
 <!-- App Scripts -->
 <script src="js/firebase-config.js"></script>
 <script src="js/auth.js"></script>
+<script src="js/profile-completion.js"></script>
 <script src="js/notifications.js"></script>
 <script src="js/analytics.js"></script>
 
@@ -861,11 +862,28 @@
           if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
           if (logoutBtn) logoutBtn.style.display = 'inline-block';
           
+          // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+          if (window.profileCompletion) {
+            try {
+              const userDoc = await db.collection('users').doc(user.uid).get();
+              const userProfile = userDoc.exists ? userDoc.data() : {};
+              
+              if (!window.profileCompletion.isProfileComplete(userProfile)) {
+                console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+                await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+                  console.log('✅ Perfil completado:', updatedData);
+                });
+              }
+            } catch (profileError) {
+              console.warn('⚠️ Erro ao verificar perfil:', profileError);
+            }
+          }
+          
           // Carregar conexões, pedidos e username
           await loadUserConnections(user.uid);
           await loadConnectionRequests(user.uid);
           await loadMyUsername(user.uid);
-        } else {
+        }else {
           // User não autenticado - mostrar botão de login
           console.log('❌ User não autenticado em relatorio.html');
           if (cloudNotAuth) cloudNotAuth.style.display = 'block';

@@ -176,6 +176,32 @@ async function initDashboard(user) {
     userProfile = await loadUserProfile(user.uid);
     console.log('✅ Perfil carregado:', userProfile);
     
+    // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+    if (window.profileCompletion && !window.profileCompletion.isProfileComplete(userProfile)) {
+      console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+      hideLoading();
+      
+      await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, async (updatedData) => {
+        console.log('✅ Perfil completado:', updatedData);
+        // Atualizar userProfile local com os novos dados
+        userProfile = { ...userProfile, ...updatedData };
+        // Continuar inicialização do dashboard
+        showLoading();
+        await continueInitDashboard(user);
+      });
+      return; // Esperar pelo callback
+    }
+    
+    await continueInitDashboard(user);
+  } catch (error) {
+    console.error('❌ Erro ao inicializar dashboard:', error);
+    alert('Erro ao carregar dashboard: ' + error.message);
+    hideLoading();
+  }
+}
+
+async function continueInitDashboard(user) {
+  try {
     // Update UI with proper name fallback
     const displayName = userProfile?.name || user.displayName || user.email?.split('@')[0] || 'Utilizador';
     const userNameEl = document.getElementById('currentUserName');

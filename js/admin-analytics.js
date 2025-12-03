@@ -249,30 +249,68 @@ async function showReportDetails(reportId) {
     
     // Agrupar questões por pack
     const questionsByPack = {};
-    report.questions.forEach(q => {
-      if (!questionsByPack[q.packId]) {
-        questionsByPack[q.packId] = [];
-      }
-      questionsByPack[q.packId].push(q);
-    });
+    
+    // Verificar se o relatório tem questões
+    if (report.questions && Array.isArray(report.questions) && report.questions.length > 0) {
+      report.questions.forEach(q => {
+        if (!questionsByPack[q.packId]) {
+          questionsByPack[q.packId] = [];
+        }
+        questionsByPack[q.packId].push(q);
+      });
+    } else {
+      console.log('⚠️ Relatório sem detalhes de questões (formato antigo)');
+    }
     
     // Renderizar questões por pack
     let questionsHtml = '';
-    Object.entries(questionsByPack).forEach(([packId, questions]) => {
-      const packNames = {
-        'romantico': 'Pack Romântico',
-        'experiencia': 'Exploração e Aventura',
-        'pimentinha': 'Pimentinha',
-        'poliamor': 'Poliamor',
-        'kinks': 'Fetiches'
-      };
-      
-      questionsHtml += `
-        <div style="margin-bottom: 30px;">
-          <h4 style="color: #667eea; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e0e0e0;">
-            ${packNames[packId] || packId} (${questions.length} questões)
-          </h4>
+    
+    // Verificar se há questões para mostrar
+    if (Object.keys(questionsByPack).length === 0) {
+      questionsHtml = `
+        <div style="text-align: center; padding: 40px; color: #6c757d; background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%); border-radius: 10px; border: 2px solid #ffc107;">
+          <div style="font-size: 3em; margin-bottom: 15px;">📋</div>
+          <h4 style="margin-bottom: 10px; color: #856404;">Detalhes não disponíveis</h4>
+          <p style="font-size: 0.95em; color: #856404; margin-bottom: 15px;">
+            Este relatório foi gerado <strong>antes da atualização do sistema de analytics</strong> (3 Dez 2024).
+          </p>
+          <div style="background: white; border-radius: 8px; padding: 15px; text-align: left; margin-top: 15px;">
+            <p style="font-size: 0.9em; color: #495057; margin-bottom: 10px;">
+              <strong>⚠️ Porque não consigo ver as questões?</strong>
+            </p>
+            <p style="font-size: 0.85em; color: #6c757d; margin-bottom: 10px;">
+              Os relatórios antigos apenas guardavam estatísticas gerais (nº de matches, packs usados), 
+              não os detalhes de cada questão individual.
+            </p>
+            <p style="font-size: 0.9em; color: #495057; margin-bottom: 10px;">
+              <strong>💡 Solução:</strong>
+            </p>
+            <p style="font-size: 0.85em; color: #6c757d;">
+              Se os utilizadores ainda tiverem as respostas guardadas, podem gerar um <strong>novo relatório</strong> 
+              que já incluirá todos os detalhes das questões.
+            </p>
+          </div>
+          <p style="font-size: 0.8em; margin-top: 15px; color: #856404;">
+            ✅ Todos os relatórios gerados a partir de agora terão o detalhe completo.
+          </p>
+        </div>
       `;
+    } else {
+      Object.entries(questionsByPack).forEach(([packId, questions]) => {
+        const packNames = {
+          'romantico': 'Pack Romântico',
+          'experiencia': 'Exploração e Aventura',
+          'pimentinha': 'Pimentinha',
+          'poliamor': 'Poliamor',
+          'kinks': 'Fetiches'
+        };
+        
+        questionsHtml += `
+          <div style="margin-bottom: 30px;">
+            <h4 style="color: #667eea; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e0e0e0;">
+              ${packNames[packId] || packId} (${questions.length} questões)
+            </h4>
+        `;
       
       questions.forEach((q, index) => {
         const matchColor = getMatchColor(q.matchType);
@@ -305,7 +343,8 @@ async function showReportDetails(reportId) {
       });
       
       questionsHtml += `</div>`;
-    });
+      });
+    } // Fecha o else das questões disponíveis
     
     // Atualizar modal com conteúdo
     modal.innerHTML = `

@@ -545,6 +545,7 @@
 <script src="js/firebase-config.js"></script>
 <script src="js/firestore-sync.js"></script>
 <script src="js/analytics.js"></script>
+<script src="js/profile-completion.js"></script>
 <script src="js/notifications.js"></script>
 
 <!-- JavaScript Modules -->
@@ -562,7 +563,7 @@
   let isUserAuthenticated = false;
   
   // Verificar se user está autenticado
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (!user) {
       // User NÃO autenticado - pode VER mas não pode RESPONDER
       console.warn('⚠️ Modo visualização: User não autenticado');
@@ -597,6 +598,23 @@
       const currentUserName = document.getElementById('currentUserName');
       if (currentUserName) {
         currentUserName.textContent = user.displayName || user.email.split('@')[0];
+      }
+      
+      // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+      if (window.profileCompletion) {
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          const userProfile = userDoc.exists ? userDoc.data() : {};
+          
+          if (!window.profileCompletion.isProfileComplete(userProfile)) {
+            console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+            await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+              console.log('✅ Perfil completado:', updatedData);
+            });
+          }
+        } catch (profileError) {
+          console.warn('⚠️ Erro ao verificar perfil:', profileError);
+        }
       }
       
       // Habilitar inputs de resposta
