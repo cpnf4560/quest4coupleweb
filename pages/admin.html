@@ -327,6 +327,42 @@
       border-bottom: 2px solid #dee2e6;
     }
     
+    /* Sortable Table Headers */
+    th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    
+    th.sortable:hover {
+      background: #e9ecef;
+    }
+    
+    th.sortable .sort-icon {
+      margin-left: 5px;
+      opacity: 0.4;
+      font-size: 0.9em;
+    }
+    
+    th.sortable.sorted-asc .sort-icon,
+    th.sortable.sorted-desc .sort-icon {
+      opacity: 1;
+      color: #667eea;
+    }
+    
+    th.sortable.sorted-asc .sort-icon::after {
+      content: '↑';
+    }
+    
+    th.sortable.sorted-desc .sort-icon::after {
+      content: '↓';
+    }
+    
+    th.sortable.sorted-asc .sort-icon,
+    th.sortable.sorted-desc .sort-icon {
+      font-weight: bold;
+    }
+    
     td {
       padding: 15px 12px;
       border-bottom: 1px solid #f1f3f5;
@@ -819,15 +855,15 @@
         <div class="table-container" id="usersTableContainer" style="display: none;">
           <table id="usersTable">            <thead>
               <tr>
-                <th>Email</th>
-                <th>Nome</th>
-                <th>Username</th>
-                <th>Sexo</th>
-                <th>Idade</th>
-                <th>País</th>
-                <th>Cidade</th>
-                <th>Data Registo</th>
-                <th>Último Login</th>
+                <th class="sortable" onclick="sortUsersTable(0, 'string')">Email <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(1, 'string')">Nome <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(2, 'string')">Username <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(3, 'string')">Sexo <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(4, 'string')">Idade <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(5, 'string')">País <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(6, 'string')">Cidade <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(7, 'date')">Data Registo <span class="sort-icon">⇅</span></th>
+                <th class="sortable" onclick="sortUsersTable(8, 'date')">Último Login <span class="sort-icon">⇅</span></th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -1514,6 +1550,83 @@ ${error.stack || 'Sem stack trace'}
       document.getElementById('filterGender').value = '';
       document.getElementById('filterCountry').value = '';
       filterUsers();
+    }
+    
+    // ===========================
+    // SORT USERS TABLE
+    // ===========================
+    let currentSortColumn = -1;
+    let currentSortOrder = 'asc';
+    
+    function sortUsersTable(columnIndex, type) {
+      const table = document.getElementById('usersTable');
+      const tbody = document.getElementById('usersTableBody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const headers = table.querySelectorAll('th.sortable');
+      
+      // Determinar a ordem (toggle entre asc e desc)
+      if (currentSortColumn === columnIndex) {
+        currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSortOrder = 'asc';
+        currentSortColumn = columnIndex;
+      }
+      
+      // Remover classes de ordenação de todos os headers
+      headers.forEach(th => {
+        th.classList.remove('sorted-asc', 'sorted-desc');
+        const icon = th.querySelector('.sort-icon');
+        if (icon) icon.textContent = '⇅';
+      });
+      
+      // Adicionar classe ao header atual
+      const currentHeader = headers[columnIndex];
+      if (currentHeader) {
+        currentHeader.classList.add(currentSortOrder === 'asc' ? 'sorted-asc' : 'sorted-desc');
+        const icon = currentHeader.querySelector('.sort-icon');
+        if (icon) icon.textContent = currentSortOrder === 'asc' ? '↑' : '↓';
+      }
+      
+      // Ordenar as linhas
+      rows.sort((a, b) => {
+        let aValue = a.cells[columnIndex]?.textContent.trim() || '';
+        let bValue = b.cells[columnIndex]?.textContent.trim() || '';
+        
+        // Tratar valores vazios ou "-"
+        if (aValue === '-' || aValue === '') aValue = currentSortOrder === 'asc' ? 'zzz' : '';
+        if (bValue === '-' || bValue === '') bValue = currentSortOrder === 'asc' ? 'zzz' : '';
+        
+        let comparison = 0;
+        
+        if (type === 'date') {
+          // Converter datas portuguesas (DD/MM/YYYY HH:MM) para comparação
+          const parseDate = (str) => {
+            if (!str || str === '-' || str === 'zzz') return currentSortOrder === 'asc' ? new Date(9999, 11, 31) : new Date(0);
+            const parts = str.match(/(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})?:?(\d{2})?/);
+            if (parts) {
+              return new Date(parts[3], parts[2] - 1, parts[1], parts[4] || 0, parts[5] || 0);
+            }
+            return new Date(0);
+          };
+          
+          const dateA = parseDate(aValue);
+          const dateB = parseDate(bValue);
+          comparison = dateA - dateB;
+        } else {
+          // Ordenação de strings (case insensitive)
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+          comparison = aValue.localeCompare(bValue, 'pt');
+        }
+        
+        return currentSortOrder === 'asc' ? comparison : -comparison;
+      });
+      
+      // Limpar e re-adicionar as linhas ordenadas
+      tbody.innerHTML = '';
+      rows.forEach(row => tbody.appendChild(row));
+      
+      console.log(`📊 Tabela ordenada por coluna ${columnIndex} (${type}) - ${currentSortOrder}`);
     }
     
     // ===========================
