@@ -18,7 +18,7 @@ let currentResetPackId = null; // Pack selecionado para reset
 let userName, userDisplayName, logoutBtn, packsGrid, connectionsList, loadingOverlay;
 
 // Modals
-let addConnectionModal, shareModal, resetPackModal, addConnectionBtn, closeModalBtn, closeShareModalBtn, searchUserForm, searchResults;
+let addConnectionModal, shareModal, resetPackModal, editProfileModal, addConnectionBtn, closeModalBtn, closeShareModalBtn, searchUserForm, searchResults;
 
 // Stats
 let totalAnswersEl, completedPacksEl, totalConnectionsEl, sharedReportsEl;
@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addConnectionModal = document.getElementById('addConnectionModal');
   shareModal = document.getElementById('shareModal');
   resetPackModal = document.getElementById('resetPackModal');
+  editProfileModal = document.getElementById('editProfileModal');
   addConnectionBtn = document.getElementById('addConnectionBtn');
   closeModalBtn = document.getElementById('closeModalBtn');
   closeShareModalBtn = document.getElementById('closeShareModalBtn');
@@ -828,14 +829,13 @@ async function confirmResetPack() {
     await db.collection('users').doc(userId).collection('answers').doc('all').update({
       [currentResetPackId]: firebase.firestore.FieldValue.delete()
     });
-    
-    console.log('✅ Pack resetado com sucesso:', currentResetPackId);
+      console.log('✅ Pack resetado com sucesso:', currentResetPackId);
     
     // Fechar modal
     closeResetPackModal();
     
     // Atualizar estatísticas e re-renderizar packs
-    updateStats();
+    renderStats();
     renderPacks();
     
     hideLoading();
@@ -1056,7 +1056,9 @@ function loadCountriesInEditModal() {
 }
 
 function closeEditProfileModal() {
-  editProfileModal.classList.remove('active');
+  if (editProfileModal) {
+    editProfileModal.classList.remove('active');
+  }
 }
 
 async function saveProfileChanges(event) {
@@ -1123,6 +1125,11 @@ async function saveProfileChanges(event) {
     alert('❌ Erro ao atualizar perfil. Tente novamente.');
   }
 }
+
+// Make edit profile functions global
+window.openEditProfileModal = openEditProfileModal;
+window.closeEditProfileModal = closeEditProfileModal;
+window.saveProfileChanges = saveProfileChanges;
 
 // ========================================
 // UI HELPERS

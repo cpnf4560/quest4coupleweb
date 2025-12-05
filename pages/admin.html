@@ -726,20 +726,18 @@
       </button>
       <button class="tab-btn" onclick="showTab('users')">
         👥 Utilizadores
-      </button>      <button class="tab-btn" onclick="showTab('reports')">
-        📈 Relatórios
       </button>
       <button class="tab-btn" onclick="showTab('partialReports')">
-        📝 Relatórios
+        📝 Respostas
       </button>
       <button class="tab-btn" onclick="showTab('fullReports')">
         📋 Relatórios Completos
       </button>
       <button class="tab-btn" onclick="showTab('questions')">
-        📊 Análise de Questões
+        🔍 Análise de Questões
       </button>
       <button class="tab-btn" onclick="showTab('activity')">
-        📝 Log de Atividade
+        📜 Log de Atividade
       </button>
     </div>
     
@@ -796,6 +794,33 @@
           <div class="stat-label">países diferentes</div>
         </div>
       </div>
+      
+      <!-- Estatísticas de Relatórios e Respostas -->
+      <div class="stats-grid">
+        <div class="stat-card purple">
+          <h3>📝 Total Respostas</h3>
+          <div class="stat-value" id="totalAnswers">0</div>
+          <div class="stat-label">questões respondidas</div>
+        </div>
+        
+        <div class="stat-card pink">
+          <h3>📅 Relatórios Hoje</h3>
+          <div class="stat-value" id="reportsToday">0</div>
+          <div class="stat-label">gerados nas últimas 24h</div>
+        </div>
+        
+        <div class="stat-card blue">
+          <h3>📆 Esta Semana</h3>
+          <div class="stat-value" id="reportsWeek">0</div>
+          <div class="stat-label">últimos 7 dias</div>
+        </div>
+        
+        <div class="stat-card green">
+          <h3>📊 Média/Casal</h3>
+          <div class="stat-value" id="reportsAvg">0</div>
+          <div class="stat-label">relatórios por casal</div>
+        </div>
+      </div>
     </div>
     
     <!-- TAB: USERS -->    <div id="tab-users" class="tab-content">
@@ -831,9 +856,10 @@
             <label>⚧️ Sexo</label>
             <select id="filterGender" onchange="filterUsers()">
               <option value="">Todos</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-              <option value="outro">Outro</option>
+              <option value="M">♂️ Masculino</option>
+              <option value="F">♀️ Feminino</option>
+              <option value="outro">⚧️ Outro</option>
+              <option value="nd">❓ Não definido</option>
             </select>
           </div>
           <div class="filter-group">
@@ -871,75 +897,50 @@
               <!-- Users will be loaded here -->
             </tbody>
           </table>
+          
+          <!-- Controlos de Paginação -->
+          <div id="paginationControls">
+            <!-- Será preenchido dinamicamente -->
+          </div>
         </div>
       </div>
     </div>
     
-    <!-- TAB: REPORTS -->
-    <div id="tab-reports" class="tab-content">
-      <div class="content-card">
-        <h2>📈 Estatísticas de Relatórios</h2>
-        
-        <div class="stats-grid">
-          <div class="stat-card purple">
-            <h3>📊 Total Relatórios</h3>
-            <div class="stat-value" id="reportsTotal">0</div>
-            <div class="stat-label">relatórios gerados</div>
-          </div>
-          
-          <div class="stat-card pink">
-            <h3>📅 Hoje</h3>
-            <div class="stat-value" id="reportsToday">0</div>
-            <div class="stat-label">gerados hoje</div>
-          </div>
-          
-          <div class="stat-card blue">
-            <h3>📆 Esta Semana</h3>
-            <div class="stat-value" id="reportsWeek">0</div>
-            <div class="stat-label">últimos 7 dias</div>
-          </div>
-          
-          <div class="stat-card green">
-            <h3>📊 Média/Casal</h3>
-            <div class="stat-value" id="reportsAvg">0</div>
-            <div class="stat-label">relatórios por casal</div>
-          </div>
-        </div>
-          <h3 style="margin: 30px 0 15px 0; color: #495057;">📋 Questionários Mais Respondidos</h3>
-        <div id="packStats"></div>
-      </div>
-    </div>
-
-    <!-- TAB: PARTIAL REPORTS (1 Pack Only) -->
+    <!-- TAB: PARTIAL REPORTS (Individual Pack Answers) -->
     <div id="tab-partialReports" class="tab-content">
       <div class="content-card">
         <h2>
-          📝 Relatórios
+          📝 Respostas Individuais
           <span style="font-size: 0.7em; color: #6c757d; font-weight: normal; margin-left: 15px;">
-            Casais que geraram relatório
+            Packs completados por utilizador
           </span>
         </h2>
         
         <div class="filters">
           <div class="filter-group">
-            <label>📦 Pack Completado</label>
-            <select id="filterPartialPack" onchange="loadPartialReportsWithFilters()">
+            <label>📦 Pack</label>
+            <select id="filterPartialPack" onchange="loadIndividualAnswers()">
               <option value="">Todos os Packs</option>
-              <option value="romantico">Pack Romântico</option>
-              <option value="experiencia">Exploração e Aventura</option>
-              <option value="pimentinha">Pimentinha</option>
-              <option value="poliamor">Poliamor</option>
-              <option value="kinks">Fetiches</option>
+              <option value="romantico">💕 Pack Romântico</option>
+              <option value="experiencia">🌍 Exploração e Aventura</option>
+              <option value="pimentinha">🌶️ Pimentinha</option>
+              <option value="poliamor">💜 Poliamor</option>
+              <option value="kinks">🔥 Fetiches</option>
             </select>
           </div>
           <div class="filter-group">
-            <label>📅 Período</label>
-            <select id="filterPartialPeriod" onchange="loadPartialReportsWithFilters()">
+            <label>⚧️ Género</label>
+            <select id="filterPartialGender" onchange="loadIndividualAnswers()">
               <option value="">Todos</option>
-              <option value="today">Hoje</option>
-              <option value="week">Última Semana</option>
-              <option value="month">Último Mês</option>
+              <option value="M">♂️ Masculino</option>
+              <option value="F">♀️ Feminino</option>
+              <option value="outro">⚧️ Outro</option>
             </select>
+          </div>
+          <div class="filter-group">
+            <label>🔍 Procurar utilizador</label>
+            <input type="text" id="filterPartialUser" placeholder="Nome ou email..." 
+                   oninput="loadIndividualAnswers()" style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
           </div>
           <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
             <button class="btn-reset" onclick="resetPartialReportFilters()">🔄 Limpar</button>
@@ -951,7 +952,16 @@
         </div>
         
         <div id="partialReportsContainer">
-          <!-- Partial reports will be loaded here -->
+          <!-- Individual answers will be loaded here -->
+        </div>
+        
+        <!-- Modal para ver respostas -->
+        <div id="answersModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; overflow-y: auto;">
+          <div style="background: white; margin: 30px auto; max-width: 800px; border-radius: 16px; box-shadow: 0 10px 50px rgba(0,0,0,0.3);">
+            <div id="answersModalContent">
+              <!-- Modal content will be loaded here -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1017,7 +1027,8 @@
             <label>🔢 Mínimo Respostas</label>
             <input type="number" id="filterMinResponses" min="0" value="0" 
                    onchange="loadQuestionAnalyticsWithFilters()" 
-                   placeholder="Filtrar por nº de respostas">
+                   placeholder="Filtrar por nº de respostas"
+                   style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
           </div>
           <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
             <button class="btn-reset" onclick="resetQuestionFilters()">🔄 Limpar</button>
@@ -1035,26 +1046,35 @@
       <div class="content-card">
         <h2>
           📝 Log de Atividade
+          <span style="font-size: 0.7em; color: #6c757d; font-weight: normal; margin-left: 15px;">
+            Últimas 100 atividades
+          </span>
           <button class="btn-export" onclick="exportActivity()">
             📥 Exportar LOG
           </button>
         </h2>
+        
+        <!-- Stats Container -->
+        <div id="activityStats" style="display: none; margin-bottom: 20px;">
+          <!-- Will be populated by JS -->
+        </div>
         
         <div class="filters">
           <div class="filter-group">
             <label>🔍 Tipo de Atividade</label>
             <select id="filterActivityType" onchange="filterActivity()">
               <option value="">Todas</option>
-              <option value="register">Registos</option>
-              <option value="login">Logins</option>
-              <option value="answer">Respostas</option>
-              <option value="report">Relatórios</option>
-              <option value="connection">Conexões</option>
+              <option value="register">🆕 Registos</option>
+              <option value="login">🔓 Logins</option>
+              <option value="answer">✍️ Respostas</option>
+              <option value="report">📊 Relatórios</option>
+              <option value="connection">💑 Conexões</option>
             </select>
           </div>
           <div class="filter-group">
             <label>📅 Data</label>
-            <input type="date" id="filterActivityDate" onchange="filterActivity()">
+            <input type="date" id="filterActivityDate" onchange="filterActivity()" 
+                   style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
           </div>
           <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
             <button class="btn-reset" onclick="resetActivityFilters()">🔄 Limpar</button>
@@ -1267,7 +1287,7 @@
       } else if (tabName === 'questions') {
         loadQuestionAnalyticsWithFilters();
       } else if (tabName === 'partialReports') {
-        loadPartialReportsWithFilters();
+        loadIndividualAnswers();
       }
     }
     
@@ -1294,34 +1314,430 @@
     }
     
     // ===========================
-    // PARTIAL REPORTS TAB FUNCTIONS
+    // PARTIAL REPORTS TAB FUNCTIONS - RESPOSTAS INDIVIDUAIS
     // ===========================
-    function loadPartialReportsWithFilters() {
-      const packId = document.getElementById('filterPartialPack').value;
-      const period = document.getElementById('filterPartialPeriod').value;
+    let allUserAnswers = []; // Cache de respostas individuais
+    let packQuestionsData = null; // Cache dos dados das perguntas
+    
+    async function loadIndividualAnswers() {
+      const container = document.getElementById('partialReportsContainer');
+      const statsContainer = document.getElementById('partialReportsStats');
+      const packFilter = document.getElementById('filterPartialPack').value;
+      const genderFilter = document.getElementById('filterPartialGender').value;
+      const userFilter = document.getElementById('filterPartialUser').value.toLowerCase().trim();
       
-      const filters = {};
-      if (packId) filters.packId = packId;
-      if (period) filters.period = period;
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #6c757d;">
+          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+          <p>A carregar respostas individuais...</p>
+          <p style="font-size: 0.85em; margin-top: 10px;" id="loadingAnswersProgress">A preparar...</p>
+          <div style="width: 200px; height: 6px; background: #e9ecef; border-radius: 3px; margin: 15px auto 0;">
+            <div id="loadingAnswersBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 3px; transition: width 0.3s;"></div>
+          </div>
+        </div>
+      `;
       
-      // Call function from admin-analytics.js
-      if (typeof loadPartialReports === 'function') {
-        loadPartialReports(filters);
-      } else {
-        console.warn('loadPartialReports function not found');
-        document.getElementById('partialReportsContainer').innerHTML = `
-          <div style="text-align: center; padding: 40px; color: #6c757d;">
-            <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
-            <p>A funcionalidade será carregada em breve...</p>
+      try {
+        // Carregar dados dos packs se ainda não carregou
+        if (!packQuestionsData) {
+          const response = await fetch('../data/packs_data_clean.json');
+          packQuestionsData = await response.json();
+        }
+        
+        // Recolher respostas de todos os utilizadores
+        if (allUserAnswers.length === 0) {
+          console.log('📥 A carregar respostas de todos os utilizadores...');
+          
+          const totalUsers = allUsers.length;
+          let processedUsers = 0;
+          const progressEl = document.getElementById('loadingAnswersProgress');
+          const progressBar = document.getElementById('loadingAnswersBar');
+          
+          for (const user of allUsers) {
+            processedUsers++;
+            
+            // Atualizar progresso a cada utilizador
+            if (progressEl) {
+              progressEl.textContent = `A processar utilizador ${processedUsers} de ${totalUsers}...`;
+            }
+            if (progressBar) {
+              progressBar.style.width = `${Math.round((processedUsers / totalUsers) * 100)}%`;
+            }
+            
+            try {
+              const answersDoc = await db.collection('users').doc(user.id).collection('answers').doc('all').get();
+              if (answersDoc.exists) {
+                const answersData = answersDoc.data() || {};
+                const packs = Object.keys(answersData);
+                
+                for (const packId of packs) {
+                  const packAnswers = answersData[packId] || {};
+                  const answerCount = Object.keys(packAnswers).length;
+                  
+                  if (answerCount > 0) {
+                    // Contar comentários
+                    const commentsCount = Object.values(packAnswers).filter(ans => ans.comment && ans.comment.trim()).length;
+                    
+                    allUserAnswers.push({
+                      oderId: user.id,
+                      userName: user.name || user.displayName || user.username || user.email?.split('@')[0] || 'Sem nome',
+                      userEmail: user.email || '-',
+                      userGender: user.gender || null,
+                      packId: packId,
+                      answerCount: answerCount,
+                      commentsCount: commentsCount,
+                      answers: packAnswers,
+                      lastUpdated: packAnswers[Object.keys(packAnswers).pop()]?.timestamp || null
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              // Ignorar erros de permissão
+            }
+          }
+          
+          // Ordenar por data (mais recentes primeiro) ou por nome
+          allUserAnswers.sort((a, b) => {
+            if (a.lastUpdated && b.lastUpdated) {
+              const dateA = a.lastUpdated?.toDate ? a.lastUpdated.toDate() : new Date(a.lastUpdated);
+              const dateB = b.lastUpdated?.toDate ? b.lastUpdated.toDate() : new Date(b.lastUpdated);
+              return dateB - dateA;
+            }
+            return a.userName.localeCompare(b.userName);
+          });
+          
+          console.log(`✅ ${allUserAnswers.length} packs individuais encontrados`);
+        }
+        
+        // Aplicar filtros
+        let filtered = [...allUserAnswers];
+        
+        if (packFilter) {
+          filtered = filtered.filter(item => item.packId === packFilter);
+        }
+        
+        if (genderFilter) {
+          if (genderFilter === 'outro') {
+            // "Outro" inclui qualquer coisa que não seja M ou F
+            filtered = filtered.filter(item => item.userGender && item.userGender !== 'M' && item.userGender !== 'F');
+          } else {
+            filtered = filtered.filter(item => item.userGender === genderFilter);
+          }
+        }
+        
+        if (userFilter) {
+          filtered = filtered.filter(item => 
+            item.userName.toLowerCase().includes(userFilter) ||
+            item.userEmail.toLowerCase().includes(userFilter)
+          );
+        }
+        
+        // Estatísticas
+        const packStats = {};
+        let totalAnswers = 0;
+        let totalComments = 0;
+        
+        allUserAnswers.forEach(item => {
+          packStats[item.packId] = (packStats[item.packId] || 0) + 1;
+          totalAnswers += item.answerCount;
+          totalComments += item.commentsCount || 0;
+        });
+        
+        const packInfo = {
+          'romantico': { icon: '💕', name: 'Romântico', color: '#e91e63' },
+          'experiencia': { icon: '🌍', name: 'Exploração', color: '#ff9800' },
+          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336' },
+          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0' },
+          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7' }
+        };
+        
+        statsContainer.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 12px; text-align: center; color: white;">
+              <div style="font-size: 1.8em; font-weight: 700;">${allUserAnswers.length}</div>
+              <div style="font-size: 0.8em; opacity: 0.9;">Packs Preenchidos</div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.8em; font-weight: 700; color: #28a745;">${totalAnswers.toLocaleString('pt-PT')}</div>
+              <div style="font-size: 0.8em; color: #6c757d;">Total Respostas</div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid #ffc107;">
+              <div style="font-size: 1.8em; font-weight: 700; color: #856404;">${totalComments.toLocaleString('pt-PT')}</div>
+              <div style="font-size: 0.8em; color: #6c757d;">💬 Comentários</div>
+            </div>
+            ${Object.keys(packStats).map(pid => {
+              const info = packInfo[pid] || { icon: '📋', name: pid, color: '#6c757d' };
+              return `
+                <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid ${info.color};">
+                  <div style="font-size: 1.5em; font-weight: 700; color: ${info.color};">${packStats[pid]}</div>
+                  <div style="font-size: 0.75em; color: #6c757d;">${info.icon} ${info.name}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        
+        // Renderizar lista
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 50px; color: #6c757d;">
+              <div style="font-size: 3em; margin-bottom: 15px;">🔍</div>
+              <h3>Nenhum resultado encontrado</h3>
+              <p>Tente ajustar os filtros.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let html = `<div style="display: grid; gap: 12px;">`;
+        
+        filtered.forEach((item, idx) => {
+          const info = packInfo[item.packId] || { icon: '📋', name: item.packId, color: '#6c757d' };
+          const maskedEmail = maskEmail(item.userEmail);
+          const genderIcon = item.userGender === 'M' ? '♂️' : item.userGender === 'F' ? '♀️' : item.userGender ? '⚧️' : '';
+          
+          html += `
+            <div class="answer-card" style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; cursor: pointer; border-left: 4px solid ${info.color};"
+                 onclick="showUserPackAnswers('${item.oderId}', '${item.packId}')"
+                 onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 45px; height: 45px; background: linear-gradient(135deg, ${info.color}22, ${info.color}44); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4em;">
+                  ${info.icon}
+                </div>
+                <div>
+                  <div style="font-weight: 600; color: #333; margin-bottom: 3px;">${genderIcon} ${item.userName}</div>
+                  <div style="font-size: 0.85em; color: #6c757d;" title="${item.userEmail}">${maskedEmail}</div>
+                </div>
+              </div>              <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="text-align: right;">
+                  <div style="font-size: 0.85em; color: ${info.color}; font-weight: 600;">${info.name}</div>
+                  <div style="font-size: 0.8em; color: #6c757d;">
+                    ${item.answerCount} respostas
+                    ${item.commentsCount > 0 ? `<span style="margin-left: 8px; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 8px; font-size: 0.85em; font-weight: 600;">💬 ${item.commentsCount}</span>` : ''}
+                  </div>
+                </div>
+                <div style="color: #667eea; font-size: 1.2em;">▶</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+        container.innerHTML = html;
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar respostas individuais:', error);
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #dc3545;">
+            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+            <p>Erro ao carregar dados: ${error.message}</p>
           </div>
         `;
       }
     }
     
+    async function showUserPackAnswers(userId, packId) {
+      const modal = document.getElementById('answersModal');
+      const content = document.getElementById('answersModalContent');
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      
+      content.innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+          <p>A carregar respostas...</p>
+        </div>
+      `;
+      
+      try {
+        // Buscar dados do utilizador
+        const userDoc = await db.collection('users').doc(userId).get();
+        const userData = userDoc.exists ? userDoc.data() : {};
+        const userName = userData.name || userData.displayName || userData.username || userData.email?.split('@')[0] || 'Utilizador';
+        
+        // Buscar respostas
+        const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
+        const allAnswers = answersDoc.exists ? answersDoc.data() : {};
+        const packAnswers = allAnswers[packId] || {};
+        
+        // DEBUG: Ver estrutura dos dados
+        console.log('📊 DEBUG - Estrutura das respostas:');
+        console.log('packAnswers:', packAnswers);
+        if (Object.keys(packAnswers).length > 0) {
+          const firstKey = Object.keys(packAnswers)[0];
+          console.log('Exemplo de resposta (primeira):', firstKey, packAnswers[firstKey]);
+          console.log('Tem comment?', packAnswers[firstKey]?.comment);
+        }
+        
+        // Buscar dados do pack
+        const packInfo = {
+          'romantico': { icon: '💕', name: 'Pack Romântico', color: '#e91e63', colorKey: 'romantico' },
+          'experiencia': { icon: '🌍', name: 'Exploração e Aventura', color: '#ff9800', colorKey: 'experiencia' },
+          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336', colorKey: 'pimentinha' },
+          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0', colorKey: 'poliamor' },
+          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7', colorKey: 'kinks' }
+        };
+        
+        const info = packInfo[packId] || { icon: '📋', name: packId, color: '#667eea', colorKey: packId };
+        
+        // Buscar perguntas do pack
+        const packData = packQuestionsData?.find(p => p.color === info.colorKey);
+        const allQuestions = packData?.categories?.flatMap(cat => cat.questions) || [];
+        
+        // Ordenar respostas por ordem da pergunta
+        const sortedAnswers = Object.entries(packAnswers).sort((a, b) => {
+          const numA = parseInt(a[0].replace('q', ''));
+          const numB = parseInt(b[0].replace('q', ''));
+          return numA - numB;
+        });
+        
+        // Contar tipos de resposta
+        const answerCounts = { porfavor: 0, yup: 0, talvez: 0, meh: 0 };
+        sortedAnswers.forEach(([key, val]) => {
+          const ans = val.answer;
+          if (answerCounts[ans] !== undefined) answerCounts[ans]++;
+        });
+        
+        const answerLabels = {
+          porfavor: { label: 'Por favor! 🤩', color: '#28a745', bg: '#d4edda' },
+          yup: { label: 'Sim! 😊', color: '#17a2b8', bg: '#d1ecf1' },
+          talvez: { label: 'Talvez 🤔', color: '#ffc107', bg: '#fff3cd' },
+          meh: { label: 'Não, obrigado 😅', color: '#dc3545', bg: '#f8d7da' }
+        };
+        
+        let html = `
+          <div style="padding: 25px; border-bottom: 1px solid #eee; background: linear-gradient(135deg, ${info.color}15, ${info.color}05);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h2 style="margin: 0 0 8px 0; color: #333;">
+                  ${info.icon} ${info.name}
+                </h2>
+                <p style="margin: 0; color: #6c757d;">
+                  <strong>${userName}</strong> • ${sortedAnswers.length} respostas
+                </p>
+              </div>
+              <button onclick="closeAnswersModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #6c757d; padding: 5px;">✕</button>
+            </div>
+          </div>
+          
+          <div style="padding: 20px; background: #f8f9fa;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              ${Object.entries(answerCounts).map(([key, count]) => {
+                const labelInfo = answerLabels[key];
+                return `
+                  <div style="background: ${labelInfo.bg}; padding: 12px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 1.3em; font-weight: 700; color: ${labelInfo.color};">${count}</div>
+                    <div style="font-size: 0.75em; color: ${labelInfo.color};">${labelInfo.label}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div style="padding: 20px; max-height: 400px; overflow-y: auto;">
+        `;
+        
+        // Contar comentários
+        const commentsCount = sortedAnswers.filter(([key, val]) => val.comment && val.comment.trim()).length;
+        
+        if (commentsCount > 0) {
+          html += `
+            <div style="background: #e8f4fd; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.2em;">💬</span>
+              <span style="color: #1976d2; font-weight: 500;">${commentsCount} resposta${commentsCount > 1 ? 's' : ''} com comentário</span>
+            </div>
+          `;
+        }
+        
+        sortedAnswers.forEach(([qKey, answerData], idx) => {
+          const qIndex = parseInt(qKey.replace('q', '')) - 1;
+          const questionText = allQuestions[qIndex] || `Pergunta ${qIndex + 1}`;
+          const answer = answerData.answer;
+          const comment = answerData.comment?.trim() || '';
+          const labelInfo = answerLabels[answer] || { label: answer, color: '#6c757d', bg: '#f8f9fa' };
+          
+          html += `
+            <div style="padding: 12px 15px; margin-bottom: 10px; background: white; border-radius: 10px; border-left: 3px solid ${labelInfo.color}; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;">
+                <div style="flex: 1;">
+                  <span style="color: #999; font-size: 0.8em; margin-right: 8px;">#${qIndex + 1}</span>
+                  <span style="color: #333;">${questionText}</span>
+                </div>
+                <span style="background: ${labelInfo.bg}; color: ${labelInfo.color}; padding: 4px 10px; border-radius: 15px; font-size: 0.8em; font-weight: 600; white-space: nowrap;">
+                  ${labelInfo.label}
+                </span>
+              </div>
+              ${comment ? `
+                <div style="margin-top: 10px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #667eea;">
+                  <div style="display: flex; align-items: flex-start; gap: 8px;">
+                    <span style="color: #667eea; font-size: 1em;">💬</span>
+                    <div style="flex: 1;">
+                      <div style="font-size: 0.75em; color: #667eea; font-weight: 600; margin-bottom: 4px;">Comentário do utilizador:</div>
+                      <div style="color: #495057; font-size: 0.9em; font-style: italic; line-height: 1.4;">"${comment}"</div>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        html += `
+          </div>
+          <div style="padding: 20px; border-top: 1px solid #eee; text-align: center;">
+            <button onclick="closeAnswersModal()" style="padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+              Fechar
+            </button>
+          </div>
+        `;
+        
+        content.innerHTML = html;
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar respostas:', error);
+        content.innerHTML = `
+          <div style="padding: 40px; text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+            <p style="color: #dc3545;">Erro ao carregar respostas: ${error.message}</p>
+            <button onclick="closeAnswersModal()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
+              Fechar
+            </button>
+          </div>
+        `;
+      }
+    }
+    
+    function closeAnswersModal() {
+      document.getElementById('answersModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    // Fechar modal ao clicar fora
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('answersModal');
+      if (e.target === modal) {
+        closeAnswersModal();
+      }
+    });
+    
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('answersModal');
+        if (modal && modal.style.display !== 'none') {
+          closeAnswersModal();
+        }
+      }
+    });
+    
     function resetPartialReportFilters() {
       document.getElementById('filterPartialPack').value = '';
-      document.getElementById('filterPartialPeriod').value = '';
-      loadPartialReportsWithFilters();
+      document.getElementById('filterPartialGender').value = '';
+      document.getElementById('filterPartialUser').value = '';
+      loadIndividualAnswers();
     }
     
     // ===========================
@@ -1330,16 +1746,18 @@
     function loadQuestionAnalyticsWithFilters() {
       const packId = document.getElementById('filterQuestionPack').value;
       const minResponses = parseInt(document.getElementById('filterMinResponses').value) || 0;
+      const sortBy = document.getElementById('filterQuestionSort')?.value || 'responses';
       
       // Call function from admin-analytics.js
       if (typeof loadQuestionAnalytics === 'function') {
-        loadQuestionAnalytics(packId, minResponses);
+        loadQuestionAnalytics(packId, minResponses, sortBy);
       }
     }
     
     function resetQuestionFilters() {
       document.getElementById('filterQuestionPack').value = '';
       document.getElementById('filterMinResponses').value = '0';
+      document.getElementById('filterQuestionSort').value = 'responses';
       loadQuestionAnalyticsWithFilters();
     }
     
@@ -1363,16 +1781,13 @@
           console.log('✅ Utilizadores carregados:', allUsers.length);
         
         // Update dashboard stats
-        updateDashboardStats();
+        await updateDashboardStats();
         
         // Load users table
         loadUsersTable();
         
         // Check users without username
         await checkUsersWithoutUsername();
-        
-        // Load reports stats
-        loadReportsStats();
         
         // Load activity log
         loadActivityLog();
@@ -1407,7 +1822,7 @@ ${error.stack || 'Sem stack trace'}
     // ===========================
     // DASHBOARD STATS
     // ===========================
-    function updateDashboardStats() {
+    async function updateDashboardStats() {
       // Total users
       document.getElementById('totalUsers').textContent = allUsers.length;
       
@@ -1433,76 +1848,280 @@ ${error.stack || 'Sem stack trace'}
       const countries = new Set(allUsers.filter(u => u.country).map(u => u.country));
       document.getElementById('totalCountries').textContent = countries.size;
       
-      // Active couples (users with connections)
-      const couplesCount = Math.floor(allUsers.length / 2); // Simplified
-      document.getElementById('activeCouples').textContent = couplesCount;
-      
-      // Reports (estimated)
-      const reportsCount = Math.floor(allUsers.length * 1.5);
-      document.getElementById('totalReports').textContent = reportsCount;
+      // Buscar dados reais do Firestore
+      try {
+        const db = firebase.firestore();
+        
+        // === CONEXÕES ATIVAS (casais) ===
+        const connectionsSnapshot = await db.collection('connections').get();
+        document.getElementById('activeCouples').textContent = connectionsSnapshot.size;
+        
+        // === RELATÓRIOS ===
+        const reportsSnapshot = await db.collection('analytics_full_reports').get();
+        const totalReports = reportsSnapshot.size;
+        document.getElementById('totalReports').textContent = totalReports;
+        
+        // Relatórios hoje e esta semana
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const weekStart = new Date(todayStart);
+        weekStart.setDate(weekStart.getDate() - 7);
+        
+        let reportsToday = 0;
+        let reportsWeek = 0;
+        
+        reportsSnapshot.forEach(doc => {
+          const data = doc.data();
+          const timestamp = data.timestamp?.toDate();
+          if (timestamp) {
+            if (timestamp >= todayStart) reportsToday++;
+            if (timestamp >= weekStart) reportsWeek++;
+          }
+        });
+        
+        document.getElementById('reportsToday').textContent = reportsToday;
+        document.getElementById('reportsWeek').textContent = reportsWeek;
+        
+        // Média de relatórios por casal
+        const avgReports = connectionsSnapshot.size > 0 
+          ? (totalReports / connectionsSnapshot.size).toFixed(1) 
+          : '0';
+        document.getElementById('reportsAvg').textContent = avgReports;
+        
+        // === TOTAL DE RESPOSTAS ===
+        // Contar todas as respostas de todos os utilizadores
+        let totalAnswers = 0;
+        let usersWithAnswers = 0;
+        
+        console.log('📊 A contar respostas de', allUsers.length, 'utilizadores...');
+        
+        for (const user of allUsers) {
+          try {
+            const answersDoc = await db.collection('users').doc(user.id).collection('answers').doc('all').get();
+            if (answersDoc.exists) {
+              const answersData = answersDoc.data() || {};
+              let userTotal = 0;
+              // Contar respostas em cada pack
+              Object.values(answersData).forEach(packAnswers => {
+                if (packAnswers && typeof packAnswers === 'object') {
+                  userTotal += Object.keys(packAnswers).length;
+                }
+              });
+              if (userTotal > 0) {
+                totalAnswers += userTotal;
+                usersWithAnswers++;
+              }
+            }
+          } catch (e) {
+            // Ignorar erros de permissão em utilizadores individuais
+          }
+        }
+        
+        console.log(`✅ Total de respostas: ${totalAnswers} de ${usersWithAnswers} utilizadores com respostas`);
+        
+        document.getElementById('totalAnswers').textContent = totalAnswers.toLocaleString('pt-PT');
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas:', error);
+        // Mostrar valores de fallback
+        document.getElementById('activeCouples').textContent = '-';
+        document.getElementById('totalReports').textContent = '-';
+        document.getElementById('reportsToday').textContent = '-';
+        document.getElementById('reportsWeek').textContent = '-';
+        document.getElementById('reportsAvg').textContent = '-';
+        document.getElementById('totalAnswers').textContent = '-';
+      }
     }
     
     // ===========================
-    // USERS TABLE
+    // USERS TABLE - Com Paginação
     // ===========================
+    let currentPage = 1;
+    const usersPerPage = 20;
+    let filteredUsers = [];
+    
+    // Função para mascarar email parcialmente
+    function maskEmail(email) {
+      if (!email || email === '-') return '-';
+      
+      const parts = email.split('@');
+      if (parts.length !== 2) return email;
+      
+      const [localPart, domain] = parts;
+      
+      // Mascarar parte local do email
+      let maskedLocal;
+      if (localPart.length <= 2) {
+        maskedLocal = localPart[0] + '*';
+      } else if (localPart.length <= 4) {
+        maskedLocal = localPart[0] + '**' + localPart.slice(-1);
+      } else {
+        // Mostrar primeiros 2 caracteres e último, mascarar o resto
+        const visibleStart = localPart.slice(0, 2);
+        const visibleEnd = localPart.slice(-1);
+        const maskedLength = Math.min(localPart.length - 3, 5);
+        maskedLocal = visibleStart + '*'.repeat(maskedLength) + visibleEnd;
+      }
+      
+      // Mascarar domínio parcialmente
+      const domainParts = domain.split('.');
+      let maskedDomain;
+      if (domainParts.length >= 2) {
+        const domainName = domainParts[0];
+        const extension = domainParts.slice(1).join('.');
+        if (domainName.length <= 3) {
+          maskedDomain = domainName[0] + '*' + '.' + extension;
+        } else {
+          maskedDomain = domainName[0] + '**' + domainName.slice(-1) + '.' + extension;
+        }
+      } else {
+        maskedDomain = domain;
+      }
+      
+      return maskedLocal + '@' + maskedDomain;
+    }
+    
     function loadUsersTable() {
       const loadingUsers = document.getElementById('loadingUsers');
       const tableContainer = document.getElementById('usersTableContainer');
-      const tbody = document.getElementById('usersTableBody');
-      
-      tbody.innerHTML = '';
       
       // Populate country filter
       const countries = new Set(allUsers.filter(u => u.country).map(u => u.country));
       const countrySelect = document.getElementById('filterCountry');
       countrySelect.innerHTML = '<option value="">Todos</option>';
-      countries.forEach(country => {
+      Array.from(countries).sort().forEach(country => {
         countrySelect.innerHTML += `<option value="${country}">${country}</option>`;
       });
       
-      if (allUsers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum utilizador encontrado.</td></tr>';
-      } else {
-        allUsers.forEach(user => {
-          const row = createUserRow(user);
-          tbody.appendChild(row);
-        });
-      }
+      // Inicializar lista filtrada com todos os users
+      filteredUsers = [...allUsers];
+      currentPage = 1;
+      
+      renderUsersPage();
       
       loadingUsers.style.display = 'none';
       tableContainer.style.display = 'block';
     }
     
+    function renderUsersPage() {
+      const tbody = document.getElementById('usersTableBody');
+      tbody.innerHTML = '';
+      
+      if (filteredUsers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum utilizador encontrado.</td></tr>';
+        updatePaginationInfo(0, 0, 0);
+        return;
+      }
+      
+      // Calcular índices da página
+      const startIndex = (currentPage - 1) * usersPerPage;
+      const endIndex = Math.min(startIndex + usersPerPage, filteredUsers.length);
+      const pageUsers = filteredUsers.slice(startIndex, endIndex);
+      
+      // Renderizar apenas os users da página atual
+      pageUsers.forEach(user => {
+        const row = createUserRow(user);
+        tbody.appendChild(row);
+      });
+      
+      // Atualizar info de paginação
+      updatePaginationInfo(startIndex + 1, endIndex, filteredUsers.length);
+    }
+    
+    function updatePaginationInfo(start, end, total) {
+      const totalPages = Math.ceil(total / usersPerPage);
+      const paginationDiv = document.getElementById('paginationControls');
+      
+      if (!paginationDiv) return;
+      
+      paginationDiv.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-top: 15px;">
+          <span style="color: #6c757d;">
+            A mostrar <strong>${start}-${end}</strong> de <strong>${total}</strong> utilizadores
+          </span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button onclick="goToPage(1)" ${currentPage === 1 ? 'disabled' : ''} 
+                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px; background: ${currentPage === 1 ? '#e9ecef' : 'white'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'};">
+              ⏮️ Primeira
+            </button>
+            <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} 
+                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px; background: ${currentPage === 1 ? '#e9ecef' : 'white'}; cursor: ${currentPage === 1 ? 'not-allowed' : 'pointer'};">
+              ◀️ Anterior
+            </button>
+            <span style="padding: 8px 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 6px; font-weight: 600;">
+              ${currentPage} / ${totalPages || 1}
+            </span>
+            <button onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''} 
+                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px; background: ${currentPage >= totalPages ? '#e9ecef' : 'white'}; cursor: ${currentPage >= totalPages ? 'not-allowed' : 'pointer'};">
+              Seguinte ▶️
+            </button>
+            <button onclick="goToPage(${totalPages})" ${currentPage >= totalPages ? 'disabled' : ''} 
+                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px; background: ${currentPage >= totalPages ? '#e9ecef' : 'white'}; cursor: ${currentPage >= totalPages ? 'not-allowed' : 'pointer'};">
+              Última ⏭️
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    
+    function goToPage(page) {
+      const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+      if (page < 1 || page > totalPages) return;
+      currentPage = page;
+      renderUsersPage();
+    }
+    
     function createUserRow(user) {
       const tr = document.createElement('tr');
+      tr.setAttribute('data-user-id', user.id);
+      tr.setAttribute('data-gender', user.gender || '');
+      tr.setAttribute('data-country', user.country || '');
       
       const createdAt = user.createdAt?.toDate();
       const lastLogin = user.lastLogin?.toDate();
       
       const createdStr = createdAt ? createdAt.toLocaleDateString('pt-PT') + ' ' + createdAt.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'}) : '-';
       const loginStr = lastLogin ? lastLogin.toLocaleDateString('pt-PT') + ' ' + lastLogin.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'}) : '-';
-        const genderBadge = user.gender === 'M' ? 
-        '<span class="badge badge-male">♂️ Masculino</span>' :
-        user.gender === 'F' ?
-        '<span class="badge badge-female">♀️ Feminino</span>' :
-        '<span class="badge badge-other">⚧️ Outro</span>';
+      
+      // Género com possibilidade de edição se não definido ou "outro"
+      let genderCell;
+      if (user.gender === 'M') {
+        genderCell = '<span class="badge badge-male">♂️ Masculino</span>';
+      } else if (user.gender === 'F') {
+        genderCell = '<span class="badge badge-female">♀️ Feminino</span>';
+      } else {
+        // Sem género ou "outro" - mostrar botão para editar
+        genderCell = `
+          <div style="display: flex; align-items: center; gap: 5px;">
+            <span class="badge badge-other">⚧️ ${user.gender === 'outro' ? 'Outro' : 'N/D'}</span>
+            <button onclick="showGenderEdit('${user.id}')" 
+                    style="padding: 4px 8px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.75em;" 
+                    title="Editar género">
+              ✏️
+            </button>
+          </div>
+        `;
+      }
       
       const usernameBadge = user.username ? 
         `<span style="color: #667eea; font-weight: 500;">@${user.username}</span>` :
         '<span style="color: #dc3545; font-size: 0.85em;">❌ Sem username</span>';
       
+      // Mascarar email para privacidade
+      const maskedEmail = maskEmail(user.email);
+      
       tr.innerHTML = `
-        <td><span class="user-email">${user.email || '-'}</span></td>
+        <td><span class="user-email" title="${user.email || ''}">${maskedEmail}</span></td>
         <td>${user.name || '-'}</td>
         <td>${usernameBadge}</td>
-        <td>${genderBadge}</td>
+        <td id="gender-cell-${user.id}">${genderCell}</td>
         <td>${user.ageRange || '-'}</td>
         <td>${user.country || '-'}</td>
         <td>${user.city || '-'}</td>
         <td>${createdStr}</td>
         <td>${loginStr}</td>
         <td>
-          <button onclick="deleteUser('${user.id}', '${user.email}')" 
+          <button onclick="deleteUser('${user.id}', '${maskEmail(user.email)}')" 
                   style="padding: 6px 12px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; transition: all 0.2s;"
                   onmouseover="this.style.background='#c82333'" 
                   onmouseout="this.style.background='#dc3545'"
@@ -1516,52 +2135,142 @@ ${error.stack || 'Sem stack trace'}
     }
     
     // ===========================
-    // FILTERS
+    // FILTERS - Corrigido
     // ===========================
     function filterUsers() {
-      const searchTerm = document.getElementById('searchUser').value.toLowerCase();
+      const searchTerm = document.getElementById('searchUser').value.toLowerCase().trim();
       const genderFilter = document.getElementById('filterGender').value;
       const countryFilter = document.getElementById('filterCountry').value;
       
-      const rows = document.querySelectorAll('#usersTableBody tr');
-      
-      rows.forEach(row => {
-        const cells = row.cells;
-        if (!cells || cells.length === 0) return;
+      // Filtrar a lista de utilizadores (não as linhas da tabela)
+      filteredUsers = allUsers.filter(user => {
+        // Filtro de pesquisa (nome ou email)
+        const matchSearch = !searchTerm || 
+          (user.email && user.email.toLowerCase().includes(searchTerm)) ||
+          (user.name && user.name.toLowerCase().includes(searchTerm)) ||
+          (user.username && user.username.toLowerCase().includes(searchTerm));
         
-        const email = cells[0].textContent.toLowerCase();
-        const name = cells[1].textContent.toLowerCase();
-        const gender = cells[2].textContent;
-        const country = cells[4].textContent;
+        // Filtro de género (inclui "nd" para não definido)
+        let matchGender = !genderFilter;
+        if (genderFilter === 'nd') {
+          // Filtrar utilizadores sem género definido
+          matchGender = !user.gender || user.gender === '';
+        } else if (genderFilter) {
+          matchGender = user.gender === genderFilter;
+        }
         
-        const matchSearch = !searchTerm || email.includes(searchTerm) || name.includes(searchTerm);
-        const matchGender = !genderFilter || 
-          (genderFilter === 'M' && gender.includes('Masculino')) ||
-          (genderFilter === 'F' && gender.includes('Feminino')) ||
-          (genderFilter === 'outro' && gender.includes('Outro'));
-        const matchCountry = !countryFilter || country === countryFilter;
+        // Filtro de país
+        const matchCountry = !countryFilter || user.country === countryFilter;
         
-        row.style.display = matchSearch && matchGender && matchCountry ? '' : 'none';
+        return matchSearch && matchGender && matchCountry;
       });
+      
+      // Voltar à primeira página e re-renderizar
+      currentPage = 1;
+      renderUsersPage();
     }
     
     function resetFilters() {
       document.getElementById('searchUser').value = '';
       document.getElementById('filterGender').value = '';
       document.getElementById('filterCountry').value = '';
-      filterUsers();
+      filteredUsers = [...allUsers];
+      currentPage = 1;
+      renderUsersPage();
     }
     
     // ===========================
-    // SORT USERS TABLE
+    // EDIT GENDER
+    // ===========================
+    function showGenderEdit(userId) {
+      const cell = document.getElementById(`gender-cell-${userId}`);
+      if (!cell) return;
+      
+      cell.innerHTML = `
+        <select id="gender-select-${userId}" style="padding: 6px 10px; border: 2px solid #667eea; border-radius: 6px; font-size: 0.9em;">
+          <option value="">Selecionar...</option>
+          <option value="M">♂️ Masculino</option>
+          <option value="F">♀️ Feminino</option>
+          <option value="outro">⚧️ Outro</option>
+        </select>
+        <button onclick="saveGender('${userId}')" 
+                style="padding: 6px 10px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 5px;">
+          ✓
+        </button>
+        <button onclick="cancelGenderEdit('${userId}')" 
+                style="padding: 6px 10px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 3px;">
+          ✕
+        </button>
+      `;
+    }
+    
+    async function saveGender(userId) {
+      const select = document.getElementById(`gender-select-${userId}`);
+      const newGender = select?.value;
+      
+      if (!newGender) {
+        alert('Por favor seleciona um género.');
+        return;
+      }
+      
+      try {
+        // Atualizar no Firestore
+        await db.collection('users').doc(userId).update({
+          gender: newGender
+        });
+        
+        // Atualizar na lista local
+        const userIndex = allUsers.findIndex(u => u.id === userId);
+        if (userIndex !== -1) {
+          allUsers[userIndex].gender = newGender;
+        }
+        
+        // Atualizar na lista filtrada
+        const filteredIndex = filteredUsers.findIndex(u => u.id === userId);
+        if (filteredIndex !== -1) {
+          filteredUsers[filteredIndex].gender = newGender;
+        }
+        
+        // Re-renderizar a página atual
+        renderUsersPage();
+        
+        // Atualizar stats do dashboard
+        updateDashboardStats();
+        
+        console.log(`✅ Género do utilizador ${userId} atualizado para ${newGender}`);
+        
+      } catch (error) {
+        console.error('Erro ao atualizar género:', error);
+        alert('❌ Erro ao atualizar género: ' + error.message);
+      }
+    }
+    
+    function cancelGenderEdit(userId) {
+      // Re-renderizar para voltar ao estado original
+      renderUsersPage();
+    }
+    
+    // ===========================
+    // SORT USERS TABLE - Ordenar a lista filtrada
     // ===========================
     let currentSortColumn = -1;
     let currentSortOrder = 'asc';
     
+    // Mapeamento de colunas para propriedades do objeto user
+    const columnMapping = {
+      0: 'email',
+      1: 'name',
+      2: 'username',
+      3: 'gender',
+      4: 'ageRange',
+      5: 'country',
+      6: 'city',
+      7: 'createdAt',
+      8: 'lastLogin'
+    };
+    
     function sortUsersTable(columnIndex, type) {
       const table = document.getElementById('usersTable');
-      const tbody = document.getElementById('usersTableBody');
-      const rows = Array.from(tbody.querySelectorAll('tr'));
       const headers = table.querySelectorAll('th.sortable');
       
       // Determinar a ordem (toggle entre asc e desc)
@@ -1587,46 +2296,36 @@ ${error.stack || 'Sem stack trace'}
         if (icon) icon.textContent = currentSortOrder === 'asc' ? '↑' : '↓';
       }
       
-      // Ordenar as linhas
-      rows.sort((a, b) => {
-        let aValue = a.cells[columnIndex]?.textContent.trim() || '';
-        let bValue = b.cells[columnIndex]?.textContent.trim() || '';
+      // Obter a propriedade a ordenar
+      const property = columnMapping[columnIndex];
+      
+      // Ordenar a lista filtrada
+      filteredUsers.sort((a, b) => {
+        let aValue = a[property];
+        let bValue = b[property];
         
-        // Tratar valores vazios ou "-"
-        if (aValue === '-' || aValue === '') aValue = currentSortOrder === 'asc' ? 'zzz' : '';
-        if (bValue === '-' || bValue === '') bValue = currentSortOrder === 'asc' ? 'zzz' : '';
-        
-        let comparison = 0;
-        
+        // Tratar timestamps do Firestore
         if (type === 'date') {
-          // Converter datas portuguesas (DD/MM/YYYY HH:MM) para comparação
-          const parseDate = (str) => {
-            if (!str || str === '-' || str === 'zzz') return currentSortOrder === 'asc' ? new Date(9999, 11, 31) : new Date(0);
-            const parts = str.match(/(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})?:?(\d{2})?/);
-            if (parts) {
-              return new Date(parts[3], parts[2] - 1, parts[1], parts[4] || 0, parts[5] || 0);
-            }
-            return new Date(0);
-          };
+          aValue = aValue?.toDate ? aValue.toDate() : (aValue || new Date(0));
+          bValue = bValue?.toDate ? bValue.toDate() : (bValue || new Date(0));
           
-          const dateA = parseDate(aValue);
-          const dateB = parseDate(bValue);
-          comparison = dateA - dateB;
-        } else {
-          // Ordenação de strings (case insensitive)
-          aValue = aValue.toLowerCase();
-          bValue = bValue.toLowerCase();
-          comparison = aValue.localeCompare(bValue, 'pt');
+          const comparison = aValue - bValue;
+          return currentSortOrder === 'asc' ? comparison : -comparison;
         }
         
+        // Tratar valores nulos/undefined
+        aValue = aValue || '';
+        bValue = bValue || '';
+        
+        // Ordenação de strings (case insensitive)
+        const comparison = aValue.toString().toLowerCase().localeCompare(bValue.toString().toLowerCase(), 'pt');
         return currentSortOrder === 'asc' ? comparison : -comparison;
       });
       
-      // Limpar e re-adicionar as linhas ordenadas
-      tbody.innerHTML = '';
-      rows.forEach(row => tbody.appendChild(row));
+      // Re-renderizar a página atual
+      renderUsersPage();
       
-      console.log(`📊 Tabela ordenada por coluna ${columnIndex} (${type}) - ${currentSortOrder}`);
+      console.log(`📊 Lista ordenada por ${property} - ${currentSortOrder}`);
     }
     
     // ===========================
@@ -1718,44 +2417,6 @@ ${error.stack || 'Sem stack trace'}
     }
     
     // ===========================
-    // REPORTS STATS
-    // ===========================
-    function loadReportsStats() {
-      // Simplified stats (in real app, fetch from reports collection)
-      const total = Math.floor(allUsers.length * 1.5);
-      const today = Math.floor(Math.random() * 10);
-      const week = Math.floor(Math.random() * 50);
-      const avg = (total / Math.max(1, allUsers.length / 2)).toFixed(1);
-      
-      document.getElementById('reportsTotal').textContent = total;
-      document.getElementById('reportsToday').textContent = today;
-      document.getElementById('reportsWeek').textContent = week;
-      document.getElementById('reportsAvg').textContent = avg;
-      
-      // Pack stats (mock data)
-      const packStatsDiv = document.getElementById('packStats');
-      packStatsDiv.innerHTML = `
-        <div style="display: grid; gap: 15px;">
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-            <span>🌶️ Pimentinha</span>
-            <strong>${Math.floor(allUsers.length * 0.8)} respostas</strong>
-          </div>
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-            <span>🎭 Fetiches</span>
-            <strong>${Math.floor(allUsers.length * 0.6)} respostas</strong>
-          </div>
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-            <span>💑 Experiências a Dois</span>
-            <strong>${Math.floor(allUsers.length * 0.7)} respostas</strong>
-          </div>
-          <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between;">
-            <span>👫 Poliamor & Swing</span>
-            <strong>${Math.floor(allUsers.length * 0.4)} respostas</strong>
-          </div>
-        </div>
-      `;
-    }
-      // ===========================
     // ACTIVITY LOG
     // ===========================
     async function loadActivityLog() {
@@ -1896,6 +2557,54 @@ ${error.stack || 'Sem stack trace'}
       
       console.log('📊 Total de atividades:', allActivity.length);
       
+      // Calcular estatísticas por tipo
+      const activityCounts = {
+        register: allActivity.filter(a => a.type === 'register').length,
+        login: allActivity.filter(a => a.type === 'login').length,
+        answer: allActivity.filter(a => a.type === 'answer').length,
+        report: allActivity.filter(a => a.type === 'report').length,
+        connection: allActivity.filter(a => a.type === 'connection').length
+      };
+      
+      // Atividades hoje
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayActivity = allActivity.filter(a => a.timestamp >= today).length;
+      
+      // Mostrar estatísticas
+      const statsContainer = document.getElementById('activityStats');
+      if (statsContainer) {
+        statsContainer.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; border-radius: 10px; text-align: center; color: white;">
+              <div style="font-size: 1.5em; font-weight: 700;">${allActivity.length}</div>
+              <div style="font-size: 0.75em; opacity: 0.9;">Total</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border-top: 3px solid #28a745;">
+              <div style="font-size: 1.5em; font-weight: 700; color: #28a745;">${todayActivity}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Hoje</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #17a2b8;">🆕 ${activityCounts.register}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Registos</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #6c757d;">🔓 ${activityCounts.login}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Logins</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #fd7e14;">✍️ ${activityCounts.answer}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Respostas</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #e91e63;">💑 ${activityCounts.connection}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Conexões</div>
+            </div>
+          </div>
+        `;
+        statsContainer.style.display = 'block';
+      }
+      
       // Show only last 100
       const recentActivity = allActivity.slice(0, 100);
       
@@ -1917,32 +2626,26 @@ ${error.stack || 'Sem stack trace'}
     function createActivityItem(activity) {
       const div = document.createElement('div');
       div.className = 'activity-item';
+      div.setAttribute('data-type', activity.type);
       
-      const typeIcons = {
-        register: '🆕',
-        login: '🔓',
-        answer: '✍️',
-        report: '📊',
-        connection: '💑'
+      const typeConfig = {
+        register: { icon: '🆕', label: 'Registo', color: '#17a2b8' },
+        login: { icon: '🔓', label: 'Login', color: '#6c757d' },
+        answer: { icon: '✍️', label: 'Resposta', color: '#fd7e14' },
+        report: { icon: '📊', label: 'Relatório', color: '#28a745' },
+        connection: { icon: '💑', label: 'Conexão', color: '#e91e63' }
       };
       
-      const typeLabels = {
-        register: 'Registo',
-        login: 'Login',
-        answer: 'Resposta',
-        report: 'Relatório',
-        connection: 'Conexão'
-      };
-      
-      const icon = typeIcons[activity.type] || '📝';
-      const label = typeLabels[activity.type] || activity.type;
+      const config = typeConfig[activity.type] || { icon: '📝', label: activity.type, color: '#667eea' };
       
       const timeStr = activity.timestamp.toLocaleDateString('pt-PT') + ' às ' + 
                       activity.timestamp.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
       
+      div.style.borderLeftColor = config.color;
+      
       div.innerHTML = `
         <div class="activity-header">
-          <div class="activity-type">${icon} ${label}</div>
+          <div class="activity-type" style="color: ${config.color};">${config.icon} ${config.label}</div>
           <div class="activity-time">${timeStr}</div>
         </div>
         <div class="activity-details">
@@ -1958,12 +2661,13 @@ ${error.stack || 'Sem stack trace'}
       const dateFilter = document.getElementById('filterActivityDate').value;
       
       const items = document.querySelectorAll('.activity-item');
+      let visibleCount = 0;
       
       items.forEach(item => {
-        const typeText = item.querySelector('.activity-type').textContent;
+        const itemType = item.getAttribute('data-type');
         const dateText = item.querySelector('.activity-time').textContent;
         
-        const matchType = !typeFilter || typeText.toLowerCase().includes(typeFilter);
+        const matchType = !typeFilter || itemType === typeFilter;
         
         let matchDate = true;
         if (dateFilter) {
@@ -1972,8 +2676,26 @@ ${error.stack || 'Sem stack trace'}
           matchDate = itemDate === filterDate;
         }
         
-        item.style.display = matchType && matchDate ? '' : 'none';
+        const visible = matchType && matchDate;
+        item.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
       });
+      
+      // Mostrar mensagem se não houver resultados
+      const activityLog = document.getElementById('activityLog');
+      const noResultsMsg = activityLog.querySelector('.no-results-msg');
+      
+      if (visibleCount === 0 && (typeFilter || dateFilter)) {
+        if (!noResultsMsg) {
+          const msg = document.createElement('div');
+          msg.className = 'no-results-msg';
+          msg.style.cssText = 'text-align: center; color: #6c757d; padding: 30px;';
+          msg.innerHTML = '🔍 Nenhuma atividade encontrada com os filtros selecionados.';
+          activityLog.appendChild(msg);
+        }
+      } else if (noResultsMsg) {
+        noResultsMsg.remove();
+      }
     }
     
     function resetActivityFilters() {

@@ -192,6 +192,61 @@
     </div>
   </div>
 
+  <!-- Edit Profile Modal -->
+  <div class="modal" id="editProfileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⚙️ <span data-i18n="dashboard.editProfile">Editar Perfil</span></h3>
+        <button class="modal-close" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm" onsubmit="saveProfileChanges(event)">
+          <div class="form-group">
+            <label for="editProfileName" data-i18n="auth.name">Nome</label>
+            <input type="text" id="editProfileName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="editProfileEmail">Email</label>
+            <input type="email" id="editProfileEmail" class="form-control" readonly style="background: #f5f5f5; cursor: not-allowed;">
+          </div>
+          <div class="form-group">
+            <label for="editProfileGender" data-i18n="auth.gender">Género</label>
+            <select id="editProfileGender" class="form-control" required>
+              <option value="">Selecionar...</option>
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+              <option value="nao-binario">Não-binário</option>
+              <option value="outro">Outro</option>
+              <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileAgeRange" data-i18n="auth.ageRange">Faixa Etária</label>
+            <select id="editProfileAgeRange" class="form-control" required>
+              <option value="">Selecionar...</option>
+              <option value="18-24">18-24 anos</option>
+              <option value="25-34">25-34 anos</option>
+              <option value="35-44">35-44 anos</option>
+              <option value="45-54">45-54 anos</option>
+              <option value="55+">55+ anos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileCountry" data-i18n="auth.country">País</label>
+            <select id="editProfileCountry" class="form-control" required>
+              <option value="">Selecionar país...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileCity" data-i18n="auth.city">Cidade</label>
+            <input type="text" id="editProfileCity" class="form-control" placeholder="Ex: Lisboa" required>
+          </div>
+          <button type="submit" class="btn-primary btn-full">💾 <span data-i18n="common.save">Guardar Alterações</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Reset Pack Modal -->
   <div class="modal" id="resetPackModal">
     <div class="modal-content modal-small">
