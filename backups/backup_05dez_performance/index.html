@@ -1,0 +1,1289 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest4Couple - Descubram juntos </title>
+    
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "u8hwuw3ixs");
+    </script>
+    
+    <!-- Meta Description -->
+    <meta name="description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita, privada e segura. 5 packs temáticos, 300 perguntas.">
+    <meta name="keywords" content="casal, relacionamento, compatibilidade, intimidade, fantasias, privacidade">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://quest4couple.pt/">
+    <meta property="og:title" content="Quest4Couple - Descubram-se melhor 💑">
+    <meta property="og:description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita, privada e segura. 5 packs temáticos, 300 perguntas.">
+    <meta property="og:image" content="https://quest4couple.pt/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://quest4couple.pt/">
+    <meta property="twitter:title" content="Quest4Couple - Descubram-se melhor 💑">
+    <meta property="twitter:description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita e privada.">
+    <meta property="twitter:image" content="https://quest4couple.pt/assets/og-image.jpg">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }          body {
+            font-family: 'Arial', sans-serif;
+            background: 
+                radial-gradient(circle at 15% 25%, rgba(214, 51, 132, 0.35) 0%, transparent 35%),
+                radial-gradient(circle at 85% 75%, rgba(111, 66, 193, 0.30) 0%, transparent 35%),
+                radial-gradient(circle at 50% 10%, rgba(38, 198, 218, 0.20) 0%, transparent 35%),
+                linear-gradient(135deg, #e8ecf0 0%, #d1d9e0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: 100px;
+        }        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15) !important; /* 85% transparente - MUITO transparente */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Safari */
+            padding: 15px 40px;
+            box-shadow: 0 2px 15px rgba(214, 51, 132, 0.08);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(214, 51, 132, 0.1);
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-section a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-section a:hover {
+            transform: scale(1.05);
+        }
+          .logo-section img {
+            height: 60px;
+            width: auto;
+        }
+        
+        /* Quest4You - Coming Soon styling */
+        .quest4you-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0.7;
+            cursor: default;
+            transition: opacity 0.3s ease;
+        }
+        
+        .quest4you-link:hover {
+            opacity: 0.85;
+            transform: none !important;
+        }
+        
+        .logo-separator {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #ddd, transparent);
+            margin: 0 20px;
+        }
+        
+        /* Esconder Quest4You em mobile */
+        @media (max-width: 900px) {
+            .logo-separator,
+            .quest4you-link {
+                display: none !important;
+            }
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .header-btn {
+            padding: 10px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .btn-login {
+            background: white;
+            color: #d63384;
+            border: 2px solid #d63384;
+        }
+        
+        .btn-login:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
+        }
+        
+        .btn-logout {
+            background: #dc3545 !important;
+            color: white !important;
+            border: 2px solid #dc3545 !important;
+        }
+        
+        .btn-logout:hover {
+            background: #c82333 !important;
+            transform: translateY(-2px);
+        }
+        
+        /* Estilos para o conteúdo abaixo do header */          .container {
+            max-width: 900px;
+            text-align: center;
+            margin-top: 20px; /* Reduzido - body já tem padding-top */
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .hero-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }          .hero-logo img {
+            height: 320px;
+            width: auto;
+            filter: drop-shadow(0 4px 12px rgba(214, 51, 132, 0.3));
+            animation: fadeInScale 0.8s ease-out;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-logo img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 16px rgba(214, 51, 132, 0.4));
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #d63384, #6f42c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        
+        .highlight {
+            color: #d63384;
+            font-weight: 600;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+        }        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+            align-items: stretch; /* Força todos os cards a terem a mesma altura */
+        }
+        
+        @media (max-width: 900px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (min-width: 901px) and (max-width: 1200px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr); /* Força 3 colunas mesmo em tablets */
+            }
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(214, 51, 132, 0.05), rgba(111, 66, 193, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(214, 51, 132, 0.2);
+            border-color: rgba(214, 51, 132, 0.3);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #d63384;
+            margin-bottom: 12px;
+        }
+        
+        .feature-text {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #26c6da, #6f42c1);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        footer {
+            margin-top: 80px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+        }
+        
+        footer a {
+            color: #d63384;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Tutorial Link */
+        .tutorial-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .tutorial-link:hover {
+            color: #764ba2;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: #d63384;
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .modal-header h2 {
+            color: #d63384;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .modal-header p {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #495057;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #d63384;
+            box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+        }
+        
+        .btn-modal {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
+        }
+        
+        .btn-modal:hover {
+            background: linear-gradient(135deg, #c1296d, #d63384);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+        }
+        
+        .modal-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .modal-footer a {
+            color: #d63384;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .modal-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-logout {
+            background: #dc3545 !important;
+            color: white !important;
+        }
+        
+        .btn-logout:hover {
+            background: #c82333 !important;
+        }        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .subtitle { font-size: 1.1em; }
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .container {
+                margin-top: 90px;
+            }              .hero-logo img {
+                height: 320px;
+            }
+              /* Header mobile */
+            .header {
+                padding: 10px 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .logo-section {
+                flex-direction: row;
+                gap: 8px;
+            }
+            
+            .logo-section img {
+                height: 40px !important;
+            }
+            
+            .auth-buttons {
+                gap: 5px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .header-btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+        }        /* Beta Banner Styles */
+        .beta-banner {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.95), rgba(255, 152, 0, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
+            z-index: 999;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .beta-banner-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .beta-icon {
+            font-size: 2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .beta-text {
+            flex: 1;
+        }
+        
+        .beta-text h3 {
+            margin: 0 0 5px 0;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .beta-text p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .beta-text a {
+            color: #fff;
+            font-weight: 700;
+            text-decoration: underline;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .beta-text a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .beta-close {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .beta-close:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
+        }
+          @media (max-width: 768px) {
+            .beta-banner {
+                top: 95px;
+                width: 95%;
+                padding: 12px 15px;
+            }
+            
+            .beta-banner-content {
+                gap: 10px;
+            }
+            
+            .beta-icon {
+                font-size: 1.5em;
+            }
+            
+            .beta-text h3 {
+                font-size: 0.95em;
+            }
+            
+            .beta-text p {
+                font-size: 0.85em;
+            }
+            
+            .container {
+                margin-top: 100px !important;
+            }
+        }
+        
+        /* Quando o banner beta está visível, ajustar margin do container */
+        body:has(.beta-banner:not([style*="display: none"])) .container {
+            margin-top: 160px;
+        }
+          @media (max-width: 768px) {
+            body:has(.beta-banner:not([style*="display: none"])) .container {
+                margin-top: 200px;
+            }
+        }
+        
+        /* Update Notice Styles */
+        .update-notice {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 700px;
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.95), rgba(185, 28, 28, 0.95));
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+            z-index: 1001;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        .update-notice-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .update-icon {
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+        
+        .update-text {
+            flex: 1;
+            color: white;
+        }
+        
+        .update-text h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+        
+        .update-text p {
+            margin: 0 0 5px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .update-text ul {
+            padding-left: 20px;
+        }
+        
+        .update-text li {
+            margin-bottom: 3px;
+        }
+        
+        .update-text a {
+            color: #ffc107;
+            font-weight: 600;
+        }
+        
+        .update-close {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        
+        .update-close:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .update-notice {
+                top: 95px;
+                width: 95%;
+                padding: 12px 15px;
+            }
+            
+            .update-text h3 {
+                font-size: 0.95em;
+            }
+            
+            .update-text p, .update-text li {
+                font-size: 0.8em;
+            }
+        }</style>
+</head>
+<body>
+      <!-- Header -->    <div class="header">        <!-- Logo e Título -->
+        <div class="logo-section">
+            <!-- Quest4Couple -->
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;" style="height: 40px; width: auto; margin-right: 10px;">
+                <div>
+                    <h1 style="font-size: 1.3em; margin: 0;" data-i18n="home.title">Quest4Couple</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
+                </div>
+            </a>
+            
+            <!-- Separador -->
+            <div class="logo-separator"></div>            <!-- Quest4You - Coming Soon -->
+            <a href="#" class="quest4you-link" title="Brevemente...">
+                <img src="./assets/quest4you_transp.png" alt="Quest4You Logo" style="height: 40px; width: auto; margin-right: 10px; filter: grayscale(30%);">
+                <div>
+                    <h1 style="font-size: 1.3em; margin: 0; background: linear-gradient(135deg, #e63946, #f4a261, #8ac926); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Quest4You</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;">Brevemente... 🔮</p>
+                </div>
+            </a>
+        </div>
+          <!-- Navigation Buttons -->
+        <div class="auth-buttons">            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
+                <span>🎓</span> <span data-i18n="header.tutorial">Tutorial</span>
+            </button>
+            
+            <button class="header-btn btn-login" onclick="window.location.href='app.html'" title="Ver Questionários">
+                <span>📝</span> <span data-i18n="header.questionnaire">Questionários</span>
+            </button>
+            
+            <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+                <span>💑</span> <span data-i18n="header.report">Relatório</span>
+            </button>
+            
+            <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" title="Dashboard" id="dashboardBtn" style="display: none;">
+                <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
+            </button>
+            
+            <button class="header-btn btn-login" onclick="window.location.href='auth.html'" data-i18n="header.login" title="Fazer Login" id="loginBtn">
+                🔐 Login
+            </button>
+            
+            <button class="header-btn btn-logout" onclick="handleLogout()" data-i18n="header.logout" title="Sair" id="logoutBtn" style="display: none;">
+                🚪 Sair
+            </button>
+        </div>
+    </div>
+    
+    <!-- Beta Banner -->    <div class="beta-banner" id="betaBanner">
+        <div class="beta-banner-content">
+            <div class="beta-icon" data-i18n="beta.icon">🚀</div>            <div class="beta-text">
+                <h3 data-i18n="beta.title">Versão Beta • Em Desenvolvimento</h3>
+                <p data-i18n-html="beta.description">Estamos em fase de testes! Se encontrares bugs ou tiveres sugestões, <a href='pages/apoiar.html#feedback'>envia-nos feedback</a> e ajuda a melhorar 💪</p>
+            </div>
+            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso" data-i18n="beta.close">✕</button>
+        </div>
+    </div>
+    
+    <!-- Aviso de Correção de Questões (apenas para utilizadores logados) -->
+    <div class="update-notice" id="updateNotice" style="display: none;">
+        <div class="update-notice-content">
+            <div class="update-icon">⚠️</div>
+            <div class="update-text">
+                <h3>Aviso Importante - Atualização de Questões</h3>
+                <p>Devido a um erro de atualização, algumas questões alteradas anteriormente, apenas ficaram disponíveis hoje (3 Dez). 
+                Se respondeste recentemente, por favor <strong>revê as tuas respostas</strong> nas seguintes questões:</p>
+                <ul style="text-align: left; margin: 10px auto; max-width: 500px; font-size: 0.85em;">
+                    <li><strong>Pack Romântico:</strong> Q1, Q20, Q29, Q31</li>
+                    <li><strong>Pack Exploração:</strong> Q16, Q22, Q25</li>
+                    <li><strong>Pack Pimentinha:</strong> Q5, Q26</li>
+                    <li><strong>Pack Poliamor:</strong> Q7, Q8 + 2 novas (Q20, Q60)</li>
+                    <li><strong>Pack Kinks:</strong> Q15</li>
+                </ul>
+                <p style="font-size: 0.85em;">Dúvidas? <a href="mailto:info@quest4couple.pt">info@quest4couple.pt</a></p>
+            </div>
+            <button class="update-close" onclick="closeUpdateNotice()" title="Fechar aviso">✕</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="hero-logo">
+            <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
+        </div>        <h1 data-i18n="home.heroTitle">Descubram-se juntos 💕</h1><p class="subtitle" data-i18n-html="home.heroSubtitle">
+            Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>
+            De forma <strong>privada, segura</strong> e sem julgamentos.
+        </p>        <div style="text-align: center; margin-top: 30px;">            <a href="app.html" class="cta-button" id="ctaButton" style="display: inline-block;" data-i18n="home.cta.viewQuestions">👀 Ver Questionários</a>
+            <br>
+            <div class="free-badge" id="freeBadge" style="font-size: 0.85em; padding: 5px 14px; margin-top: 12px; display: inline-block;" data-i18n="home.badge.free">
+                ✨ 100% Gratuito • Veja sem login
+            </div>
+            <br>            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                <a href="tutorial.html" class="tutorial-link" data-i18n="home.links.howItWorks">
+                    🎓 Como Funciona? • Tutorial
+                </a>
+                <a href="relatorio.html" class="tutorial-link" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;" data-i18n="home.links.viewReport">
+                    💑 Ver Relatório do Casal
+                </a>
+            </div>
+        </div>
+        
+       <!-- <div style="margin-top: 25px; font-size: 0.9em; color: #777;">
+            <span style="margin: 0 10px;">✓ Respostas encriptadas</span>
+            <span style="margin: 0 10px;">✓ 5 packs temáticos</span>
+            <span style="margin: 0 10px;">✓ Comparação automática</span>
+        </div>-->
+          <div class="features">            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <div class="feature-title" data-i18n="home.features.private.title">100% Privado</div>
+                <div class="feature-text" data-i18n-html="home.features.private.description">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
+            </div><div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <div class="feature-title" data-i18n="home.packs.title">5 Packs Temáticos</div>
+                <div class="feature-text" data-i18n-html="home.packs.description">💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong></div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💖</div>
+                <div class="feature-title" data-i18n="home.features.compare.title">Compatibilidade Instantânea</div>
+                <div class="feature-text" data-i18n-html="home.features.compare.description">Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal.</div>
+            </div>
+        </div>
+    </div>
+      <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+            <div class="modal-header">
+                <h2 data-i18n="auth.login.title">🔐 Entrar</h2>
+                <p data-i18n="auth.login.subtitle">Aceda à sua conta Quest4Couple</p>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginEmail" data-i18n="auth.login.email">Email</label>
+                    <input type="email" id="loginEmail" data-i18n-placeholder="auth.login.emailPlaceholder" placeholder="seuemail@exemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword" data-i18n="auth.login.password">Password</label>
+                    <input type="password" id="loginPassword" data-i18n-placeholder="auth.login.passwordPlaceholder" placeholder="Digite a sua password" required>
+                </div>
+                <button type="submit" class="btn-modal" data-i18n="auth.login.submit">Entrar</button>
+                <p class="modal-footer">
+                    <span data-i18n="auth.login.noAccount">Não tem conta?</span> <a href="#" onclick="switchToRegister()" data-i18n="auth.login.createAccount">Registar agora</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>            <div class="modal-header">
+                <h2 data-i18n="auth.register.title">✨ Criar Conta</h2>
+                <p data-i18n="auth.register.subtitle">Registe-se gratuitamente e comece já!</p>
+            </div>            <form onsubmit="handleRegister(event)">
+                <div class="social-login" style="margin-bottom: 25px;">
+                    <button type="button" class="social-btn google-btn" onclick="registerWithGoogle()" style="width: 100%; padding: 12px; margin-bottom: 10px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        <span data-i18n="auth.register.googleBtn">Registar com Google</span>
+                    </button>
+                    <button type="button" class="social-btn reddit-btn" onclick="registerWithReddit()" style="width: 100%; padding: 12px; background: #FF4500; color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+                        <span data-i18n="auth.register.redditBtn">Registar com Reddit</span>
+                    </button>
+                    <div style="text-align: center; margin: 15px 0; color: #999; font-size: 0.9em;" data-i18n="auth.register.socialOptions">ou com email</div>
+                </div>
+                <div class="form-group">
+                    <label for="registerName" data-i18n="auth.register.name">Nome</label>
+                    <input type="text" id="registerName" data-i18n-placeholder="auth.register.namePlaceholder" placeholder="O seu nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail" data-i18n="auth.register.email">Email</label>
+                    <input type="email" id="registerEmail" data-i18n-placeholder="auth.register.emailPlaceholder" placeholder="seuemail@exemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword" data-i18n="auth.register.password">Password</label>
+                    <input type="password" id="registerPassword" data-i18n-placeholder="auth.register.passwordPlaceholder" placeholder="Mínimo 6 caracteres" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword" data-i18n="auth.register.confirmPassword">Confirmar Password</label>
+                    <input type="password" id="registerConfirmPassword" data-i18n-placeholder="auth.register.confirmPasswordPlaceholder" placeholder="Repita a password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="registerAge" data-i18n="auth.register.age">Idade *</label>
+                    <input type="number" id="registerAge" min="18" max="99" data-i18n-placeholder="auth.register.agePlaceholder" placeholder="Ex: 25" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerCountry" data-i18n="auth.register.country">País *</label>
+                    <input type="text" id="registerCountry" data-i18n-placeholder="auth.register.countryPlaceholder" placeholder="Ex: Portugal" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerCity" data-i18n="auth.register.city">Cidade *</label>
+                    <input type="text" id="registerCity" data-i18n-placeholder="auth.register.cityPlaceholder" placeholder="Ex: Lisboa" required>
+                </div>
+                <button type="submit" class="btn-modal" data-i18n="auth.register.submit">Criar Conta</button>
+                <p class="modal-footer">
+                    <span data-i18n="auth.register.hasAccount">Já tem conta?</span> <a href="#" onclick="switchToLogin()" data-i18n="auth.register.login">Entrar</a>
+                </p>
+            </form>
+        </div>    </div>
+
+    <!-- Support Banner -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div id="supportBanner"></div>
+    </div>      <footer>
+        <p data-i18n="footer.copyright">&copy; 2025 Quest4Couple - Todos os direitos reservados</p>
+        <div>
+            <a href="pages/sobre.html" data-i18n="footer.links.about">Sobre</a>
+            <a href="pages/faq.html" data-i18n="footer.links.faq">FAQ</a>
+            <a href="pages/apoiar.html" data-i18n="footer.links.support">Apoiar o Projeto</a>
+            <a href="pages/privacidade.html" data-i18n="footer.links.privacy">Privacidade</a>
+            <a href="pages/termos.html" data-i18n="footer.links.terms">Termos</a>
+            <a href="pages/admin.html" style="opacity: 0.5;" data-i18n="footer.links.admin">Admin</a>
+        </div>    </footer>
+    
+    <!-- Support Banner Script -->
+    <script src="support-banner.js"></script>
+      <!-- i18n System -->
+    <script src="js/i18n.js"></script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/profile-completion.js"></script>
+    <script src="js/notifications.js"></script>
+      <!-- Local Auth (fallback) -->
+    <script src="js/auth.js"></script>
+    
+    <script>        // Check if user is logged in on page load (Firebase Auth)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Renderizar support banner
+            if (typeof SupportBanner !== 'undefined') {
+                SupportBanner.render('supportBanner', false);
+            }
+            
+            // Tentar Firebase Auth primeiro
+            if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
+                auth.onAuthStateChanged(async (user) => {
+                    if (user) {
+                        // User está autenticado no Firebase
+                        console.log('✅ User autenticado (Firebase):', user.email);
+                        const userData = {
+                            name: user.displayName || user.email.split('@')[0],
+                            email: user.email
+                        };
+                        updateHeaderForLoggedInUser(userData);
+                        
+                        // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+                        if (window.profileCompletion) {
+                            try {
+                                const userDoc = await db.collection('users').doc(user.uid).get();
+                                const userProfile = userDoc.exists ? userDoc.data() : {};
+                                
+                                if (!window.profileCompletion.isProfileComplete(userProfile)) {
+                                    console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+                                    await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+                                        console.log('✅ Perfil completado:', updatedData);
+                                    });
+                                }
+                            } catch (profileError) {
+                                console.warn('⚠️ Erro ao verificar perfil:', profileError);
+                            }
+                        }
+                    } else {
+                        console.log('❌ User não autenticado');
+                    }
+                });
+            } else {
+                // Fallback para auth.js local
+                const currentUser = auth.getCurrentUser();
+                if (currentUser) {
+                    console.log('✅ User autenticado (Local):', currentUser.email);
+                    updateHeaderForLoggedInUser(currentUser);
+                }
+            }
+        });
+        
+        // Modal functions
+        function showLogin() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+        
+        function showRegister() {
+            document.getElementById('registerModal').classList.add('active');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function switchToRegister() {
+            closeModal('loginModal');
+            setTimeout(() => showRegister(), 200);
+        }
+        
+        function switchToLogin() {
+            closeModal('registerModal');
+            setTimeout(() => showLogin(), 200);
+        }
+          // Close modal when clicking outside
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                }
+            });
+        });
+        
+        // Beta Banner Functions
+        function closeBetaBanner() {
+            const banner = document.getElementById('betaBanner');
+            banner.style.animation = 'slideUp 0.3s ease-out';
+            setTimeout(() => {
+                banner.style.display = 'none';
+                // Guardar preferência no localStorage
+                localStorage.setItem('betaBannerClosed', 'true');
+            }, 300);
+        }
+        
+        // Verificar se o banner já foi fechado
+        window.addEventListener('DOMContentLoaded', () => {
+            const bannerClosed = localStorage.getItem('betaBannerClosed');
+            if (bannerClosed === 'true') {
+                document.getElementById('betaBanner').style.display = 'none';
+            }
+        });
+        
+        // Adicionar animação de slide up
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideUp {
+                from {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-30px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Handle Login
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const user = await auth.loginUser(email, password);
+                auth.setCurrentUser(user);
+                closeModal('loginModal');
+                updateHeaderForLoggedInUser(user);
+                alert('✅ Login bem-sucedido!\n\nBem-vindo(a) de volta, ' + user.name + '!');
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } catch (error) {
+                alert('❌ ' + error.message);
+            }
+        }
+          // Handle Register
+        async function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const age = parseInt(document.getElementById('registerAge').value);
+            const country = document.getElementById('registerCountry').value;
+            const city = document.getElementById('registerCity').value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('❌ As passwords não coincidem!');
+                return;
+            }
+            
+            // Validate age
+            if (age < 18) {
+                alert('❌ Deve ter pelo menos 18 anos para se registar.');
+                return;
+            }
+            
+            try {
+                const newUser = await auth.registerUser(name, email, password, country, city, age);
+                auth.setCurrentUser(newUser);
+                closeModal('registerModal');
+                updateHeaderForLoggedInUser(newUser);
+                alert('✅ Conta criada com sucesso!\n\n' +
+                      'Bem-vindo(a) ao Quest4Couple, ' + newUser.name + '!\n\n' +
+                      '🎁 Pode agora:\n' +
+                      '• Guardar relatórios na cloud\n' +
+                      '• Definir códigos de acesso personalizados\n' +
+                      '• Ver histórico de relatórios');
+                      
+                // Clear form
+                document.getElementById('registerName').value = '';
+                document.getElementById('registerEmail').value = '';
+                document.getElementById('registerPassword').value = '';
+                document.getElementById('registerConfirmPassword').value = '';
+                document.getElementById('registerAge').value = '';
+                document.getElementById('registerCountry').value = '';
+                document.getElementById('registerCity').value = '';
+            } catch (error) {
+                alert('❌ ' + error.message);
+            }
+        }
+        
+        // Register with Google
+        function registerWithGoogle() {
+            alert('🔧 Funcionalidade em desenvolvimento!\n\nEm breve poderá registar-se com a sua conta Google.\n\nPor agora, use o registo com email.');
+            // TODO: Implementar OAuth Google
+            // window.location.href = '/auth/google';
+        }
+        
+        // Register with Reddit
+        function registerWithReddit() {
+            alert('🔧 Funcionalidade em desenvolvimento!\n\nEm breve poderá registar-se com a sua conta Reddit.\n\nPor agora, use o registo com email.');
+            // TODO: Implementar OAuth Reddit
+            // window.location.href = '/auth/reddit';
+        }        // Update header for logged in user
+        function updateHeaderForLoggedInUser(user) {
+            // Mostrar/esconder botões baseado na autenticação
+            const loginBtn = document.getElementById('loginBtn');
+            const dashboardBtn = document.getElementById('dashboardBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (dashboardBtn) dashboardBtn.style.display = 'inline-block';
+            if (logoutBtn) logoutBtn.style.display = 'inline-block';
+            
+            // Atualizar botão CTA quando autenticado
+            const ctaButton = document.getElementById('ctaButton');
+            const freeBadge = document.getElementById('freeBadge');
+            
+            if (ctaButton) {
+                ctaButton.href = 'app.html';
+                ctaButton.innerHTML = '📝 Responder Questionários';
+            }
+            
+            if (freeBadge) {
+                freeBadge.innerHTML = '✅ Login efetuado • Pode responder';
+            }
+
+            // Mostrar aviso de correção de questões
+            const updateNotice = document.getElementById('updateNotice');
+            if (updateNotice) {
+                updateNotice.style.display = 'block';
+            }
+        }
+          // Handle Logout
+        async function handleLogout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                try {
+                    await firebase.auth().signOut();
+                    console.log('✅ Logout bem-sucedido');
+                    window.location.href = 'index.html';
+                } catch (error) {
+                    console.error('❌ Erro no logout:', error);
+                    alert('Erro ao sair. Tenta novamente.');
+                }
+            }
+        }
+        
+        // View user reports
+        function viewMyReports() {
+            const currentUser = auth.getCurrentUser();
+            if (!currentUser) {
+                alert('❌ Por favor, faça login primeiro!');
+                return;
+            }
+            
+            const reports = auth.getUserReports(currentUser.email);
+            
+            if (reports.length === 0) {
+                alert('📊 Ainda não gerou nenhum relatório!\n\nResponda aos questionários e gere relatórios de compatibilidade para vê-los aqui.');
+                return;
+            }
+            
+            let message = `📊 MEUS RELATÓRIOS (${reports.length})\n\n`;
+            reports.forEach((report, index) => {
+                message += `${index + 1}. ${report.packName}\n`;
+                message += `   📅 ${new Date(report.date).toLocaleString('pt-PT')}\n`;
+                message += `   💕 ${report.partner1} & ${report.partner2}\n`;
+                message += `   ✨ Compatibilidade: ${report.compatibility}%\n\n`;
+            });
+            
+            alert(message);
+        }
+
+        // Close update notice
+        function closeUpdateNotice() {
+            const updateNotice = document.getElementById('updateNotice');
+            if (updateNotice) {
+                updateNotice.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+``` 

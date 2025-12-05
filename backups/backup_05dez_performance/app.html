@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- ✅ Cache Busting - Força refresh no Chrome mobile -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
+  <title>Quest4Couple - Sistema para Casais 💕</title>
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+  <link rel="manifest" href="/site.webmanifest?v=3">
+    <!-- CSS Modules -->
+  <link rel="stylesheet" href="css/main.css?v=20241120">
+  <link rel="stylesheet" href="css/themes.css?v=20241120">
+  <link rel="stylesheet" href="css/questions.css?v=20241120">
+  
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "u8hwuw3ixs");
+  </script>
+</head>
+<body>
+
+<!-- Age Verification Modal -->
+<div class="modal-overlay active" id="ageModal">
+  <div class="age-modal">
+    <div class="age-modal-icon">🔞</div>
+    <h2 data-i18n="app.ageModal.title">Verificação de Idade</h2>
+    <p data-i18n-html="app.ageModal.question">Este site contém conteúdo adulto.<br>Tens 18 anos ou mais?</p>
+    
+    <div class="age-buttons">
+      <button class="age-btn age-btn-yes" onclick="confirmAge(true)" data-i18n="app.ageModal.yes">
+        ✓ Sim, tenho +18
+      </button>
+      <button class="age-btn age-btn-no" onclick="confirmAge(false)" data-i18n="app.ageModal.no">
+        ✗ Não, sou menor
+      </button>
+    </div>
+    
+    <div class="age-warning" data-i18n="app.ageModal.warning">
+      ⚠️ Ao confirmar, declaras que tens idade legal para aceder a este conteúdo.
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <!-- Logo e Título (Centro) -->
+  <div class="logo-section">
+    <a href="index.html">
+      <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
+    </a>
+    <h1>Quest4Couple</h1>
+    <p class="tagline" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
+  </div>
+    <!-- User Section (Canto Superior Direito) -->  <div class="user-section-top">
+    <span class="user-info" id="userInfo">
+      👤 <span id="currentUserName" data-i18n="common.loading">Carregando...</span>
+    </span>
+    
+    <!-- ✅ NOVO: Indicador de sincronização -->
+    <span id="syncStatus" class="sync-status" style="display: none;">
+      <span class="sync-icon">✅</span>
+      <span class="sync-text" data-i18n="app.saved">Guardado</span>
+    </span>
+    
+    <button class="btn btn-primary" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+      <span>📊</span> <span data-i18n="header.report">Relatório</span>
+    </button>
+    
+    <button class="btn btn-dashboard" onclick="window.location.href='dashboard.html'" title="Voltar ao Dashboard">
+      <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
+    </button>
+    <button class="btn btn-logout" onclick="logout()" title="Sair">
+      <span>🚪</span> <span data-i18n="header.logout">Sair</span>
+    </button>
+  </div>
+  
+  <div class="free-badge-small" data-i18n="home.badge.free">
+    ✨ 100% Gratuito
+  </div>
+    <!-- Compare Section -->
+  <div id="compareSection" style="display: none;">
+    <h3>🔍 Comparar Respostas do Casal</h3>
+    
+    <div style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border-radius: 15px; border-left: 5px solid #667eea;">
+      <div style="font-size: 1.5em; margin-bottom: 10px;">✨ Nova Página de Relatório!</div>
+      <p style="margin-bottom: 15px; font-size: 1.05em;">Para uma melhor experiência, use a página dedicada do relatório:</p>
+      <a href="relatorio.html" style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; font-weight: 700; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+        🎯 Ir para Página do Relatório
+      </a>
+    </div>
+    
+    <details>
+      <summary style="cursor: pointer; font-weight: 700; padding: 12px; background: #f8f9fa; border-radius: 8px; margin-bottom: 15px;">
+        📋 Ou gerar relatório aqui (legado)
+      </summary>
+      
+      <div style="margin-top: 15px;">
+        <div>
+          <label>📁 Carregar o VOSSO ficheiro .q4c:</label>
+          <input type="file" id="myFile" accept=".q4c">
+        </div>
+        <div>
+          <label>📁 Carregar ficheiro .q4c do/a parceiro/a:</label>
+          <input type="file" id="partnerFile" accept=".q4c">
+        </div>
+        <div>
+          <label>🔑 Código de segurança:</label>
+          <input type="password" id="securityCode" placeholder="Código utilizado...">
+        </div>
+        <button class="btn" onclick="compareEncryptedAnswers()">🎯 Gerar Relatório</button>
+        
+        <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; font-size: 11px;">
+          💡 <strong>Como funciona:</strong><br>
+          1. Cada pessoa responde e gera um ficheiro .q4c<br>
+          2. Partilham os ficheiros entre si<br>
+          3. Carregam ambos aqui e veem o relatório<br>
+          4. Usem o mesmo código de segurança
+        </div>
+      </div>
+    </details>
+  </div>
+  
+  <div id="compatibilityReport" style="display: none;"></div>
+</div>
+
+<!-- Couple Configuration -->
+<div class="couple-config-section" id="coupleConfig">
+  <div class="couple-config-header">
+    <h2><span>👫</span> <span data-i18n="app.coupleConfig.title">Configuração do Casal</span></h2>
+    <p data-i18n="app.coupleConfig.subtitle">Seleciona o tipo de relação para personalizar as perguntas</p>
+  </div>
+  
+  <div class="couple-types-grid">
+    <div class="couple-type-card" onclick="selectCoupleType('hetero')">
+      <span class="couple-type-icon">👨‍❤️‍👩</span>
+      <h3 data-i18n="app.coupleConfig.hetero">Homem + Mulher</h3>
+      <p data-i18n="app.coupleConfig.heteroDesc">Casal heterossexual</p>
+    </div>
+    
+    <div class="couple-type-card" onclick="selectCoupleType('lesbian')">
+      <span class="couple-type-icon">👩‍❤️‍👩</span>
+      <h3 data-i18n="app.coupleConfig.lesbian">Mulher + Mulher</h3>
+      <p data-i18n="app.coupleConfig.lesbianDesc">Casal lésbico</p>
+    </div>
+    
+    <div class="couple-type-card" onclick="selectCoupleType('gay')">
+      <span class="couple-type-icon">👨‍❤️‍👨</span>
+      <h3 data-i18n="app.coupleConfig.gay">Homem + Homem</h3>
+      <p data-i18n="app.coupleConfig.gayDesc">Casal gay</p>
+    </div>
+    
+    <div class="couple-type-card" onclick="selectCoupleType('other')">
+      <span class="couple-type-icon">🌈</span>
+      <h3 data-i18n="app.coupleConfig.other">Outro / Todas</h3>
+      <p data-i18n="app.coupleConfig.otherDesc">Não-binário ou ver tudo</p>
+    </div>
+  </div>
+  
+  <button class="continue-btn" id="continueBtn" onclick="continueToThemes()" disabled data-i18n="app.coupleConfig.continue">
+    Continuar →
+  </button>
+  
+  <div class="skip-config">
+    <a href="#" onclick="skipConfig(); return false;" data-i18n="app.coupleConfig.skip">Pular configuração</a>
+  </div>
+</div>
+
+<!-- Theme Selection Grid -->
+<div id="themesView" class="themes-grid" style="display: none;">  <div class="theme-card" onclick="showTheme('romantico')">
+    <div class="theme-card-header romantico">
+      <span class="theme-icon">💞</span>
+      <h3 data-i18n="app.packs.romanticTitle">Romântico & Fantasias</h3>
+      <p class="theme-description" data-i18n="app.themes.romanticDesc">Velas, sedução, conexão profunda e momentos especiais a dois</p>
+    </div>    <div class="theme-card-footer">
+      <div class="footer-content">
+        <span class="question-count">📝 50 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
+      </div>      <div class="theme-progress">
+        <div class="theme-progress-container">
+          <div class="theme-progress-bar"></div>
+        </div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
+      </div>
+    </div>
+  </div>  <div class="theme-card" onclick="showTheme('experiencia')">
+    <div class="theme-card-header experiencia">
+      <img src="./assets/exp2.png" alt="Experiência a 2" class="theme-icon-img">
+      <h3 data-i18n="app.packs.experienceTitle">Experiência a 2</h3>
+      <p class="theme-description" data-i18n="app.themes.experienceDesc">Aventuras, locais diferentes e novas experiências juntos</p>
+      <p class="theme-spacer">&nbsp;</p>
+    </div>
+    <div class="theme-card-footer">
+      <div class="footer-content">
+        <span class="question-count">📝 50 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
+      </div>      <div class="theme-progress">
+        <div class="theme-progress-container">
+          <div class="theme-progress-bar"></div>
+        </div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
+      </div>
+    </div>
+  </div>  <div class="theme-card" onclick="showTheme('pimentinha')">
+    <div class="theme-card-header pimentinha">
+      <img src="./assets/pimentinha.png?v=1" alt="Pimentinha" class="theme-icon-img">
+      <h3 data-i18n="app.packs.spicyTitle">Pimentinha</h3>
+      <p class="theme-description" data-i18n="app.themes.spicyDesc">Adicione tempero, provocação e jogos sensuais</p>
+      <p class="theme-spacer">&nbsp;</p>
+    </div>
+    <div class="theme-card-footer">
+      <div class="footer-content">
+        <span class="question-count">📝 50 perguntas</span>
+        <span class="theme-free">✨ Grátis</span>
+      </div>      <div class="theme-progress">
+        <div class="theme-progress-container">
+          <div class="theme-progress-bar"></div>
+        </div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 50 <span data-i18n="app.themes.answered">respondidas</span></div>
+      </div>
+    </div>
+  </div>  <div class="theme-card" onclick="showTheme('poliamor')">
+    <div class="theme-card-header poliamor">
+      <img src="./assets/poliamor.png" alt="Poliamor" class="theme-icon-img">
+      <h3 data-i18n="app.packs.polyamoryTitle">Poliamor</h3>
+      <p class="theme-description" data-i18n="app.themes.polyamoryDesc">Múltiplos parceiros, swing e experiências em grupo</p>
+      <p class="theme-spacer">&nbsp;</p>
+    </div>
+    <div class="theme-card-footer">
+      <div class="footer-content">
+        <span class="question-count">📝 60 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>
+      </div>      <div class="theme-progress">
+        <div class="theme-progress-container">
+          <div class="theme-progress-bar"></div>
+        </div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 60 <span data-i18n="app.themes.answered">respondidas</span></div>
+      </div>
+    </div>
+  </div><div class="theme-card" onclick="showTheme('kinks')">
+    <div class="theme-card-header kinks">
+      <img src="./assets/fetiches.png" alt="Kinks & Fetiches" class="theme-icon-img">
+      <h3 data-i18n="app.packs.fetishesTitle">Kinks & Fetiches</h3>
+      <p class="theme-description" data-i18n="app.themes.fetishesDesc">Fetiches específicos, práticas avançadas e preferências únicas</p>
+      <p class="theme-spacer">&nbsp;</p>
+    </div>
+    <div class="theme-card-footer">
+      <div class="footer-content">
+        <span class="question-count">📝 90 <span data-i18n="app.themes.questions">perguntas</span></span>
+        <span class="theme-free">✨ <span data-i18n="app.themes.free">Grátis</span></span>      </div>
+      <div class="theme-progress">
+        <div class="theme-progress-container">
+          <div class="theme-progress-bar"></div>
+        </div>
+        <div class="theme-progress-text">0 <span data-i18n="app.themes.of">de</span> 90 <span data-i18n="app.themes.answered">respondidas</span></div>
+      </div>    </div>  </div>
+</div>
+
+<!-- Controls - Moved below themes -->
+<div class="controls-bottom" id="mainControls">
+  <button class="btn" onclick="saveAnswers()"><span>💾</span> <span data-i18n="app.controls.save">Guardar</span></button>
+  <button class="btn btn-load" onclick="showLoadModal()"><span>📂</span> <span data-i18n="app.controls.load">Carregar</span></button>
+  <button class="btn btn-import" onclick="showImportModal()"><span>📥</span> <span data-i18n="app.controls.import">Importar</span></button>
+  <button class="btn" onclick="showCompareSection()"><span>🔀</span> <span data-i18n="app.controls.compare">Comparar</span></button>
+  <button class="btn btn-secondary" onclick="generatePDF()"><span>📄</span> <span data-i18n="app.controls.pdf">PDF</span></button>
+  <button class="btn btn-secondary" onclick="sendByEmail()"><span>📧</span> <span data-i18n="app.controls.email">E-mail</span></button>
+</div>
+
+<!-- Pack Navigation Sidebar -->
+<div class="pack-nav-sidebar hidden" id="packNavSidebar">
+  <button class="pack-nav-toggle" onclick="togglePackNav()" title="Navegação entre Packs">
+    <span class="toggle-icon">🫶</span>
+  </button>
+  <div class="pack-nav-content">
+    <h3 data-i18n="app.sidebar.navigate">Navegar Packs</h3>    <button class="pack-nav-item romantico" onclick="showTheme('romantico')">
+      <span class="nav-emoji">💞</span>
+      <span class="nav-label" data-i18n="app.packs.romantic">Romântico</span>
+    </button><button class="pack-nav-item experiencia" onclick="showTheme('experiencia')">
+      <span class="nav-emoji">🔥</span>
+      <span class="nav-label" data-i18n="app.packs.experience">Experiência</span>
+    </button>
+    <button class="pack-nav-item pimentinha" onclick="showTheme('pimentinha')">
+      <span class="nav-emoji">🌶️</span>
+      <span class="nav-label" data-i18n="app.packs.spicy">Pimentinha</span>
+    </button>
+    <button class="pack-nav-item poliamor" onclick="showTheme('poliamor')">
+      <span class="nav-emoji">🔀</span>
+      <span class="nav-label" data-i18n="app.packs.polyamory">Poliamor</span>
+    </button>
+    <button class="pack-nav-item kinks" onclick="showTheme('kinks')">
+      <span class="nav-emoji">⛓️</span>
+      <span class="nav-label" data-i18n="app.packs.fetishes">Fetiches</span>
+    </button>
+    <button class="pack-nav-back" onclick="backToThemes()" data-i18n="app.sidebar.backToThemes">
+      ← Voltar aos Temas
+    </button>
+  </div>
+</div>
+
+<!-- Pack Romântico -->
+<div class="pack romantico" id="pack-romantico">
+  <div class="pack-header">
+    <h2><span>💝</span> <span data-i18n="app.packs.romanticTitle">Romântico & Fantasias</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
+  </div>
+  
+  <!-- Guia de Respostas -->
+  <div class="response-guide">
+    <h3><span>📖</span> <span data-i18n="app.guide.title">Guia de Respostas</span></h3>
+    <p><strong data-i18n="app.guide.beHonest">Sejam honestos e claros nas vossas respostas!</strong></p>
+    <div class="guide-options">
+      <div class="guide-option">
+        <span class="guide-emoji">😍</span>
+        <strong data-i18n="app.guide.please">Por favor!</strong>
+        <p data-i18n-html="app.guide.pleaseDesc">Usem apenas para algo que <u>realmente desejam muito</u>. Isto criará prioridades no relatório!</p>
+      </div>
+      <div class="guide-option">
+        <span class="guide-emoji">👍</span>
+        <strong data-i18n="app.guide.yup">Yup</strong>
+        <p data-i18n="app.guide.yupDesc">Estou aberto/a, gostaria de experimentar.</p>
+      </div>
+      <div class="guide-option">
+        <span class="guide-emoji">😑</span>
+        <strong data-i18n="app.guide.meh">Meh...</strong>
+        <p data-i18n-html="app.guide.mehDesc">Não me interessa ou não me sinto confortável. Estas questões <u>não aparecerão</u> no relatório, EXCETO se o/a parceiro/a responder "Por favor!" (para reflexão do casal).</p>
+      </div>
+      <div class="guide-option">
+        <span class="guide-emoji">🤔</span>
+        <strong data-i18n="app.guide.maybe">Talvez</strong>
+        <p data-i18n="app.guide.maybeDesc">Preciso pensar melhor, não tenho certeza.</p>
+      </div>
+    </div>    <button class="btn-understand" onclick="this.parentElement.style.display='none'" data-i18n="app.guide.understand">✓ Entendi, vamos começar!</button>
+  </div>
+    <div class="pack-content" id="pack-romantico-questions"></div>
+  <div class="pack-footer">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('romantico')" data-i18n="app.packFooter.addCustom">
+      ➕ Adicionar Pergunta Personalizada
+    </button>
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
+      💾 Guardar Respostas
+    </button>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+  </div>
+</div>
+
+<!-- Pack Experiência -->
+<div class="pack experiencia" id="pack-experiencia">
+  <div class="pack-header">
+    <h2><span>🌍</span> <span data-i18n="app.packs.experienceTitle">Exploração e Aventura a Dois</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
+  </div>  <div class="pack-content" id="pack-experiencia-questions"></div>
+  <div class="pack-footer">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('experiencia')" data-i18n="app.packFooter.addCustom">
+      ➕ Adicionar Pergunta Personalizada
+    </button>
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
+      💾 Guardar Respostas
+    </button>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+  </div>
+</div>
+
+<!-- Pack Pimentinha -->
+<div class="pack pimentinha" id="pack-pimentinha">
+  <div class="pack-header">
+    <h2><span>🔥</span> <span data-i18n="app.packs.spicyTitle">Pimentinha</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
+  </div>  <div class="pack-content" id="pack-pimentinha-questions"></div>
+  <div class="pack-footer">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('pimentinha')" data-i18n="app.packFooter.addCustom">
+      ➕ Adicionar Pergunta Personalizada
+    </button>
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
+      💾 Guardar Respostas
+    </button>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+  </div>
+</div>
+
+<!-- Pack Poliamor -->
+<div class="pack poliamor" id="pack-poliamor">
+  <div class="pack-header">
+    <h2><span>💞</span> <span data-i18n="app.packs.polyamoryTitle">Poliamor & Múltiplos Parceiros</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
+  </div>  <div class="pack-content" id="pack-poliamor-questions"></div>
+  <div class="pack-footer">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('poliamor')" data-i18n="app.packFooter.addCustom">
+      ➕ Adicionar Pergunta Personalizada
+    </button>
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
+      💾 Guardar Respostas
+    </button>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+  </div>
+</div>
+
+<!-- Pack Fetiches -->
+<div class="pack kinks" id="pack-kinks">
+  <div class="pack-header">
+    <h2><span>⛓️</span> <span data-i18n="app.packs.fetishesTitle">Kinks & Fetiches</span></h2>
+    <button class="back-btn" onclick="backToThemes()" data-i18n="app.backButton">← Voltar</button>
+  </div>  <div class="pack-content" id="pack-kinks-questions"></div>
+  <div class="pack-footer">
+    <button class="btn-add-custom" onclick="openCustomQuestionModal('kinks')" data-i18n="app.packFooter.addCustom">
+      ➕ Adicionar Pergunta Personalizada
+    </button>
+    <button class="btn-save-pack" onclick="saveAnswers()" data-i18n="app.packFooter.saveAnswers">
+      💾 Guardar Respostas
+    </button>
+    <p class="save-hint" data-i18n="app.packFooter.saveHint">💡 Não é obrigatório, mas recomendamos guardar para continuar depois ou evitar perder o progresso</p>
+  </div>
+</div>
+
+<!-- Custom Question Modal -->
+<div class="modal-overlay" id="customQuestionModal">
+  <div class="custom-question-modal">
+    <div class="custom-modal-header">
+      <h2 data-i18n="app.modals.customQuestion.title">✏️ Adicionar Pergunta Personalizada</h2>
+      <button class="modal-close" onclick="closeCustomQuestionModal()">✕</button>
+    </div>
+    
+    <div class="custom-modal-body">
+      <label for="customQuestionText" data-i18n="app.modals.customQuestion.label">📝 Pergunta:</label>
+      <textarea id="customQuestionText" data-i18n-placeholder="app.modals.customQuestion.placeholder" placeholder="Escreve a tua pergunta personalizada aqui..." rows="3"></textarea>
+      
+      <p class="custom-hint" data-i18n-html="app.modals.customQuestion.hint">
+        💡 <strong>Dica:</strong> Sê específico/a e claro/a. Esta pergunta aparecerá no questionário e no relatório de compatibilidade.
+      </p>
+    </div>
+    
+    <div class="custom-modal-footer">
+      <button class="btn-cancel" onclick="closeCustomQuestionModal()" data-i18n="app.modals.customQuestion.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="addCustomQuestion()" data-i18n="app.modals.customQuestion.add">✅ Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Load Answers Modal -->
+<div class="modal-overlay" id="loadAnswersModal">
+  <div class="custom-question-modal">
+    <div class="custom-modal-header">
+      <h2 data-i18n="app.modals.loadAnswers.title">📂 Carregar Respostas Guardadas</h2>
+      <button class="modal-close" onclick="closeLoadModal()">✕</button>
+    </div>
+    
+    <div class="custom-modal-body">
+      <label for="loadAnswersFile" data-i18n="app.modals.loadAnswers.fileLabel">📁 Seleciona o ficheiro .q4c:</label>
+      <input type="file" id="loadAnswersFile" accept=".q4c" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px dashed #d63384; border-radius: 10px; cursor: pointer;">
+      
+      <label for="loadAnswersCode" data-i18n="app.modals.loadAnswers.codeLabel">🔑 Código de segurança:</label>
+      <input type="password" id="loadAnswersCode" data-i18n-placeholder="app.modals.loadAnswers.codePlaceholder" placeholder="Código usado ao guardar..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
+      
+      <p class="custom-hint" data-i18n-html="app.modals.loadAnswers.hint">
+        💡 <strong>Como funciona:</strong> Carrega o ficheiro .q4c que guardaste anteriormente para continuar a responder de onde paraste. As tuas respostas aparecerão automaticamente!
+      </p>
+    </div>
+    
+    <div class="custom-modal-footer">
+      <button class="btn-cancel" onclick="closeLoadModal()" data-i18n="app.modals.loadAnswers.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="loadAnswersFromFile()" data-i18n="app.modals.loadAnswers.load">✅ Carregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Import Partner Questions Modal -->
+<div class="modal-overlay" id="importQuestionsModal">
+  <div class="custom-question-modal">
+    <div class="custom-modal-header">
+      <h2 data-i18n="app.modals.importQuestions.title">📥 Importar Perguntas do Parceiro</h2>
+      <button class="modal-close" onclick="closeImportModal()">✕</button>
+    </div>
+    
+    <div class="custom-modal-body">
+      <label for="importQuestionsFile" data-i18n="app.modals.importQuestions.fileLabel">📁 Ficheiro .q4c do parceiro:</label>
+      <input type="file" id="importQuestionsFile" accept=".q4c" style="width: 100%; padding: 10px; margin: 10px 0; border: 2px dashed #28a745; border-radius: 10px; cursor: pointer;">
+      
+      <label for="importQuestionsCode" data-i18n="app.modals.importQuestions.codeLabel">🔑 Código de segurança dele/a:</label>
+      <input type="password" id="importQuestionsCode" data-i18n-placeholder="app.modals.importQuestions.codePlaceholder" placeholder="Código que ele/a usou..." style="width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 10px;">
+      
+      <p class="custom-hint" data-i18n-html="app.modals.importQuestions.hint">
+        💡 <strong>Para que serve:</strong> Se o teu parceiro/a criou perguntas personalizadas, carrega o ficheiro .q4c dele/a aqui. As perguntas custom aparecerão automaticamente para tu poderes responder também!
+      </p>
+      
+      <div style="background: #d1ecf1; border-left: 4px solid #17a2b8; padding: 12px; margin-top: 15px; border-radius: 5px;" data-i18n-html="app.modals.importQuestions.steps">
+        <strong>📋 Passo a passo:</strong><br>
+        1. Parceiro cria perguntas custom<br>
+        2. Parceiro guarda ficheiro .q4c<br>
+        3. Parceiro envia-te o ficheiro<br>
+        4. Tu carregas aqui → Perguntas aparecem!
+      </div>
+    </div>
+    
+    <div class="custom-modal-footer">
+      <button class="btn-cancel" onclick="closeImportModal()" data-i18n="app.modals.importQuestions.cancel">❌ Cancelar</button>
+      <button class="btn-add" onclick="importPartnerQuestions()" data-i18n="app.modals.importQuestions.import">✅ Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Support Banner -->
+<div style="max-width: 1200px; margin: 40px auto 20px; padding: 0 20px;">
+  <div id="supportBanner"></div>
+</div>
+
+<!-- Footer -->
+<footer style="margin-top: 30px; padding: 30px 20px; background: rgba(255,255,255,0.9); border-top: 2px solid #d63384; text-align: center;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+      <a href="pages/sobre.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Sobre</a>
+      <a href="pages/faq.html" style="color: #d63384; text-decoration: none; font-weight: 600;">FAQ</a>
+      <a href="pages/apoiar.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Apoiar</a>
+      <a href="pages/termos.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Termos de Uso</a>
+      <a href="pages/privacidade.html" style="color: #d63384; text-decoration: none; font-weight: 600;">Privacidade</a>
+    </div>
+    <p style="color: #6c757d; font-size: 0.9em; margin: 10px 0;">
+      💕 Quest4Couple - Descubram-se juntos
+    </p>
+    <p style="color: #999; font-size: 0.8em;">
+      © 2025 Quest4Couple. Todos os direitos reservados.
+    </p>  </div>
+</footer>
+
+<!-- Support Banner Script -->
+<script src="support-banner.js"></script>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config & Auth -->
+<script src="js/firebase-config.js"></script>
+<script src="js/firestore-sync.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/profile-completion.js"></script>
+<script src="js/notifications.js"></script>
+
+<!-- JavaScript Modules -->
+<script src="js/customQuestions.js?v=20241120"></script>
+<script src="js/invertMatching.js?v=20241120"></script>
+<script src="js/loadAnswers.js?v=20241120"></script>
+<script src="js/pack-collapse.js?v=20241120"></script>
+<script src="js/app.js?v=20241120"></script>
+<script src="js/rendering.js?v=20241120"></script>
+<script src="js/storage.js?v=20241127"></script>
+<script src="js/comparison.js?v=20241120"></script>
+
+<!-- Auth Check (Permitir visualização sem login) -->
+<script>
+  let isUserAuthenticated = false;
+  
+  // Verificar se user está autenticado
+  auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+      // User NÃO autenticado - pode VER mas não pode RESPONDER
+      console.warn('⚠️ Modo visualização: User não autenticado');
+      isUserAuthenticated = false;
+      
+      // Atualizar header para modo não autenticado
+      const userSection = document.querySelector('.user-section');
+      if (userSection) {
+        userSection.innerHTML = `
+          <div style="background: rgba(255, 193, 7, 0.1); border: 2px solid rgba(255, 193, 7, 0.5); border-radius: 10px; padding: 12px 20px; display: flex; align-items: center; gap: 10px; margin-right: 15px;">
+            <span style="font-size: 1.2em;">⚠️</span>
+            <span style="color: #856404; font-weight: 600;">Modo Visualização</span>
+          </div>
+          <button class="btn btn-login" onclick="window.location.href='auth.html'" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            🔐 Fazer Login para Responder
+          </button>
+        `;
+      }
+      
+      // Desabilitar todos os inputs de resposta
+      disableAnswerInputs();
+      
+      // Mostrar banner informativo
+      showLoginBanner();
+      
+    } else {
+      // User AUTENTICADO - pode ver E responder
+      console.log('✅ User autenticado:', user.email);
+      isUserAuthenticated = true;
+      
+      // Atualizar nome do user no header
+      const currentUserName = document.getElementById('currentUserName');
+      if (currentUserName) {
+        currentUserName.textContent = user.displayName || user.email.split('@')[0];
+      }
+      
+      // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
+      if (window.profileCompletion) {
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          const userProfile = userDoc.exists ? userDoc.data() : {};
+          
+          if (!window.profileCompletion.isProfileComplete(userProfile)) {
+            console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+            await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+              console.log('✅ Perfil completado:', updatedData);
+            });
+          }
+        } catch (profileError) {
+          console.warn('⚠️ Erro ao verificar perfil:', profileError);
+        }
+      }
+      
+      // Habilitar inputs de resposta
+      enableAnswerInputs();
+      
+      // Remover banner de login (se existir)
+      removeLoginBanner();
+    }
+  });
+  
+  // Desabilitar inputs quando não autenticado
+  function disableAnswerInputs() {
+    // Desabilitar radios
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.disabled = true;
+      input.style.cursor = 'not-allowed';
+    });
+    
+    // Desabilitar textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.disabled = true;
+      textarea.placeholder = '🔒 Faça login para adicionar comentários';
+      textarea.style.cursor = 'not-allowed';
+      textarea.style.background = '#f5f5f5';
+    });
+  }
+  
+  // Habilitar inputs quando autenticado
+  function enableAnswerInputs() {
+    // Habilitar radios
+    document.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.disabled = false;
+      input.style.cursor = 'pointer';
+    });
+    
+    // Habilitar textareas
+    document.querySelectorAll('textarea').forEach(textarea => {
+      textarea.disabled = false;
+      textarea.placeholder = 'Comentário (opcional)...';
+      textarea.style.cursor = 'text';
+      textarea.style.background = 'white';
+    });
+  }
+  
+  // Mostrar banner informativo
+  function showLoginBanner() {
+    // Verificar se banner já existe
+    if (document.getElementById('loginBanner')) return;
+    
+    const banner = document.createElement('div');
+    banner.id = 'loginBanner';
+    banner.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      animation: slideUp 0.5s ease-out;
+      max-width: 90%;
+    `;
+    
+    banner.innerHTML = `
+      <span style="font-size: 2em;">💡</span>
+      <div>
+        <div style="font-weight: 700; font-size: 1.1em; margin-bottom: 5px;">
+          Está em modo visualização
+        </div>
+        <div style="font-size: 0.9em; opacity: 0.95;">
+          Faça login para responder e guardar as suas respostas
+        </div>
+      </div>
+      <button onclick="window.location.href='auth.html'" style="
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        🔐 Fazer Login
+      </button>
+      <button onclick="this.parentElement.remove()" style="
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 1.5em;
+        cursor: pointer;
+        padding: 0;
+        margin-left: -10px;
+      ">×</button>
+    `;
+    
+    document.body.appendChild(banner);
+    
+    // Adicionar animação
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateX(-50%) translateY(100px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // Remover banner
+  function removeLoginBanner() {
+    const banner = document.getElementById('loginBanner');
+    if (banner) {
+      banner.remove();
+    }
+  }
+  
+  // Função de logout
+  function logout() {
+    if (confirm('Tem certeza que deseja sair?')) {
+      auth.signOut().then(() => {
+        console.log('✅ Logout realizado');
+        window.location.href = 'auth.html';
+      }).catch((error) => {
+        console.error('❌ Erro ao fazer logout:', error);
+        alert('Erro ao sair. Tente novamente.');
+      });
+    }
+  }
+  
+  // Interceptar tentativas de resposta sem login
+  document.addEventListener('click', function(e) {
+    if (!isUserAuthenticated && (e.target.type === 'radio' || e.target.tagName === 'TEXTAREA')) {
+      e.preventDefault();
+      if (confirm('⚠️ Precisa fazer login para responder aos questionários.\n\nQuer ir para a página de login agora?')) {
+        window.location.href = 'auth.html';
+      }
+    }
+  });
+</script>
+
+<!-- ✅ Service Worker Cleanup - Força atualização no Chrome mobile -->
+<script>
+  // ✅ CORRIGIDO: Executar cleanup de forma silenciosa sem recarregar página
+  (function() {
+    // Marcar que cleanup foi executado (usar flag mais persistente)
+    const CLEANUP_VERSION = 'v20241120'; // Atualizar esta versão para forçar novo cleanup
+    const lastCleanup = localStorage.getItem('sw_cleanup_version');
+    
+    if (lastCleanup === CLEANUP_VERSION) {
+      console.log('✅ Cleanup já executado para versão:', CLEANUP_VERSION);
+      return;
+    }
+    
+    console.log('🧹 Executando cleanup de cache e service workers...');
+    
+    // Verificar e limpar service workers antigos
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        if (registrations.length > 0) {
+          console.log('🧹 Service Workers encontrados:', registrations.length);
+          
+          // Desregistar todos os service workers (silenciosamente)
+          Promise.all(
+            registrations.map(reg => reg.unregister())
+          ).then(function() {
+            console.log('✅ Todos os Service Workers desregistados');
+            localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+          });
+        } else {
+          console.log('✅ Nenhum Service Worker ativo');
+          localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+        }
+      });
+    } else {
+      localStorage.setItem('sw_cleanup_version', CLEANUP_VERSION);
+    }
+    
+    // Limpar cache do browser programaticamente (silenciosamente)
+    if ('caches' in window) {
+      caches.keys().then(function(names) {
+        if (names.length > 0) {
+          console.log('🧹 Limpando', names.length, 'caches...');
+          Promise.all(
+            names.map(name => caches.delete(name))
+          ).then(function() {
+            console.log('✅ Todo o cache limpo');
+          });
+        }
+      });
+    }
+  })();
+</script>
+
+<!-- Renderizar Support Banner -->
+<script>
+  // Renderizar banner de apoio
+  if (typeof SupportBanner !== 'undefined') {
+    SupportBanner.render('supportBanner', false);
+  }
+</script>
+
+<!-- i18n System -->
+<script src="js/i18n.js"></script>
+
+</body>
+</html>

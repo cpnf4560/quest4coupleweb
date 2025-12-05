@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title data-i18n="dashboard.pageTitle">Dashboard - Quest4Couple</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "u8hwuw3ixs");
+  </script>
+</head>
+<body>
+  
+  <!-- Header -->
+  <header class="header">
+    <!-- Logo e Título (Centro) -->
+    <div class="logo-section">
+      <a href="index.html">
+        <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;">
+      </a>
+      <h1>Quest4Couple</h1>
+      <p class="tagline" data-i18n="dashboard.tagline">Dashboard 📊</p>
+    </div>
+    
+    <!-- User Section (Canto Superior Direito) -->
+    <div class="user-section-top">
+      <span class="user-info" id="userInfo">
+        👤 <span id="currentUserName" data-i18n="common.loading">Carregando...</span>
+      </span>
+      
+      <button class="btn btn-primary" onclick="window.location.href='app.html'" title="Responder Questionário">
+        📝 <span data-i18n="header.questionnaire">Questionário</span>
+      </button>
+      
+      <button class="btn btn-secondary" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
+        📊 <span data-i18n="header.report">Relatório</span>
+      </button>
+      
+      <button class="btn btn-secondary" onclick="window.location.href='index.html'" title="Voltar ao Início">
+        🏠 <span data-i18n="common.home">Início</span>
+      </button>
+      
+      <button class="btn btn-logout" onclick="logout()" title="Sair" id="logoutBtn">
+        🚪 <span data-i18n="header.logout">Sair</span>
+      </button>
+    </div>
+    
+    <div class="free-badge-small" data-i18n="home.badge.free">
+      ✨ 100% Gratuito
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <div class="container">
+        <!-- Welcome Section -->
+      <section class="welcome-section">
+        <div class="welcome-header">
+          <div>
+            <h2><span data-i18n="dashboard.hello">Olá</span>, <span id="userDisplayName">...</span>! 👋</h2>
+            <p data-i18n="dashboard.welcomeMessage">Desejamos que descubram novas formas de se conhecerem melhor. Boa sorte!</p>
+          </div>
+          <button class="btn-edit-profile" id="editProfileBtn">
+            ⚙️ <span data-i18n="dashboard.editProfile">Editar Perfil</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Partner Notifications Section -->
+      <section id="partnerNotifications" class="notifications-section" style="display: none;">
+        <!-- As notificações serão inseridas aqui via JavaScript -->
+      </section>
+
+      <!-- Stats Overview -->
+      <section class="stats-section">
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-content">
+            <h3 id="totalAnswers">0</h3>
+            <p data-i18n="dashboard.stats.answers">Respostas</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-content">
+            <h3 id="completedPacks">0</h3>
+            <p data-i18n="dashboard.stats.completedPacks">Packs Completos</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-content">
+            <h3 id="totalConnections">0</h3>
+            <p data-i18n="dashboard.stats.connections">Conexões</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <h3 id="sharedReports">0</h3>
+            <p data-i18n="dashboard.stats.reports">Relatórios</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Packs Section -->
+      <section class="packs-section">
+        <h2 data-i18n="dashboard.packs.title">Questionários</h2>
+        <div class="packs-grid" id="packsGrid">
+          <!-- Packs will be loaded here -->
+          <div class="pack-card loading">
+            <div class="loading-shimmer"></div>
+          </div>
+          <div class="pack-card loading">
+            <div class="loading-shimmer"></div>
+          </div>
+          <div class="pack-card loading">
+            <div class="loading-shimmer"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Connections Section -->
+      <section class="connections-section">
+        <div class="section-header">
+          <h2 data-i18n="dashboard.connections.title">Conexões</h2>
+          <button class="btn-primary" id="addConnectionBtn">+ <span data-i18n="dashboard.connections.addPartner">Adicionar Parceiro</span></button>
+        </div>
+        
+        <div class="connections-list" id="connectionsList">
+          <div class="empty-state">
+            <div class="empty-icon">💑</div>
+            <h3 data-i18n="dashboard.connections.noConnectionsTitle">Nenhuma conexão ainda</h3>
+            <p data-i18n="dashboard.connections.noConnectionsDesc">Adiciona o teu parceiro para partilharem respostas e gerarem relatórios juntos!</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Add Connection Modal -->
+  <div class="modal" id="addConnectionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 data-i18n="dashboard.connections.addPartner">Adicionar Parceiro</h3>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>      <div class="modal-body">
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+          <p style="margin: 0 0 8px 0; color: #495057; font-weight: 500;">📱 <span data-i18n="dashboard.modal.yourUsername">O teu username para partilhar:</span></p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <code id="myUsernameDisplay" style="background: white; padding: 8px 12px; border-radius: 6px; font-size: 1.1em; color: #667eea; font-weight: 600; flex: 1;">@carregando...</code>
+            <button type="button" onclick="copyMyUsername()" style="background: #667eea; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; white-space: nowrap;">📋 <span data-i18n="common.copy">Copiar</span></button>
+          </div>
+          <small style="color: #6c757d; display: block; margin-top: 8px;" data-i18n="dashboard.modal.shareUsername">Partilha este username com o teu parceiro</small>
+        </div>
+        
+        <p style="font-weight: 500; margin-bottom: 10px;">🔍 <span data-i18n="dashboard.modal.searchPartner">Procura pelo username do teu parceiro:</span></p>
+        <form id="searchUserForm">
+          <div class="form-group">
+            <input type="text" id="searchUsername" placeholder="@username" required>
+            <button type="submit" class="btn-search" data-i18n="common.search">Procurar</button>
+          </div>
+        </form>
+        
+        <div class="search-results" id="searchResults">
+          <!-- Results will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Share Modal -->
+  <div class="modal" id="shareModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><span data-i18n="dashboard.share.shareWith">Partilhar com</span> <span id="sharePartnerName">...</span></h3>
+        <button class="modal-close" id="closeShareModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p data-i18n="dashboard.share.selectPacks">Seleciona os packs que queres partilhar:</p>
+        <div class="share-packs-list" id="sharePacksList">
+          <!-- Checkboxes will be loaded here -->
+        </div>
+        <button class="btn-primary btn-full" id="confirmShareBtn" data-i18n="dashboard.share.shareSelected">Partilhar Selecionados</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal" id="editProfileModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>⚙️ <span data-i18n="dashboard.editProfile">Editar Perfil</span></h3>
+        <button class="modal-close" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm" onsubmit="saveProfileChanges(event)">
+          <div class="form-group">
+            <label for="editProfileName" data-i18n="auth.name">Nome</label>
+            <input type="text" id="editProfileName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="editProfileEmail">Email</label>
+            <input type="email" id="editProfileEmail" class="form-control" readonly style="background: #f5f5f5; cursor: not-allowed;">
+          </div>
+          <div class="form-group">
+            <label for="editProfileGender" data-i18n="auth.gender">Género</label>
+            <select id="editProfileGender" class="form-control" required>
+              <option value="">Selecionar...</option>
+              <option value="masculino">Masculino</option>
+              <option value="feminino">Feminino</option>
+              <option value="nao-binario">Não-binário</option>
+              <option value="outro">Outro</option>
+              <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileAgeRange" data-i18n="auth.ageRange">Faixa Etária</label>
+            <select id="editProfileAgeRange" class="form-control" required>
+              <option value="">Selecionar...</option>
+              <option value="18-24">18-24 anos</option>
+              <option value="25-34">25-34 anos</option>
+              <option value="35-44">35-44 anos</option>
+              <option value="45-54">45-54 anos</option>
+              <option value="55+">55+ anos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileCountry" data-i18n="auth.country">País</label>
+            <select id="editProfileCountry" class="form-control" required>
+              <option value="">Selecionar país...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editProfileCity" data-i18n="auth.city">Cidade</label>
+            <input type="text" id="editProfileCity" class="form-control" placeholder="Ex: Lisboa" required>
+          </div>
+          <button type="submit" class="btn-primary btn-full">💾 <span data-i18n="common.save">Guardar Alterações</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Pack Modal -->
+  <div class="modal" id="resetPackModal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h3>🗑️ <span data-i18n="dashboard.reset.title">Resetar Pack</span></h3>
+        <button class="modal-close" onclick="closeResetPackModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="reset-warning">
+          <div class="warning-icon">⚠️</div>
+          <p data-i18n="dashboard.reset.warning">Tens a certeza que queres apagar todas as respostas deste pack?</p>
+          <p class="pack-name-display" id="resetPackName"></p>
+          <p class="warning-note" data-i18n="dashboard.reset.note">Esta ação não pode ser desfeita!</p>
+        </div>
+        <div class="reset-actions">
+          <button class="btn btn-secondary" onclick="closeResetPackModal()" data-i18n="common.cancel">Cancelar</button>
+          <button class="btn btn-danger" id="confirmResetBtn" data-i18n="dashboard.reset.confirm">Sim, Apagar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- App Scripts -->
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/profile-completion.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/dashboard.js"></script>
+
+  <!-- i18n System -->
+  <script src="js/i18n.js"></script>
+
+</body>
+</html>
