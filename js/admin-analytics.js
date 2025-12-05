@@ -908,9 +908,19 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
           if (answersDoc.exists) {
             const answersData = answersDoc.data() || {};
             
+            // Limites de perguntas por pack (perguntas oficiais)
+            const packLimits = {
+              'romantico': 50,
+              'experiencia': 50,
+              'pimentinha': 50,
+              'poliamor': 60,
+              'kinks': 90
+            };
+            
             // Iterar por cada pack
             Object.keys(answersData).forEach(packKey => {
               const packAnswers = answersData[packKey] || {};
+              const maxQuestions = packLimits[packKey] || 50;
               
               // Iterar por cada resposta no pack
               Object.keys(packAnswers).forEach(qKey => {
@@ -918,6 +928,16 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                 if (!answerData || !answerData.answer) return;
                 
                 const questionIndex = parseInt(qKey.replace('q', '')) - 1;
+                
+                // Ignorar perguntas personalizadas (índice >= máximo do pack)
+                // Elas são identificáveis por terem índice maior que o limite
+                if (questionIndex >= maxQuestions) {
+                  // É uma pergunta personalizada - vamos ignorar na análise geral
+                  // ou poderíamos criar uma categoria especial
+                  console.log(`⚠️ Pergunta personalizada ignorada: ${packKey} q${questionIndex + 1}`);
+                  return;
+                }
+                
                 const key = `${packKey}_${questionIndex}`;
                 
                 if (!questionStats[key]) {
@@ -959,6 +979,15 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       }
       
       questionAnalyticsCache = Object.values(questionStats);
+      
+      // Calcular openRate para cada questão (para permitir ordenação)
+      questionAnalyticsCache.forEach(q => {
+        const total = q.total || 1;
+        const openScore = (q.porfavor * 3) + (q.yup * 2) + (q.talvez * 1) + (q.meh * 0);
+        const maxScore = total * 3;
+        q.openRate = Math.round((openScore / maxScore) * 100);
+      });
+      
       console.log(`✅ Cache construído: ${questionAnalyticsCache.length} questões, ${questionAnalyticsCache.reduce((sum, q) => sum + q.total, 0)} respostas`);
     }
     
@@ -1082,6 +1111,9 @@ function renderQuestionAnalytics(container, data, totalQuestions, totalResponses
               <th style="padding: 12px 10px; text-align: center; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.1);" onclick="sortQuestionAnalytics('total')">
                 Total${sortIcon('total')}
               </th>
+              <th style="padding: 12px 10px; text-align: center; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.15);" onclick="sortQuestionAnalytics('openRate')" title="Taxa de Abertura: Porfavor=3pts, Yup=2pts, Talvez=1pt, Meh=0pts">
+                📈 Abertura${sortIcon('openRate')}
+              </th>
               <th style="padding: 12px 10px; text-align: center; font-weight: 600; cursor: pointer; color: #d4edda;" onclick="sortQuestionAnalytics('porfavor')">
                 🔥 Porfavor${sortIcon('porfavor')}
               </th>
@@ -1107,6 +1139,19 @@ function renderQuestionAnalytics(container, data, totalQuestions, totalResponses
       const talvezPct = Math.round((q.talvez / total) * 100);
       const mehPct = Math.round((q.meh / total) * 100);
       
+      // Calcular Taxa de Abertura: Porfavor=3pts, Yup=2pts, Talvez=1pt, Meh=0pts
+      // Máximo teórico = total * 3 (se todos respondessem porfavor)
+      const openScore = (q.porfavor * 3) + (q.yup * 2) + (q.talvez * 1) + (q.meh * 0);
+      const maxScore = total * 3;
+      const openRate = Math.round((openScore / maxScore) * 100);
+      
+      // Cor baseada na taxa de abertura
+      let openRateColor = '#dc3545'; // vermelho para <30%
+      let openRateBg = '#f8d7da';
+      if (openRate >= 70) { openRateColor = '#28a745'; openRateBg = '#d4edda'; }
+      else if (openRate >= 50) { openRateColor = '#17a2b8'; openRateBg = '#d1ecf1'; }
+      else if (openRate >= 30) { openRateColor = '#ffc107'; openRateBg = '#fff3cd'; }
+      
       html += `
         <tr style="border-bottom: 1px solid #eee; ${idx % 2 === 0 ? 'background: #fafafa;' : ''}">
           <td style="padding: 10px; color: #6c757d; font-weight: 600;">${idx + 1}</td>
@@ -1117,6 +1162,11 @@ function renderQuestionAnalytics(container, data, totalQuestions, totalResponses
             ${q.questionText.length > 60 ? q.questionText.substring(0, 60) + '...' : q.questionText}
           </td>
           <td style="padding: 10px; text-align: center; font-weight: 700; color: #667eea; background: rgba(102,126,234,0.05);">${q.total}</td>
+          <td style="padding: 10px; text-align: center;">
+            <div style="background: ${openRateBg}; padding: 4px 8px; border-radius: 12px; display: inline-block;">
+              <span style="color: ${openRateColor}; font-weight: 700;">${openRate}%</span>
+            </div>
+          </td>
           <td style="padding: 10px; text-align: center;">
             <span style="color: #28a745; font-weight: 600;">${porfavorPct}%</span>
           </td>
@@ -1150,6 +1200,14 @@ function renderQuestionAnalytics(container, data, totalQuestions, totalResponses
       const talvezPct = Math.round((q.talvez / total) * 100);
       const mehPct = Math.round((q.meh / total) * 100);
       
+      // Taxa de Abertura
+      const openRate = q.openRate || 0;
+      let openRateColor = '#dc3545';
+      let openRateBg = '#f8d7da';
+      if (openRate >= 70) { openRateColor = '#28a745'; openRateBg = '#d4edda'; }
+      else if (openRate >= 50) { openRateColor = '#17a2b8'; openRateBg = '#d1ecf1'; }
+      else if (openRate >= 30) { openRateColor = '#ffc107'; openRateBg = '#fff3cd'; }
+      
       html += `
         <div style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid ${pack.border};">
           <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
@@ -1160,9 +1218,12 @@ function renderQuestionAnalytics(container, data, totalQuestions, totalResponses
               </div>
               <p style="margin: 0; color: #333; font-size: 0.95em;">${q.questionText}</p>
             </div>
-            <div style="text-align: center; min-width: 60px;">
+            <div style="text-align: center; min-width: 80px;">
               <div style="font-size: 1.4em; font-weight: 700; color: #667eea;">${q.total}</div>
               <div style="font-size: 0.7em; color: #6c757d;">respostas</div>
+              <div style="margin-top: 6px; background: ${openRateBg}; padding: 4px 8px; border-radius: 10px;">
+                <span style="font-size: 0.85em; font-weight: 700; color: ${openRateColor};">📈 ${openRate}%</span>
+              </div>
             </div>
           </div>
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
@@ -1259,6 +1320,13 @@ function exportQuestionAnalytics() {
 function clearQuestionAnalyticsCache() {
   questionAnalyticsCache = null;
   console.log('🗑️ Cache de análise de questões limpo');
+}
+
+// Forçar recarga dos dados (limpar cache e recarregar)
+function forceReloadQuestionAnalytics() {
+  clearQuestionAnalyticsCache();
+  loadQuestionAnalyticsWithFilters();
+  console.log('🔃 Análise de questões recarregada');
 }
 
 // Função chamada pelos filtros do HTML
