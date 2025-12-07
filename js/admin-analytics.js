@@ -843,7 +843,13 @@ let questionAnalyticsSortCol = 'total';
 let questionAnalyticsSortDir = 'desc';
 
 async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'total', genderFilter = '') {
-  console.log('📊 loadQuestionAnalytics() chamada:', { packId, minResponses, sortBy, genderFilter });
+  console.log('📊 ========================================');
+  console.log('📊 loadQuestionAnalytics() chamada com parâmetros:');
+  console.log('📊 packId:', packId);
+  console.log('📊 minResponses:', minResponses);
+  console.log('📊 sortBy:', sortBy);
+  console.log('📊 genderFilter:', genderFilter, '(tipo:', typeof genderFilter, ')');
+  console.log('📊 ========================================');
   
   const container = document.getElementById('questionAnalyticsContainer');
   
@@ -1010,14 +1016,17 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       });
       
       console.log(`✅ Cache construído: ${questionAnalyticsCache.length} questões, ${questionAnalyticsCache.reduce((sum, q) => sum + q.total, 0)} respostas`);
-    }
-      // Aplicar filtros
+    }      // Aplicar filtros
     let filtered = [...questionAnalyticsCache];
     
     // Se há filtro de género, usar os dados específicos do género
     if (genderFilter) {
+      console.log(`🔍 Aplicando filtro de género: "${genderFilter}"`);
+      console.log(`📊 Total de questões antes do filtro: ${filtered.length}`);
+      
       filtered = filtered.map(q => {
-        const genderData = q.byGender[genderFilter];
+        const genderData = q.byGender && q.byGender[genderFilter];
+        
         if (!genderData || genderData.total === 0) {
           return null; // Questão sem respostas deste género
         }
@@ -1040,6 +1049,8 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
         
         return filteredQ;
       }).filter(q => q !== null); // Remover questões sem dados
+      
+      console.log(`📊 Total de questões após filtro de género: ${filtered.length}`);
     }
     
     if (packId) {
@@ -1380,9 +1391,27 @@ function forceReloadQuestionAnalytics() {
 
 // Função chamada pelos filtros do HTML
 function loadQuestionAnalyticsWithFilters() {
+  const genderSelect = document.getElementById('filterQuestionGender');
   const packId = document.getElementById('filterQuestionPack')?.value || '';
   const minResponses = parseInt(document.getElementById('filterMinResponses')?.value) || 0;
-  const genderFilter = document.getElementById('filterQuestionGender')?.value || '';
+  const genderFilter = genderSelect?.value || '';
+  
+  console.log('🔍 ========================================');
+  console.log('🔍 DEBUG: Filtros aplicados');
+  console.log('🔍 Elemento select género:', genderSelect);
+  console.log('🔍 Valor RAW do select:', genderSelect?.value);
+  console.log('🔍 Valor após || "":', genderFilter);
+  console.log('🔍 Todas as options do select:');
+  if (genderSelect) {
+    Array.from(genderSelect.options).forEach((opt, i) => {
+      console.log(`   ${i}: value="${opt.value}" text="${opt.text}" selected=${opt.selected}`);
+    });
+  }
+  console.log('🔍 packId:', packId);
+  console.log('🔍 minResponses:', minResponses);
+  console.log('🔍 genderFilter:', genderFilter, '(length:', genderFilter.length, ')');
+  console.log('🔍 ========================================');
+  
   loadQuestionAnalytics(packId, minResponses, 'total', genderFilter);
 }
 

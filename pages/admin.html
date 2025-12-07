@@ -847,13 +847,12 @@
           </div>
         </div>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label>🔍 Pesquisar</label>
+        <div class="filters">          <div class="filter-group">
+            <label for="searchUser">🔍 Pesquisar</label>
             <input type="text" id="searchUser" placeholder="Nome ou email..." onkeyup="filterUsers()">
           </div>
           <div class="filter-group">
-            <label>⚧️ Sexo</label>
+            <label for="filterGender">⚧️ Sexo</label>
             <select id="filterGender" onchange="filterUsers()">
               <option value="">Todos</option>
               <option value="M">♂️ Masculino</option>
@@ -863,7 +862,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>🌍 País</label>
+            <label for="filterCountry">🌍 País</label>
             <select id="filterCountry" onchange="filterUsers()">
               <option value="">Todos</option>
             </select>
@@ -916,9 +915,8 @@
           </span>
         </h2>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label>📦 Pack</label>
+        <div class="filters">          <div class="filter-group">
+            <label for="filterPartialPack">📦 Pack</label>
             <select id="filterPartialPack" onchange="loadIndividualAnswers()">
               <option value="">Todos os Packs</option>
               <option value="romantico">💕 Pack Romântico</option>
@@ -929,7 +927,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>⚧️ Género</label>
+            <label for="filterPartialGender">⚧️ Género</label>
             <select id="filterPartialGender" onchange="loadIndividualAnswers()">
               <option value="">Todos</option>
               <option value="M">♂️ Masculino</option>
@@ -938,7 +936,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>🔍 Procurar utilizador</label>
+            <label for="filterPartialUser">🔍 Procurar utilizador</label>
             <input type="text" id="filterPartialUser" placeholder="Nome ou email..." 
                    oninput="loadIndividualAnswers()" style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
           </div>
@@ -976,9 +974,8 @@
           </span>
         </h2>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label>📅 Período</label>
+        <div class="filters">          <div class="filter-group">
+            <label for="filterReportPeriod">📅 Período</label>
             <select id="filterReportPeriod" onchange="loadFullReportsWithFilters()">
               <option value="">Todos</option>
               <option value="today">Hoje</option>
@@ -987,7 +984,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>🎯 Compatibilidade</label>
+            <label for="filterReportCompat">🎯 Compatibilidade</label>
             <select id="filterReportCompat" onchange="loadFullReportsWithFilters()">
               <option value="">Todas</option>
               <option value="high">Alta (≥80%)</option>
@@ -1012,7 +1009,7 @@
         <h2>📊 Análise de Questões</h2>
         
         <div class="filters">          <div class="filter-group">
-            <label>📦 Pacote</label>
+            <label for="filterQuestionPack">📦 Pacote</label>
             <select id="filterQuestionPack" onchange="loadQuestionAnalyticsWithFilters()">
               <option value="">Todos os Pacotes</option>
               <option value="romantico">💕 Pack Romântico</option>
@@ -1023,7 +1020,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>⚧️ Género</label>
+            <label for="filterQuestionGender">⚧️ Género</label>
             <select id="filterQuestionGender" onchange="loadQuestionAnalyticsWithFilters()">
               <option value="">Todos</option>
               <option value="M">♂️ Masculino</option>
@@ -1032,7 +1029,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>🔢 Mínimo Respostas</label>
+            <label for="filterMinResponses">🔢 Mínimo Respostas</label>
             <input type="number" id="filterMinResponses" min="0" value="0" 
                    onchange="loadQuestionAnalyticsWithFilters()" 
                    placeholder="Filtrar por nº de respostas"
@@ -1067,9 +1064,8 @@
           <!-- Will be populated by JS -->
         </div>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label>🔍 Tipo de Atividade</label>
+        <div class="filters">          <div class="filter-group">
+            <label for="filterActivityType">🔍 Tipo de Atividade</label>
             <select id="filterActivityType" onchange="filterActivity()">
               <option value="">Todas</option>
               <option value="register">🆕 Registos</option>
@@ -1080,7 +1076,7 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>📅 Data</label>
+            <label for="filterActivityDate">📅 Data</label>
             <input type="date" id="filterActivityDate" onchange="filterActivity()" 
                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
           </div>
@@ -1755,10 +1751,13 @@
       const packId = document.getElementById('filterQuestionPack').value;
       const minResponses = parseInt(document.getElementById('filterMinResponses').value) || 0;
       const sortBy = document.getElementById('filterQuestionSort')?.value || 'responses';
+      const genderFilter = document.getElementById('filterQuestionGender')?.value || '';
+      
+      console.log('🔍 loadQuestionAnalyticsWithFilters() - Filtros:', { packId, minResponses, sortBy, genderFilter });
       
       // Call function from admin-analytics.js
       if (typeof loadQuestionAnalytics === 'function') {
-        loadQuestionAnalytics(packId, minResponses, sortBy);
+        loadQuestionAnalytics(packId, minResponses, sortBy, genderFilter);
       }
     }
     
@@ -1766,6 +1765,8 @@
       document.getElementById('filterQuestionPack').value = '';
       document.getElementById('filterMinResponses').value = '0';
       document.getElementById('filterQuestionSort').value = 'responses';
+      const genderEl = document.getElementById('filterQuestionGender');
+      if (genderEl) genderEl.value = '';
       loadQuestionAnalyticsWithFilters();
     }
     
