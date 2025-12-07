@@ -1011,8 +1011,7 @@
       <div class="content-card">
         <h2>📊 Análise de Questões</h2>
         
-        <div class="filters">
-          <div class="filter-group">
+        <div class="filters">          <div class="filter-group">
             <label>📦 Pacote</label>
             <select id="filterQuestionPack" onchange="loadQuestionAnalyticsWithFilters()">
               <option value="">Todos os Pacotes</option>
@@ -1024,12 +1023,21 @@
             </select>
           </div>
           <div class="filter-group">
+            <label>⚧️ Género</label>
+            <select id="filterQuestionGender" onchange="loadQuestionAnalyticsWithFilters()">
+              <option value="">Todos</option>
+              <option value="M">♂️ Masculino</option>
+              <option value="F">♀️ Feminino</option>
+              <option value="outro">⚧️ Outro</option>
+            </select>
+          </div>
+          <div class="filter-group">
             <label>🔢 Mínimo Respostas</label>
             <input type="number" id="filterMinResponses" min="0" value="0" 
                    onchange="loadQuestionAnalyticsWithFilters()" 
                    placeholder="Filtrar por nº de respostas"
                    style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
-          </div>          <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
+          </div><div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
             <button class="btn-reset" onclick="resetQuestionFilters()">🔄 Limpar</button>
             <button class="btn-primary" onclick="forceReloadQuestionAnalytics()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🔃 Recarregar Dados</button>
           </div>
@@ -1774,11 +1782,17 @@
         const usersSnapshot = await db.collection('users').get();
         console.log('✅ Snapshot recebido:', usersSnapshot.size, 'utilizadores');
         allUsers = [];
-        
-        usersSnapshot.forEach(doc => {
+          usersSnapshot.forEach(doc => {
           allUsers.push({ id: doc.id, ...doc.data() });
         });
           console.log('✅ Utilizadores carregados:', allUsers.length);
+        
+        // Ordenar por data de registo (mais recentes primeiro)
+        allUsers.sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA; // Descendente (mais recentes primeiro)
+        });
         
         // Update dashboard stats
         await updateDashboardStats();
@@ -1977,8 +1991,30 @@ ${error.stack || 'Sem stack trace'}
       } else {
         maskedDomain = domain;
       }
+        return maskedLocal + '@' + maskedDomain;
+    }
+    
+    // Mascarar nome (manter primeiro nome completo, mascarar segundos nomes)
+    function maskName(fullName) {
+      if (!fullName || typeof fullName !== 'string') return fullName;
       
-      return maskedLocal + '@' + maskedDomain;
+      const nameParts = fullName.trim().split(/\s+/); // Split por espaços
+      
+      if (nameParts.length === 1) {
+        // Só tem um nome - retornar completo
+        return nameParts[0];
+      }
+      
+      // Manter primeiro nome completo, mascarar os restantes
+      const firstName = nameParts[0];
+      const maskedLastNames = nameParts.slice(1).map(name => {
+        if (name.length === 0) return '';
+        if (name.length === 1) return name[0] + '.';
+        // Mostrar primeira letra + asteriscos
+        return name[0] + '*'.repeat(Math.min(name.length - 1, 4)) + '.';
+      });
+      
+      return firstName + ' ' + maskedLastNames.join(' ');
     }
     
     function loadUsersTable() {
@@ -2106,13 +2142,15 @@ ${error.stack || 'Sem stack trace'}
       const usernameBadge = user.username ? 
         `<span style="color: #667eea; font-weight: 500;">@${user.username}</span>` :
         '<span style="color: #dc3545; font-size: 0.85em;">❌ Sem username</span>';
-      
-      // Mascarar email para privacidade
+        // Mascarar email para privacidade
       const maskedEmail = maskEmail(user.email);
+      
+      // Mascarar apelido para privacidade
+      const maskedName = maskName(user.name);
       
       tr.innerHTML = `
         <td><span class="user-email" title="${user.email || ''}">${maskedEmail}</span></td>
-        <td>${user.name || '-'}</td>
+        <td><span title="${user.name || '-'}">${maskedName || '-'}</span></td>
         <td>${usernameBadge}</td>
         <td id="gender-cell-${user.id}">${genderCell}</td>
         <td>${user.ageRange || '-'}</td>
@@ -2428,22 +2466,23 @@ ${error.stack || 'Sem stack trace'}
       allActivity = [];
       
       // 1. REGISTOS E LOGINS (de users)
-      allUsers.forEach(user => {
-        if (user.createdAt) {
+      allUsers.forEach(user => {        if (user.createdAt) {
+          const maskedNameForActivity = maskName(user.name);
           allActivity.push({
             type: 'register',
             user: user.email,
-            userName: user.name || 'Sem nome',
+            userName: maskedNameForActivity || 'Sem nome',
             timestamp: user.createdAt.toDate(),
-            details: `Novo registo: ${user.name || 'Sem nome'}`
+            details: `Novo registo: ${maskedNameForActivity || 'Sem nome'}`
           });
         }
         
         if (user.lastLogin) {
+          const maskedNameForActivity = maskName(user.name);
           allActivity.push({
             type: 'login',
             user: user.email,
-            userName: user.name || 'Sem nome',
+            userName: maskedNameForActivity || 'Sem nome',
             timestamp: user.lastLogin.toDate(),
             details: `Login realizado`
           });
@@ -2852,13 +2891,15 @@ ${error.stack || 'Sem stack trace'}
     // ===========================
     function exportUsers() {
       const csv = ['Email,Nome,Username,Sexo,Idade,País,Cidade,Data Registo,Último Login'];
-        allUsers.forEach(user => {
-        const createdAt = user.createdAt?.toDate();
+        allUsers.forEach(user => {      const createdAt = user.createdAt?.toDate();
         const lastLogin = user.lastLogin?.toDate();
+        
+        // Mascarar nome no export para privacidade
+        const maskedNameForExport = maskName(user.name);
         
         const row = [
           user.email || '',
-          user.name || '',
+          maskedNameForExport || '',
           user.username ? `@${user.username}` : 'Sem username',
           user.gender || '',
           user.ageRange || '',

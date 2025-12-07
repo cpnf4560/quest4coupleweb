@@ -842,8 +842,8 @@ let questionAnalyticsViewMode = 'table'; // 'table' ou 'cards'
 let questionAnalyticsSortCol = 'total';
 let questionAnalyticsSortDir = 'desc';
 
-async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'total') {
-  console.log('📊 loadQuestionAnalytics() chamada:', { packId, minResponses, sortBy });
+async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'total', genderFilter = '') {
+  console.log('📊 loadQuestionAnalytics() chamada:', { packId, minResponses, sortBy, genderFilter });
   
   const container = document.getElementById('questionAnalyticsContainer');
   
@@ -882,8 +882,7 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       
       const progressEl = document.getElementById('loadingProgress');
       const progressBar = document.getElementById('loadingProgressBar');
-      
-      // Buscar todos os utilizadores
+        // Buscar todos os utilizadores
       const usersSnapshot = await db.collection('users').get();
       const totalUsers = usersSnapshot.size;
       let processedUsers = 0;
@@ -903,6 +902,10 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
         }
         
         try {
+          // Obter género do utilizador
+          const userData = userDoc.data();
+          const userGender = userData.gender || null;
+          
           const answersDoc = await db.collection('users').doc(userDoc.id).collection('answers').doc('all').get();
           
           if (answersDoc.exists) {
@@ -952,8 +955,7 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                       }
                     }
                   }
-                  
-                  questionStats[key] = {
+                    questionStats[key] = {
                     packId: packKey,
                     questionIndex: questionIndex,
                     questionText: questionText,
@@ -961,14 +963,33 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                     porfavor: 0,
                     yup: 0,
                     talvez: 0,
-                    meh: 0
+                    meh: 0,
+                    byGender: {} // Guardar contadores por género
                   };
                 }
                 
+                // Contar no total geral
                 questionStats[key].total++;
                 const answer = answerData.answer;
                 if (questionStats[key][answer] !== undefined) {
                   questionStats[key][answer]++;
+                }
+                
+                // Contar por género
+                if (userGender) {
+                  if (!questionStats[key].byGender[userGender]) {
+                    questionStats[key].byGender[userGender] = {
+                      total: 0,
+                      porfavor: 0,
+                      yup: 0,
+                      talvez: 0,
+                      meh: 0
+                    };
+                  }
+                  questionStats[key].byGender[userGender].total++;
+                  if (questionStats[key].byGender[userGender][answer] !== undefined) {
+                    questionStats[key].byGender[userGender][answer]++;
+                  }
                 }
               });
             });
@@ -990,9 +1011,36 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       
       console.log(`✅ Cache construído: ${questionAnalyticsCache.length} questões, ${questionAnalyticsCache.reduce((sum, q) => sum + q.total, 0)} respostas`);
     }
-    
-    // Aplicar filtros
+      // Aplicar filtros
     let filtered = [...questionAnalyticsCache];
+    
+    // Se há filtro de género, usar os dados específicos do género
+    if (genderFilter) {
+      filtered = filtered.map(q => {
+        const genderData = q.byGender[genderFilter];
+        if (!genderData || genderData.total === 0) {
+          return null; // Questão sem respostas deste género
+        }
+        
+        // Criar nova questão com dados do género específico
+        const filteredQ = {
+          ...q,
+          total: genderData.total,
+          porfavor: genderData.porfavor,
+          yup: genderData.yup,
+          talvez: genderData.talvez,
+          meh: genderData.meh
+        };
+        
+        // Recalcular openRate para este género
+        const total = filteredQ.total || 1;
+        const openScore = (filteredQ.porfavor * 3) + (filteredQ.yup * 2) + (filteredQ.talvez * 1) + (filteredQ.meh * 0);
+        const maxScore = total * 3;
+        filteredQ.openRate = Math.round((openScore / maxScore) * 100);
+        
+        return filteredQ;
+      }).filter(q => q !== null); // Remover questões sem dados
+    }
     
     if (packId) {
       filtered = filtered.filter(q => q.packId === packId);
@@ -1269,7 +1317,8 @@ function sortQuestionAnalytics(column) {
   // Recarregar sem refazer cache
   const packId = document.getElementById('filterQuestionPack')?.value || '';
   const minResponses = parseInt(document.getElementById('filterMinResponses')?.value) || 0;
-  loadQuestionAnalytics(packId, minResponses);
+  const genderFilter = document.getElementById('filterQuestionGender')?.value || '';
+  loadQuestionAnalytics(packId, minResponses, column, genderFilter);
 }
 
 function exportQuestionAnalytics() {
@@ -1333,22 +1382,25 @@ function forceReloadQuestionAnalytics() {
 function loadQuestionAnalyticsWithFilters() {
   const packId = document.getElementById('filterQuestionPack')?.value || '';
   const minResponses = parseInt(document.getElementById('filterMinResponses')?.value) || 0;
-  loadQuestionAnalytics(packId, minResponses);
+  const genderFilter = document.getElementById('filterQuestionGender')?.value || '';
+  loadQuestionAnalytics(packId, minResponses, 'total', genderFilter);
 }
 
 // Reset filtros de questões
 function resetQuestionFilters() {
   const packEl = document.getElementById('filterQuestionPack');
   const minEl = document.getElementById('filterMinResponses');
+  const genderEl = document.getElementById('filterQuestionGender');
   
   if (packEl) packEl.value = '';
   if (minEl) minEl.value = '0';
+  if (genderEl) genderEl.value = '';
   
   // Reset sorting
   questionAnalyticsSortCol = 'total';
   questionAnalyticsSortDir = 'desc';
   
-  loadQuestionAnalytics('', 0);
+  loadQuestionAnalytics('', 0, 'total', '');
 }
 
 // ========================================
