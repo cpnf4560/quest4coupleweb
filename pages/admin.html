@@ -707,15 +707,44 @@
 
   <!-- ADMIN DASHBOARD -->
   <div class="admin-dashboard" id="adminDashboard">
-    
-    <!-- Header -->
+      <!-- Header -->
     <div class="dashboard-header">
       <div>
         <h1>📊 Quest4Couple - BackOffice</h1>
         <div class="admin-info">Bem-vindo, <strong id="adminName">Admin</strong></div>
       </div>
       <div class="header-actions">
+        <button class="btn-primary" onclick="manualReloadAllData()" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-right: 10px;">
+          🔄 Recarregar Todos os Dados
+        </button>
         <button class="btn-logout" onclick="logout()">🚪 Sair</button>
+      </div>
+    </div>
+    
+    <!-- Data Loading Status -->
+    <div id="dataLoadingStatus" style="display: none; background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3 style="color: #667eea; margin: 0;">⚙️ Carregamento de Dados</h3>
+        <span id="lastLoadTime" style="color: #6c757d; font-size: 0.9em;">Último carregamento: Nunca</span>
+      </div>
+      <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <span style="font-weight: 600; color: #495057;">Carregamento Automático:</span>
+          <span id="autoLoadStatus" style="color: #28a745; font-weight: 600;">✅ Ativo (7h00 e 19h00)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 600; color: #495057;">Próximo carregamento:</span>
+          <span id="nextLoadTime" style="color: #667eea; font-weight: 600;">--:--</span>
+        </div>
+      </div>
+      <div id="loadingProgressContainer" style="display: none;">
+        <div style="margin-bottom: 10px;">
+          <span id="loadingStage" style="font-weight: 600; color: #667eea;">A carregar...</span>
+          <span id="loadingPercentage" style="float: right; color: #6c757d; font-weight: 600;">0%</span>
+        </div>
+        <div style="background: #e9ecef; border-radius: 10px; height: 20px; overflow: hidden;">
+          <div id="loadingProgressBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
+        </div>
       </div>
     </div>
     
@@ -1126,12 +1155,67 @@
     // ⚠️ IMPORTANTE: A autenticação é feita exclusivamente via Firebase Auth
     // O utilizador deve ter isAdmin=true no Firestore para aceder ao backoffice
     // NÃO armazenar credenciais em código!
-    
-    // ===========================
+      // ===========================
     // GLOBAL VARIABLES
     // ===========================
     let allUsers = [];
     let allActivity = [];
+    
+    // ===========================
+    // CACHE SYSTEM
+    // ===========================
+    let dataCache = {
+      loaded: false,
+      lastLoadTime: null,
+      users: [],
+      activity: []
+    };
+    
+    function isDataCacheValid() {
+      return dataCache.loaded && dataCache.lastLoadTime !== null;
+    }
+    
+    function saveDataToCache(users, activity) {
+      dataCache = {
+        loaded: true,
+        lastLoadTime: new Date(),
+        users: users || [],
+        activity: activity || []
+      };
+      console.log('💾 Dados guardados em cache:', {
+        users: dataCache.users.length,
+        activity: dataCache.activity.length,
+        timestamp: dataCache.lastLoadTime
+      });
+    }
+    
+    function loadDataFromCache() {
+      if (!isDataCacheValid()) {
+        console.warn('⚠️ Cache não disponível ou inválido');
+        return false;
+      }
+      
+      allUsers = [...dataCache.users];
+      allActivity = [...dataCache.activity];
+      
+      console.log('📦 Dados carregados do cache:', {
+        users: allUsers.length,
+        activity: allActivity.length,
+        cachedAt: dataCache.lastLoadTime
+      });
+      
+      return true;
+    }
+    
+    function clearDataCache() {
+      dataCache = {
+        loaded: false,
+        lastLoadTime: null,
+        users: [],
+        activity: []
+      };
+      console.log('🗑️ Cache limpo');
+    }
     
     // ===========================
     // LOGIN LOGIC
@@ -1254,19 +1338,209 @@
       loginContainer.style.display = 'none';
       adminDashboard.style.display = 'block';
       document.body.style.alignItems = 'flex-start';
-      
-      const adminName = sessionStorage.getItem('adminUsername') || ADMIN_USERNAME;
+        const adminName = sessionStorage.getItem('adminUsername') || ADMIN_USERNAME;
       document.getElementById('adminName').textContent = adminName;
       
+      // Mostrar painel de status de carregamento
+      document.getElementById('dataLoadingStatus').style.display = 'block';
+      
+      // Inicializar sistema de carregamento agendado
+      initScheduledDataLoading();
+      
       loadAllData();
+    }
+    
+    // ===========================
+    // SCHEDULED DATA LOADING
+    // ===========================
+    let scheduledLoadInterval = null;
+    let nextScheduledLoad = null;
+    
+    function initScheduledDataLoading() {
+      console.log('⏰ Inicializando carregamento agendado de dados...');
+      
+      // Calcular próximo carregamento
+      updateNextScheduledLoad();
+      
+      // Atualizar display a cada minuto
+      if (scheduledLoadInterval) {
+        clearInterval(scheduledLoadInterval);
+      }
+      
+      scheduledLoadInterval = setInterval(() => {
+        const now = new Date();
+        
+        // Verificar se chegou a hora de carregar
+        if (nextScheduledLoad && now >= nextScheduledLoad) {
+          console.log('⏰ Hora de carregar dados automaticamente!');
+          manualReloadAllData();
+          updateNextScheduledLoad();
+        }
+        
+        // Atualizar display do próximo carregamento
+        updateNextLoadTimeDisplay();
+      }, 60000); // Verificar a cada minuto
+      
+      // Atualizar display imediatamente
+      updateNextLoadTimeDisplay();
+    }
+    
+    function updateNextScheduledLoad() {
+      const now = new Date();
+      const scheduled = [7, 19]; // 7h00 e 19h00
+      
+      // Encontrar próxima hora de carregamento
+      let nextHour = null;
+      for (const hour of scheduled) {
+        const scheduledTime = new Date(now);
+        scheduledTime.setHours(hour, 0, 0, 0);
+        
+        if (scheduledTime > now) {
+          nextHour = scheduledTime;
+          break;
+        }
+      }
+      
+      // Se não encontrou hoje, usar primeira hora de amanhã
+      if (!nextHour) {
+        nextHour = new Date(now);
+        nextHour.setDate(nextHour.getDate() + 1);
+        nextHour.setHours(scheduled[0], 0, 0, 0);
+      }
+      
+      nextScheduledLoad = nextHour;
+      console.log('⏰ Próximo carregamento agendado:', nextScheduledLoad.toLocaleString('pt-PT'));
+    }
+    
+    function updateNextLoadTimeDisplay() {
+      const nextLoadSpan = document.getElementById('nextLoadTime');
+      if (!nextScheduledLoad || !nextLoadSpan) return;
+      
+      const now = new Date();
+      const diff = nextScheduledLoad - now;
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      
+      if (hours > 0) {
+        nextLoadSpan.textContent = `${nextScheduledLoad.getHours()}:00 (em ${hours}h ${minutes}m)`;
+      } else {
+        nextLoadSpan.textContent = `${nextScheduledLoad.getHours()}:00 (em ${minutes}m)`;
+      }
+    }
+    
+    function updateLastLoadTime() {
+      const lastLoadSpan = document.getElementById('lastLoadTime');
+      if (!lastLoadSpan) return;
+      
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+      const dateStr = now.toLocaleDateString('pt-PT');
+      lastLoadSpan.textContent = `Último carregamento: ${dateStr} às ${timeStr}`;
+    }
+      // ===========================
+    // MANUAL DATA RELOAD
+    // ===========================
+    async function manualReloadAllData() {
+      try {
+        console.log('🔄 Recarregamento manual de todos os dados...');
+        
+        // Limpar cache antes de recarregar
+        clearDataCache();
+        
+        // Mostrar barra de progresso
+        const progressContainer = document.getElementById('loadingProgressContainer');
+        const progressBar = document.getElementById('loadingProgressBar');
+        const loadingStage = document.getElementById('loadingStage');
+        const loadingPercentage = document.getElementById('loadingPercentage');
+        
+        if (progressContainer) {
+          progressContainer.style.display = 'block';
+        }
+        
+        // Etapa 1: Utilizadores (50%)
+        if (loadingStage) loadingStage.textContent = '👥 A carregar utilizadores...';
+        if (progressBar) progressBar.style.width = '10%';
+        if (loadingPercentage) loadingPercentage.textContent = '10%';
+        
+        await loadUsersWithProgress();
+        
+        if (progressBar) progressBar.style.width = '50%';
+        if (loadingPercentage) loadingPercentage.textContent = '50%';
+        
+        // Etapa 2: Dashboard Stats (70%)
+        if (loadingStage) loadingStage.textContent = '📊 A atualizar estatísticas...';
+        if (progressBar) progressBar.style.width = '70%';
+        if (loadingPercentage) loadingPercentage.textContent = '70%';
+        
+        await updateDashboardStats();
+        loadUsersTable();
+        
+        // Etapa 3: Atividade (85%)
+        if (loadingStage) loadingStage.textContent = '📜 A carregar atividades...';
+        if (progressBar) progressBar.style.width = '85%';
+        if (loadingPercentage) loadingPercentage.textContent = '85%';
+        
+        await checkUsersWithoutUsername();
+        await loadActivityLog();
+        
+        // Concluído (100%)
+        if (loadingStage) loadingStage.textContent = '✅ Carregamento concluído!';
+        if (progressBar) progressBar.style.width = '100%';
+        if (loadingPercentage) loadingPercentage.textContent = '100%';
+        
+        // 💾 Guardar dados em cache
+        saveDataToCache(allUsers, allActivity);
+        
+        // Atualizar timestamp
+        updateLastLoadTime();
+        
+        // Esconder barra após 2 segundos
+        setTimeout(() => {
+          if (progressContainer) {
+            progressContainer.style.display = 'none';
+            progressBar.style.width = '0%';
+          }
+        }, 2000);
+        
+        console.log('✅ Recarregamento manual concluído e guardado em cache!');
+        
+      } catch (error) {
+        console.error('❌ Erro no recarregamento manual:', error);
+        alert('Erro ao recarregar dados. Verifique a consola para detalhes.');
+        
+        // Esconder barra em caso de erro
+        const progressContainer = document.getElementById('loadingProgressContainer');
+        if (progressContainer) {
+          progressContainer.style.display = 'none';
+        }
+      }
+    }
+    
+    async function loadUsersWithProgress() {
+      console.log('👥 A buscar utilizadores com progresso...');
+      const usersSnapshot = await db.collection('users').get();
+      console.log('✅ Snapshot recebido:', usersSnapshot.size, 'utilizadores');
+      
+      allUsers = [];
+      usersSnapshot.forEach(doc => {
+        allUsers.push({ id: doc.id, ...doc.data() });
+      });
+      
+      console.log('✅ Utilizadores carregados:', allUsers.length);
+      
+      // Ordenar por data de registo (mais recentes primeiro)
+      allUsers.sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
     }
       function logout() {
       sessionStorage.removeItem('adminLoggedIn');
       sessionStorage.removeItem('adminUsername');
       window.location.reload();
     }
-    
-    // ===========================
+      // ===========================
     // TAB NAVIGATION
     // ===========================
     function showTab(tabName) {
@@ -1285,13 +1559,33 @@
       
       // Highlight active button
       event.target.classList.add('active');
-        // Load data for specific tabs when they are opened
-      if (tabName === 'fullReports') {
+      
+      // ⚡ USAR CACHE - NÃO RECARREGAR
+      // Apenas renderizar os dados que já estão em memória
+      console.log(`📑 Mudando para tab: ${tabName} (usando cache)`);
+      
+      // Renderizar dados específicos do tab (SEM recarregar do Firebase)
+      if (tabName === 'dashboard') {
+        // Dashboard já foi carregado - apenas garantir que stats estão atualizadas
+        if (isDataCacheValid()) {
+          updateDashboardStats();
+        }
+      } else if (tabName === 'users') {
+        // Tabela de utilizadores já foi carregada - apenas re-renderizar
+        if (isDataCacheValid()) {
+          renderUsersPage();
+        }
+      } else if (tabName === 'fullReports') {
         loadFullReportsWithFilters();
       } else if (tabName === 'questions') {
         loadQuestionAnalyticsWithFilters();
       } else if (tabName === 'partialReports') {
         loadIndividualAnswers();
+      } else if (tabName === 'activity') {
+        // Log de atividade já foi carregado - apenas re-renderizar
+        if (isDataCacheValid()) {
+          renderActivityLog();
+        }
       }
     }
     
@@ -1769,8 +2063,7 @@
       if (genderEl) genderEl.value = '';
       loadQuestionAnalyticsWithFilters();
     }
-    
-    // ===========================
+      // ===========================
     // LOAD DATA
     // ===========================
     async function loadAllData() {
@@ -1778,15 +2071,36 @@
         console.log('🔄 A carregar dados do Firebase...');
         console.log('📦 Firestore instance:', db);
         
-        // Load users
+        // Mostrar barra de progresso
+        const progressContainer = document.getElementById('loadingProgressContainer');
+        const progressBar = document.getElementById('loadingProgressBar');
+        const loadingStage = document.getElementById('loadingStage');
+        const loadingPercentage = document.getElementById('loadingPercentage');
+        
+        if (progressContainer) {
+          progressContainer.style.display = 'block';
+        }
+        
+        // Etapa 1: Carregar utilizadores (0-50%)
+        if (loadingStage) loadingStage.textContent = '👥 A carregar utilizadores...';
+        if (progressBar) progressBar.style.width = '10%';
+        if (loadingPercentage) loadingPercentage.textContent = '10%';
+        
         console.log('👥 A buscar utilizadores...');
         const usersSnapshot = await db.collection('users').get();
         console.log('✅ Snapshot recebido:', usersSnapshot.size, 'utilizadores');
+        
+        if (progressBar) progressBar.style.width = '30%';
+        if (loadingPercentage) loadingPercentage.textContent = '30%';
+        
         allUsers = [];
-          usersSnapshot.forEach(doc => {
+        usersSnapshot.forEach(doc => {
           allUsers.push({ id: doc.id, ...doc.data() });
         });
-          console.log('✅ Utilizadores carregados:', allUsers.length);
+        console.log('✅ Utilizadores carregados:', allUsers.length);
+        
+        if (progressBar) progressBar.style.width = '50%';
+        if (loadingPercentage) loadingPercentage.textContent = '50%';
         
         // Ordenar por data de registo (mais recentes primeiro)
         allUsers.sort((a, b) => {
@@ -1795,21 +2109,61 @@
           return dateB - dateA; // Descendente (mais recentes primeiro)
         });
         
-        // Update dashboard stats
+        // Etapa 2: Dashboard Stats (50-70%)
+        if (loadingStage) loadingStage.textContent = '📊 A atualizar estatísticas...';
+        if (progressBar) progressBar.style.width = '60%';
+        if (loadingPercentage) loadingPercentage.textContent = '60%';
+        
         await updateDashboardStats();
         
-        // Load users table
+        if (progressBar) progressBar.style.width = '70%';
+        if (loadingPercentage) loadingPercentage.textContent = '70%';
+        
+        // Etapa 3: Tabela de utilizadores (70-80%)
+        if (loadingStage) loadingStage.textContent = '📋 A renderizar tabela...';
+        if (progressBar) progressBar.style.width = '75%';
+        if (loadingPercentage) loadingPercentage.textContent = '75%';
+        
         loadUsersTable();
         
-        // Check users without username
-        await checkUsersWithoutUsername();
+        if (progressBar) progressBar.style.width = '80%';
+        if (loadingPercentage) loadingPercentage.textContent = '80%';
         
-        // Load activity log
+        // Etapa 4: Verificações e logs (80-100%)
+        if (loadingStage) loadingStage.textContent = '🔍 A verificar dados...';
+        if (progressBar) progressBar.style.width = '90%';
+        if (loadingPercentage) loadingPercentage.textContent = '90%';
+          await checkUsersWithoutUsername();
         loadActivityLog();
+        
+        // Concluído
+        if (loadingStage) loadingStage.textContent = '✅ Carregamento concluído!';
+        if (progressBar) progressBar.style.width = '100%';
+        if (loadingPercentage) loadingPercentage.textContent = '100%';
+        
+        // 💾 Guardar dados em cache
+        saveDataToCache(allUsers, allActivity);
+        
+        // Atualizar timestamp
+        updateLastLoadTime();
+        
+        // Esconder barra após 2 segundos
+        setTimeout(() => {
+          if (progressContainer) {
+            progressContainer.style.display = 'none';
+            progressBar.style.width = '0%';
+          }
+        }, 2000);
         
       } catch (error) {
         console.error('❌ ERRO CRÍTICO ao carregar dados:', error);
         console.error('📋 Stack trace:', error.stack);
+        
+        // Esconder barra de progresso
+        const progressContainer = document.getElementById('loadingProgressContainer');
+        if (progressContainer) {
+          progressContainer.style.display = 'none';
+        }
         
         // Mostrar erro detalhado
         const errorDetails = `
@@ -2662,8 +3016,7 @@ ${error.stack || 'Sem stack trace'}
       loadingActivity.style.display = 'none';
       activityLog.style.display = 'block';
     }
-    
-    function createActivityItem(activity) {
+      function createActivityItem(activity) {
       const div = document.createElement('div');
       div.className = 'activity-item';
       div.setAttribute('data-type', activity.type);
@@ -2694,6 +3047,77 @@ ${error.stack || 'Sem stack trace'}
       `;
       
       return div;
+    }
+    
+    // ===========================
+    // RENDER ACTIVITY LOG (FROM CACHE)
+    // ===========================
+    function renderActivityLog() {
+      console.log('📋 A renderizar log de atividade do cache...');
+      
+      const activityLog = document.getElementById('activityLog');
+      
+      if (!allActivity || allActivity.length === 0) {
+        activityLog.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma atividade registada.</p>';
+        return;
+      }
+      
+      // Calcular estatísticas
+      const activityCounts = {
+        register: allActivity.filter(a => a.type === 'register').length,
+        login: allActivity.filter(a => a.type === 'login').length,
+        answer: allActivity.filter(a => a.type === 'answer').length,
+        report: allActivity.filter(a => a.type === 'report').length,
+        connection: allActivity.filter(a => a.type === 'connection').length
+      };
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayActivity = allActivity.filter(a => a.timestamp >= today).length;
+      
+      // Atualizar estatísticas
+      const statsContainer = document.getElementById('activityStats');
+      if (statsContainer) {
+        statsContainer.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 12px; border-radius: 10px; text-align: center; color: white;">
+              <div style="font-size: 1.5em; font-weight: 700;">${allActivity.length}</div>
+              <div style="font-size: 0.75em; opacity: 0.9;">Total</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); border-top: 3px solid #28a745;">
+              <div style="font-size: 1.5em; font-weight: 700; color: #28a745;">${todayActivity}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Hoje</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #17a2b8;">🆕 ${activityCounts.register}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Registos</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #6c757d;">🔓 ${activityCounts.login}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Logins</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #fd7e14;">✍️ ${activityCounts.answer}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Respostas</div>
+            </div>
+            <div style="background: white; padding: 12px; border-radius: 10px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <div style="font-size: 1.5em; font-weight: 700; color: #e91e63;">💑 ${activityCounts.connection}</div>
+              <div style="font-size: 0.75em; color: #6c757d;">Conexões</div>
+            </div>
+          </div>
+        `;
+      }
+      
+      // Renderizar últimas 100 atividades
+      const recentActivity = allActivity.slice(0, 100);
+      activityLog.innerHTML = '';
+      
+      recentActivity.forEach(activity => {
+        const item = createActivityItem(activity);
+        activityLog.appendChild(item);
+      });
+      
+      console.log('✅ Log de atividade renderizado:', recentActivity.length, 'itens');
     }
     
     function filterActivity() {
