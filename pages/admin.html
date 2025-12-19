@@ -1047,8 +1047,7 @@
               <option value="poliamor">💜 Poliamor</option>
               <option value="kinks">🔥 Fetiches</option>
             </select>
-          </div>
-          <div class="filter-group">
+          </div>          <div class="filter-group">
             <label for="filterQuestionGender">⚧️ Género</label>
             <select id="filterQuestionGender" onchange="loadQuestionAnalyticsWithFilters()">
               <option value="">Todos</option>
@@ -1058,14 +1057,39 @@
             </select>
           </div>
           <div class="filter-group">
+            <label for="filterQuestionAge">🎂 Faixa Etária</label>
+            <select id="filterQuestionAge" onchange="loadQuestionAnalyticsWithFilters()">
+              <option value="">Todas as idades</option>
+              <option value="18-25">18-25 anos</option>
+              <option value="26-35">26-35 anos</option>
+              <option value="36-45">36-45 anos</option>
+              <option value="46-55">46-55 anos</option>
+              <option value="56+">56+ anos</option>
+            </select>
+          </div>
+          <div class="filter-group">
             <label for="filterMinResponses">🔢 Mínimo Respostas</label>
             <input type="number" id="filterMinResponses" min="0" value="0" 
                    onchange="loadQuestionAnalyticsWithFilters()" 
                    placeholder="Filtrar por nº de respostas"
-                   style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">
-          </div><div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
-            <button class="btn-reset" onclick="resetQuestionFilters()">🔄 Limpar</button>
-            <button class="btn-primary" onclick="forceReloadQuestionAnalytics()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">🔃 Recarregar Dados</button>
+                   style="padding: 8px 12px; border: 1px solid #dee2e6; border-radius: 6px;">          </div>
+
+          <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
+            <button class="btn-reset" onclick="resetQuestionFilters()">🔄 Limpar Filtros</button>
+            <button class="btn-primary" onclick="rebuildAnalyticsCache()" 
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                           color: white; border: none; padding: 8px 16px; border-radius: 6px; 
+                           cursor: pointer;" 
+                    title="Forçar reconstrução do cache de analytics">
+              🔃 Reconstruir Cache
+            </button>
+            <button class="btn-primary" onclick="publishPublicStatistics()" 
+                    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); 
+                           color: white; border: none; padding: 8px 16px; border-radius: 6px; 
+                           cursor: pointer;" 
+                    title="Publicar estatísticas para a página pública (auto: 7h e 19h)">
+              📤 Publicar Estatísticas
+            </button>
           </div>
         </div>
         
@@ -1216,6 +1240,160 @@
       };
       console.log('🗑️ Cache limpo');
     }
+    
+    // ===========================
+    // TESTING FUNCTIONS
+    // ===========================
+    
+    /**
+     * 🧪 FUNÇÃO DE TESTE: Simula carregamento automático
+     * Para testar sem esperar pelas 7h/19h
+     */
+    function testAutoLoad() {
+      console.log('🧪 ========================================');
+      console.log('🧪 TESTE: Simulando carregamento automático');
+      console.log('🧪 ========================================');
+      
+      // 1. Verificar estado do cache ANTES
+      console.log('📊 Cache ANTES do reload:', {
+        loaded: dataCache.loaded,
+        lastLoadTime: dataCache.lastLoadTime,
+        usersCount: dataCache.users.length,
+        activityCount: dataCache.activity.length
+      });
+      
+      // 2. Simular carregamento automático (igual ao que acontece às 7h/19h)
+      console.log('⏰ Simulando carregamento automático...');
+      manualReloadAllData().then(() => {
+        // 3. Verificar estado do cache DEPOIS
+        console.log('📊 Cache DEPOIS do reload:', {
+          loaded: dataCache.loaded,
+          lastLoadTime: dataCache.lastLoadTime,
+          usersCount: dataCache.users.length,
+          activityCount: dataCache.activity.length
+        });
+        
+        // 4. Testar se mudança de tab não recarrega
+        console.log('🔄 Testando mudança de tabs...');
+        console.log('Tab atual: Dashboard');
+        
+        setTimeout(() => {
+          console.log('📑 Simulando mudança para tab Users...');
+          console.log('⚡ Se cache funcionar, NÃO deve recarregar do Firebase');
+          // showTab irá usar loadDataFromCache() em vez de recarregar
+        }, 2000);
+        
+        console.log('✅ Teste concluído! Verifique os logs acima.');
+      });
+    }
+    
+    /**
+     * 🧪 FUNÇÃO DE TESTE: Força próximo reload para daqui a 1 minuto
+     * Útil para testar o sistema de agendamento
+     */
+    function testScheduledLoadIn1Minute() {
+      console.log('🧪 ========================================');
+      console.log('🧪 TESTE: Agendando reload para daqui a 1 minuto');
+      console.log('🧪 ========================================');
+      
+      const now = new Date();
+      const testTime = new Date(now.getTime() + 60000); // +1 minuto
+      
+      nextScheduledLoad = testTime;
+      console.log('⏰ Próximo reload forçado para:', testTime.toLocaleTimeString('pt-PT'));
+      console.log('⏳ Aguarde 1 minuto...');
+      console.log('📝 O reload deve acontecer automaticamente e atualizar o cache');
+      
+      updateNextLoadTimeDisplay();
+    }
+    
+    /**
+     * 🧪 FUNÇÃO DE TESTE: Verifica integridade do cache
+     */
+    function testCacheIntegrity() {
+      console.log('🧪 ========================================');
+      console.log('🧪 TESTE: Verificando integridade do cache');
+      console.log('🧪 ========================================');
+      
+      const tests = {
+        'Cache carregado': dataCache.loaded === true,
+        'Timestamp válido': dataCache.lastLoadTime !== null,
+        'Users em cache': dataCache.users.length > 0,
+        'Users em memória': allUsers.length > 0,
+        'Cache = Memória': dataCache.users.length === allUsers.length,
+        'Activity em cache': dataCache.activity.length >= 0
+      };
+      
+      console.table(tests);
+      
+      const allPassed = Object.values(tests).every(t => t === true);
+      
+      if (allPassed) {
+        console.log('✅ Todos os testes passaram! Cache íntegro.');
+      } else {
+        console.error('❌ Alguns testes falharam! Verifique o cache.');
+      }
+      
+      return allPassed;
+    }
+      // ===========================
+    // EXPOR FUNÇÕES DE TESTE GLOBALMENTE
+    // ===========================
+    // Garantir que as funções estão disponíveis no console do browser
+    window.testAutoLoad = testAutoLoad;
+    window.testScheduledLoadIn1Minute = testScheduledLoadIn1Minute;
+    window.testCacheIntegrity = testCacheIntegrity;
+    window.clearDataCache = clearDataCache;
+    
+    // Debug: Verificar se funções foram registradas
+    console.log('🧪 ========================================');
+    console.log('🧪 FUNÇÕES DE TESTE CARREGADAS');
+    console.log('🧪 ========================================');
+    console.log('✅ testAutoLoad:', typeof window.testAutoLoad);
+    console.log('✅ testScheduledLoadIn1Minute:', typeof window.testScheduledLoadIn1Minute);
+    console.log('✅ testCacheIntegrity:', typeof window.testCacheIntegrity);
+    console.log('✅ clearDataCache:', typeof window.clearDataCache);
+    console.log('');
+    console.log('📝 Para executar, copie e cole no console:');
+    console.log('  • testAutoLoad()');
+    console.log('  • testScheduledLoadIn1Minute()');
+    console.log('  • testCacheIntegrity()');
+    console.log('  • clearDataCache()');
+    console.log('🧪 ========================================');
+    
+    // Função helper para listar funções disponíveis
+    window.listTestFunctions = function() {
+      console.log('🧪 ========================================');
+      console.log('🧪 FUNÇÕES DE TESTE DISPONÍVEIS');
+      console.log('🧪 ========================================');
+      console.log('');
+      console.log('1️⃣ testAutoLoad()');
+      console.log('   → Simula carregamento automático');
+      console.log('   → Mostra estado do cache antes e depois');
+      console.log('');
+      console.log('2️⃣ testScheduledLoadIn1Minute()');
+      console.log('   → Agenda reload para daqui a 1 minuto');
+      console.log('   → Testa sistema de agendamento 7h/19h');
+      console.log('');
+      console.log('3️⃣ testCacheIntegrity()');
+      console.log('   → Verifica integridade do cache');
+      console.log('   → Mostra tabela com todos os testes');
+      console.log('');
+      console.log('4️⃣ clearDataCache()');
+      console.log('   → Limpa cache manualmente');
+      console.log('   → Força reload do Firebase no próximo acesso');
+      console.log('');
+      console.log('5️⃣ listTestFunctions()');
+      console.log('   → Mostra esta lista novamente');
+      console.log('');
+      console.log('🧪 ========================================');
+      console.log('📋 Status das funções:');
+      console.log('   testAutoLoad:', typeof window.testAutoLoad === 'function' ? '✅' : '❌');
+      console.log('   testScheduledLoadIn1Minute:', typeof window.testScheduledLoadIn1Minute === 'function' ? '✅' : '❌');
+      console.log('   testCacheIntegrity:', typeof window.testCacheIntegrity === 'function' ? '✅' : '❌');
+      console.log('   clearDataCache:', typeof window.clearDataCache === 'function' ? '✅' : '❌');
+      console.log('🧪 ========================================');
+    };
     
     // ===========================
     // LOGIN LOGIC
@@ -1425,7 +1603,7 @@
         nextLoadSpan.textContent = `${nextScheduledLoad.getHours()}:00 (em ${hours}h ${minutes}m)`;
       } else {
         nextLoadSpan.textContent = `${nextScheduledLoad.getHours()}:00 (em ${minutes}m)`;
-      }
+    }
     }
     
     function updateLastLoadTime() {
@@ -1437,15 +1615,16 @@
       const dateStr = now.toLocaleDateString('pt-PT');
       lastLoadSpan.textContent = `Último carregamento: ${dateStr} às ${timeStr}`;
     }
-      // ===========================
+    
+    // ===========================
     // MANUAL DATA RELOAD
     // ===========================
     async function manualReloadAllData() {
       try {
         console.log('🔄 Recarregamento manual de todos os dados...');
         
-        // Limpar cache antes de recarregar
-        clearDataCache();
+        // 💡 NÃO limpar cache - apenas atualizar com novos dados
+        console.log('📊 Cache será atualizado após carregamento');
         
         // Mostrar barra de progresso
         const progressContainer = document.getElementById('loadingProgressContainer');
@@ -1540,530 +1719,131 @@
       sessionStorage.removeItem('adminUsername');
       window.location.reload();
     }
-      // ===========================
+    
+    // Função para forçar reconstrução do cache de analytics
+    function rebuildAnalyticsCache() {
+      console.log('🔄 Forçando reconstrução do cache de analytics...');
+      
+      // Limpar cache existente (está em admin-analytics.js)
+      if (typeof window.questionAnalyticsCache !== 'undefined') {
+        window.questionAnalyticsCache = null;
+      }
+      
+      // Recarregar analytics
+      loadQuestionAnalyticsWithFilters();
+      
+      console.log('✅ Cache será reconstruído na próxima consulta');
+    }
+    
+    // ===========================
     // TAB NAVIGATION
     // ===========================
     function showTab(tabName) {
-      // Hide all tabs
-      document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-      });
+      console.log(`📑 Mudando para tab: ${tabName}`);
       
-      // Remove active from all buttons
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
+      // Esconder todos os tabs
+      const allTabs = document.querySelectorAll('.tab-content');
+      allTabs.forEach(tab => tab.classList.remove('active'));
       
-      // Show selected tab
-      document.getElementById(`tab-${tabName}`).classList.add('active');
+      // Remover active de todos os botões
+      const allBtns = document.querySelectorAll('.tab-btn');
+      allBtns.forEach(btn => btn.classList.remove('active'));
       
-      // Highlight active button
+      // Mostrar tab selecionado
+      const selectedTab = document.getElementById(`tab-${tabName}`);
+      if (selectedTab) {
+        selectedTab.classList.add('active');
+      }
+      
+      // Marcar botão como active
       event.target.classList.add('active');
       
-      // ⚡ USAR CACHE - NÃO RECARREGAR
-      // Apenas renderizar os dados que já estão em memória
-      console.log(`📑 Mudando para tab: ${tabName} (usando cache)`);
-      
-      // Renderizar dados específicos do tab (SEM recarregar do Firebase)
-      if (tabName === 'dashboard') {
-        // Dashboard já foi carregado - apenas garantir que stats estão atualizadas
-        if (isDataCacheValid()) {
-          updateDashboardStats();
-        }
-      } else if (tabName === 'users') {
-        // Tabela de utilizadores já foi carregada - apenas re-renderizar
-        if (isDataCacheValid()) {
-          renderUsersPage();
-        }
-      } else if (tabName === 'fullReports') {
-        loadFullReportsWithFilters();
-      } else if (tabName === 'questions') {
-        loadQuestionAnalyticsWithFilters();
-      } else if (tabName === 'partialReports') {
-        loadIndividualAnswers();
-      } else if (tabName === 'activity') {
-        // Log de atividade já foi carregado - apenas re-renderizar
-        if (isDataCacheValid()) {
-          renderActivityLog();
-        }
-      }
-    }
-    
-    // ===========================
-    // FULL REPORTS TAB FUNCTIONS
-    // ===========================
-    function loadFullReportsWithFilters() {
-      const period = document.getElementById('filterReportPeriod').value;
-      const compat = document.getElementById('filterReportCompat').value;
-      
-      const filters = {};
-      if (period) filters.period = period;
-      if (compat) filters.compatibility = compat;
-      
-      // Call function from admin-analytics.js
-      if (typeof loadFullReports === 'function') {
-        loadFullReports(filters);
-      }
-    }
-    
-    function resetFullReportFilters() {
-      document.getElementById('filterReportPeriod').value = '';      document.getElementById('filterReportCompat').value = '';
-      loadFullReportsWithFilters();
-    }
-    
-    // ===========================
-    // PARTIAL REPORTS TAB FUNCTIONS - RESPOSTAS INDIVIDUAIS
-    // ===========================
-    let allUserAnswers = []; // Cache de respostas individuais
-    let packQuestionsData = null; // Cache dos dados das perguntas
-    
-    async function loadIndividualAnswers() {
-      const container = document.getElementById('partialReportsContainer');
-      const statsContainer = document.getElementById('partialReportsStats');
-      const packFilter = document.getElementById('filterPartialPack').value;
-      const genderFilter = document.getElementById('filterPartialGender').value;
-      const userFilter = document.getElementById('filterPartialUser').value.toLowerCase().trim();
-      
-      container.innerHTML = `
-        <div style="text-align: center; padding: 40px; color: #6c757d;">
-          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
-          <p>A carregar respostas individuais...</p>
-          <p style="font-size: 0.85em; margin-top: 10px;" id="loadingAnswersProgress">A preparar...</p>
-          <div style="width: 200px; height: 6px; background: #e9ecef; border-radius: 3px; margin: 15px auto 0;">
-            <div id="loadingAnswersBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 3px; transition: width 0.3s;"></div>
-          </div>
-        </div>
-      `;
-      
-      try {
-        // Carregar dados dos packs se ainda não carregou
-        if (!packQuestionsData) {
-          const response = await fetch('../data/packs_data_clean.json');
-          packQuestionsData = await response.json();
-        }
+      // Carregar dados específicos do tab se necessário
+      // Usar cache quando disponível
+      if (isDataCacheValid()) {
+        console.log('📦 Usando dados do cache para tab:', tabName);
         
-        // Recolher respostas de todos os utilizadores
-        if (allUserAnswers.length === 0) {
-          console.log('📥 A carregar respostas de todos os utilizadores...');
-          
-          const totalUsers = allUsers.length;
-          let processedUsers = 0;
-          const progressEl = document.getElementById('loadingAnswersProgress');
-          const progressBar = document.getElementById('loadingAnswersBar');
-          
-          for (const user of allUsers) {
-            processedUsers++;
+        switch(tabName) {
+          case 'dashboard':
+            // Dashboard já está carregado
+            break;
             
-            // Atualizar progresso a cada utilizador
-            if (progressEl) {
-              progressEl.textContent = `A processar utilizador ${processedUsers} de ${totalUsers}...`;
+          case 'users':
+            // Users já estão carregados, apenas renderizar se necessário
+            if (filteredUsers.length === 0) {
+              filteredUsers = [...allUsers];
+              renderUsersPage();
             }
-            if (progressBar) {
-              progressBar.style.width = `${Math.round((processedUsers / totalUsers) * 100)}%`;
-            }
+            break;
             
-            try {
-              const answersDoc = await db.collection('users').doc(user.id).collection('answers').doc('all').get();
-              if (answersDoc.exists) {
-                const answersData = answersDoc.data() || {};
-                const packs = Object.keys(answersData);
-                
-                for (const packId of packs) {
-                  const packAnswers = answersData[packId] || {};
-                  const answerCount = Object.keys(packAnswers).length;
-                  
-                  if (answerCount > 0) {
-                    // Contar comentários
-                    const commentsCount = Object.values(packAnswers).filter(ans => ans.comment && ans.comment.trim()).length;
-                    
-                    allUserAnswers.push({
-                      oderId: user.id,
-                      userName: user.name || user.displayName || user.username || user.email?.split('@')[0] || 'Sem nome',
-                      userEmail: user.email || '-',
-                      userGender: user.gender || null,
-                      packId: packId,
-                      answerCount: answerCount,
-                      commentsCount: commentsCount,
-                      answers: packAnswers,
-                      lastUpdated: packAnswers[Object.keys(packAnswers).pop()]?.timestamp || null
-                    });
-                  }
-                }
-              }
-            } catch (e) {
-              // Ignorar erros de permissão
-            }
-          }
-          
-          // Ordenar por data (mais recentes primeiro) ou por nome
-          allUserAnswers.sort((a, b) => {
-            if (a.lastUpdated && b.lastUpdated) {
-              const dateA = a.lastUpdated?.toDate ? a.lastUpdated.toDate() : new Date(a.lastUpdated);
-              const dateB = b.lastUpdated?.toDate ? b.lastUpdated.toDate() : new Date(b.lastUpdated);
-              return dateB - dateA;
-            }
-            return a.userName.localeCompare(b.userName);
-          });
-          
-          console.log(`✅ ${allUserAnswers.length} packs individuais encontrados`);
+          case 'partialReports':
+            loadIndividualAnswers();
+            break;
+            
+          case 'fullReports':
+            loadFullReportsWithFilters();
+            break;
+            
+          case 'questions':
+            loadQuestionAnalyticsWithFilters();
+            break;
+            
+          case 'activity':
+            // Re-renderizar activity log do cache
+            renderActivityLog();
+            break;
         }
+      } else {
+        console.warn('⚠️ Cache não disponível, pode ser necessário recarregar dados');
         
-        // Aplicar filtros
-        let filtered = [...allUserAnswers];
-        
-        if (packFilter) {
-          filtered = filtered.filter(item => item.packId === packFilter);
+        // Se não há cache, carregar dados conforme necessário
+        switch(tabName) {
+          case 'partialReports':
+            loadIndividualAnswers();
+            break;
+            
+          case 'fullReports':
+            loadFullReportsWithFilters();
+            break;
+            
+          case 'questions':
+            loadQuestionAnalyticsWithFilters();
+            break;
+            
+          case 'activity':
+            loadActivityLog();
+            break;
         }
-        
-        if (genderFilter) {
-          if (genderFilter === 'outro') {
-            // "Outro" inclui qualquer coisa que não seja M ou F
-            filtered = filtered.filter(item => item.userGender && item.userGender !== 'M' && item.userGender !== 'F');
-          } else {
-            filtered = filtered.filter(item => item.userGender === genderFilter);
-          }
-        }
-        
-        if (userFilter) {
-          filtered = filtered.filter(item => 
-            item.userName.toLowerCase().includes(userFilter) ||
-            item.userEmail.toLowerCase().includes(userFilter)
-          );
-        }
-        
-        // Estatísticas
-        const packStats = {};
-        let totalAnswers = 0;
-        let totalComments = 0;
-        
-        allUserAnswers.forEach(item => {
-          packStats[item.packId] = (packStats[item.packId] || 0) + 1;
-          totalAnswers += item.answerCount;
-          totalComments += item.commentsCount || 0;
-        });
-        
-        const packInfo = {
-          'romantico': { icon: '💕', name: 'Romântico', color: '#e91e63' },
-          'experiencia': { icon: '🌍', name: 'Exploração', color: '#ff9800' },
-          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336' },
-          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0' },
-          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7' }
-        };
-        
-        statsContainer.innerHTML = `
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 12px; text-align: center; color: white;">
-              <div style="font-size: 1.8em; font-weight: 700;">${allUserAnswers.length}</div>
-              <div style="font-size: 0.8em; opacity: 0.9;">Packs Preenchidos</div>
-            </div>
-            <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-              <div style="font-size: 1.8em; font-weight: 700; color: #28a745;">${totalAnswers.toLocaleString('pt-PT')}</div>
-              <div style="font-size: 0.8em; color: #6c757d;">Total Respostas</div>
-            </div>
-            <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid #ffc107;">
-              <div style="font-size: 1.8em; font-weight: 700; color: #856404;">${totalComments.toLocaleString('pt-PT')}</div>
-              <div style="font-size: 0.8em; color: #6c757d;">💬 Comentários</div>
-            </div>
-            ${Object.keys(packStats).map(pid => {
-              const info = packInfo[pid] || { icon: '📋', name: pid, color: '#6c757d' };
-              return `
-                <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid ${info.color};">
-                  <div style="font-size: 1.5em; font-weight: 700; color: ${info.color};">${packStats[pid]}</div>
-                  <div style="font-size: 0.75em; color: #6c757d;">${info.icon} ${info.name}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
-        
-        // Renderizar lista
-        if (filtered.length === 0) {
-          container.innerHTML = `
-            <div style="text-align: center; padding: 50px; color: #6c757d;">
-              <div style="font-size: 3em; margin-bottom: 15px;">🔍</div>
-              <h3>Nenhum resultado encontrado</h3>
-              <p>Tente ajustar os filtros.</p>
-            </div>
-          `;
-          return;
-        }
-        
-        let html = `<div style="display: grid; gap: 12px;">`;
-        
-        filtered.forEach((item, idx) => {
-          const info = packInfo[item.packId] || { icon: '📋', name: item.packId, color: '#6c757d' };
-          const maskedEmail = maskEmail(item.userEmail);
-          const genderIcon = item.userGender === 'M' ? '♂️' : item.userGender === 'F' ? '♀️' : item.userGender ? '⚧️' : '';
-          
-          html += `
-            <div class="answer-card" style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; cursor: pointer; border-left: 4px solid ${info.color};"
-                 onclick="showUserPackAnswers('${item.oderId}', '${item.packId}')"
-                 onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.12)';"
-                 onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
-              <div style="display: flex; align-items: center; gap: 15px;">
-                <div style="width: 45px; height: 45px; background: linear-gradient(135deg, ${info.color}22, ${info.color}44); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4em;">
-                  ${info.icon}
-                </div>
-                <div>
-                  <div style="font-weight: 600; color: #333; margin-bottom: 3px;">${genderIcon} ${item.userName}</div>
-                  <div style="font-size: 0.85em; color: #6c757d;" title="${item.userEmail}">${maskedEmail}</div>
-                </div>
-              </div>              <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="text-align: right;">
-                  <div style="font-size: 0.85em; color: ${info.color}; font-weight: 600;">${info.name}</div>
-                  <div style="font-size: 0.8em; color: #6c757d;">
-                    ${item.answerCount} respostas
-                    ${item.commentsCount > 0 ? `<span style="margin-left: 8px; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 8px; font-size: 0.85em; font-weight: 600;">💬 ${item.commentsCount}</span>` : ''}
-                  </div>
-                </div>
-                <div style="color: #667eea; font-size: 1.2em;">▶</div>
-              </div>
-            </div>
-          `;
-        });
-        
-        html += `</div>`;
-        container.innerHTML = html;
-        
-      } catch (error) {
-        console.error('❌ Erro ao carregar respostas individuais:', error);
-        container.innerHTML = `
-          <div style="text-align: center; padding: 40px; color: #dc3545;">
-            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
-            <p>Erro ao carregar dados: ${error.message}</p>
-          </div>
-        `;
       }
     }
     
-    async function showUserPackAnswers(userId, packId) {
-      const modal = document.getElementById('answersModal');
-      const content = document.getElementById('answersModalContent');
-      
-      modal.style.display = 'block';
-      document.body.style.overflow = 'hidden';
-      
-      content.innerHTML = `
-        <div style="padding: 40px; text-align: center;">
-          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
-          <p>A carregar respostas...</p>
-        </div>
-      `;
-      
-      try {
-        // Buscar dados do utilizador
-        const userDoc = await db.collection('users').doc(userId).get();
-        const userData = userDoc.exists ? userDoc.data() : {};
-        const userName = userData.name || userData.displayName || userData.username || userData.email?.split('@')[0] || 'Utilizador';
-        
-        // Buscar respostas
-        const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
-        const allAnswers = answersDoc.exists ? answersDoc.data() : {};
-        const packAnswers = allAnswers[packId] || {};
-        
-        // DEBUG: Ver estrutura dos dados
-        console.log('📊 DEBUG - Estrutura das respostas:');
-        console.log('packAnswers:', packAnswers);
-        if (Object.keys(packAnswers).length > 0) {
-          const firstKey = Object.keys(packAnswers)[0];
-          console.log('Exemplo de resposta (primeira):', firstKey, packAnswers[firstKey]);
-          console.log('Tem comment?', packAnswers[firstKey]?.comment);
-        }
-        
-        // Buscar dados do pack
-        const packInfo = {
-          'romantico': { icon: '💕', name: 'Pack Romântico', color: '#e91e63', colorKey: 'romantico' },
-          'experiencia': { icon: '🌍', name: 'Exploração e Aventura', color: '#ff9800', colorKey: 'experiencia' },
-          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336', colorKey: 'pimentinha' },
-          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0', colorKey: 'poliamor' },
-          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7', colorKey: 'kinks' }
-        };
-        
-        const info = packInfo[packId] || { icon: '📋', name: packId, color: '#667eea', colorKey: packId };
-        
-        // Buscar perguntas do pack
-        const packData = packQuestionsData?.find(p => p.color === info.colorKey);
-        const allQuestions = packData?.categories?.flatMap(cat => cat.questions) || [];
-        
-        // Ordenar respostas por ordem da pergunta
-        const sortedAnswers = Object.entries(packAnswers).sort((a, b) => {
-          const numA = parseInt(a[0].replace('q', ''));
-          const numB = parseInt(b[0].replace('q', ''));
-          return numA - numB;
-        });
-        
-        // Contar tipos de resposta
-        const answerCounts = { porfavor: 0, yup: 0, talvez: 0, meh: 0 };
-        sortedAnswers.forEach(([key, val]) => {
-          const ans = val.answer;
-          if (answerCounts[ans] !== undefined) answerCounts[ans]++;
-        });
-        
-        const answerLabels = {
-          porfavor: { label: 'Por favor! 🤩', color: '#28a745', bg: '#d4edda' },
-          yup: { label: 'Sim! 😊', color: '#17a2b8', bg: '#d1ecf1' },
-          talvez: { label: 'Talvez 🤔', color: '#ffc107', bg: '#fff3cd' },
-          meh: { label: 'Não, obrigado 😅', color: '#dc3545', bg: '#f8d7da' }
-        };
-        
-        let html = `
-          <div style="padding: 25px; border-bottom: 1px solid #eee; background: linear-gradient(135deg, ${info.color}15, ${info.color}05);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h2 style="margin: 0 0 8px 0; color: #333;">
-                  ${info.icon} ${info.name}
-                </h2>
-                <p style="margin: 0; color: #6c757d;">
-                  <strong>${userName}</strong> • ${sortedAnswers.length} respostas
-                </p>
-              </div>
-              <button onclick="closeAnswersModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #6c757d; padding: 5px;">✕</button>
-            </div>
-          </div>
-          
-          <div style="padding: 20px; background: #f8f9fa;">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-              ${Object.entries(answerCounts).map(([key, count]) => {
-                const labelInfo = answerLabels[key];
-                return `
-                  <div style="background: ${labelInfo.bg}; padding: 12px; border-radius: 8px; text-align: center;">
-                    <div style="font-size: 1.3em; font-weight: 700; color: ${labelInfo.color};">${count}</div>
-                    <div style="font-size: 0.75em; color: ${labelInfo.color};">${labelInfo.label}</div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          </div>
-          
-          <div style="padding: 20px; max-height: 400px; overflow-y: auto;">
-        `;
-        
-        // Contar comentários
-        const commentsCount = sortedAnswers.filter(([key, val]) => val.comment && val.comment.trim()).length;
-        
-        if (commentsCount > 0) {
-          html += `
-            <div style="background: #e8f4fd; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.2em;">💬</span>
-              <span style="color: #1976d2; font-weight: 500;">${commentsCount} resposta${commentsCount > 1 ? 's' : ''} com comentário</span>
-            </div>
-          `;
-        }
-        
-        sortedAnswers.forEach(([qKey, answerData], idx) => {
-          const qIndex = parseInt(qKey.replace('q', '')) - 1;
-          const questionText = allQuestions[qIndex] || `Pergunta ${qIndex + 1}`;
-          const answer = answerData.answer;
-          const comment = answerData.comment?.trim() || '';
-          const labelInfo = answerLabels[answer] || { label: answer, color: '#6c757d', bg: '#f8f9fa' };
-          
-          html += `
-            <div style="padding: 12px 15px; margin-bottom: 10px; background: white; border-radius: 10px; border-left: 3px solid ${labelInfo.color}; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;">
-                <div style="flex: 1;">
-                  <span style="color: #999; font-size: 0.8em; margin-right: 8px;">#${qIndex + 1}</span>
-                  <span style="color: #333;">${questionText}</span>
-                </div>
-                <span style="background: ${labelInfo.bg}; color: ${labelInfo.color}; padding: 4px 10px; border-radius: 15px; font-size: 0.8em; font-weight: 600; white-space: nowrap;">
-                  ${labelInfo.label}
-                </span>
-              </div>
-              ${comment ? `
-                <div style="margin-top: 10px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #667eea;">
-                  <div style="display: flex; align-items: flex-start; gap: 8px;">
-                    <span style="color: #667eea; font-size: 1em;">💬</span>
-                    <div style="flex: 1;">
-                      <div style="font-size: 0.75em; color: #667eea; font-weight: 600; margin-bottom: 4px;">Comentário do utilizador:</div>
-                      <div style="color: #495057; font-size: 0.9em; font-style: italic; line-height: 1.4;">"${comment}"</div>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-          `;
-        });
-        
-        html += `
-          </div>
-          <div style="padding: 20px; border-top: 1px solid #eee; text-align: center;">
-            <button onclick="closeAnswersModal()" style="padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-              Fechar
-            </button>
-          </div>
-        `;
-        
-        content.innerHTML = html;
-        
-      } catch (error) {
-        console.error('❌ Erro ao carregar respostas:', error);
-        content.innerHTML = `
-          <div style="padding: 40px; text-align: center;">
-            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
-            <p style="color: #dc3545;">Erro ao carregar respostas: ${error.message}</p>
-            <button onclick="closeAnswersModal()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">
-              Fechar
-            </button>
-          </div>
-        `;
+    // Função para re-renderizar activity log do cache sem recarregar
+    function renderActivityLog() {
+      if (!allActivity || allActivity.length === 0) {
+        console.warn('⚠️ Nenhuma atividade em cache');
+        loadActivityLog();
+        return;
       }
-    }
-    
-    function closeAnswersModal() {
-      document.getElementById('answersModal').style.display = 'none';
-      document.body.style.overflow = '';
-    }
-    
-    // Fechar modal ao clicar fora
-    document.addEventListener('click', function(e) {
-      const modal = document.getElementById('answersModal');
-      if (e.target === modal) {
-        closeAnswersModal();
+      
+      console.log('📦 Re-renderizando activity log do cache:', allActivity.length, 'atividades');
+      
+      const loadingActivity = document.getElementById('loadingActivity');
+      const activityLog = document.getElementById('activityLog');
+      
+      if (loadingActivity) loadingActivity.style.display = 'none';
+      if (activityLog) {
+        activityLog.style.display = 'block';
+        
+        // Re-renderizar itens (usar mesma lógica do loadActivityLog)
+        activityLog.innerHTML = '';
+        allActivity.slice(0, 100).forEach(activity => {
+          const item = createActivityItem(activity);
+          activityLog.appendChild(item);
+        });
       }
-    });
-    
-    // Fechar modal com ESC
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('answersModal');
-        if (modal && modal.style.display !== 'none') {
-          closeAnswersModal();
-        }
-      }
-    });
-    
-    function resetPartialReportFilters() {
-      document.getElementById('filterPartialPack').value = '';
-      document.getElementById('filterPartialGender').value = '';
-      document.getElementById('filterPartialUser').value = '';
-      loadIndividualAnswers();
     }
     
     // ===========================
-    // QUESTION ANALYTICS TAB FUNCTIONS
-    // ===========================
-    function loadQuestionAnalyticsWithFilters() {
-      const packId = document.getElementById('filterQuestionPack').value;
-      const minResponses = parseInt(document.getElementById('filterMinResponses').value) || 0;
-      const sortBy = document.getElementById('filterQuestionSort')?.value || 'responses';
-      const genderFilter = document.getElementById('filterQuestionGender')?.value || '';
-      
-      console.log('🔍 loadQuestionAnalyticsWithFilters() - Filtros:', { packId, minResponses, sortBy, genderFilter });
-      
-      // Call function from admin-analytics.js
-      if (typeof loadQuestionAnalytics === 'function') {
-        loadQuestionAnalytics(packId, minResponses, sortBy, genderFilter);
-      }
-    }
-    
-    function resetQuestionFilters() {
-      document.getElementById('filterQuestionPack').value = '';
-      document.getElementById('filterMinResponses').value = '0';
-      document.getElementById('filterQuestionSort').value = 'responses';
-      const genderEl = document.getElementById('filterQuestionGender');
-      if (genderEl) genderEl.value = '';
-      loadQuestionAnalyticsWithFilters();
-    }
-      // ===========================
     // LOAD DATA
     // ===========================
     async function loadAllData() {
@@ -3398,4 +3178,3 @@ ${error.stack || 'Sem stack trace'}
 
 </body>
 </html>
-``` 

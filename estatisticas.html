@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estatísticas - Quest4Couple</title>
+  
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "u8hwuw3ixs");
+  </script>
+
+  <link rel="stylesheet" href="css/main.css">
+  
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+    }
+
+    .stats-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }    .stats-header {
+      background: white;
+      border-radius: 16px;
+      padding: 20px 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .stats-header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .stats-header img {
+      width: 60px;
+      height: auto;
+    }
+
+    .stats-header h1 {
+      color: #667eea;
+      font-size: 1.6em;
+      margin: 0;
+      font-weight: 700;
+    }
+
+    .stats-header p {
+      color: #6c757d;
+      font-size: 0.9em;
+      margin: 3px 0 0 0;
+    }
+
+    .stats-header-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .stats-counter {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 12px 20px;
+      border-radius: 12px;
+      color: white;
+      text-align: center;
+    }
+
+    .stats-counter .number {
+      font-size: 1.5em;
+      font-weight: 700;
+    }
+
+    .stats-counter .label {
+      font-size: 0.75em;
+      opacity: 0.9;
+    }
+
+    .stats-update {
+      text-align: center;
+      font-size: 0.8em;
+      color: #6c757d;
+    }
+
+    .stats-update .time {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    /* Filters Inline */
+    .filters-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 12px;
+    }
+
+    .filters-inline .filter-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 120px;
+    }
+
+    .filters-inline .filter-group label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 5px;
+      font-size: 0.8em;
+    }
+
+    .filters-inline .filter-group select {
+      padding: 8px 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 0.9em;
+      background: white;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .filters-inline .filter-group select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .btn-reset-small {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1em;
+    }    .btn-reset-small:hover {
+      background: #5a6268;
+    }
+
+    /* Table Section */
+    .table-section {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+
+    .table-section h3 {
+      color: #495057;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 5px;
+    }
+
+    .view-toggle button {
+      background: #e9ecef;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.3s;
+    }
+
+    .view-toggle button.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 600;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
+    }
+
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #667eea;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Sortable Table Headers */
+    .sortable-header {
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .sortable-header:hover {
+      background: rgba(102, 126, 234, 0.15) !important;
+    }
+
+    .sort-icon {
+      margin-left: 5px;
+      opacity: 0.5;
+      font-size: 0.8em;
+    }
+
+    .sort-icon.active {
+      opacity: 1;
+    }
+
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .pagination button {
+      background: #e9ecef;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #667eea;
+      color: white;
+    }
+
+    .pagination button.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-weight: 600;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination-info {
+      font-size: 0.85em;
+      color: #6c757d;
+      margin: 0 10px;
+    }    /* Responsive */
+    @media (max-width: 768px) {
+      .stats-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .stats-header-left {
+        flex-direction: column;
+      }
+
+      .stats-header h1 {
+        font-size: 1.4em;
+      }
+
+      .filters-inline {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .filters-inline .filter-group {
+        width: 100%;
+      }
+
+      .table-controls {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .curiosidades-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .curiosidade-mini .stats-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .pagination {
+        gap: 4px;
+      }
+
+      .pagination button {
+        padding: 6px 10px;
+        font-size: 0.8em;
+      }
+    }
+
+    /* Footer */
+    .stats-footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: white;
+    }
+
+    .stats-footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px 30px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 25px;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+
+    .stats-footer a:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <div class="stats-container">
+    <!-- Header Compacto -->
+    <div class="stats-header">
+      <div class="stats-header-left">
+        <img src="assets/logo.png" alt="Quest4Couple Logo">
+        <div>
+          <h1>📊 Estatísticas</h1>
+          <p>O que milhares de casais responderam</p>
+        </div>
+      </div>
+      <div class="stats-header-right">
+        <div class="stats-counter">
+          <div class="number" id="totalResponsesCount">--</div>
+          <div class="label">Respostas</div>
+        </div>
+        <div class="stats-update">
+          <div>🕐 Atualizado</div>
+          <div class="time" id="lastUpdateTime">--</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Questões por Aceitação -->
+    <div class="table-section">
+      <h3>📈 Questões por Aceitação</h3>
+      
+      <!-- Filtros inline -->
+      <div class="filters-inline">
+        <div class="filter-group">
+          <label for="filterPack">📦 Pacote</label>
+          <select id="filterPack" onchange="applyFilters()">
+            <option value="">Todos</option>
+            <option value="romantico">💕 Romântico</option>
+            <option value="experiencia">🌍 Exploração</option>
+            <option value="pimentinha">🌶️ Pimentinha</option>
+            <option value="poliamor">💜 Poliamor</option>
+            <option value="kinks">🔥 Fetiches</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterGender">⚧️ Género</label>
+          <select id="filterGender" onchange="applyFilters()">
+            <option value="">Todos</option>
+            <option value="M">♂️ Masculino</option>
+            <option value="F">♀️ Feminino</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterAge">🎂 Idade</label>
+          <select id="filterAge" onchange="applyFilters()">
+            <option value="">Todas</option>
+            <option value="18-25">18-25</option>
+            <option value="26-35">26-35</option>
+            <option value="36-45">36-45</option>
+            <option value="46-55">46-55</option>
+            <option value="56+">56+</option>
+          </select>
+        </div>
+        <button class="btn-reset-small" onclick="resetFilters()" title="Limpar filtros">🔄</button>
+      </div>
+      
+      <div class="table-controls">
+        <div class="view-toggle">
+          <button id="btnTableView" class="active" onclick="changeView('table')">📊 Tabela</button>
+          <button id="btnCardsView" onclick="changeView('cards')">📋 Cards</button>
+        </div>
+        <div class="pagination-info" id="paginationInfo">--</div>
+      </div>
+      
+      <div id="statisticsContainer">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <p>A carregar estatísticas...</p>
+        </div>
+      </div>
+      
+            <!-- Paginação -->
+      <div class="pagination" id="paginationContainer"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="stats-footer">
+    <a href="index.html">🏠 Voltar à Página Inicial</a>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <script src="js/firebase-config.js"></script>
+  <script src="js/public-statistics.js"></script>
+
+</body>
+</html>

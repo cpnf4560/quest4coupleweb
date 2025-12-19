@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publicar Estatísticas - Admin Tool</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    h1 { color: #667eea; margin-bottom: 20px; }
+    .status { 
+      padding: 15px; 
+      border-radius: 10px; 
+      margin: 15px 0;
+      background: #f8f9fa;
+    }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .info { background: #d1ecf1; color: #0c5460; }
+    button {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1.1em;
+      cursor: pointer;
+      margin: 10px 5px;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: translateY(-2px); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    #log {
+      background: #1e1e1e;
+      color: #00ff00;
+      padding: 15px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.85em;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📤 Publicar Estatísticas</h1>
+    <p>Esta ferramenta publica as estatísticas para a página pública.</p>
+    
+    <div id="authStatus" class="status info">
+      🔄 A verificar autenticação...
+    </div>
+    
+    <div id="buttons" style="display: none;">
+      <button onclick="doPublish()" id="btnPublish">
+        📤 Publicar Estatísticas Agora
+      </button>
+      <button onclick="window.location.href='pages/admin.html'" class="btn-secondary">
+        🔙 Ir para Admin
+      </button>
+    </div>
+    
+    <div id="log"></div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <script src="js/firebase-config.js"></script>
+  
+  <script>
+    const logEl = document.getElementById('log');
+    const authStatusEl = document.getElementById('authStatus');
+    const buttonsEl = document.getElementById('buttons');
+    
+    function log(msg) {
+      const time = new Date().toLocaleTimeString('pt-PT');
+      logEl.textContent += `[${time}] ${msg}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+      console.log(msg);
+    }
+    
+    // Verificar autenticação
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        log(`✅ Utilizador autenticado: ${user.email}`);
+        
+        // Verificar se é admin
+        const db = firebase.firestore();
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        
+        if (userDoc.exists && userDoc.data().isAdmin) {
+          authStatusEl.className = 'status success';
+          authStatusEl.innerHTML = `✅ Autenticado como Admin: ${user.email}`;
+          buttonsEl.style.display = 'block';
+          log('✅ Permissões de admin confirmadas');
+        } else {
+          authStatusEl.className = 'status error';
+          authStatusEl.innerHTML = '❌ Utilizador não é admin';
+          log('❌ Este utilizador não tem permissões de admin');
+        }
+      } else {
+        authStatusEl.className = 'status error';
+        authStatusEl.innerHTML = '❌ Não autenticado. <a href="pages/admin.html">Fazer login</a>';
+        log('❌ Não há utilizador autenticado');
+      }
+    });
+      async function doPublish() {
+      const btn = document.getElementById('btnPublish');
+      btn.disabled = true;
+      btn.textContent = '⏳ A publicar...';
+      
+      try {
+        log('📥 A carregar dados dos packs...');
+        const packsResponse = await fetch('data/packs_data_clean.json');
+        const allPacksData = await packsResponse.json();
+        
+        // Criar mapa de questões por pack
+        // O JSON é um array de packs, cada pack tem categories com questions
+        const packQuestionsMap = {};
+        const packIdMap = {
+          'romantico': 'romantico',
+          'experiencia': 'experiencia', 
+          'pimentinha': 'pimentinha',
+          'poliamor': 'poliamor',
+          'kinks': 'kinks'
+        };
+        
+        allPacksData.forEach(pack => {
+          const packId = pack.color; // 'romantico', 'experiencia', etc.
+          const allQuestions = [];
+          
+          // Juntar todas as questões de todas as categorias
+          if (pack.categories) {
+            pack.categories.forEach(cat => {
+              if (cat.questions) {
+                cat.questions.forEach(q => {
+                  allQuestions.push(typeof q === 'string' ? q : (q.q || q.question || ''));
+                });
+              }
+            });
+          }
+          
+          packQuestionsMap[packId] = allQuestions;
+          log(`📦 Pack ${packId}: ${allQuestions.length} questões`);
+        });
+        
+        log('📊 A buscar utilizadores do Firestore...');
+        const db = firebase.firestore();
+        const usersSnapshot = await db.collection('users').get();
+        log(`📊 Total de utilizadores: ${usersSnapshot.size}`);
+          const questionStats = {};
+        let totalAnswers = 0;
+        let usersWithAnswers = 0;
+        
+        // Limites de perguntas por pack (perguntas oficiais)
+        const packLimits = {
+          'romantico': 50,
+          'experiencia': 50,
+          'pimentinha': 50,
+          'poliamor': 60,
+          'kinks': 90
+        };
+        
+        log('🔨 A processar respostas...');
+        
+        for (const userDoc of usersSnapshot.docs) {
+          const userData = userDoc.data();
+          const userId = userDoc.id;
+          
+          const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
+          if (!answersDoc.exists) continue;
+          
+          usersWithAnswers++;
+          const answers = answersDoc.data();
+          const userGender = userData.gender || null;
+          const userAgeRange = userData.ageRange || null;
+            // Debug: mostrar estrutura das respostas do primeiro utilizador
+          if (usersWithAnswers === 1) {
+            log(`🔍 Debug - Packs com respostas: ${JSON.stringify(Object.keys(answers))}`);
+            const firstPack = Object.keys(answers)[0];
+            if (firstPack && answers[firstPack]) {
+              const firstPackKeys = Object.keys(answers[firstPack]).slice(0, 5);
+              log(`🔍 Debug - Chaves do pack "${firstPack}": ${JSON.stringify(firstPackKeys)}`);
+              const firstKey = firstPackKeys[0];
+              if (firstKey) {
+                log(`🔍 Debug - Valor de "${firstKey}": ${JSON.stringify(answers[firstPack][firstKey])}`);
+              }
+            }
+          }
+            // Para cada pack
+          for (const packId of Object.keys(packQuestionsMap)) {
+            const packAnswers = answers[packId];
+            const questions = packQuestionsMap[packId];
+            
+            if (!packAnswers || !questions) continue;
+            
+            // As respostas estão no formato: {"q0": {"answer": "yup", ...}, "q1": {...}}
+            // OU no formato antigo: {0: "yup", 1: "porfavor"}
+              questions.forEach((questionText, qIdx) => {
+              const key = `${packId}_${qIdx}`;
+              
+              // No Firestore, as chaves são q1, q2, q3... (1-based, não 0-based)
+              const qKey = `q${qIdx + 1}`;
+              const answerData = packAnswers[qKey];
+              
+              if (!answerData) return;
+              
+              // A resposta pode ser um objeto {answer: "yup"} ou string direta
+              const answer = (typeof answerData === 'object' && answerData.answer) 
+                ? answerData.answer 
+                : answerData;
+              
+              if (!answer || !['porfavor', 'yup', 'talvez', 'meh'].includes(answer)) return;
+              
+              if (!questionStats[key]) {
+                questionStats[key] = {
+                  packId: packId,
+                  questionIndex: qIdx,
+                  questionText: questionText,
+                  total: 0,
+                  porfavor: 0,
+                  yup: 0,
+                  talvez: 0,
+                  meh: 0,
+                  byGender: {},
+                  byAge: {}
+                };
+              }
+              
+              questionStats[key].total++;
+              questionStats[key][answer]++;
+              totalAnswers++;
+              
+              if (userGender) {
+                if (!questionStats[key].byGender[userGender]) {
+                  questionStats[key].byGender[userGender] = {
+                    total: 0, porfavor: 0, yup: 0, talvez: 0, meh: 0
+                  };
+                }
+                questionStats[key].byGender[userGender].total++;
+                questionStats[key].byGender[userGender][answer]++;
+              }
+              
+              if (userAgeRange) {
+                if (!questionStats[key].byAge[userAgeRange]) {
+                  questionStats[key].byAge[userAgeRange] = {
+                    total: 0, porfavor: 0, yup: 0, talvez: 0, meh: 0
+                  };
+                }
+                questionStats[key].byAge[userAgeRange].total++;
+                questionStats[key].byAge[userAgeRange][answer]++;
+              }
+            });
+          }
+        }
+        
+        log(`✅ Processados ${usersWithAnswers} utilizadores com respostas`);
+        log(`📊 Questões encontradas: ${Object.keys(questionStats).length}`);
+          // Converter para array e calcular openRate
+        // Nova fórmula: porfavor + yup = aceite (100%), talvez = meio aceite (50%), meh = não aceite (0%)
+        const questionsArray = Object.values(questionStats).map(q => {
+          const total = q.total || 1;
+          q.openRate = Math.round(((q.porfavor + q.yup + q.talvez * 0.5) / total) * 100);
+          return q;
+        });
+        
+        log(`📊 ${questionsArray.length} questões com ${totalAnswers} respostas`);
+        
+        // Publicar no Firestore
+        log('📤 A publicar no Firestore...');
+        
+        const publicData = {
+          questions: questionsArray,
+          totalResponses: totalAnswers,
+          totalQuestions: questionsArray.length,
+          lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+          version: 1
+        };
+        
+        await db.collection('publicStatistics').doc('questionAnalytics').set(publicData);
+        
+        log('✅ ========================================');
+        log(`✅ PUBLICAÇÃO CONCLUÍDA COM SUCESSO!`);
+        log(`📊 ${questionsArray.length} questões`);
+        log(`📈 ${totalAnswers.toLocaleString('pt-PT')} respostas`);
+        log('✅ ========================================');
+        
+        authStatusEl.className = 'status success';
+        authStatusEl.innerHTML = `✅ Estatísticas publicadas! ${questionsArray.length} questões, ${totalAnswers.toLocaleString('pt-PT')} respostas`;
+        
+        btn.textContent = '✅ Publicado!';
+        btn.style.background = '#28a745';
+        
+      } catch (error) {
+        log(`❌ ERRO: ${error.message}`);
+        console.error(error);
+        authStatusEl.className = 'status error';
+        authStatusEl.innerHTML = `❌ Erro: ${error.message}`;
+        btn.disabled = false;
+        btn.textContent = '📤 Tentar Novamente';
+      }
+    }
+  </script>
+</body>
+</html>

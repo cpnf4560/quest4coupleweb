@@ -131,10 +131,10 @@
     },
     "badge": {
       "free": "✨ 100% Gratuito • Veja sem login"
-    },
-    "links": {
+    },    "links": {
       "howItWorks": "🎓 Como Funciona? • Tutorial",
-      "viewReport": "💑 Ver Relatório do Casal"
+      "viewReport": "💑 Ver Relatório do Casal",
+      "statistics": "📊 Estatísticas Públicas"
     },
     "features": {
       "title": "Como Funciona?",      "private": {
@@ -971,15 +971,25 @@
       "s11Title": "11. Lei Aplicável",
       "s11Text": "Estes termos são regidos pelas leis de Portugal. Qualquer disputa será resolvida nos tribunais portugueses.",
       "s12Title": "12. Contacto",      "s12Text": "Dúvidas sobre estes termos?"
-    },
-    "footer": {
+    },    "footer": {
       "copyright": "© 2025 Quest4Couple",
       "home": "Início",
       "about": "Sobre",
       "faq": "FAQ",
+      "statistics": "📊 Estatísticas",
       "support": "Apoiar",
       "privacy": "Privacidade",
-      "terms": "Termos"
+      "terms": "Termos",
+      "admin": "Admin",
+      "links": {
+        "about": "Sobre",
+        "faq": "FAQ",
+        "statistics": "📊 Estatísticas",
+        "support": "Apoiar o Projeto",
+        "privacy": "Privacidade",
+        "terms": "Termos",
+        "admin": "Admin"
+      }
     }
   }
 }

@@ -213,8 +213,7 @@ service cloud.firestore {
       // Utilizador pode apagar suas conexões
       allow delete: if request.auth != null;
     }
-    
-    // ========================================
+      // ========================================
     // AUDIT LOG COLLECTION
     // ========================================
     match /audit_log/{logId} {
@@ -227,6 +226,20 @@ service cloud.firestore {
       
       // Ninguém pode editar ou apagar logs
       allow update, delete: if false;
+    }
+    
+    // ========================================
+    // PUBLIC STATISTICS COLLECTION
+    // Estatísticas públicas para a página de estatísticas
+    // Atualização: 7h e 19h (pelo admin)
+    // ========================================
+    match /publicStatistics/{docId} {
+      // LEITURA: Qualquer pessoa pode ler (público)
+      allow read: if true;
+      
+      // ESCRITA: Apenas admins podem publicar estatísticas
+      allow write: if request.auth != null && 
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
     
     // ========================================

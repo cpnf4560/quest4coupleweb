@@ -842,14 +842,23 @@ let questionAnalyticsViewMode = 'table'; // 'table' ou 'cards'
 let questionAnalyticsSortCol = 'total';
 let questionAnalyticsSortDir = 'desc';
 
-async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'total', genderFilter = '') {
+// Expor cache globalmente para poder ser limpo
+window.questionAnalyticsCache = questionAnalyticsCache;
+
+async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'total', genderFilter = '', ageFilter = '') {
   console.log('📊 ========================================');
   console.log('📊 loadQuestionAnalytics() chamada com parâmetros:');
   console.log('📊 packId:', packId);
   console.log('📊 minResponses:', minResponses);
   console.log('📊 sortBy:', sortBy);
   console.log('📊 genderFilter:', genderFilter, '(tipo:', typeof genderFilter, ')');
+  console.log('📊 ageFilter:', ageFilter, '(tipo:', typeof ageFilter, ')');
   console.log('📊 ========================================');
+  
+  // Sincronizar com cache global (pode ter sido limpo externamente)
+  if (window.questionAnalyticsCache === null) {
+    questionAnalyticsCache = null;
+  }
   
   const container = document.getElementById('questionAnalyticsContainer');
   
@@ -880,11 +889,37 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       packsData = await response.json();
     } catch (e) {
       console.warn('⚠️ Não foi possível carregar packs_data_clean.json');
-    }
+    }  // VERSÃO DO CACHE - incrementar quando a estrutura mudar
+    const CACHE_VERSION = 2; // v2: adicionou byAge
     
-    // Se não temos cache, buscar todas as respostas
-    if (!questionAnalyticsCache) {
-      console.log('📥 A construir cache de análise de questões...');
+    // DEBUG: Mostrar estado do cache
+    console.log('🔍 ========== DEBUG CACHE ==========');
+    console.log('Cache existe?', !!questionAnalyticsCache);
+    console.log('Cache length:', questionAnalyticsCache?.length);
+    if (questionAnalyticsCache && questionAnalyticsCache.length > 0) {
+      console.log('Primeira questão:', questionAnalyticsCache[0]);
+      console.log('_cacheVersion:', questionAnalyticsCache[0]._cacheVersion);
+      console.log('byAge:', questionAnalyticsCache[0].byAge);
+    }
+    console.log('================================');
+    
+    // Se não temos cache OU não tem versão OU versão errada, reconstruir
+    const cacheIsValid = questionAnalyticsCache && 
+                         questionAnalyticsCache.length > 0 && 
+                         questionAnalyticsCache[0]._cacheVersion === CACHE_VERSION;
+    
+    console.log('🔍 Cache válido?', cacheIsValid);
+    
+    if (!cacheIsValid) {
+      if (questionAnalyticsCache) {
+        if (!questionAnalyticsCache[0]?.byAge) {
+          console.log('⚠️ Cache desatualizado detectado (sem byAge) - Reconstruindo...');
+        } else if (questionAnalyticsCache[0]._cacheVersion !== CACHE_VERSION) {
+          console.log(`⚠️ Cache desatualizado detectado (versão ${questionAnalyticsCache[0]._cacheVersion || 1} -> ${CACHE_VERSION}) - Reconstruindo...`);
+        }
+      } else {
+        console.log('📥 A construir cache de análise de questões...');
+      }
       
       const progressEl = document.getElementById('loadingProgress');
       const progressBar = document.getElementById('loadingProgressBar');
@@ -892,9 +927,12 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       const usersSnapshot = await db.collection('users').get();
       const totalUsers = usersSnapshot.size;
       let processedUsers = 0;
-      
-      // Estrutura para agregar respostas por questão
+        // Estrutura para agregar respostas por questão
       const questionStats = {};
+      
+      // Contador de perguntas personalizadas encontradas
+      let customQuestionsCount = 0;
+      const customQuestionsMap = new Set();
       
       for (const userDoc of usersSnapshot.docs) {
         processedUsers++;
@@ -905,12 +943,11 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
         }
         if (progressBar) {
           progressBar.style.width = `${Math.round((processedUsers / totalUsers) * 100)}%`;
-        }
-        
-        try {
-          // Obter género do utilizador
+        }        try {
+          // Obter género e faixa etária do utilizador
           const userData = userDoc.data();
           const userGender = userData.gender || null;
+          const userAgeRange = userData.ageRange || null; // Usar ageRange em vez de age
           
           const answersDoc = await db.collection('users').doc(userDoc.id).collection('answers').doc('all').get();
           
@@ -936,14 +973,13 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                 const answerData = packAnswers[qKey];
                 if (!answerData || !answerData.answer) return;
                 
-                const questionIndex = parseInt(qKey.replace('q', '')) - 1;
-                
-                // Ignorar perguntas personalizadas (índice >= máximo do pack)
+                const questionIndex = parseInt(qKey.replace('q', '')) - 1;                // Ignorar perguntas personalizadas (índice >= máximo do pack)
                 // Elas são identificáveis por terem índice maior que o limite
                 if (questionIndex >= maxQuestions) {
                   // É uma pergunta personalizada - vamos ignorar na análise geral
-                  // ou poderíamos criar uma categoria especial
-                  console.log(`⚠️ Pergunta personalizada ignorada: ${packKey} q${questionIndex + 1}`);
+                  // porque são específicas de cada utilizador
+                  customQuestionsCount++;
+                  customQuestionsMap.add(`${packKey}_q${questionIndex + 1}`);
                   return;
                 }
                 
@@ -960,8 +996,7 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                         questionText = allQuestions[questionIndex];
                       }
                     }
-                  }
-                    questionStats[key] = {
+                  }                  questionStats[key] = {
                     packId: packKey,
                     questionIndex: questionIndex,
                     questionText: questionText,
@@ -970,7 +1005,8 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                     yup: 0,
                     talvez: 0,
                     meh: 0,
-                    byGender: {} // Guardar contadores por género
+                    byGender: {}, // Guardar contadores por género
+                    byAge: {} // Guardar contadores por faixa etária
                   };
                 }
                 
@@ -980,8 +1016,7 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                 if (questionStats[key][answer] !== undefined) {
                   questionStats[key][answer]++;
                 }
-                
-                // Contar por género
+                  // Contar por género
                 if (userGender) {
                   if (!questionStats[key].byGender[userGender]) {
                     questionStats[key].byGender[userGender] = {
@@ -995,6 +1030,23 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
                   questionStats[key].byGender[userGender].total++;
                   if (questionStats[key].byGender[userGender][answer] !== undefined) {
                     questionStats[key].byGender[userGender][answer]++;
+                  }                }
+                
+                // Contar por faixa etária
+                if (userAgeRange) {
+                  // userAgeRange já vem no formato correto ("18-25", "26-35", etc.)
+                  if (!questionStats[key].byAge[userAgeRange]) {
+                    questionStats[key].byAge[userAgeRange] = {
+                      total: 0,
+                      porfavor: 0,
+                      yup: 0,
+                      talvez: 0,
+                      meh: 0
+                    };
+                  }
+                  questionStats[key].byAge[userAgeRange].total++;
+                  if (questionStats[key].byAge[userAgeRange][answer] !== undefined) {
+                    questionStats[key].byAge[userAgeRange][answer]++;
                   }
                 }
               });
@@ -1002,10 +1054,37 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
           }
         } catch (e) {
           // Ignorar erros de permissão
-        }
-      }
+        }      }
+        questionAnalyticsCache = Object.values(questionStats);
       
-      questionAnalyticsCache = Object.values(questionStats);
+      // Adicionar versão do cache a cada questão
+      questionAnalyticsCache.forEach(q => {
+        q._cacheVersion = CACHE_VERSION;
+      });
+      
+      // DEBUG: Verificar se byAge foi populado
+      console.log('🔍 ========== CACHE RECONSTRUÍDO ==========');
+      console.log('Total de questões:', questionAnalyticsCache.length);
+      if (questionAnalyticsCache.length > 0) {
+        const firstQ = questionAnalyticsCache[0];
+        console.log('Primeira questão:', firstQ.packId, firstQ.questionIndex);
+        console.log('_cacheVersion:', firstQ._cacheVersion);
+        console.log('byAge:', firstQ.byAge);
+        console.log('byAge keys:', Object.keys(firstQ.byAge || {}));
+        
+        // Mostrar todas as faixas etárias encontradas
+        const allAgeRanges = new Set();
+        questionAnalyticsCache.forEach(q => {
+          if (q.byAge) {
+            Object.keys(q.byAge).forEach(range => allAgeRanges.add(range));
+          }
+        });
+        console.log('Faixas etárias encontradas:', Array.from(allAgeRanges));
+      }
+      console.log('==========================================');
+      
+      // Sincronizar com variável global
+      window.questionAnalyticsCache = questionAnalyticsCache;
       
       // Calcular openRate para cada questão (para permitir ordenação)
       questionAnalyticsCache.forEach(q => {
@@ -1016,7 +1095,13 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
       });
       
       console.log(`✅ Cache construído: ${questionAnalyticsCache.length} questões, ${questionAnalyticsCache.reduce((sum, q) => sum + q.total, 0)} respostas`);
-    }      // Aplicar filtros
+      
+      // Log consolidado de perguntas personalizadas
+      if (customQuestionsCount > 0) {
+        console.log(`💡 ${customQuestionsCount} respostas a perguntas personalizadas encontradas (${customQuestionsMap.size} perguntas únicas)`);
+        console.log(`📊 Perguntas personalizadas não são incluídas nas estatísticas gerais (são específicas de cada utilizador)`);
+      }
+    }// Aplicar filtros
     let filtered = [...questionAnalyticsCache];
     
     // Se há filtro de género, usar os dados específicos do género
@@ -1049,8 +1134,71 @@ async function loadQuestionAnalytics(packId = '', minResponses = 0, sortBy = 'to
         
         return filteredQ;
       }).filter(q => q !== null); // Remover questões sem dados
+        console.log(`📊 Total de questões após filtro de género: ${filtered.length}`);
+    }    // Se há filtro de faixa etária, usar os dados específicos da faixa
+    if (ageFilter) {
+      console.log(`🔍 Aplicando filtro de faixa etária: "${ageFilter}"`);
+      console.log(`📊 Total de questões antes do filtro: ${filtered.length}`);
       
-      console.log(`📊 Total de questões após filtro de género: ${filtered.length}`);
+      // 🆕 SISTEMA DE MAPEAMENTO: Converte filtros do dropdown para faixas reais dos dados
+      const ageRangeMapping = {
+        '18-25': ['18-23', '18-24', '24-29'],
+        '26-35': ['24-29', '25-34', '30-35'],
+        '36-45': ['35-44', '36-40', '41-49'],
+        '46-55': ['41-49', '50+'],
+        '56+': ['50+']
+      };
+      
+      const targetRanges = ageRangeMapping[ageFilter] || [ageFilter];
+      console.log(`🗺️ Faixas reais a buscar para "${ageFilter}":`, targetRanges);
+      
+      filtered = filtered.map(q => {
+        // Agregar dados de todas as faixas reais que correspondem ao filtro
+        let aggregatedData = {
+          total: 0,
+          porfavor: 0,
+          yup: 0,
+          talvez: 0,
+          meh: 0
+        };
+        
+        targetRanges.forEach(range => {
+          const rangeData = q.byAge && q.byAge[range];
+          if (rangeData) {
+            aggregatedData.total += rangeData.total || 0;
+            aggregatedData.porfavor += rangeData.porfavor || 0;
+            aggregatedData.yup += rangeData.yup || 0;
+            aggregatedData.talvez += rangeData.talvez || 0;
+            aggregatedData.meh += rangeData.meh || 0;
+          }
+        });
+        
+        // Debug: mostrar o que foi encontrado
+        if (aggregatedData.total === 0) {
+          console.log(`⚠️ Questão ${q.packId}_${q.questionIndex}: Nenhuma resposta encontrada para faixas ${targetRanges.join(', ')}`);
+          return null; // Questão sem respostas desta faixa etária
+        }
+        
+        // Criar nova questão com dados agregados da faixa etária
+        const filteredQ = {
+          ...q,
+          total: aggregatedData.total,
+          porfavor: aggregatedData.porfavor,
+          yup: aggregatedData.yup,
+          talvez: aggregatedData.talvez,
+          meh: aggregatedData.meh
+        };
+        
+        // Recalcular openRate para esta faixa etária
+        const total = filteredQ.total || 1;
+        const openScore = (filteredQ.porfavor * 3) + (filteredQ.yup * 2) + (filteredQ.talvez * 1) + (filteredQ.meh * 0);
+        const maxScore = total * 3;
+        filteredQ.openRate = Math.round((openScore / maxScore) * 100);
+        
+        return filteredQ;
+      }).filter(q => q !== null); // Remover questões sem dados
+      
+      console.log(`📊 Total de questões após filtro de faixa etária: ${filtered.length}`);
     }
     
     if (packId) {
@@ -1392,15 +1540,20 @@ function forceReloadQuestionAnalytics() {
 // Função chamada pelos filtros do HTML
 function loadQuestionAnalyticsWithFilters() {
   const genderSelect = document.getElementById('filterQuestionGender');
+  const ageSelect = document.getElementById('filterQuestionAge');
   const packId = document.getElementById('filterQuestionPack')?.value || '';
   const minResponses = parseInt(document.getElementById('filterMinResponses')?.value) || 0;
   const genderFilter = genderSelect?.value || '';
+  const ageFilter = ageSelect?.value || '';
   
   console.log('🔍 ========================================');
   console.log('🔍 DEBUG: Filtros aplicados');
   console.log('🔍 Elemento select género:', genderSelect);
-  console.log('🔍 Valor RAW do select:', genderSelect?.value);
+  console.log('🔍 Valor RAW do select género:', genderSelect?.value);
   console.log('🔍 Valor após || "":', genderFilter);
+  console.log('🔍 Elemento select idade:', ageSelect);
+  console.log('🔍 Valor RAW do select idade:', ageSelect?.value);
+  console.log('🔍 Valor após || "":', ageFilter);
   console.log('🔍 Todas as options do select:');
   if (genderSelect) {
     Array.from(genderSelect.options).forEach((opt, i) => {
@@ -1410,9 +1563,10 @@ function loadQuestionAnalyticsWithFilters() {
   console.log('🔍 packId:', packId);
   console.log('🔍 minResponses:', minResponses);
   console.log('🔍 genderFilter:', genderFilter, '(length:', genderFilter.length, ')');
+  console.log('🔍 ageFilter:', ageFilter, '(length:', ageFilter.length, ')');
   console.log('🔍 ========================================');
   
-  loadQuestionAnalytics(packId, minResponses, 'total', genderFilter);
+  loadQuestionAnalytics(packId, minResponses, 'total', genderFilter, ageFilter);
 }
 
 // Reset filtros de questões
@@ -1420,16 +1574,18 @@ function resetQuestionFilters() {
   const packEl = document.getElementById('filterQuestionPack');
   const minEl = document.getElementById('filterMinResponses');
   const genderEl = document.getElementById('filterQuestionGender');
+  const ageEl = document.getElementById('filterQuestionAge');
   
   if (packEl) packEl.value = '';
   if (minEl) minEl.value = '0';
   if (genderEl) genderEl.value = '';
+  if (ageEl) ageEl.value = '';
   
   // Reset sorting
   questionAnalyticsSortCol = 'total';
   questionAnalyticsSortDir = 'desc';
   
-  loadQuestionAnalytics('', 0, 'total', '');
+  loadQuestionAnalytics('', 0, 'total', '', '');
 }
 
 // ========================================
@@ -1609,8 +1765,7 @@ async function loadPartialReports(filters = {}) {
         </div>
       `;
     });
-    
-    container.innerHTML = html;
+      container.innerHTML = html;
     console.log(`✅ ${reports.length} relatórios parciais renderizados`);
     
   } catch (error) {
@@ -1624,3 +1779,106 @@ async function loadPartialReports(filters = {}) {
     `;
   }
 }
+
+// ========================================
+// PUBLISH PUBLIC STATISTICS
+// Sistema de publicação para página pública
+// Atualização agendada: 7h e 19h
+// ========================================
+
+/**
+ * Publica as estatísticas para o cache público no Firestore
+ * Esta função deve ser chamada manualmente ou via agendamento
+ */
+async function publishPublicStatistics() {
+  console.log('📤 Publicando estatísticas públicas...');
+  
+  if (!questionAnalyticsCache || questionAnalyticsCache.length === 0) {
+    console.log('⚠️ Cache de analytics vazio. A construir primeiro...');
+    await loadQuestionAnalytics();
+  }
+  
+  if (!questionAnalyticsCache || questionAnalyticsCache.length === 0) {
+    console.error('❌ Não foi possível construir o cache de analytics');
+    alert('❌ Erro: Não há dados para publicar');
+    return;
+  }
+  
+  try {
+    const db = firebase.firestore();
+    
+    // Calcular total de respostas
+    const totalResponses = questionAnalyticsCache.reduce((sum, q) => sum + (q.total || 0), 0);
+    
+    // Preparar dados para publicação (sem dados sensíveis)
+    const publicData = {
+      questions: questionAnalyticsCache.map(q => ({
+        packId: q.packId,
+        questionIndex: q.questionIndex,
+        questionText: q.questionText,
+        total: q.total,
+        porfavor: q.porfavor,
+        yup: q.yup,
+        talvez: q.talvez,
+        meh: q.meh,
+        openRate: q.openRate,
+        byGender: q.byGender || {},
+        byAge: q.byAge || {}
+      })),
+      totalResponses: totalResponses,
+      totalQuestions: questionAnalyticsCache.length,
+      lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+      version: 1
+    };
+    
+    // Guardar no Firestore
+    await db.collection('publicStatistics').doc('questionAnalytics').set(publicData);
+    
+    console.log(`✅ Estatísticas públicas publicadas com sucesso!`);
+    console.log(`📊 ${questionAnalyticsCache.length} questões, ${totalResponses.toLocaleString('pt-PT')} respostas`);
+    
+    alert(`✅ Estatísticas publicadas com sucesso!\n\n📊 ${questionAnalyticsCache.length} questões\n📈 ${totalResponses.toLocaleString('pt-PT')} respostas\n\nOs dados estão agora disponíveis na página pública de estatísticas.`);
+    
+  } catch (error) {
+    console.error('❌ Erro ao publicar estatísticas:', error);
+    alert(`❌ Erro ao publicar: ${error.message}`);
+  }
+}
+
+/**
+ * Verifica se é hora de atualizar as estatísticas (7h ou 19h)
+ * e atualiza automaticamente se necessário
+ */
+function checkAndAutoPublishStatistics() {
+  const now = new Date();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  
+  // Verificar se é 7h ou 19h (com margem de 5 minutos)
+  const is7am = hour === 7 && minute < 5;
+  const is7pm = hour === 19 && minute < 5;
+  
+  if (is7am || is7pm) {
+    const lastAutoPublish = localStorage.getItem('lastAutoPublishStats');
+    const today = now.toDateString();
+    const lastPublishKey = `${today}_${hour}`;
+    
+    // Só publicar se ainda não publicou nesta hora
+    if (lastAutoPublish !== lastPublishKey) {
+      console.log(`⏰ Hora de atualização automática detectada (${hour}h)`);
+      localStorage.setItem('lastAutoPublishStats', lastPublishKey);
+      publishPublicStatistics();
+    }
+  }
+}
+
+// Verificar auto-publicação ao carregar a página admin
+if (typeof window !== 'undefined') {
+  // Verificar a cada minuto se é hora de publicar
+  setInterval(checkAndAutoPublishStatistics, 60000);
+  // Verificar imediatamente ao carregar
+  setTimeout(checkAndAutoPublishStatistics, 5000);
+}
+
+// Exportar função para uso global
+window.publishPublicStatistics = publishPublicStatistics;
