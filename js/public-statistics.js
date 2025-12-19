@@ -117,6 +117,21 @@ function applyFilters() {
 // SORTING
 // ========================================
 
+// Função auxiliar para calcular aceitação por género
+function getGenderAcceptance(q, gender) {
+  const gData = q.byGender && q.byGender[gender];
+  if (!gData || gData.total === 0) return null;
+  return ((gData.porfavor + gData.yup + gData.talvez * 0.5) / gData.total) * 100;
+}
+
+// Função auxiliar para calcular diferença F-M
+function getGenderDiff(q) {
+  const fAccept = getGenderAcceptance(q, 'F');
+  const mAccept = getGenderAcceptance(q, 'M');
+  if (fAccept === null || mAccept === null) return null;
+  return fAccept - mAccept;
+}
+
 function sortData() {
   filteredData.sort((a, b) => {
     let aVal, bVal;
@@ -129,6 +144,10 @@ function sortData() {
       case 'yup': aVal = ta > 0 ? (a.yup / ta) * 100 : 0; bVal = tb > 0 ? (b.yup / tb) * 100 : 0; break;
       case 'talvez': aVal = ta > 0 ? (a.talvez / ta) * 100 : 0; bVal = tb > 0 ? (b.talvez / tb) * 100 : 0; break;
       case 'meh': aVal = ta > 0 ? (a.meh / ta) * 100 : 0; bVal = tb > 0 ? (b.meh / tb) * 100 : 0; break;
+      case 'genderDiff': 
+        aVal = getGenderDiff(a) ?? -999; 
+        bVal = getGenderDiff(b) ?? -999; 
+        break;
       default: aVal = a.openRate || 0; bVal = b.openRate || 0;
     }
     return sortDirection === 'desc' ? bVal - aVal : aVal - bVal;
@@ -235,7 +254,7 @@ function renderTableView(data, startIdx) {
       <th style="padding:12px 8px;text-align:center;width:40px;">Pack</th>
       <th style="padding:12px 8px;text-align:left;">Questão</th>
       <th class="sortable-header" onclick="sortByColumn('openRate')" style="padding:12px 8px;text-align:center;cursor:pointer;">📈 ${getSortIcon('openRate')}</th>
-      ${showGenderComparison ? '<th style="padding:12px 8px;text-align:center;min-width:90px;" title="Aceitação por género">♂️ vs ♀️</th>' : ''}
+      ${showGenderComparison ? `<th class="sortable-header" onclick="sortByColumn('genderDiff')" style="padding:12px 8px;text-align:center;cursor:pointer;min-width:90px;" title="Clica para ordenar por diferença (♀️-♂️)">♂️/♀️ ${getSortIcon('genderDiff')}</th>` : ''}
       <th class="sortable-header" onclick="sortByColumn('porfavor')" style="padding:12px 8px;text-align:center;cursor:pointer;">🔥 ${getSortIcon('porfavor')}</th>
       <th class="sortable-header" onclick="sortByColumn('yup')" style="padding:12px 8px;text-align:center;cursor:pointer;">✅ ${getSortIcon('yup')}</th>
       <th class="sortable-header" onclick="sortByColumn('talvez')" style="padding:12px 8px;text-align:center;cursor:pointer;">🤔 ${getSortIcon('talvez')}</th>
@@ -251,8 +270,7 @@ function renderTableView(data, startIdx) {
     let color = '#dc3545', bg = '#f8d7da';
     if (openRate >= 70) { color = '#28a745'; bg = '#d4edda'; }
     else if (openRate >= 50) { color = '#17a2b8'; bg = '#d1ecf1'; }
-    else if (openRate >= 30) { color = '#ffc107'; bg = '#fff3cd'; }
-      // Calcular aceitação por género (usando nova fórmula)
+    else if (openRate >= 30) { color = '#ffc107'; bg = '#fff3cd'; }    // Calcular aceitação por género (usando nova fórmula)
     let genderHtml = '';
     if (showGenderComparison && q.byGender) {
       const mData = q.byGender.M;
@@ -260,11 +278,25 @@ function renderTableView(data, startIdx) {
       if (mData && fData && mData.total > 0 && fData.total > 0) {
         const mAccept = Math.round(((mData.porfavor + mData.yup + mData.talvez * 0.5) / mData.total) * 100);
         const fAccept = Math.round(((fData.porfavor + fData.yup + fData.talvez * 0.5) / fData.total) * 100);
-        genderHtml = `<td style="padding:10px 4px;text-align:center;font-size:0.85em;">
-          <span style="color:#0d6efd;font-weight:600;">${mAccept}%</span>
-          <span style="color:#adb5bd;margin:0 3px;">/</span>
-          <span style="color:#e83e8c;font-weight:600;">${fAccept}%</span>
-        </td>`;
+        
+        // Só mostra diferença se estiver a ordenar por genderDiff
+        if (sortColumn === 'genderDiff') {
+          const diff = fAccept - mAccept;
+          const diffColor = Math.abs(diff) < 5 ? '#6c757d' : (diff > 0 ? '#e83e8c' : '#0d6efd');
+          const diffText = diff > 0 ? `+${diff}` : `${diff}`;
+          genderHtml = `<td style="padding:10px 4px;text-align:center;font-size:0.85em;">
+            <span style="color:#0d6efd;font-weight:600;">${mAccept}%</span>
+            <span style="color:#adb5bd;margin:0 2px;">/</span>
+            <span style="color:#e83e8c;font-weight:600;">${fAccept}%</span>
+            <div style="font-size:0.8em;color:${diffColor};font-weight:700;">${diffText}</div>
+          </td>`;
+        } else {
+          genderHtml = `<td style="padding:10px 4px;text-align:center;font-size:0.85em;">
+            <span style="color:#0d6efd;font-weight:600;">${mAccept}%</span>
+            <span style="color:#adb5bd;margin:0 2px;">/</span>
+            <span style="color:#e83e8c;font-weight:600;">${fAccept}%</span>
+          </td>`;
+        }
       } else {
         genderHtml = '<td style="padding:10px 4px;text-align:center;color:#adb5bd;font-size:0.8em;">--</td>';
       }
