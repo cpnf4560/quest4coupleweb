@@ -128,8 +128,7 @@ service cloud.firestore {
       // Prevenir deleção
       allow delete: if false;
     }
-    
-    // ========================================
+      // ========================================
     // CONNECTIONS COLLECTION (Coleção raiz)
     // ========================================
     match /connections/{connectionId} {
@@ -137,9 +136,15 @@ service cloud.firestore {
       allow create: if request.auth != null && 
                        request.auth.uid in request.resource.data.users;
       
-      // Utilizador pode ler/atualizar conexões onde participa
-      allow read, update: if request.auth != null && 
-                             request.auth.uid in resource.data.users;
+      // Utilizador pode ler conexões onde participa OU admin pode ler todas
+      allow read: if request.auth != null && (
+                       request.auth.uid in resource.data.users ||
+                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true
+                     );
+      
+      // Utilizador pode atualizar conexões onde participa
+      allow update: if request.auth != null && 
+                       request.auth.uid in resource.data.users;
       
       // Utilizador pode apagar conexões onde participa
       allow delete: if request.auth != null && 
