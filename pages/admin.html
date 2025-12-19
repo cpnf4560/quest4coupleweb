@@ -810,9 +810,8 @@
           <div class="stat-value" id="femaleUsers">0</div>
           <div class="stat-label">utilizadores</div>
         </div>
-        
-        <div class="stat-card blue">
-          <h3>⚧️ Outro</h3>
+          <div class="stat-card blue">
+          <h3>⚧️ Outro/ND</h3>
           <div class="stat-value" id="otherUsers">0</div>
           <div class="stat-label">utilizadores</div>
         </div>
@@ -1983,15 +1982,19 @@ ${error.stack || 'Sem stack trace'}
         return createdAt && createdAt >= today;
       }).length;
       document.getElementById('newUsersToday').textContent = newToday;
-      
-      // Gender stats
+        // Gender stats
       const maleCount = allUsers.filter(u => u.gender === 'M').length;
       const femaleCount = allUsers.filter(u => u.gender === 'F').length;
-      const otherCount = allUsers.filter(u => u.gender === 'outro').length;
+      // "Outro" pode ser guardado como 'outro', 'O', 'other', etc.
+      const otherCount = allUsers.filter(u => u.gender && u.gender !== 'M' && u.gender !== 'F').length;
+      const undefinedCount = allUsers.filter(u => !u.gender).length;
+      
+      console.log('📊 Géneros:', { M: maleCount, F: femaleCount, Outro: otherCount, 'Não definido': undefinedCount });
+      console.log('📊 Valores únicos de gender:', [...new Set(allUsers.map(u => u.gender))]);
       
       document.getElementById('maleUsers').textContent = maleCount;
       document.getElementById('femaleUsers').textContent = femaleCount;
-      document.getElementById('otherUsers').textContent = otherCount;
+      document.getElementById('otherUsers').textContent = otherCount + undefinedCount; // Junta Outro + Não definido
       
       // Countries
       const countries = new Set(allUsers.filter(u => u.country).map(u => u.country));
