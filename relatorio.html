@@ -1355,20 +1355,30 @@
       alert(t('report.alerts.errorRemove'));
     }
   }
-  
-  // ========================================
+    // ========================================
   // MOSTRAR BOTÕES APÓS GERAR RELATÓRIO
   // ========================================
   
   // Mostrar botões de ação após gerar relatório
   const originalGenerateReport = window.generateCompatibilityReport;
-  if (originalGenerateReport) {    window.generateCompatibilityReport = async function(...args) {
+  if (originalGenerateReport) {
+    window.generateCompatibilityReport = async function(...args) {
       await originalGenerateReport.apply(this, args);
       document.getElementById('actionButtons').style.display = 'flex';
       document.getElementById('uploadSection').style.display = 'none';
+      
+      // ✅ NOVO: Mostrar modal de apoio (apenas 1x por casal)
+      setTimeout(() => {
+        if (typeof SupportBanner !== 'undefined' && SupportBanner.showDonationModal) {
+          SupportBanner.showDonationModal();
+        }
+      }, 1000); // Esperar 1s para o relatório renderizar
     };
   }
 </script>
+
+<!-- Support Banner (para modal de doação) -->
+<script src="support-banner.js"></script>
 
 <!-- i18n System -->
 <script src="js/i18n.js"></script>

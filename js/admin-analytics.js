@@ -1846,37 +1846,85 @@ async function publishPublicStatistics() {
 }
 
 /**
- * Verifica se é hora de atualizar as estatísticas (7h ou 19h)
- * e atualiza automaticamente se necessário
+ * Verifica se as estatísticas precisam ser atualizadas
+ * Atualiza se: passou das 7h ou 19h desde a última atualização
  */
-function checkAndAutoPublishStatistics() {
+async function checkAndAutoPublishStatistics() {
   const now = new Date();
   const hour = now.getHours();
-  const minute = now.getMinutes();
   
-  // Verificar se é 7h ou 19h (com margem de 5 minutos)
-  const is7am = hour === 7 && minute < 5;
-  const is7pm = hour === 19 && minute < 5;
-  
-  if (is7am || is7pm) {
-    const lastAutoPublish = localStorage.getItem('lastAutoPublishStats');
-    const today = now.toDateString();
-    const lastPublishKey = `${today}_${hour}`;
+  try {
+    // Verificar última atualização no Firestore
+    const db = firebase.firestore();
+    const cacheDoc = await db.collection('publicStatistics').doc('questionAnalytics').get();
     
-    // Só publicar se ainda não publicou nesta hora
-    if (lastAutoPublish !== lastPublishKey) {
-      console.log(`⏰ Hora de atualização automática detectada (${hour}h)`);
-      localStorage.setItem('lastAutoPublishStats', lastPublishKey);
-      publishPublicStatistics();
+    let needsUpdate = false;
+    let reason = '';
+    
+    if (!cacheDoc.exists) {
+      needsUpdate = true;
+      reason = 'Cache não existe';
+    } else {
+      const lastUpdate = cacheDoc.data().lastUpdate?.toDate();
+      
+      if (!lastUpdate) {
+        needsUpdate = true;
+        reason = 'Sem timestamp de última atualização';
+      } else {
+        // Calcular próxima atualização esperada (7h ou 19h)
+        const lastUpdateHour = lastUpdate.getHours();
+        const lastUpdateDate = lastUpdate.toDateString();
+        const todayDate = now.toDateString();
+        
+        // Se é um dia diferente, precisa atualizar
+        if (lastUpdateDate !== todayDate) {
+          needsUpdate = true;
+          reason = `Última atualização foi ontem (${lastUpdate.toLocaleString('pt-PT')})`;
+        } 
+        // Se passou das 7h e última foi antes das 7h de hoje
+        else if (hour >= 7 && lastUpdateHour < 7) {
+          needsUpdate = true;
+          reason = `Passou das 7h, última às ${lastUpdateHour}h`;
+        }
+        // Se passou das 19h e última foi antes das 19h de hoje
+        else if (hour >= 19 && lastUpdateHour < 19) {
+          needsUpdate = true;
+          reason = `Passou das 19h, última às ${lastUpdateHour}h`;
+        }
+        
+        // Log informativo
+        const nextUpdate = hour < 7 ? '7:00' : (hour < 19 ? '19:00' : 'amanhã às 7:00');
+        console.log(`📊 Última atualização: ${lastUpdate.toLocaleString('pt-PT')} | Próxima: ${nextUpdate}`);
+      }
     }
+    
+    if (needsUpdate) {
+      console.log(`⏰ Auto-publicação necessária: ${reason}`);
+      
+      // Verificar se não foi publicado recentemente (evitar duplicados)
+      const lastAutoKey = localStorage.getItem('lastAutoPublishStats');
+      const currentKey = `${now.toDateString()}_${hour >= 19 ? 19 : (hour >= 7 ? 7 : 0)}`;
+      
+      if (lastAutoKey !== currentKey) {
+        localStorage.setItem('lastAutoPublishStats', currentKey);
+        await publishPublicStatistics();
+      } else {
+        console.log('⚠️ Já foi publicado recentemente nesta janela');
+      }
+    } else {
+      console.log('✅ Estatísticas atualizadas');
+    }
+    
+  } catch (error) {
+    console.error('❌ Erro ao verificar auto-publicação:', error);
   }
 }
 
 // Verificar auto-publicação ao carregar a página admin
 if (typeof window !== 'undefined') {
-  // Verificar a cada minuto se é hora de publicar
-  setInterval(checkAndAutoPublishStatistics, 60000);
-  // Verificar imediatamente ao carregar
+  // Verificar a cada 5 minutos se precisa publicar
+  setInterval(checkAndAutoPublishStatistics, 300000);
+  // Verificar imediatamente ao carregar (após 5 segundos para Firebase inicializar)
   setTimeout(checkAndAutoPublishStatistics, 5000);
 }
 

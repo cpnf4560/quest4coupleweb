@@ -423,8 +423,7 @@
         </div>
         <div class="pagination-info" id="paginationInfo">--</div>
       </div>
-      
-      <div id="statisticsContainer">
+        <div id="statisticsContainer">
         <div class="loading">
           <div class="loading-spinner"></div>
           <p>A carregar estatísticas...</p>
@@ -433,6 +432,9 @@
       
             <!-- Paginação -->
       <div class="pagination" id="paginationContainer"></div>
+      
+      <!-- Banner de Apoio -->
+      <div id="statsSupportBanner"></div>
     </div>
   </div>
 
@@ -441,12 +443,27 @@
     <a href="index.html">🏠 Voltar à Página Inicial</a>
   </div>
 
+  <!-- Support Banner Script -->
+  <script src="support-banner.js"></script>
+
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <script src="js/firebase-config.js"></script>
   <script src="js/public-statistics.js"></script>
+
+  <!-- Renderizar banner de apoio após carregar estatísticas -->
+  <script>
+    // Renderizar banner de apoio quando a página carregar
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        if (typeof SupportBanner !== 'undefined' && SupportBanner.renderStatsBanner) {
+          SupportBanner.renderStatsBanner('statsSupportBanner');
+        }
+      }, 500);
+    });
+  </script>
 
 </body>
 </html>

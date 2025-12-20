@@ -206,6 +206,16 @@ function attachProgressListeners() {
       }
     }
   });
+  
+  // ✅ NOVO: Listener para textareas de comentários
+  document.addEventListener('input', function(e) {
+    if (e.target.tagName === 'TEXTAREA' && e.target.closest('.question-comment')) {
+      // Atualizar contador de comentários
+      if (typeof updateAllCategoriesProgress === 'function') {
+        updateAllCategoriesProgress();
+      }
+    }
+  });
 }
 
 // ========================================
@@ -376,24 +386,37 @@ async function loadSavedAnswersForPack(packId) {
     if (answers && Object.keys(answers).length > 0) {
       console.log(`📥 Carregando respostas salvas para ${packId}:`, answers);
       
+      // ✅ CORREÇÃO: Primeiro renderizar TODAS as categorias (lazy loading)
+      const packContainer = document.getElementById(`pack-${packId}-questions`);
+      if (packContainer) {
+        const categoryWrappers = packContainer.querySelectorAll('.category-wrapper');
+        console.log(`📂 Renderizando ${categoryWrappers.length} categorias...`);
+        
+        categoryWrappers.forEach(wrapper => {
+          // Forçar renderização das questões se ainda não foi feita
+          if (wrapper.dataset.loaded !== 'true' && typeof renderCategoryQuestionsIfNeeded === 'function') {
+            renderCategoryQuestionsIfNeeded(wrapper);
+          }
+        });
+        
+        // Aguardar um tick para o DOM atualizar
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+      
       let loadedCount = 0;
       
       // Preencher formulário com respostas salvas
       Object.entries(answers).forEach(([questionId, data]) => {
         const qNum = questionId.replace('q', '');
         
-        console.log(`  → Processando ${questionId}:`, data);
-        
         // Marcar resposta radio
         if (data.answer) {
           const radioSelector = `input[name="${packId}_q${qNum}"][value="${data.answer}"]`;
           const radio = document.querySelector(radioSelector);
-          console.log(`    Procurando radio: ${radioSelector}`, radio ? '✅ Encontrado' : '❌ Não encontrado');
           
           if (radio) {
             radio.checked = true;
             loadedCount++;
-            console.log(`    ✅ Radio marcado: ${data.answer}`);
           }
         }
         
@@ -401,20 +424,23 @@ async function loadSavedAnswersForPack(packId) {
         if (data.comment) {
           const textareaSelector = `textarea[name="${packId}_q${qNum}_comment"]`;
           const textarea = document.querySelector(textareaSelector);
-          console.log(`    Procurando textarea: ${textareaSelector}`, textarea ? '✅ Encontrado' : '❌ Não encontrado');
           
           if (textarea) {
             textarea.value = data.comment;
-            console.log(`    ✅ Comentário preenchido`);
           }
-        }      });
+        }
+      });
       
-      console.log(`✅ Total de respostas carregadas: ${loadedCount}`);
+      console.log(`✅ Total de respostas carregadas: ${loadedCount}/${Object.keys(answers).length}`);
+      
+      // Atualizar progresso das categorias
+      if (typeof updateAllCategoriesProgress === 'function') {
+        updateAllCategoriesProgress();
+      }
       
       // Atualizar barra de progresso dos cards
       if (typeof updateThemeProgress === 'function') {
         updateThemeProgress();
-        console.log('📊 Barra de progresso atualizada');
       }
     } else {
       console.log(`ℹ️ Nenhuma resposta salva encontrada para ${packId}`);

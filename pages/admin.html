@@ -1816,6 +1816,391 @@
       }
     }
     
+    // ===========================
+    // RESPOSTAS INDIVIDUAIS
+    // ===========================
+    let allUserAnswers = []; // Cache de respostas individuais
+    let packQuestionsData = null; // Cache dos dados das perguntas
+    
+    async function loadIndividualAnswers() {
+      const container = document.getElementById('partialReportsContainer');
+      const statsContainer = document.getElementById('partialReportsStats');
+      const packFilter = document.getElementById('filterPartialPack')?.value || '';
+      const genderFilter = document.getElementById('filterPartialGender')?.value || '';
+      const userFilter = (document.getElementById('filterPartialUser')?.value || '').toLowerCase().trim();
+      
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px; color: #6c757d;">
+          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+          <p>A carregar respostas individuais...</p>
+        </div>
+      `;
+      
+      try {
+        // Carregar dados dos packs se ainda não carregou
+        if (!packQuestionsData) {
+          const response = await fetch('../data/packs_data_clean.json');
+          packQuestionsData = await response.json();
+        }
+        
+        // Recolher respostas de todos os utilizadores
+        if (allUserAnswers.length === 0) {
+          console.log('📥 A carregar respostas de todos os utilizadores...');
+          
+          for (const user of allUsers) {
+            try {
+              const answersDoc = await db.collection('users').doc(user.id).collection('answers').doc('all').get();
+              if (answersDoc.exists) {
+                const answersData = answersDoc.data() || {};
+                const packs = Object.keys(answersData);
+                
+                for (const packId of packs) {
+                  const packAnswers = answersData[packId] || {};
+                  const answerCount = Object.keys(packAnswers).length;
+                  
+                  if (answerCount > 0) {
+                    const commentsCount = Object.values(packAnswers).filter(ans => ans.comment && ans.comment.trim()).length;
+                    
+                    allUserAnswers.push({
+                      oderId: user.id,
+                      userName: user.name || user.displayName || user.username || user.email?.split('@')[0] || 'Sem nome',
+                      userEmail: user.email || '-',
+                      userGender: user.gender || null,
+                      packId: packId,
+                      answerCount: answerCount,
+                      commentsCount: commentsCount,
+                      answers: packAnswers,
+                      lastUpdated: packAnswers[Object.keys(packAnswers).pop()]?.timestamp || null
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              // Ignorar erros de permissão
+            }
+          }
+          
+          allUserAnswers.sort((a, b) => {
+            if (a.lastUpdated && b.lastUpdated) {
+              const dateA = a.lastUpdated?.toDate ? a.lastUpdated.toDate() : new Date(a.lastUpdated);
+              const dateB = b.lastUpdated?.toDate ? b.lastUpdated.toDate() : new Date(b.lastUpdated);
+              return dateB - dateA;
+            }
+            return a.userName.localeCompare(b.userName);
+          });
+          
+          console.log(`✅ ${allUserAnswers.length} packs individuais encontrados`);
+        }
+        
+        // Aplicar filtros
+        let filtered = [...allUserAnswers];
+        
+        if (packFilter) {
+          filtered = filtered.filter(item => item.packId === packFilter);
+        }
+        
+        if (genderFilter) {
+          if (genderFilter === 'outro') {
+            filtered = filtered.filter(item => item.userGender && item.userGender !== 'M' && item.userGender !== 'F');
+          } else {
+            filtered = filtered.filter(item => item.userGender === genderFilter);
+          }
+        }
+        
+        if (userFilter) {
+          filtered = filtered.filter(item => 
+            item.userName.toLowerCase().includes(userFilter) ||
+            item.userEmail.toLowerCase().includes(userFilter)
+          );
+        }
+        
+        // Estatísticas
+        const packStats = {};
+        let totalAnswers = 0;
+        let totalComments = 0;
+        
+        allUserAnswers.forEach(item => {
+          packStats[item.packId] = (packStats[item.packId] || 0) + 1;
+          totalAnswers += item.answerCount;
+          totalComments += item.commentsCount || 0;
+        });
+        
+        const packInfo = {
+          'romantico': { icon: '💕', name: 'Romântico', color: '#e91e63' },
+          'experiencia': { icon: '🌍', name: 'Exploração', color: '#ff9800' },
+          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336' },
+          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0' },
+          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7' }
+        };
+        
+        if (statsContainer) {
+          statsContainer.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;">
+              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 15px; border-radius: 12px; text-align: center; color: white;">
+                <div style="font-size: 1.8em; font-weight: 700;">${allUserAnswers.length}</div>
+                <div style="font-size: 0.8em; opacity: 0.9;">Packs Preenchidos</div>
+              </div>
+              <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="font-size: 1.8em; font-weight: 700; color: #28a745;">${totalAnswers.toLocaleString('pt-PT')}</div>
+                <div style="font-size: 0.8em; color: #6c757d;">Total Respostas</div>
+              </div>
+              <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid #ffc107;">
+                <div style="font-size: 1.8em; font-weight: 700; color: #856404;">${totalComments.toLocaleString('pt-PT')}</div>
+                <div style="font-size: 0.8em; color: #6c757d;">💬 Comentários</div>
+              </div>
+              ${Object.keys(packStats).map(pid => {
+                const info = packInfo[pid] || { icon: '📋', name: pid, color: '#6c757d' };
+                return `
+                  <div style="background: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 3px solid ${info.color};">
+                    <div style="font-size: 1.5em; font-weight: 700; color: ${info.color};">${packStats[pid]}</div>
+                    <div style="font-size: 0.75em; color: #6c757d;">${info.icon} ${info.name}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }
+        
+        // Renderizar lista
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 50px; color: #6c757d;">
+              <div style="font-size: 3em; margin-bottom: 15px;">🔍</div>
+              <h3>Nenhum resultado encontrado</h3>
+              <p>Tente ajustar os filtros.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        let html = `<div style="display: grid; gap: 12px;">`;
+        
+        filtered.forEach((item, idx) => {
+          const info = packInfo[item.packId] || { icon: '📋', name: item.packId, color: '#6c757d' };
+          const maskedEmail = maskEmail(item.userEmail);
+          const genderIcon = item.userGender === 'M' ? '♂️' : item.userGender === 'F' ? '♀️' : item.userGender ? '⚧️' : '';
+          
+          html += `
+            <div class="answer-card" style="background: white; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; cursor: pointer; border-left: 4px solid ${info.color};"
+                 onclick="showUserPackAnswers('${item.oderId}', '${item.packId}')"
+                 onmouseover="this.style.transform='translateX(5px)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='none'; this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 45px; height: 45px; background: linear-gradient(135deg, ${info.color}22, ${info.color}44); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4em;">
+                  ${info.icon}
+                </div>
+                <div>
+                  <div style="font-weight: 600; color: #333; margin-bottom: 3px;">${genderIcon} ${item.userName}</div>
+                  <div style="font-size: 0.85em; color: #6c757d;" title="${item.userEmail}">${maskedEmail}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 20px;">
+                <div style="text-align: right;">
+                  <div style="font-size: 0.85em; color: ${info.color}; font-weight: 600;">${info.name}</div>
+                  <div style="font-size: 0.8em; color: #6c757d;">
+                    ${item.answerCount} respostas
+                    ${item.commentsCount > 0 ? `<span style="margin-left: 8px; background: #ffc107; color: #333; padding: 2px 6px; border-radius: 8px; font-size: 0.85em; font-weight: 600;">💬 ${item.commentsCount}</span>` : ''}
+                  </div>
+                </div>
+                <div style="color: #667eea; font-size: 1.2em;">▶</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `</div>`;
+        container.innerHTML = html;
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar respostas individuais:', error);
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #dc3545;">
+            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+            <p>Erro ao carregar dados: ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    async function showUserPackAnswers(userId, packId) {
+      const modal = document.getElementById('answersModal');
+      const content = document.getElementById('answersModalContent');
+      
+      modal.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      
+      content.innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+          <p>A carregar respostas...</p>
+        </div>
+      `;
+      
+      try {
+        const userDoc = await db.collection('users').doc(userId).get();
+        const userData = userDoc.exists ? userDoc.data() : {};
+        const userName = userData.name || userData.displayName || userData.username || userData.email?.split('@')[0] || 'Utilizador';
+        
+        const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
+        const allAnswers = answersDoc.exists ? answersDoc.data() : {};
+        const packAnswers = allAnswers[packId] || {};
+        
+        const packInfoMap = {
+          'romantico': { icon: '💕', name: 'Pack Romântico', color: '#e91e63', colorKey: 'romantico' },
+          'experiencia': { icon: '🌍', name: 'Exploração e Aventura', color: '#ff9800', colorKey: 'experiencia' },
+          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336', colorKey: 'pimentinha' },
+          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0', colorKey: 'poliamor' },
+          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7', colorKey: 'kinks' }
+        };
+        
+        const info = packInfoMap[packId] || { icon: '📋', name: packId, color: '#667eea', colorKey: packId };
+        const packData = packQuestionsData?.find(p => p.color === info.colorKey);
+        const allQuestions = packData?.categories?.flatMap(cat => cat.questions) || [];
+        
+        const sortedAnswers = Object.entries(packAnswers).sort((a, b) => {
+          const numA = parseInt(a[0].replace('q', ''));
+          const numB = parseInt(b[0].replace('q', ''));
+          return numA - numB;
+        });
+        
+        const answerCounts = { porfavor: 0, yup: 0, talvez: 0, meh: 0 };
+        sortedAnswers.forEach(([key, val]) => {
+          const ans = val.answer;
+          if (answerCounts[ans] !== undefined) answerCounts[ans]++;
+        });
+        
+        const answerLabels = {
+          porfavor: { label: 'Por favor! 🤩', color: '#28a745', bg: '#d4edda' },
+          yup: { label: 'Sim! 😊', color: '#17a2b8', bg: '#d1ecf1' },
+          talvez: { label: 'Talvez 🤔', color: '#ffc107', bg: '#fff3cd' },
+          meh: { label: 'Não, obrigado 😅', color: '#dc3545', bg: '#f8d7da' }
+        };
+        
+        let html = `
+          <div style="padding: 25px; border-bottom: 1px solid #eee; background: linear-gradient(135deg, ${info.color}15, ${info.color}05);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h2 style="margin: 0 0 8px 0; color: #333;">${info.icon} ${info.name}</h2>
+                <p style="margin: 0; color: #6c757d;"><strong>${userName}</strong> • ${sortedAnswers.length} respostas</p>
+              </div>
+              <button onclick="closeAnswersModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #6c757d; padding: 5px;">✕</button>
+            </div>
+          </div>
+          
+          <div style="padding: 20px; background: #f8f9fa;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+              ${Object.entries(answerCounts).map(([key, count]) => {
+                const labelInfo = answerLabels[key];
+                return `
+                  <div style="background: ${labelInfo.bg}; padding: 12px; border-radius: 8px; text-align: center;">
+                    <div style="font-size: 1.3em; font-weight: 700; color: ${labelInfo.color};">${count}</div>
+                    <div style="font-size: 0.75em; color: ${labelInfo.color};">${labelInfo.label}</div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+          
+          <div style="padding: 20px; max-height: 400px; overflow-y: auto;">
+        `;
+        
+        const commentsCount = sortedAnswers.filter(([key, val]) => val.comment && val.comment.trim()).length;
+        
+        if (commentsCount > 0) {
+          html += `
+            <div style="background: #e8f4fd; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.2em;">💬</span>
+              <span style="color: #1976d2; font-weight: 500;">${commentsCount} resposta${commentsCount > 1 ? 's' : ''} com comentário</span>
+            </div>
+          `;
+        }
+        
+        sortedAnswers.forEach(([qKey, answerData], idx) => {
+          const qIndex = parseInt(qKey.replace('q', '')) - 1;
+          const questionText = allQuestions[qIndex] || `Pergunta ${qIndex + 1}`;
+          const answer = answerData.answer;
+          const comment = answerData.comment?.trim() || '';
+          const labelInfo = answerLabels[answer] || { label: answer, color: '#6c757d', bg: '#f8f9fa' };
+          
+          html += `
+            <div style="padding: 12px 15px; margin-bottom: 10px; background: white; border-radius: 10px; border-left: 3px solid ${labelInfo.color}; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;">
+                <div style="flex: 1;">
+                  <span style="color: #999; font-size: 0.8em; margin-right: 8px;">#${qIndex + 1}</span>
+                  <span style="color: #333;">${questionText}</span>
+                </div>
+                <span style="background: ${labelInfo.bg}; color: ${labelInfo.color}; padding: 4px 10px; border-radius: 15px; font-size: 0.8em; font-weight: 600; white-space: nowrap;">
+                  ${labelInfo.label}
+                </span>
+              </div>
+              ${comment ? `
+                <div style="margin-top: 10px; padding: 10px 12px; background: #f8f9fa; border-radius: 8px; border-left: 3px solid #667eea;">
+                  <div style="display: flex; align-items: flex-start; gap: 8px;">
+                    <span style="color: #667eea; font-size: 1em;">💬</span>
+                    <div style="flex: 1;">
+                      <div style="font-size: 0.75em; color: #667eea; font-weight: 600; margin-bottom: 4px;">Comentário:</div>
+                      <div style="color: #495057; font-size: 0.9em; font-style: italic; line-height: 1.4;">"${comment}"</div>
+                    </div>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+        
+        html += `
+          </div>
+          <div style="padding: 20px; border-top: 1px solid #eee; text-align: center;">
+            <button onclick="closeAnswersModal()" style="padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+              Fechar
+            </button>
+          </div>
+        `;
+        
+        content.innerHTML = html;
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar respostas:', error);
+        content.innerHTML = `
+          <div style="padding: 40px; text-align: center;">
+            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+            <p style="color: #dc3545;">Erro ao carregar respostas: ${error.message}</p>
+            <button onclick="closeAnswersModal()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer;">Fechar</button>
+          </div>
+        `;
+      }
+    }
+    
+    function closeAnswersModal() {
+      document.getElementById('answersModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function resetPartialReportFilters() {
+      document.getElementById('filterPartialPack').value = '';
+      document.getElementById('filterPartialGender').value = '';
+      document.getElementById('filterPartialUser').value = '';
+      loadIndividualAnswers();
+    }
+    
+    // Fechar modal ao clicar fora
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('answersModal');
+      if (e.target === modal) {
+        closeAnswersModal();
+      }
+    });
+    
+    // Fechar modal com ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('answersModal');
+        if (modal && modal.style.display !== 'none') {
+          closeAnswersModal();
+        }
+      }
+    });
+    
     // Função para re-renderizar activity log do cache sem recarregar
     function renderActivityLog() {
       if (!allActivity || allActivity.length === 0) {

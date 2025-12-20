@@ -427,7 +427,315 @@ const SupportBanner = {
             });
         }
         console.log(`📊 Support action tracked: ${action}`);
-    },    // Renderizar banner em um elemento específico
+    },
+
+    // ========================================
+    // MODAL PÓS-RELATÓRIO
+    // ========================================
+    
+    // Verificar se o modal já foi mostrado
+    hasShownDonationModal() {
+        return localStorage.getItem('q4c_donation_modal_shown') === 'true';
+    },
+    
+    // Marcar como mostrado
+    markDonationModalShown() {
+        localStorage.setItem('q4c_donation_modal_shown', 'true');
+    },
+    
+    // Template do modal pós-relatório
+    getDonationModalTemplate() {
+        return `
+            <style>
+                .donation-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.6);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease;
+                    backdrop-filter: blur(5px);
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes slideUp {
+                    from { 
+                        opacity: 0;
+                        transform: translateY(50px) scale(0.9);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+                
+                .donation-modal {
+                    background: white;
+                    border-radius: 20px;
+                    padding: 40px;
+                    max-width: 450px;
+                    width: 90%;
+                    text-align: center;
+                    position: relative;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    animation: slideUp 0.4s ease;
+                }
+                
+                .donation-modal-close {
+                    position: absolute;
+                    top: 15px;
+                    right: 20px;
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #999;
+                    transition: all 0.2s;
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .donation-modal-close:hover {
+                    background: #f5f5f5;
+                    color: #333;
+                }
+                
+                .donation-modal-icon {
+                    font-size: 60px;
+                    margin-bottom: 15px;
+                    animation: bounce 0.6s ease;
+                }
+                
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
+                
+                .donation-modal-title {
+                    font-size: 1.6em;
+                    font-weight: 700;
+                    color: #333;
+                    margin-bottom: 10px;
+                }
+                
+                .donation-modal-divider {
+                    width: 60%;
+                    height: 2px;
+                    background: linear-gradient(90deg, transparent, #d63384, transparent);
+                    margin: 20px auto;
+                }
+                
+                .donation-modal-text {
+                    font-size: 1.1em;
+                    color: #d63384;
+                    font-weight: 600;
+                    margin-bottom: 10px;
+                }
+                
+                .donation-modal-subtext {
+                    font-size: 0.95em;
+                    color: #666;
+                    line-height: 1.6;
+                    margin-bottom: 25px;
+                }
+                
+                .donation-modal-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding: 15px 35px;
+                    background: linear-gradient(135deg, #ff813f, #ff6b35);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 1.1em;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    text-decoration: none;
+                    box-shadow: 0 4px 15px rgba(255, 129, 63, 0.4);
+                }
+                
+                .donation-modal-btn:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 25px rgba(255, 129, 63, 0.5);
+                }
+                
+                .donation-modal-skip {
+                    display: block;
+                    margin-top: 20px;
+                    color: #999;
+                    font-size: 0.9em;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: color 0.2s;
+                }
+                
+                .donation-modal-skip:hover {
+                    color: #667eea;
+                }
+                
+                .donation-modal-hearts {
+                    position: absolute;
+                    font-size: 20px;
+                    opacity: 0.3;
+                }
+                
+                .donation-modal-hearts.left { top: 20%; left: 10%; }
+                .donation-modal-hearts.right { top: 15%; right: 10%; }
+                .donation-modal-hearts.bottom { bottom: 15%; left: 50%; transform: translateX(-50%); }
+            </style>
+            
+            <div class="donation-modal-overlay" id="donationModalOverlay" onclick="SupportBanner.closeDonationModal(event)">
+                <div class="donation-modal" onclick="event.stopPropagation()">
+                    <button class="donation-modal-close" onclick="SupportBanner.closeDonationModal()">&times;</button>
+                    
+                    <span class="donation-modal-hearts left">💕</span>
+                    <span class="donation-modal-hearts right">💕</span>
+                    <span class="donation-modal-hearts bottom">✨</span>
+                    
+                    <div class="donation-modal-icon">🎉</div>
+                    <div class="donation-modal-title">O vosso relatório está pronto!</div>
+                    
+                    <div class="donation-modal-divider"></div>
+                    
+                    <div class="donation-modal-text">💕 Gostaram da experiência?</div>
+                    <div class="donation-modal-subtext">
+                        O Quest4Couple é 100% gratuito e mantido com carinho.<br>
+                        Se quiserem apoiar o projeto, ficamos muito agradecidos!
+                    </div>
+                    
+                    <a href="/pages/apoiar.html" class="donation-modal-btn" onclick="SupportBanner.trackAction('donation_modal_click')">
+                        ☕ Apoiar com um café
+                    </a>
+                    
+                    <span class="donation-modal-skip" onclick="SupportBanner.closeDonationModal()">
+                        Ver Relatório →
+                    </span>
+                </div>
+            </div>
+        `;
+    },
+    
+    // Mostrar modal de doação
+    showDonationModal() {
+        // Não mostrar se já foi mostrado antes
+        if (this.hasShownDonationModal()) {
+            console.log('💬 Modal de doação já foi mostrado anteriormente');
+            return;
+        }
+        
+        // Criar container para o modal
+        const modalContainer = document.createElement('div');
+        modalContainer.id = 'donationModalContainer';
+        modalContainer.innerHTML = this.getDonationModalTemplate();
+        document.body.appendChild(modalContainer);
+        
+        // Marcar como mostrado
+        this.markDonationModalShown();
+        this.trackAction('donation_modal_shown');
+        
+        console.log('✅ Modal de doação exibido');
+    },
+    
+    // Fechar modal
+    closeDonationModal(event) {
+        if (event && event.target.id !== 'donationModalOverlay') return;
+        
+        const container = document.getElementById('donationModalContainer');
+        if (container) {
+            container.remove();
+        }
+        this.trackAction('donation_modal_closed');
+    },
+
+    // ========================================
+    // BANNER PARA PÁGINA DE ESTATÍSTICAS
+    // ========================================
+    
+    getStatsBannerTemplate() {
+        return `
+            <style>
+                .stats-support-banner {
+                    background: linear-gradient(135deg, rgba(214, 51, 132, 0.08), rgba(102, 126, 234, 0.08));
+                    border: 2px solid rgba(214, 51, 132, 0.2);
+                    border-radius: 16px;
+                    padding: 30px;
+                    margin-top: 30px;
+                    text-align: center;
+                }
+                
+                .stats-support-banner h3 {
+                    font-size: 1.3em;
+                    color: #d63384;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                }
+                
+                .stats-support-banner p {
+                    color: #666;
+                    margin-bottom: 20px;
+                    font-size: 1em;
+                }
+                
+                .stats-support-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 28px;
+                    background: linear-gradient(135deg, #ff813f, #ff6b35);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 1em;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    text-decoration: none;
+                }
+                
+                .stats-support-btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 6px 20px rgba(255, 129, 63, 0.4);
+                }
+            </style>
+            
+            <div class="stats-support-banner">
+                <h3>💕 Gostaste das estatísticas?</h3>
+                <p>Ajuda-nos a manter o Quest4Couple gratuito para todos os casais!</p>
+                <a href="/pages/apoiar.html" class="stats-support-btn" onclick="SupportBanner.trackAction('stats_banner_click')">
+                    ☕ Apoiar o projeto
+                </a>
+            </div>
+        `;
+    },
+    
+    // Renderizar banner de estatísticas
+    renderStatsBanner(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.innerHTML = this.getStatsBannerTemplate();
+            console.log('✅ Banner de estatísticas renderizado');
+        }
+    },
+
+    // Renderizar banner em um elemento específico
     render(elementId, compact = false) {
         const element = document.getElementById(elementId);
         if (element) {

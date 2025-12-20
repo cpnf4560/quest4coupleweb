@@ -641,8 +641,7 @@
       textarea.style.background = '#f5f5f5';
     });
   }
-  
-  // Habilitar inputs quando autenticado
+    // Habilitar inputs quando autenticado
   function enableAnswerInputs() {
     // Habilitar radios
     document.querySelectorAll('input[type="radio"]').forEach(input => {
@@ -653,7 +652,8 @@
     // Habilitar textareas
     document.querySelectorAll('textarea').forEach(textarea => {
       textarea.disabled = false;
-      textarea.placeholder = 'Comentário (opcional)...';
+      // ✅ Placeholder motivacional para incentivar comentários
+      textarea.placeholder = '💭 Conta ao teu par porquê... torna o relatório mais rico! (opcional)';
       textarea.style.cursor = 'text';
       textarea.style.background = 'white';
     });

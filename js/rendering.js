@@ -1,19 +1,32 @@
 /* ============================================
-   QUEST4COUPLE - RENDERING
+   QUEST4COUPLE - RENDERING (OPTIMIZED)
    Renderização dinâmica de perguntas
+   Com lazy loading para melhor performance
    ============================================ */
 
+// ✅ Cache para dados dos packs (evita múltiplos fetches)
+let cachedPacksData = null;
+let questionCounters = {};
+
+// ✅ Flag para debug (desativar em produção)
+const DEBUG_MODE = false;
+const log = DEBUG_MODE ? console.log.bind(console) : () => {};
+
 function loadAndRenderAllPacks() {
-  console.log('🚀 loadAndRenderAllPacks() chamado');
+  log('🚀 loadAndRenderAllPacks() chamado');
+  
+  // Se já temos dados em cache, usar
+  if (cachedPacksData) {
+    log('📦 Usando dados em cache');
+    processPacksData(cachedPacksData);
+    return;
+  }
   
   // Determinar ficheiro baseado no idioma atual
   const currentLang = (typeof I18n !== 'undefined' && I18n.currentLang) 
     ? I18n.currentLang 
     : (localStorage.getItem('quest4couple_lang') || 'pt-pt');
   
-  console.log('🌍 Idioma atual:', currentLang);
-  
-  // Mapeamento de idioma para ficheiro JSON
   const langFileMap = {
     'pt-pt': 'packs_data_clean.json',
     'pt-br': 'packs_data_pt-br.json',
@@ -23,54 +36,19 @@ function loadAndRenderAllPacks() {
   };
   
   const jsonFile = langFileMap[currentLang] || 'packs_data_clean.json';
-  
-  // Tentar múltiplos caminhos para o JSON
-  const possiblePaths = [
-    `./data/${jsonFile}?v=` + Date.now(),
-    `data/${jsonFile}?v=` + Date.now(),
-    `../data/${jsonFile}?v=` + Date.now()
-  ];
-  
-  let fetchPath = possiblePaths[0];
-  console.log('📂 Tentando carregar:', fetchPath);
+  const fetchPath = `./data/${jsonFile}?v=${Date.now()}`;
   
   fetch(fetchPath)
     .then(response => {
-      console.log('📥 Response recebida:', response.status, response.statusText);
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       return response.json();
-    })    .then(packsData => {
-      console.log('✅ JSON parseado com sucesso!');
-      console.log('📦 Total de packs:', packsData.length);
-      console.log('📦 Packs disponíveis:', packsData.map(p => p.name));
-      
-      // Usar 'color' para identificar packs (não varia por idioma)
-      const packConfigs = [
-        { id: 'romantico', containerId: 'pack-romantico-questions', color: 'romantico' },
-        { id: 'experiencia', containerId: 'pack-experiencia-questions', color: 'experiencia' },
-        { id: 'pimentinha', containerId: 'pack-pimentinha-questions', color: 'pimentinha' },
-        { id: 'poliamor', containerId: 'pack-poliamor-questions', color: 'poliamor' },
-        { id: 'kinks', containerId: 'pack-kinks-questions', color: 'kinks' }
-      ];      packConfigs.forEach(config => {
-        console.log(`🔍 Procurando pack com color: "${config.color}"`);
-        const packData = packsData.find(p => p.color === config.color);
-        if (packData && packData.categories) {
-          console.log(`✅ Pack encontrado: ${packData.name} com ${packData.categories.length} categorias`);
-          renderPackQuestions(config.containerId, config.id, packData.categories);
-        } else {
-          console.error(`❌ Pack com color "${config.color}" não encontrado no JSON.`);
-        }
-      });
-      
-      console.log('✅ Renderização de todos os packs concluída!');
+    })
+    .then(packsData => {
+      cachedPacksData = packsData;
+      processPacksData(packsData);
     })
     .catch(err => {
       console.error('❌ ERRO ao carregar os packs:', err);
-      console.error('Stack:', err.stack);
-      
-      // Tentar mostrar mensagem na UI
       const mainView = document.getElementById('themesView');
       if (mainView) {
         mainView.innerHTML = `
@@ -78,224 +56,270 @@ function loadAndRenderAllPacks() {
             <h3>❌ Erro ao Carregar Perguntas</h3>
             <p>Não foi possível carregar os questionários.</p>
             <p style="font-size: 0.9em; color: #666;">${err.message}</p>
-            <p style="font-size: 0.8em; margin-top: 15px;">Verifique se o ficheiro <code>data/packs_data_clean.json</code> existe.</p>
           </div>`;
         mainView.style.display = 'grid';
       }
     });
 }
 
-function renderPackQuestions(containerId, packId, categories) {
-  console.log(`🎨 renderPackQuestions(${containerId}, ${packId})`);
+function processPacksData(packsData) {
+  const packConfigs = [
+    { id: 'romantico', containerId: 'pack-romantico-questions', color: 'romantico' },
+    { id: 'experiencia', containerId: 'pack-experiencia-questions', color: 'experiencia' },
+    { id: 'pimentinha', containerId: 'pack-pimentinha-questions', color: 'pimentinha' },
+    { id: 'poliamor', containerId: 'pack-poliamor-questions', color: 'poliamor' },
+    { id: 'kinks', containerId: 'pack-kinks-questions', color: 'kinks' }
+  ];
   
-  const container = document.getElementById(containerId);
-  if (!container) {
-    console.error(`❌ Contentor com ID "${containerId}" NÃO foi encontrado!`);
-    return;
-  }
-  
-  console.log(`✅ Contentor encontrado:`, container);
+  packConfigs.forEach(config => {
+    const packData = packsData.find(p => p.color === config.color);
+    if (packData && packData.categories) {
+      renderPackQuestionsLazy(config.containerId, config.id, packData.categories);
+    }
+  });
+}
 
-  container.innerHTML = '';
-  let questionCounter = 0;
+// ✅ OTIMIZAÇÃO: Lazy loading - só renderiza categorias (não questões)
+function renderPackQuestionsLazy(containerId, packId, categories) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
   
-  console.log(`📂 Total de categorias: ${categories.length}`);
+  // Usar DocumentFragment para melhor performance
+  const fragment = document.createDocumentFragment();
+  
+  // Reset question counter para este pack
+  questionCounters[packId] = 0;
   
   // Carregar perguntas custom
-  const customQuestions = getCustomQuestions ? getCustomQuestions() : {};
+  const customQuestions = typeof getCustomQuestions === 'function' ? getCustomQuestions() : {};
   const customPack = customQuestions[packId] || [];
-  categories.forEach((category, catIndex) => {
-    console.log(`  📁 Categoria ${catIndex + 1}: "${category.name}" com ${category.questions ? category.questions.length : 0} perguntas`);
-      // Criar wrapper para categoria (para collapse/expand)
-    const categoryWrapper = document.createElement('div');
-    categoryWrapper.className = 'category-wrapper collapsed'; // ✅ Inicia COLAPSADA
-    categoryWrapper.id = `${packId}-cat-${catIndex}`;
-      // Título da categoria (clicável)
-    const categoryTitle = document.createElement('h3');
-    categoryTitle.className = 'category-title';
-    categoryTitle.style.cursor = 'pointer';
-    categoryTitle.innerHTML = `
-      <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
-      <span class="category-name">${category.name}</span>
-      <span class="category-progress-badge">0/${category.questions ? category.questions.length : 0}</span>
-    `;    // Evento de click no título para toggle
-    categoryTitle.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof window.togglePackCategory === 'function') {
-        window.togglePackCategory(categoryWrapper);
-      } else {
-        console.error('❌ togglePackCategory não encontrada!');
-      }
-    };
-      categoryWrapper.appendChild(categoryTitle);
-    
-    // Container para as perguntas
-    const questionsContainer = document.createElement('div');
-    questionsContainer.className = 'category-questions';
-
-    if (category.questions && Array.isArray(category.questions)) {
-      category.questions.forEach((questionText) => {
-        questionCounter++;
-        const qNum = questionCounter;
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question';
-
-        // Obter traduções das opções de resposta
-        const t = (key, fallback) => {
-          if (typeof I18n !== 'undefined' && I18n.t) {
-            const result = I18n.t(key);
-            return result !== key ? result : fallback;
-          }
-          return fallback;
-        };
-
-        const optPorfavor = t('answers.porfavor', 'Por favor!');
-        const optYup = t('answers.yup', 'Yup');
-        const optMeh = t('answers.meh', 'Meh...');
-        const optTalvez = t('answers.talvez', 'Talvez');
-        const commentPlaceholder = t('answers.commentPlaceholder', 'Comentários (opcional)');
-
-        questionDiv.innerHTML = `
-          <div class="question-row">
-            <div class="question-content">
-              <div class="question-text"><strong>${qNum}.</strong> ${questionText}</div>
-            </div>
-            <div class="question-options">
-              <div class="option-item">
-                <span class="option-label">${optPorfavor}</span>
-                <input type="radio" name="${packId}_q${qNum}" value="porfavor">
-              </div>
-              <div class="option-item">
-                <span class="option-label">${optYup}</span>
-                <input type="radio" name="${packId}_q${qNum}" value="yup">
-              </div>
-              <div class="option-item">
-                <span class="option-label">${optMeh}</span>
-                <input type="radio" name="${packId}_q${qNum}" value="meh">
-              </div>
-              <div class="option-item">
-                <span class="option-label">${optTalvez}</span>
-                <input type="radio" name="${packId}_q${qNum}" value="talvez">
-              </div>
-            </div>
-          </div>          <div class="question-comment">
-            <textarea name="${packId}_q${qNum}_comment" placeholder="${commentPlaceholder}"></textarea>
-          </div>        `;
-          questionsContainer.appendChild(questionDiv);
-      });
-    }
-      // Adicionar container de perguntas ao wrapper
-    categoryWrapper.appendChild(questionsContainer);
-      // Adicionar wrapper ao container principal
-    container.appendChild(categoryWrapper);
-  });
-    // Adicionar perguntas personalizadas
-  if (customPack.length > 0) {    // Criar wrapper para categoria custom
-    const customCategoryWrapper = document.createElement('div');
-    customCategoryWrapper.className = 'category-wrapper collapsed'; // ✅ Inicia COLAPSADA
-    customCategoryWrapper.id = `${packId}-cat-custom`;
-    
-    const customCategoryTitle = document.createElement('h3');
-    customCategoryTitle.className = 'category-title custom-category-title';
-    customCategoryTitle.style.cursor = 'pointer';
-    customCategoryTitle.innerHTML = `
-      <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
-      <span class="category-name">✨ Perguntas Personalizadas</span>
-      <span class="category-progress-badge">0/${customPack.length}</span>
-    `;    // Evento de click no título para toggle
-    customCategoryTitle.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      if (typeof window.togglePackCategory === 'function') {
-        window.togglePackCategory(customCategoryWrapper);
-      }
-    };
-    
-    customCategoryWrapper.appendChild(customCategoryTitle);
-    
-    // Container para as perguntas custom
-    const customQuestionsContainer = document.createElement('div');
-    customQuestionsContainer.className = 'category-questions';
-    
-    customPack.forEach((customQ) => {
-      questionCounter++;
-      const qNum = questionCounter;
-      const questionDiv = document.createElement('div');
-      questionDiv.className = 'question custom-question';
-
-      // Obter traduções das opções de resposta
-      const t = (key, fallback) => {
-        if (typeof I18n !== 'undefined' && I18n.t) {
-          const result = I18n.t(key);
-          return result !== key ? result : fallback;
-        }
-        return fallback;
-      };
-
-      const optPorfavor = t('answers.porfavor', 'Por favor!');
-      const optYup = t('answers.yup', 'Yup');
-      const optMeh = t('answers.meh', 'Meh...');
-      const optTalvez = t('answers.talvez', 'Talvez');
-      const commentPlaceholder = t('answers.commentPlaceholder', 'Comentários (opcional)');
-      
-      questionDiv.innerHTML = `
-        <div class="question-row">
-          <div class="question-content">
-            <div class="question-text">
-              <strong>${qNum}.</strong> ${customQ.text}
-              <span class="custom-question-badge">CUSTOM</span>
-              <button class="btn-delete-custom" onclick="deleteCustomQuestion('${packId}', '${customQ.id}')" title="Remover pergunta">🗑️</button>
-            </div>
-          </div>
-          <div class="question-options">
-            <div class="option-item">
-              <span class="option-label">${optPorfavor}</span>
-              <input type="radio" name="${packId}_q${qNum}" value="porfavor">
-            </div>
-            <div class="option-item">
-              <span class="option-label">${optYup}</span>
-              <input type="radio" name="${packId}_q${qNum}" value="yup">
-            </div>
-            <div class="option-item">
-              <span class="option-label">${optMeh}</span>
-              <input type="radio" name="${packId}_q${qNum}" value="meh">
-            </div>
-            <div class="option-item">
-              <span class="option-label">${optTalvez}</span>
-              <input type="radio" name="${packId}_q${qNum}" value="talvez">
-            </div>
-          </div>
-        </div>        <div class="question-comment">
-          <textarea name="${packId}_q${qNum}_comment" placeholder="${commentPlaceholder}"></textarea>
-        </div>`;
-      
-      customQuestionsContainer.appendChild(questionDiv);
-    });
-    
-    // Adicionar container de perguntas ao wrapper
-    customCategoryWrapper.appendChild(customQuestionsContainer);
-    
-    // Adicionar wrapper ao container principal
-    container.appendChild(customCategoryWrapper);
-  }
-    console.log(`✅ ${questionCounter} perguntas renderizadas no contentor ${containerId} (incluindo ${customPack.length} custom)`);
-  console.log(`📏 HTML length: ${container.innerHTML.length} characters`);
   
-  // Restaurar estados salvos das categorias (expandido/colapsado)
-  setTimeout(() => {
+  // ✅ LAZY: Só criar estrutura das categorias, não renderizar questões
+  categories.forEach((category, catIndex) => {
+    const categoryWrapper = createCategoryWrapper(packId, catIndex, category, categories);
+    fragment.appendChild(categoryWrapper);
+  });
+  
+  // Adicionar perguntas personalizadas (se existirem)
+  if (customPack.length > 0) {
+    const customWrapper = createCustomCategoryWrapper(packId, customPack, categories.length);
+    fragment.appendChild(customWrapper);
+  }
+  
+  // Uma única operação DOM
+  container.innerHTML = '';
+  container.appendChild(fragment);
+  
+  // Restaurar estados e progresso após renderização
+  requestAnimationFrame(() => {
     restoreCategoryStates();
     updateAllCategoriesProgress();
-  }, 100);
+  });
+}
+
+// ✅ OTIMIZAÇÃO: Criar wrapper da categoria sem renderizar questões
+function createCategoryWrapper(packId, catIndex, category, allCategories) {
+  const categoryWrapper = document.createElement('div');
+  categoryWrapper.className = 'category-wrapper collapsed';
+  categoryWrapper.id = `${packId}-cat-${catIndex}`;
+  
+  // Calcular question number base para esta categoria
+  let baseQuestionNum = 0;
+  for (let i = 0; i < catIndex; i++) {
+    baseQuestionNum += allCategories[i].questions?.length || 0;
+  }
+  
+  // Armazenar dados para lazy loading
+  categoryWrapper.dataset.packId = packId;
+  categoryWrapper.dataset.catIndex = catIndex;
+  categoryWrapper.dataset.baseQuestion = baseQuestionNum;
+  categoryWrapper.dataset.loaded = 'false';
+  
+  const questionCount = category.questions?.length || 0;
+  
+  // Título da categoria
+  const categoryTitle = document.createElement('h3');
+  categoryTitle.className = 'category-title';
+  categoryTitle.innerHTML = `
+    <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
+    <span class="category-name">${category.name}</span>
+    <span class="category-progress-badge">0/${questionCount}</span>
+  `;
+  
+  // Container placeholder para questões (vazio até expandir)
+  const questionsContainer = document.createElement('div');
+  questionsContainer.className = 'category-questions';
+  questionsContainer.dataset.questions = JSON.stringify(category.questions || []);
+  
+  categoryWrapper.appendChild(categoryTitle);
+  categoryWrapper.appendChild(questionsContainer);
+  
+  return categoryWrapper;
+}
+
+// ✅ OTIMIZAÇÃO: Criar wrapper custom sem renderizar questões
+function createCustomCategoryWrapper(packId, customPack, totalCategories) {
+  const categoryWrapper = document.createElement('div');
+  categoryWrapper.className = 'category-wrapper collapsed';
+  categoryWrapper.id = `${packId}-cat-custom`;
+  categoryWrapper.dataset.packId = packId;
+  categoryWrapper.dataset.isCustom = 'true';
+  categoryWrapper.dataset.loaded = 'false';
+  
+  const categoryTitle = document.createElement('h3');
+  categoryTitle.className = 'category-title custom-category-title';
+  categoryTitle.innerHTML = `
+    <span class="category-toggle-icon" style="transform: rotate(-90deg);">▼</span>
+    <span class="category-name">✨ Perguntas Personalizadas</span>
+    <span class="category-progress-badge">0/${customPack.length}</span>
+  `;
+  
+  const questionsContainer = document.createElement('div');
+  questionsContainer.className = 'category-questions';
+  questionsContainer.dataset.customQuestions = JSON.stringify(customPack);
+  
+  categoryWrapper.appendChild(categoryTitle);
+  categoryWrapper.appendChild(questionsContainer);
+  
+  return categoryWrapper;
+}
+
+// ✅ OTIMIZAÇÃO: Renderizar questões apenas quando categoria é expandida
+function renderCategoryQuestionsIfNeeded(categoryWrapper) {
+  if (categoryWrapper.dataset.loaded === 'true') return;
+  
+  const questionsContainer = categoryWrapper.querySelector('.category-questions');
+  if (!questionsContainer) return;
+  
+  const packId = categoryWrapper.dataset.packId;
+  const isCustom = categoryWrapper.dataset.isCustom === 'true';
+  
+  // Usar DocumentFragment
+  const fragment = document.createDocumentFragment();
+  
+  // Obter traduções uma única vez
+  const translations = getTranslations();
+  
+  if (isCustom) {
+    // Renderizar questões custom
+    const customQuestions = JSON.parse(questionsContainer.dataset.customQuestions || '[]');
+    const baseNum = getBaseQuestionNumber(packId);
+    
+    customQuestions.forEach((customQ, idx) => {
+      const qNum = baseNum + idx + 1;
+      const questionDiv = createQuestionElement(packId, qNum, customQ.text, translations, true, customQ.id);
+      fragment.appendChild(questionDiv);
+    });
+  } else {
+    // Renderizar questões normais
+    const questions = JSON.parse(questionsContainer.dataset.questions || '[]');
+    const baseNum = parseInt(categoryWrapper.dataset.baseQuestion || '0');
+    
+    questions.forEach((questionText, idx) => {
+      const qNum = baseNum + idx + 1;
+      const questionDiv = createQuestionElement(packId, qNum, questionText, translations, false);
+      fragment.appendChild(questionDiv);
+    });
+  }
+  
+  questionsContainer.innerHTML = '';
+  questionsContainer.appendChild(fragment);
+  categoryWrapper.dataset.loaded = 'true';
+  
+  // Limpar dados armazenados para liberar memória
+  delete questionsContainer.dataset.questions;
+  delete questionsContainer.dataset.customQuestions;
+}
+
+// ✅ OTIMIZAÇÃO: Obter traduções uma única vez
+function getTranslations() {
+  const t = (key, fallback) => {
+    if (typeof I18n !== 'undefined' && I18n.t) {
+      const result = I18n.t(key);
+      return result !== key ? result : fallback;
+    }
+    return fallback;
+  };
+  
+  return {
+    porfavor: t('answers.porfavor', 'Por favor!'),
+    yup: t('answers.yup', 'Yup'),
+    meh: t('answers.meh', 'Meh...'),
+    talvez: t('answers.talvez', 'Talvez'),
+    placeholder: t('answers.commentPlaceholder', '💭 Conta ao teu par porquê... torna o relatório mais rico! (opcional)')
+  };
+}
+
+// ✅ OTIMIZAÇÃO: Criar elemento de questão (reutilizável)
+function createQuestionElement(packId, qNum, questionText, translations, isCustom, customId) {
+  const questionDiv = document.createElement('div');
+  questionDiv.className = isCustom ? 'question custom-question' : 'question';
+  
+  const customBadge = isCustom ? `<span class="custom-question-badge">CUSTOM</span>
+    <button class="btn-delete-custom" data-pack="${packId}" data-id="${customId}" title="Remover pergunta">🗑️</button>` : '';
+  
+  questionDiv.innerHTML = `
+    <div class="question-row">
+      <div class="question-content">
+        <div class="question-text"><strong>${qNum}.</strong> ${questionText}${customBadge}</div>
+      </div>
+      <div class="question-options">
+        <div class="option-item">
+          <span class="option-label">${translations.porfavor}</span>
+          <input type="radio" name="${packId}_q${qNum}" value="porfavor">
+        </div>
+        <div class="option-item">
+          <span class="option-label">${translations.yup}</span>
+          <input type="radio" name="${packId}_q${qNum}" value="yup">
+        </div>
+        <div class="option-item">
+          <span class="option-label">${translations.meh}</span>
+          <input type="radio" name="${packId}_q${qNum}" value="meh">
+        </div>
+        <div class="option-item">
+          <span class="option-label">${translations.talvez}</span>
+          <input type="radio" name="${packId}_q${qNum}" value="talvez">
+        </div>
+      </div>
+    </div>
+    <div class="question-comment">
+      <textarea name="${packId}_q${qNum}_comment" placeholder="${translations.placeholder}"></textarea>
+    </div>
+  `;
+  
+  return questionDiv;
+}
+
+// Calcular base question number para custom questions
+function getBaseQuestionNumber(packId) {
+  const container = document.getElementById(`pack-${packId}-questions`);
+  if (!container) return 0;
+  
+  let total = 0;
+  container.querySelectorAll('.category-wrapper:not([data-is-custom])').forEach(wrapper => {
+    const questionsContainer = wrapper.querySelector('.category-questions');
+    if (questionsContainer) {
+      if (wrapper.dataset.loaded === 'true') {
+        total += questionsContainer.querySelectorAll('.question').length;
+      } else {
+        try {
+          const questions = JSON.parse(questionsContainer.dataset.questions || '[]');
+          total += questions.length;
+        } catch(e) {}
+      }
+    }
+  });
+  return total;
 }
 
 // Função auxiliar para recarregar pack
 function loadPackQuestions(packId) {
+  cachedPacksData = null;
   loadAndRenderAllPacks();
 }
 
 // ========================================
-// RESTORE CATEGORY STATES (ao carregar página)
+// RESTORE CATEGORY STATES
 // ========================================
 function restoreCategoryStates() {
   const savedStates = JSON.parse(localStorage.getItem('quest4couple_category_states') || '{}');
@@ -308,46 +332,48 @@ function restoreCategoryStates() {
       if (isExpanded) {
         categoryWrapper.classList.add('expanded');
         categoryWrapper.classList.remove('collapsed');
+        renderCategoryQuestionsIfNeeded(categoryWrapper);
       } else {
         categoryWrapper.classList.remove('expanded');
         categoryWrapper.classList.add('collapsed');
       }
       
-      // Atualizar ícone
       const icon = categoryWrapper.querySelector('.category-toggle-icon');
       if (icon) {
         icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)';
       }
     }
   });
-  
-  console.log('✅ Estados das categorias restaurados');
 }
 
 // ========================================
-// TOGGLE PACK CATEGORY (Collapse/Expand Subcategorias nos Questionários)
+// TOGGLE PACK CATEGORY (Collapse/Expand)
 // ========================================
 function togglePackCategory(categoryWrapper) {
   const isExpanded = categoryWrapper.classList.contains('expanded');
-    if (isExpanded) {
+  
+  if (isExpanded) {
     categoryWrapper.classList.remove('expanded');
     categoryWrapper.classList.add('collapsed');
   } else {
     categoryWrapper.classList.add('expanded');
     categoryWrapper.classList.remove('collapsed');
+    renderCategoryQuestionsIfNeeded(categoryWrapper);
   }
   
-  // Atualizar ícone
   const icon = categoryWrapper.querySelector('.category-toggle-icon');
   if (icon) {
     icon.style.transform = isExpanded ? 'rotate(-90deg)' : 'rotate(0deg)';
   }
   
-  // Salvar estado no localStorage
   const categoryId = categoryWrapper.id;
   const savedStates = JSON.parse(localStorage.getItem('quest4couple_category_states') || '{}');
   savedStates[categoryId] = !isExpanded;
   localStorage.setItem('quest4couple_category_states', JSON.stringify(savedStates));
+  
+  if (!isExpanded) {
+    requestAnimationFrame(() => updateCategoryProgress(categoryWrapper));
+  }
 }
 
 // ========================================
@@ -359,14 +385,21 @@ function updateCategoryProgress(categoryWrapper) {
     q.querySelector('input[type="radio"]:checked')
   ).length;
   
+  const commented = Array.from(questions).filter(q => {
+    const textarea = q.querySelector('textarea');
+    return textarea && textarea.value.trim().length > 0;
+  }).length;
+  
   const badge = categoryWrapper.querySelector('.category-progress-badge');
   if (badge) {
-    badge.textContent = `${answered}/${questions.length}`;
+    const total = questions.length || parseInt(badge.textContent.split('/')[1]) || 0;
+    const commentInfo = commented > 0 ? ` 💬${commented}` : '';
+    badge.textContent = `${answered}/${total}${commentInfo}`;
     
-    // Mudar cor baseado no progresso
-    const percentage = questions.length > 0 ? (answered / questions.length) * 100 : 0;
+    const percentage = total > 0 ? (answered / total) * 100 : 0;
     if (percentage === 0) {
       badge.style.background = 'rgba(255, 255, 255, 0.3)';
+      badge.style.color = '';
     } else if (percentage === 100) {
       badge.style.background = 'rgba(40, 167, 69, 0.9)';
       badge.style.color = 'white';
@@ -375,6 +408,63 @@ function updateCategoryProgress(categoryWrapper) {
       badge.style.color = 'white';
     }
   }
+  
+  updateGlobalCommentCounter();
+}
+
+// ========================================
+// CONTADOR GLOBAL DE COMENTÁRIOS (Debounced)
+// ========================================
+let commentCounterTimeout = null;
+function updateGlobalCommentCounter() {
+  if (commentCounterTimeout) clearTimeout(commentCounterTimeout);
+  
+  commentCounterTimeout = setTimeout(() => {
+    const allTextareas = document.querySelectorAll('.question textarea');
+    const totalComments = Array.from(allTextareas).filter(t => t.value.trim().length > 0).length;
+    const totalQuestions = allTextareas.length;
+    
+    let globalBadge = document.getElementById('globalCommentBadge');
+    
+    if (!globalBadge && totalComments > 0) {
+      const controlsBottom = document.querySelector('.controls-bottom');
+      if (controlsBottom) {
+        globalBadge = document.createElement('div');
+        globalBadge.id = 'globalCommentBadge';
+        globalBadge.style.cssText = `
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          padding: 8px 16px;
+          border-radius: 20px;
+          font-size: 0.9em;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          margin-left: 10px;
+        `;
+        controlsBottom.appendChild(globalBadge);
+      }
+    }
+    
+    if (globalBadge) {
+      if (totalComments === 0) {
+        globalBadge.style.display = 'none';
+      } else {
+        globalBadge.style.display = 'inline-flex';
+        const percentage = totalQuestions > 0 ? Math.round((totalComments / totalQuestions) * 100) : 0;
+        globalBadge.innerHTML = `💬 ${totalComments} comentários (${percentage}%)`;
+        
+        if (totalComments >= 10) {
+          globalBadge.title = '🌟 Incrível! O vosso relatório vai ser muito rico!';
+        } else if (totalComments >= 5) {
+          globalBadge.title = '👏 Ótimo! Continuem a partilhar os vossos pensamentos!';
+        } else {
+          globalBadge.title = '💡 Comentários tornam o relatório mais pessoal!';
+        }
+      }
+    }
+  }, 100);
 }
 
 // ========================================
@@ -387,28 +477,46 @@ function updateAllCategoriesProgress() {
 }
 
 // ========================================
+// EVENT DELEGATION para clicks nas categorias
+// ========================================
+document.addEventListener('click', function(e) {
+  const categoryTitle = e.target.closest('.category-title');
+  if (categoryTitle) {
+    e.preventDefault();
+    e.stopPropagation();
+    const categoryWrapper = categoryTitle.closest('.category-wrapper');
+    if (categoryWrapper && typeof togglePackCategory === 'function') {
+      togglePackCategory(categoryWrapper);
+    }
+    return;
+  }
+  
+  const deleteBtn = e.target.closest('.btn-delete-custom');
+  if (deleteBtn) {
+    e.preventDefault();
+    const packId = deleteBtn.dataset.pack;
+    const customId = deleteBtn.dataset.id;
+    if (packId && customId && typeof deleteCustomQuestion === 'function') {
+      deleteCustomQuestion(packId, customId);
+    }
+  }
+}, { passive: false });
+
+// ========================================
 // EXPORTAR FUNÇÕES PARA ESCOPO GLOBAL
 // ========================================
 window.togglePackCategory = togglePackCategory;
 window.updateCategoryProgress = updateCategoryProgress;
 window.updateAllCategoriesProgress = updateAllCategoriesProgress;
+window.updateGlobalCommentCounter = updateGlobalCommentCounter;
 window.restoreCategoryStates = restoreCategoryStates;
-
-console.log('✅ Funções de collapse/expand exportadas para escopo global');
-console.log('   - togglePackCategory:', typeof window.togglePackCategory);
-console.log('   - updateCategoryProgress:', typeof window.updateCategoryProgress);
-console.log('   - updateAllCategoriesProgress:', typeof window.updateAllCategoriesProgress);
-console.log('   - restoreCategoryStates:', typeof window.restoreCategoryStates);
+window.loadAndRenderAllPacks = loadAndRenderAllPacks;
+window.renderCategoryQuestionsIfNeeded = renderCategoryQuestionsIfNeeded;
 
 // ========================================
 // LISTENER PARA MUDANÇA DE IDIOMA
 // ========================================
-document.addEventListener('languageChanged', (event) => {
-  console.log('🌍 Idioma alterado para:', event.detail.lang);
-  console.log('🔄 Recarregando questões no novo idioma...');
-  
-  // Recarregar questões com o novo idioma
+document.addEventListener('languageChanged', () => {
+  cachedPacksData = null;
   loadAndRenderAllPacks();
 });
-
-console.log('✅ Listener de mudança de idioma configurado');
