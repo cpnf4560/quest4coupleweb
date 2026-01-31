@@ -1832,6 +1832,41 @@
     // ===========================
     let allConnections = []; // Cache de conexões
     
+    // Função para calcular compatibilidade entre dois utilizadores
+    function calculateCoupleCompatibility(answers1, answers2) {
+      const packs = ['romantico', 'experiencia', 'pimentinha', 'poliamor', 'kinks'];
+      let totalMatches = 0;
+      let totalQuestions = 0;
+      
+      for (const packId of packs) {
+        const p1 = answers1[packId] || {};
+        const p2 = answers2[packId] || {};
+        
+        // Encontrar questões respondidas por ambos
+        const commonKeys = Object.keys(p1).filter(k => p2[k] !== undefined);
+        
+        for (const key of commonKeys) {
+          const a1 = typeof p1[key] === 'object' ? p1[key].answer : p1[key];
+          const a2 = typeof p2[key] === 'object' ? p2[key].answer : p2[key];
+          
+          totalQuestions++;
+          
+          // Super Match: ambos "porfavor" ou "yup"
+          if ((a1 === 'porfavor' || a1 === 'yup') && (a2 === 'porfavor' || a2 === 'yup')) {
+            totalMatches += 1;
+          }
+          // Match parcial: um positivo e outro "talvez"
+          else if (((a1 === 'porfavor' || a1 === 'yup') && a2 === 'talvez') ||
+                   ((a2 === 'porfavor' || a2 === 'yup') && a1 === 'talvez')) {
+            totalMatches += 0.5;
+          }
+        }
+      }
+      
+      if (totalQuestions === 0) return null; // Sem respostas em comum
+      return Math.round((totalMatches / totalQuestions) * 100);
+    }
+
     async function loadConnectionsWithFilters() {
       const container = document.getElementById('connectionsContainer');
       const loadingEl = document.getElementById('loadingConnections');
@@ -1857,11 +1892,19 @@
             const users = connData.users || [];
             
             if (users.length === 2) {
-              // Buscar dados dos dois utilizadores
-              const [user1Doc, user2Doc] = await Promise.all([
+              // Buscar dados dos dois utilizadores e suas respostas
+              const [user1Doc, user2Doc, answers1Doc, answers2Doc] = await Promise.all([
                 db.collection('users').doc(users[0]).get(),
-                db.collection('users').doc(users[1]).get()
+                db.collection('users').doc(users[1]).get(),
+                db.collection('users').doc(users[0]).collection('answers').doc('all').get(),
+                db.collection('users').doc(users[1]).collection('answers').doc('all').get()
               ]);
+              
+              const answers1 = answers1Doc.exists ? answers1Doc.data() : {};
+              const answers2 = answers2Doc.exists ? answers2Doc.data() : {};
+              
+              // Calcular compatibilidade
+              const compatibility = calculateCoupleCompatibility(answers1, answers2);
               
               allConnections.push({
                 id: connDoc.id,
@@ -1869,7 +1912,8 @@
                 user1: user1Doc.exists ? { id: users[0], ...user1Doc.data() } : { id: users[0] },
                 user2: user2Doc.exists ? { id: users[1], ...user2Doc.data() } : { id: users[1] },
                 createdAt: connData.createdAt,
-                status: connData.status || 'active'
+                status: connData.status || 'active',
+                compatibility: compatibility
               });
             }
           }
@@ -1954,6 +1998,17 @@
             ? '<span style="background: #28a745; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75em;">✅ Ativa</span>'
             : '<span style="background: #ffc107; color: #212529; padding: 4px 10px; border-radius: 20px; font-size: 0.75em;">⏳ Pendente</span>';
           
+          // Badge de compatibilidade
+          const compat = conn.compatibility;
+          let compatBadge = '';
+          if (compat !== null && compat !== undefined) {
+            const compatColor = compat >= 70 ? '#28a745' : compat >= 40 ? '#ffc107' : '#dc3545';
+            const compatEmoji = compat >= 70 ? '🔥' : compat >= 40 ? '💛' : '💔';
+            compatBadge = `<span style="background: ${compatColor}; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.85em; font-weight: 700;">${compatEmoji} ${compat}%</span>`;
+          } else {
+            compatBadge = `<span style="background: #6c757d; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8em;">❓ S/dados</span>`;
+          }
+          
           const createdAt = conn.createdAt?.toDate ? conn.createdAt.toDate().toLocaleDateString('pt-PT') : '-';
           
           html += `
@@ -1964,7 +2019,10 @@
                   <div style="font-size: 1.5em; color: #f093fb;">💕</div>
                   ${photo2}
                 </div>
-                ${statusBadge}
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  ${compatBadge}
+                  ${statusBadge}
+                </div>
               </div>
               
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -2417,9 +2475,13 @@
     
     // Função para ver respostas de um utilizador a partir da conexão
     async function showUserAnswersFromConnection(userId) {
+      console.log('🔍 showUserAnswersFromConnection chamada com userId:', userId);
       // Redirecionar para o novo dashboard
       openUserDashboard(userId);
     }
+    
+    // Expor showUserAnswersFromConnection globalmente
+    window.showUserAnswersFromConnection = showUserAnswersFromConnection;
     
     // Mostrar detalhes de um pack específico no modal
     async function showPackDetailsInModal(userId, packId) {
@@ -2626,6 +2688,9 @@
         `;
       }
     }
+    
+    // Expor viewCoupleReport globalmente
+    window.viewCoupleReport = viewCoupleReport;
     
     // ===========================
     // RESPOSTAS INDIVIDUAIS
