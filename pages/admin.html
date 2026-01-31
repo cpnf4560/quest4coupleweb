@@ -990,6 +990,15 @@
             </div>
           </div>
         </div>
+        
+        <!-- Modal para Dashboard do Utilizador -->
+        <div id="userDashboardModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; overflow-y: auto;">
+          <div style="background: #f8f9fa; margin: 20px auto; max-width: 1000px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); min-height: calc(100vh - 40px);">
+            <div id="userDashboardContent">
+              <!-- User dashboard will be loaded here -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2014,35 +2023,297 @@
       loadConnectionsWithFilters();
     }
     
-    // Função para ver respostas de um utilizador a partir da conexão
-    async function showUserAnswersFromConnection(userId) {
-      const modal = document.getElementById('answersModal');
-      const content = document.getElementById('answersModalContent');
+    // ===========================
+    // USER DASHBOARD MODAL
+    // ===========================
+    
+    // Função principal para abrir o dashboard do utilizador
+    async function openUserDashboard(userId) {
+      console.log('🔍 A abrir dashboard do utilizador:', userId);
+      
+      const modal = document.getElementById('userDashboardModal');
+      const content = document.getElementById('userDashboardContent');
+      
+      if (!modal || !content) {
+        console.error('❌ Modal não encontrado!');
+        alert('Erro: Modal não encontrado. Recarregue a página.');
+        return;
+      }
       
       modal.style.display = 'block';
       document.body.style.overflow = 'hidden';
       
       content.innerHTML = `
-        <div style="padding: 40px; text-align: center;">
-          <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
-          <p>A carregar respostas...</p>
+        <div style="padding: 60px; text-align: center;">
+          <div style="font-size: 3em; margin-bottom: 15px;">⏳</div>
+          <p style="font-size: 1.2em; color: #6c757d;">A carregar dashboard do utilizador...</p>
         </div>
       `;
       
       try {
         // Buscar dados do utilizador
         const userDoc = await db.collection('users').doc(userId).get();
-        const userData = userDoc.exists ? userDoc.data() : {};
+        if (!userDoc.exists) {
+          throw new Error('Utilizador não encontrado');
+        }
+        
+        const userData = { id: userId, ...userDoc.data() };
         const userName = userData.name || userData.displayName || userData.username || userData.email?.split('@')[0] || 'Utilizador';
-        const userPhoto = userData.photoURL 
-          ? `<img src="${userData.photoURL}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea;">`
-          : `<div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 24px;">${userName.charAt(0).toUpperCase()}</div>`;
         
         // Buscar respostas
         const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
         const allAnswers = answersDoc.exists ? answersDoc.data() : {};
         
-        // Carregar dados dos packs se necessário
+        // Buscar conexões do utilizador
+        const connectionsSnapshot = await db.collection('connections')
+          .where('users', 'array-contains', userId)
+          .get();
+        
+        const connections = [];
+        for (const connDoc of connectionsSnapshot.docs) {
+          const connData = connDoc.data();
+          const partnerIds = (connData.users || []).filter(id => id !== userId);
+          
+          for (const partnerId of partnerIds) {
+            const partnerDoc = await db.collection('users').doc(partnerId).get();
+            connections.push({
+              id: connDoc.id,
+              partner: partnerDoc.exists ? { id: partnerId, ...partnerDoc.data() } : { id: partnerId },
+              status: connData.status || 'active',
+              createdAt: connData.createdAt
+            });
+          }
+        }
+        
+        // Carregar dados dos packs
+        if (!packQuestionsData) {
+          const response = await fetch('../data/packs_data_clean.json');
+          packQuestionsData = await response.json();
+        }
+        
+        const packInfo = {
+          'romantico': { icon: '💕', name: 'Romântico', color: '#e91e63', colorKey: 'romantico' },
+          'experiencia': { icon: '🌍', name: 'Exploração', color: '#ff9800', colorKey: 'experiencia' },
+          'pimentinha': { icon: '🌶️', name: 'Pimentinha', color: '#f44336', colorKey: 'pimentinha' },
+          'poliamor': { icon: '💜', name: 'Poliamor', color: '#9c27b0', colorKey: 'poliamor' },
+          'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7', colorKey: 'kinks' }
+        };
+        
+        // Calcular estatísticas de respostas
+        let totalAnswers = 0;
+        const packStats = [];
+        
+        for (const [packId, packData] of Object.entries(packInfo)) {
+          const answers = allAnswers[packId] || {};
+          const count = Object.keys(answers).length;
+          totalAnswers += count;
+          
+          if (count > 0) {
+            packStats.push({ packId, ...packData, count });
+          }
+        }
+        
+        // Foto do utilizador
+        const userPhoto = userData.photoURL 
+          ? `<img src="${userData.photoURL}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 4px solid #667eea; box-shadow: 0 4px 15px rgba(102,126,234,0.3);">`
+          : `<div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 42px; box-shadow: 0 4px 15px rgba(102,126,234,0.3);">${userName.charAt(0).toUpperCase()}</div>`;
+        
+        // Data de registo
+        const createdAt = userData.createdAt?.toDate 
+          ? userData.createdAt.toDate().toLocaleDateString('pt-PT', { day: '2-digit', month: 'long', year: 'numeric' })
+          : '-';
+        
+        // Gerar HTML do dashboard
+        let html = `
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 20px 20px 0 0; position: relative;">
+            <button onclick="closeUserDashboard()" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 1em; backdrop-filter: blur(10px); transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕ Fechar</button>
+            
+            <div style="display: flex; align-items: center; gap: 25px;">
+              ${userPhoto}
+              <div style="color: white;">
+                <h1 style="margin: 0; font-size: 2em;">${maskName(userName)}</h1>
+                <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 1.1em;">${maskEmail(userData.email) || ''}</p>
+                ${userData.username ? `<p style="margin: 5px 0 0 0; opacity: 0.8;">@${userData.username}</p>` : ''}
+                <div style="margin-top: 12px; display: flex; gap: 15px; flex-wrap: wrap;">
+                  <span style="background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.9em;">
+                    ${userData.gender === 'M' ? '♂️ Masculino' : userData.gender === 'F' ? '♀️ Feminino' : '⚧️ Outro'}
+                  </span>
+                  ${userData.ageRange ? `<span style="background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.9em;">🎂 ${userData.ageRange}</span>` : ''}
+                  <span style="background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 20px; font-size: 0.9em;">📅 Desde ${createdAt}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="padding: 30px;">
+            <!-- Estatísticas Gerais -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
+              <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                <div style="font-size: 2.5em; font-weight: 700;">${totalAnswers}</div>
+                <div style="opacity: 0.9;">📝 Respostas</div>
+              </div>
+              <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                <div style="font-size: 2.5em; font-weight: 700;">${connections.length}</div>
+                <div style="opacity: 0.9;">💕 Conexões</div>
+              </div>
+              <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                <div style="font-size: 2.5em; font-weight: 700;">${packStats.length}</div>
+                <div style="opacity: 0.9;">📦 Packs</div>
+              </div>
+            </div>
+            
+            <!-- Secção: Questionários Respondidos -->
+            <div style="background: white; padding: 25px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+              <h2 style="margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 10px;">
+                📋 Questionários Respondidos
+              </h2>
+        `;
+        
+        if (packStats.length === 0) {
+          html += `
+            <div style="text-align: center; padding: 40px; color: #6c757d;">
+              <div style="font-size: 3em; margin-bottom: 15px;">📭</div>
+              <p>Este utilizador ainda não respondeu a nenhum questionário.</p>
+            </div>
+          `;
+        } else {
+          html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;">`;
+          
+          packStats.forEach(pack => {
+            html += `
+              <div onclick="showUserPackAnswersInDashboard('${userId}', '${pack.packId}')" 
+                   style="background: linear-gradient(135deg, ${pack.color}15 0%, ${pack.color}08 100%); 
+                          border: 2px solid ${pack.color}40; padding: 20px; border-radius: 14px; 
+                          cursor: pointer; transition: all 0.3s; text-align: center;"
+                   onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 8px 25px ${pack.color}30'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                <div style="font-size: 2.5em; margin-bottom: 10px;">${pack.icon}</div>
+                <div style="font-weight: 600; color: ${pack.color}; font-size: 1.1em;">${pack.name}</div>
+                <div style="font-size: 2em; font-weight: 700; color: ${pack.color}; margin-top: 8px;">${pack.count}</div>
+                <div style="font-size: 0.85em; color: #6c757d;">respostas</div>
+              </div>
+            `;
+          });
+          
+          html += `</div>`;
+        }
+        
+        html += `</div>`;
+        
+        // Secção: Conexões
+        html += `
+          <div style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+            <h2 style="margin: 0 0 20px 0; color: #333; display: flex; align-items: center; gap: 10px;">
+              💕 Conexões
+            </h2>
+        `;
+        
+        if (connections.length === 0) {
+          html += `
+            <div style="text-align: center; padding: 40px; color: #6c757d;">
+              <div style="font-size: 3em; margin-bottom: 15px;">💔</div>
+              <p>Este utilizador ainda não tem conexões.</p>
+            </div>
+          `;
+        } else {
+          html += `<div style="display: grid; gap: 15px;">`;
+          
+          connections.forEach(conn => {
+            const partner = conn.partner;
+            const partnerPhoto = partner.photoURL 
+              ? `<img src="${partner.photoURL}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #f093fb;">`
+              : `<div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px;">${(partner.name || partner.email || '?').charAt(0).toUpperCase()}</div>`;
+            
+            const connDate = conn.createdAt?.toDate 
+              ? conn.createdAt.toDate().toLocaleDateString('pt-PT')
+              : '-';
+            
+            const statusBadge = conn.status === 'active'
+              ? '<span style="background: #28a745; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75em;">✅ Ativa</span>'
+              : '<span style="background: #ffc107; color: #212529; padding: 4px 10px; border-radius: 20px; font-size: 0.75em;">⏳ Pendente</span>';
+            
+            html += `
+              <div style="display: flex; align-items: center; justify-content: space-between; background: #f8f9fa; padding: 15px 20px; border-radius: 12px; transition: all 0.2s;" onmouseover="this.style.background='#e9ecef'" onmouseout="this.style.background='#f8f9fa'">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  ${partnerPhoto}
+                  <div>
+                    <div style="font-weight: 600; color: #333;">${maskName(partner.name) || 'Parceiro'}</div>
+                    <div style="font-size: 0.85em; color: #6c757d;">${maskEmail(partner.email) || '-'}</div>
+                    <div style="font-size: 0.8em; color: #6c757d; margin-top: 4px;">📅 Conectados em: ${connDate}</div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  ${statusBadge}
+                  <button onclick="event.stopPropagation(); viewCoupleReport('${userId}', '${partner.id}', '${conn.id}')" 
+                          style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.2s;"
+                          onmouseover="this.style.transform='translateY(-2px)'"
+                          onmouseout="this.style.transform='translateY(0)'">
+                    📊 Relatório
+                  </button>
+                  <button onclick="event.stopPropagation(); openUserDashboard('${partner.id}')" 
+                          style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.2s;"
+                          onmouseover="this.style.transform='translateY(-2px)'"
+                          onmouseout="this.style.transform='translateY(0)'">
+                    👤 Ver Perfil
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+          
+          html += `</div>`;
+        }
+        
+        html += `</div></div>`;
+        
+        content.innerHTML = html;
+        console.log('✅ Dashboard do utilizador carregado com sucesso');
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar dashboard:', error);
+        content.innerHTML = `
+          <div style="padding: 60px; text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 15px; color: #dc3545;">❌</div>
+            <h2 style="color: #dc3545;">Erro ao carregar dashboard</h2>
+            <p style="color: #6c757d;">${error.message}</p>
+            <button onclick="closeUserDashboard()" style="margin-top: 20px; background: #6c757d; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1em;">Fechar</button>
+          </div>
+        `;
+      }
+    }
+    
+    // Fechar dashboard do utilizador
+    function closeUserDashboard() {
+      const modal = document.getElementById('userDashboardModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+    // Ver respostas de um pack específico dentro do dashboard
+    async function showUserPackAnswersInDashboard(userId, packId) {
+      const content = document.getElementById('userDashboardContent');
+      
+      const loadingHtml = content.innerHTML;
+      
+      content.innerHTML = `
+        <div style="padding: 60px; text-align: center;">
+          <div style="font-size: 3em; margin-bottom: 15px;">⏳</div>
+          <p style="font-size: 1.2em; color: #6c757d;">A carregar respostas do pack...</p>
+        </div>
+      `;
+      
+      try {
+        // Buscar dados
+        const userDoc = await db.collection('users').doc(userId).get();
+        const userData = userDoc.exists ? userDoc.data() : {};
+        const userName = userData.name || userData.displayName || userData.email?.split('@')[0] || 'Utilizador';
+        
+        const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
+        const allAnswers = answersDoc.exists ? answersDoc.data() : {};
+        const packAnswers = allAnswers[packId] || {};
+        
         if (!packQuestionsData) {
           const response = await fetch('../data/packs_data_clean.json');
           packQuestionsData = await response.json();
@@ -2056,72 +2327,98 @@
           'kinks': { icon: '🔥', name: 'Fetiches', color: '#673ab7' }
         };
         
+        const pack = packInfo[packId] || { icon: '📦', name: packId, color: '#667eea' };
+        
+        // Encontrar dados das perguntas
+        const packData = packQuestionsData?.find(p => p.color === packId || p.id === packId);
+        const questions = packData?.cards || [];
+        
         let html = `
-          <div style="padding: 25px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e9ecef;">
-              <div style="display: flex; align-items: center; gap: 15px;">
-                ${userPhoto}
+          <div style="background: linear-gradient(135deg, ${pack.color} 0%, ${pack.color}cc 100%); padding: 25px 30px; border-radius: 20px 20px 0 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 15px; color: white;">
+                <span style="font-size: 2.5em;">${pack.icon}</span>
                 <div>
-                  <h2 style="margin: 0; color: #333;">📝 Respostas de ${maskName(userName)}</h2>
-                  <p style="margin: 5px 0 0 0; color: #6c757d; font-size: 0.9em;">${maskEmail(userData.email) || ''}</p>
+                  <h2 style="margin: 0;">${pack.name}</h2>
+                  <p style="margin: 5px 0 0 0; opacity: 0.9;">${Object.keys(packAnswers).length} respostas de ${maskName(userName)}</p>
                 </div>
               </div>
-              <button onclick="closeAnswersModal()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 1em;">✕ Fechar</button>
+              <div style="display: flex; gap: 10px;">
+                <button onclick="openUserDashboard('${userId}')" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; backdrop-filter: blur(10px);">← Voltar</button>
+                <button onclick="closeUserDashboard()" style="background: rgba(255,255,255,0.2); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; backdrop-filter: blur(10px);">✕ Fechar</button>
+              </div>
             </div>
+          </div>
+          
+          <div style="padding: 30px;">
         `;
         
-        // Verificar se tem respostas
-        const packs = Object.keys(allAnswers).filter(k => packInfo[k]);
-        
-        if (packs.length === 0) {
+        if (Object.keys(packAnswers).length === 0) {
           html += `
             <div style="text-align: center; padding: 40px; color: #6c757d;">
               <div style="font-size: 3em; margin-bottom: 15px;">📭</div>
-              <h3>Sem respostas</h3>
-              <p>Este utilizador ainda não respondeu a nenhum pack.</p>
+              <p>Sem respostas para este pack.</p>
             </div>
           `;
         } else {
-          // Mostrar resumo dos packs
-          html += `<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">`;
+          html += `<div style="display: grid; gap: 15px;">`;
           
-          packs.forEach(packId => {
-            const pack = packInfo[packId];
-            const answers = allAnswers[packId] || {};
-            const count = Object.keys(answers).length;
+          const answerLabels = {
+            'porfavor': { text: '🔥 Por favor!', color: '#28a745', bg: '#d4edda' },
+            'yup': { text: '👍 Sim', color: '#17a2b8', bg: '#d1ecf1' },
+            'talvez': { text: '🤔 Talvez', color: '#ffc107', bg: '#fff3cd' },
+            'meh': { text: '😐 Meh', color: '#6c757d', bg: '#e9ecef' },
+            'nope': { text: '👎 Não', color: '#dc3545', bg: '#f8d7da' }
+          };
+          
+          Object.entries(packAnswers).forEach(([questionId, answerData]) => {
+            const answer = typeof answerData === 'object' ? answerData.answer : answerData;
+            const comment = typeof answerData === 'object' ? answerData.comment : null;
+            const answerInfo = answerLabels[answer] || { text: answer, color: '#6c757d', bg: '#e9ecef' };
+            
+            // Encontrar texto da pergunta
+            const questionData = questions.find(q => q.id == questionId);
+            const questionText = questionData?.question || `Pergunta #${questionId}`;
             
             html += `
-              <div onclick="showPackDetailsInModal('${userId}', '${packId}')" 
-                   style="background: linear-gradient(135deg, ${pack.color}22 0%, ${pack.color}11 100%); 
-                          border: 2px solid ${pack.color}44; padding: 20px; border-radius: 12px; 
-                          cursor: pointer; transition: all 0.2s; text-align: center;"
-                   onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 6px 20px ${pack.color}33'"
-                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'">
-                <div style="font-size: 2em; margin-bottom: 10px;">${pack.icon}</div>
-                <div style="font-weight: 600; color: ${pack.color};">${pack.name}</div>
-                <div style="font-size: 1.5em; font-weight: 700; color: ${pack.color}; margin-top: 5px;">${count}</div>
-                <div style="font-size: 0.8em; color: #6c757d;">respostas</div>
+              <div style="background: white; padding: 20px; border-radius: 12px; border-left: 4px solid ${answerInfo.color}; box-shadow: 0 2px 8px rgba(0,0,0,0.06);">
+                <div style="font-size: 0.85em; color: #6c757d; margin-bottom: 8px;">Pergunta #${questionId}</div>
+                <div style="font-weight: 500; color: #333; margin-bottom: 12px; font-size: 1.05em;">${questionText}</div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                  <span style="background: ${answerInfo.bg}; color: ${answerInfo.color}; padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.9em;">${answerInfo.text}</span>
+                  ${comment ? `<span style="color: #6c757d; font-style: italic; font-size: 0.9em;">💬 "${comment}"</span>` : ''}
+                </div>
               </div>
             `;
           });
           
           html += `</div>`;
-          html += `<p style="text-align: center; color: #6c757d; font-size: 0.9em;">👆 Clique num pack para ver as respostas detalhadas</p>`;
         }
         
         html += `</div>`;
         content.innerHTML = html;
         
       } catch (error) {
-        console.error('❌ Erro ao carregar respostas:', error);
+        console.error('Erro:', error);
         content.innerHTML = `
-          <div style="padding: 40px; text-align: center; color: #dc3545;">
-            <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
-            <p>Erro ao carregar respostas: ${error.message}</p>
-            <button onclick="closeAnswersModal()" style="margin-top: 20px; background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Fechar</button>
+          <div style="padding: 60px; text-align: center;">
+            <div style="font-size: 3em; margin-bottom: 15px; color: #dc3545;">❌</div>
+            <p style="color: #dc3545;">${error.message}</p>
+            <button onclick="openUserDashboard('${userId}')" style="margin-top: 20px; background: #667eea; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">← Voltar</button>
           </div>
         `;
       }
+    }
+    
+    // Expor funções globalmente para onclick
+    window.openUserDashboard = openUserDashboard;
+    window.closeUserDashboard = closeUserDashboard;
+    window.showUserPackAnswersInDashboard = showUserPackAnswersInDashboard;
+    
+    // Função para ver respostas de um utilizador a partir da conexão
+    async function showUserAnswersFromConnection(userId) {
+      // Redirecionar para o novo dashboard
+      openUserDashboard(userId);
     }
     
     // Mostrar detalhes de um pack específico no modal
