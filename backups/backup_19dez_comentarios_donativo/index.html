@@ -33,69 +33,41 @@
     <meta property="twitter:title" content="Quest4Couple - Descubram-se melhor 💑">
     <meta property="twitter:description" content="Explorem desejos, fantasias e afinidades como casal. Ferramenta 100% gratuita e privada.">
     <meta property="twitter:image" content="https://quest4couple.pt/assets/og-image.jpg">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
+    
+    <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-          body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }          body {
+            font-family: 'Arial', sans-serif;
             background: 
-                radial-gradient(circle at 15% 25%, rgba(214, 51, 132, 0.25) 0%, transparent 45%),
-                radial-gradient(circle at 85% 75%, rgba(111, 66, 193, 0.20) 0%, transparent 45%),
-                radial-gradient(circle at 50% 10%, rgba(38, 198, 218, 0.15) 0%, transparent 45%),
-                linear-gradient(180deg, #fafbfc 0%, #f0f2f5 100%);
+                radial-gradient(circle at 15% 25%, rgba(214, 51, 132, 0.35) 0%, transparent 35%),
+                radial-gradient(circle at 85% 75%, rgba(111, 66, 193, 0.30) 0%, transparent 35%),
+                radial-gradient(circle at 50% 10%, rgba(38, 198, 218, 0.20) 0%, transparent 35%),
+                linear-gradient(135deg, #e8ecf0 0%, #d1d9e0 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 20px;
             padding-top: 100px;
-            color: #1a1a2e;
-        }
-        
-        /* Decorative background elements */
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            right: -20%;
-            width: 80%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(214, 51, 132, 0.12) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        body::after {
-            content: '';
-            position: fixed;
-            bottom: -30%;
-            left: -20%;
-            width: 70%;
-            height: 80%;
-            background: radial-gradient(circle, rgba(111, 66, 193, 0.10) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .header {
+        }        .header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 40px;
-            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.15) !important; /* 85% transparente - MUITO transparente */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Safari */
+            padding: 15px 40px;
+            box-shadow: 0 2px 15px rgba(214, 51, 132, 0.08);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(214, 51, 132, 0.1);
         }
         
         .logo-section {
@@ -108,15 +80,14 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            transition: opacity 0.2s ease;
+            transition: transform 0.3s ease;
         }
         
         .logo-section a:hover {
-            opacity: 0.8;
+            transform: scale(1.05);
         }
-        
-        .logo-section img {
-            height: 44px;
+          .logo-section img {
+            height: 60px;
             width: auto;
         }
         
@@ -125,19 +96,20 @@
             display: flex;
             align-items: center;
             text-decoration: none;
-            opacity: 0.6;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
+            opacity: 0.7;
+            cursor: default;
+            transition: opacity 0.3s ease;
         }
         
         .quest4you-link:hover {
-            opacity: 0.8;
+            opacity: 0.85;
+            transform: none !important;
         }
         
         .logo-separator {
-            width: 1px;
-            height: 32px;
-            background: rgba(0, 0, 0, 0.1);
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #ddd, transparent);
             margin: 0 20px;
         }
         
@@ -151,75 +123,83 @@
         
         .auth-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             align-items: center;
         }
         
         .header-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 22px;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: 0.875em;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.3s ease;
             cursor: pointer;
             border: none;
-            background: transparent;
-            color: #555;
-        }
-        
-        .header-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
-            color: #1a1a2e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         
         .btn-login {
-            background: transparent;
-            color: #555;
-            border: none;
+            background: white;
+            color: #d63384;
+            border: 2px solid #d63384;
         }
         
         .btn-login:hover {
-            background: rgba(0, 0, 0, 0.05);
-            transform: none;
-            box-shadow: none;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.15);
         }
         
         .btn-logout {
-            background: #fee2e2 !important;
-            color: #dc2626 !important;
-            border: none !important;
+            background: #dc3545 !important;
+            color: white !important;
+            border: 2px solid #dc3545 !important;
         }
         
         .btn-logout:hover {
-            background: #fecaca !important;
-            transform: none;
+            background: #c82333 !important;
+            transform: translateY(-2px);
         }
-
-        .container {
-            max-width: 1000px;
-            width: 100%;
+        
+        /* Estilos para o conteúdo abaixo do header */          .container {
+            max-width: 900px;
             text-align: center;
-            margin-top: 40px;
-            animation: fadeIn 0.6s ease-out;
+            margin-top: 20px; /* Reduzido - body já tem padding-top */
+            animation: fadeInUp 0.8s ease-out;
         }
         
         .hero-logo {
             text-align: center;
-            margin-bottom: 24px;
-        }
-        
-        .hero-logo img {
-            height: 200px;
+            margin-bottom: 30px;
+        }          .hero-logo img {
+            height: 320px;
             width: auto;
-            filter: drop-shadow(0 20px 40px rgba(214, 51, 132, 0.15));
-            animation: floatIn 0.8s ease-out;
+            filter: drop-shadow(0 4px 12px rgba(214, 51, 132, 0.3));
+            animation: fadeInScale 0.8s ease-out;
+            transition: transform 0.3s ease;
         }
         
-        @keyframes floatIn {
+        .hero-logo img:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 6px 16px rgba(214, 51, 132, 0.4));
+        }
+        
+        @keyframes fadeInScale {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -227,190 +207,167 @@
             }
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
         h1 {
-            font-size: 3em;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #d63384 0%, #9333ea 100%);
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #d63384, #6f42c1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-weight: 800;
-            letter-spacing: -0.02em;
-            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1.2;
         }
         
         .subtitle {
-            font-size: 1.25em;
-            color: #64748b;
-            margin-bottom: 32px;
-            line-height: 1.6;
+            font-size: 1.4em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.7;
             font-weight: 400;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
         
         .highlight {
             color: #d63384;
-            font-weight: 500;
-        }
-        
-        .cta-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            margin-top: 32px;
+            font-weight: 600;
         }
         
         .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #d63384 0%, #be185d 100%);
+            display: inline-block;
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #d63384, #e83e8c);
             color: white;
             text-decoration: none;
             border-radius: 12px;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(214, 51, 132, 0.25);
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
         }
         
         .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(214, 51, 132, 0.35);
-        }
-        
-        .secondary-links {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 8px;
-        }
-        
-        .secondary-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            background: white;
-            color: #64748b;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 0.9em;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-        }
-        
-        .secondary-link:hover {
-            background: #f8fafc;
-            color: #1a1a2e;
-            border-color: rgba(0, 0, 0, 0.12);
-        }
-        
-        .secondary-link.primary {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            border: none;
-        }
-        
-        .secondary-link.primary:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            color: white;
-        }
-        
-        .free-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-weight: 500;
-            font-size: 0.875em;
-            animation: none;
-        }
-        
-        .features {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
+        }        .features {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 80px;
-            align-items: stretch;
+            gap: 30px;
+            margin-top: 60px;
+            align-items: stretch; /* Força todos os cards a terem a mesma altura */
         }
         
         @media (max-width: 900px) {
             .features {
                 grid-template-columns: 1fr;
-                gap: 16px;
             }
-        }          .feature-card {
-            background: linear-gradient(135deg, #ffffff 0%, #fdfafc 100%);
-            padding: 32px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(214, 51, 132, 0.12);
+        }
+        
+        @media (min-width: 901px) and (max-width: 1200px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr); /* Força 3 colunas mesmo em tablets */
+            }
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
             position: relative;
-            text-align: center;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(214, 51, 132, 0.05), rgba(111, 66, 193, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s;
         }
         
         .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(214, 51, 132, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(214, 51, 132, 0.2);
             border-color: rgba(214, 51, 132, 0.3);
-            background: linear-gradient(135deg, #ffffff 0%, #fff5f9 100%);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
         }
         
         .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 16px;
-            display: block;
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
         
         .feature-title {
-            font-size: 1.1em;
+            font-size: 1.4em;
             font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 8px;
+            color: #d63384;
+            margin-bottom: 12px;
         }
         
         .feature-text {
-            color: #64748b;
-            line-height: 1.6;
-            font-size: 0.95em;
+            color: #666;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+        
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #26c6da, #6f42c1);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
         footer {
-            margin-top: 100px;
-            padding: 40px 20px;
+            margin-top: 80px;
+            padding: 30px;
             text-align: center;
-            color: #94a3b8;
-            font-size: 0.875em;
-            width: 100%;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            background: rgba(255, 255, 255, 0.5);
+            color: #666;
         }
         
         footer a {
-            color: #64748b;
+            color: #d63384;
             text-decoration: none;
-            margin: 0 12px;
-            transition: color 0.2s ease;
+            margin: 0 10px;
         }
         
         footer a:hover {
-            color: #d63384;
+            text-decoration: underline;
+        }
+        
+        /* Tutorial Link */
+        .tutorial-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        .tutorial-link:hover {
+            color: #764ba2;
+            transform: translateY(-2px);
+            text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         
         /* Modal Styles */
@@ -421,11 +378,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 2000;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
         }
         
         .modal-overlay.active {
@@ -436,9 +393,9 @@
             background: white;
             border-radius: 20px;
             padding: 40px;
-            max-width: 480px;
+            max-width: 500px;
             width: 90%;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
             animation: modalSlideIn 0.3s ease-out;
         }
@@ -446,7 +403,7 @@
         @keyframes modalSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px) scale(0.95);
+                transform: translateY(-50px) scale(0.9);
             }
             to {
                 opacity: 1;
@@ -456,97 +413,87 @@
         
         .modal-close {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            background: #f1f5f9;
+            top: 15px;
+            right: 15px;
+            background: none;
             border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            font-size: 1.2em;
-            color: #64748b;
+            font-size: 2em;
+            color: #aaa;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: color 0.2s;
         }
         
         .modal-close:hover {
-            background: #fee2e2;
-            color: #dc2626;
+            color: #d63384;
         }
         
         .modal-header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
         
         .modal-header h2 {
-            color: #1a1a2e;
-            font-size: 1.5em;
-            font-weight: 700;
-            margin-bottom: 8px;
+            color: #d63384;
+            font-size: 2em;
+            margin-bottom: 10px;
         }
         
         .modal-header p {
-            color: #64748b;
+            color: #666;
             font-size: 0.95em;
         }
         
         .form-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             text-align: left;
         }
         
         .form-group label {
             display: block;
-            color: #1a1a2e;
+            color: #495057;
             font-weight: 500;
-            margin-bottom: 6px;
-            font-size: 0.9em;
+            margin-bottom: 8px;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
+            padding: 12px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             font-size: 1em;
-            transition: all 0.2s;
-            background: #f8fafc;
+            transition: all 0.3s;
         }
         
         .form-group input:focus {
             outline: none;
             border-color: #d63384;
-            background: white;
             box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
         }
         
         .btn-modal {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #d63384 0%, #be185d 100%);
+            background: linear-gradient(135deg, #d63384, #e83e8c);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1em;
+            border-radius: 8px;
+            font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(214, 51, 132, 0.3);
         }
         
         .btn-modal:hover {
+            background: linear-gradient(135deg, #c1296d, #d63384);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(214, 51, 132, 0.3);
+            box-shadow: 0 6px 20px rgba(214, 51, 132, 0.4);
         }
         
         .modal-footer {
             text-align: center;
             margin-top: 20px;
-            color: #64748b;
+            color: #666;
             font-size: 0.9em;
         }
         
@@ -560,28 +507,31 @@
             text-decoration: underline;
         }
         
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
+        .btn-logout {
+            background: #dc3545 !important;
+            color: white !important;
+        }
+        
+        .btn-logout:hover {
+            background: #c82333 !important;
+        }        @media (max-width: 768px) {
             h1 { font-size: 2em; }
-            .subtitle { font-size: 1em; max-width: 100%; }
+            .subtitle { font-size: 1.1em; }
             .modal-content {
-                padding: 28px 20px;
-                border-radius: 16px;
+                padding: 30px 20px;
             }
             
             .container {
-                margin-top: 20px;
+                margin-top: 90px;
+            }              .hero-logo img {
+                height: 320px;
             }
-            
-            .hero-logo img {
-                height: 140px;
-            }
-            
+              /* Header mobile */
             .header {
-                padding: 10px 16px;
+                padding: 10px 15px;
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 8px;
+                gap: 10px;
             }
             
             .logo-section {
@@ -590,55 +540,41 @@
             }
             
             .logo-section img {
-                height: 36px !important;
+                height: 40px !important;
             }
             
             .auth-buttons {
-                gap: 4px;
+                gap: 5px;
                 flex-wrap: wrap;
                 justify-content: center;
             }
-              .header-btn {
-                padding: 6px 10px;
-                font-size: 0.75em;
-            }
             
-            .cta-button {
-                padding: 14px 24px;
-                font-size: 1em;
+            .header-btn {
+                padding: 6px 12px;
+                font-size: 0.8em;
             }
-              .secondary-links {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .features {
-                margin-top: 48px;
-            }
-        }
-        
-        /* Beta Banner Styles */
+        }        /* Beta Banner Styles */
         .beta-banner {
             position: fixed;
-            top: 68px;
+            top: 70px;
             left: 50%;
             transform: translateX(-50%);
-            width: 94%;
-            max-width: 700px;
-            background: #fffbeb;
+            width: 90%;
+            max-width: 800px;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.95), rgba(255, 152, 0, 0.95));
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 15px 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 20px rgba(255, 152, 0, 0.3);
             z-index: 999;
-            border: 1px solid #fde68a;
-            animation: slideDown 0.4s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: slideDown 0.5s ease-out;
         }
         
         @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-10px);
+                transform: translateX(-50%) translateY(-20px);
             }
             to {
                 opacity: 1;
@@ -649,12 +585,17 @@
         .beta-banner-content {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
         
         .beta-icon {
-            font-size: 1.5em;
-            animation: none;
+            font-size: 2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
         
         .beta-text {
@@ -662,55 +603,56 @@
         }
         
         .beta-text h3 {
-            margin: 0 0 2px 0;
-            color: #92400e;
-            font-size: 0.9em;
-            font-weight: 600;
+            margin: 0 0 5px 0;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
         .beta-text p {
             margin: 0;
-            color: #a16207;
-            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.9em;
             line-height: 1.4;
         }
         
         .beta-text a {
-            color: #92400e;
-            font-weight: 600;
+            color: #fff;
+            font-weight: 700;
             text-decoration: underline;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         
         .beta-text a:hover {
-            color: #78350f;
+            color: rgba(255, 255, 255, 0.8);
         }
         
         .beta-close {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.3);
             border: none;
-            color: #a16207;
+            color: white;
             width: 28px;
             height: 28px;
-            border-radius: 8px;
+            border-radius: 50%;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1.2em;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s;
+            transition: all 0.3s;
             flex-shrink: 0;
         }
         
         .beta-close:hover {
-            background: #fef3c7;
-            transform: none;
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(90deg);
         }
-        
-        @media (max-width: 768px) {
+          @media (max-width: 768px) {
             .beta-banner {
-                top: 90px;
+                top: 95px;
                 width: 95%;
-                padding: 10px 14px;
+                padding: 12px 15px;
             }
             
             .beta-banner-content {
@@ -718,148 +660,134 @@
             }
             
             .beta-icon {
-                font-size: 1.2em;
+                font-size: 1.5em;
             }
             
             .beta-text h3 {
-                font-size: 0.85em;
+                font-size: 0.95em;
             }
             
             .beta-text p {
-                font-size: 0.8em;
+                font-size: 0.85em;
+            }
+            
+            .container {
+                margin-top: 100px !important;
             }
         }
         
         /* Quando o banner beta está visível, ajustar margin do container */
         body:has(.beta-banner:not([style*="display: none"])) .container {
-            margin-top: 100px;
+            margin-top: 160px;
         }
-        
-        @media (max-width: 768px) {
+          @media (max-width: 768px) {
             body:has(.beta-banner:not([style*="display: none"])) .container {
-                margin-top: 80px;
+                margin-top: 200px;
             }
-        }
-    </style>
+        }</style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <!-- Logo e Título -->
+      <!-- Header -->    <div class="header">        <!-- Logo e Título -->
         <div class="logo-section">
             <!-- Quest4Couple -->
-            <a href="index.html">
-                <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
+            <a href="index.html" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="./assets/logo.png" alt="Quest4Couple Logo" class="logo" onerror="this.src='./logo.png'; this.onerror=null;" style="height: 40px; width: auto; margin-right: 10px;">
                 <div>
-                    <h1 style="font-size: 1.1em; margin: 0; font-weight: 700; color: #1a1a2e;" data-i18n="home.title">Quest4Couple</h1>
-                    <p style="font-size: 0.7em; color: #94a3b8; margin: 0; font-weight: 400;" data-i18n="home.subtitle">Descubram-se juntos</p>
+                    <h1 style="font-size: 1.3em; margin: 0;" data-i18n="home.title">Quest4Couple</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;" data-i18n="home.subtitle">Descubram-se juntos 💕</p>
                 </div>
             </a>
             
             <!-- Separador -->
-            <div class="logo-separator"></div>
-            
-            <!-- Quest4You - Coming Soon -->
-            <a href="https://www.quest4you.pt" class="quest4you-link" title="Quest4You - Descobre-te a ti mesmo" target="_blank">
-                <img src="./assets/quest4you_transp.png" alt="Quest4You Logo" style="height: 36px; width: auto; margin-right: 8px;">
+            <div class="logo-separator"></div>            <!-- Quest4You - Coming Soon -->
+            <a href="#" class="quest4you-link" title="Brevemente...">
+                <img src="./assets/quest4you_transp.png" alt="Quest4You Logo" style="height: 40px; width: auto; margin-right: 10px; filter: grayscale(30%);">
                 <div>
-                    <h1 style="font-size: 1.1em; margin: 0; font-weight: 700; background: linear-gradient(135deg, #e63946, #f4a261, #8ac926); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Quest4You</h1>
-                    <p style="font-size: 0.7em; color: #94a3b8; margin: 0; font-weight: 400;">Em desenvolvimento</p>
+                    <h1 style="font-size: 1.3em; margin: 0; background: linear-gradient(135deg, #e63946, #f4a261, #8ac926); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Quest4You</h1>
+                    <p style="font-size: 0.75em; color: #888; margin: 0;">Brevemente... 🔮</p>
                 </div>
             </a>
         </div>
-        
-        <!-- Navigation Buttons -->
-        <div class="auth-buttons">
-            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
-                <span data-i18n="header.tutorial">Tutorial</span>
+          <!-- Navigation Buttons -->
+        <div class="auth-buttons">            <button class="header-btn btn-login" onclick="window.location.href='tutorial.html'" title="Ver Tutorial">
+                <span>🎓</span> <span data-i18n="header.tutorial">Tutorial</span>
             </button>
             
             <button class="header-btn btn-login" onclick="window.location.href='app.html'" title="Ver Questionários">
-                <span data-i18n="header.questionnaire">Questionários</span>
+                <span>📝</span> <span data-i18n="header.questionnaire">Questionários</span>
             </button>
             
             <button class="header-btn btn-login" onclick="window.location.href='relatorio.html'" title="Ver Relatório">
-                <span data-i18n="header.report">Relatório</span>
+                <span>💑</span> <span data-i18n="header.report">Relatório</span>
             </button>
             
             <button class="header-btn btn-login" onclick="window.location.href='dashboard.html'" title="Dashboard" id="dashboardBtn" style="display: none;">
-                <span data-i18n="header.dashboard">Dashboard</span>
+                <span>📊</span> <span data-i18n="header.dashboard">Dashboard</span>
             </button>
             
-            <button class="header-btn btn-login" onclick="window.location.href='auth.html'" data-i18n="header.login" title="Fazer Login" id="loginBtn" style="background: linear-gradient(135deg, #d63384 0%, #be185d 100%); color: white;">
-                Login
+            <button class="header-btn btn-login" onclick="window.location.href='auth.html'" data-i18n="header.login" title="Fazer Login" id="loginBtn">
+                🔐 Login
             </button>
             
             <button class="header-btn btn-logout" onclick="handleLogout()" data-i18n="header.logout" title="Sair" id="logoutBtn" style="display: none;">
-                Sair
+                🚪 Sair
             </button>
         </div>
     </div>
     
-    <!-- Beta Banner -->
-    <div class="beta-banner" id="betaBanner">
+    <!-- Beta Banner -->    <div class="beta-banner" id="betaBanner">
         <div class="beta-banner-content">
-            <div class="beta-icon" data-i18n="beta.icon">🧪</div>
-            <div class="beta-text">
-                <h3 data-i18n="beta.title">Versão Beta</h3>
-                <p data-i18n-html="beta.description">Em fase de testes. <a href='pages/apoiar.html#feedback'>Envia feedback</a> e ajuda a melhorar!</p>
+            <div class="beta-icon" data-i18n="beta.icon">🚀</div>            <div class="beta-text">
+                <h3 data-i18n="beta.title">Versão Beta • Em Desenvolvimento</h3>
+                <p data-i18n-html="beta.description">Estamos em fase de testes! Se encontrares bugs ou tiveres sugestões, <a href='pages/apoiar.html#feedback'>envia-nos feedback</a> e ajuda a melhorar 💪</p>
             </div>
-            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar" data-i18n="beta.close">✕</button>
+            <button class="beta-close" onclick="closeBetaBanner()" title="Fechar aviso" data-i18n="beta.close">✕</button>
         </div>
     </div>
     
     <div class="container">
         <div class="hero-logo">
             <img src="./assets/logo.png" alt="Quest4Couple Logo" onerror="this.src='./logo.png'; this.onerror=null;">
-        </div>
-        
-        <h1 data-i18n="home.heroTitle">Descubram-se juntos</h1>
-        
-        <p class="subtitle" data-i18n-html="home.heroSubtitle">
+        </div>        <h1 data-i18n="home.heroTitle">Descubram-se juntos 💕</h1><p class="subtitle" data-i18n-html="home.heroSubtitle">
             Explorem <span class="highlight">desejos</span>, <span class="highlight">fantasias</span> e <span class="highlight">afinidades</span> como casal.<br>
-            De forma privada, segura e sem julgamentos.
-        </p>
-        
-        <div class="cta-section">
-            <a href="app.html" class="cta-button" id="ctaButton" data-i18n="home.cta.viewQuestions">
-                Ver Questionários
-            </a>
-            
-            <div class="free-badge" id="freeBadge" data-i18n="home.badge.free">
-                ✓ 100% Gratuito • Sem registo obrigatório
+            De forma <strong>privada, segura</strong> e sem julgamentos.
+        </p>        <div style="text-align: center; margin-top: 30px;">            <a href="app.html" class="cta-button" id="ctaButton" style="display: inline-block;" data-i18n="home.cta.viewQuestions">👀 Ver Questionários</a>
+            <br>
+            <div class="free-badge" id="freeBadge" style="font-size: 0.85em; padding: 5px 14px; margin-top: 12px; display: inline-block;" data-i18n="home.badge.free">
+                ✨ 100% Gratuito • Veja sem login
             </div>
-            
-            <div class="secondary-links">
-                <a href="tutorial.html" class="secondary-link" data-i18n="home.links.howItWorks">
-                    🎓 Como Funciona
+            <br>            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                <a href="tutorial.html" class="tutorial-link" data-i18n="home.links.howItWorks">
+                    🎓 Como Funciona? • Tutorial
                 </a>
-                <a href="relatorio.html" class="secondary-link primary" data-i18n="home.links.viewReport">
-                    💑 Ver Relatório
+                <a href="relatorio.html" class="tutorial-link" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;" data-i18n="home.links.viewReport">
+                    💑 Ver Relatório do Casal
                 </a>
-                <a href="estatisticas.html" class="secondary-link" data-i18n="home.links.statistics">
-                    📊 Estatísticas
+                <a href="estatisticas.html" class="tutorial-link" style="background: linear-gradient(135deg, #26c6da, #00acc1); color: white;" data-i18n="home.links.statistics">
+                    📊 Estatísticas Públicas
                 </a>
             </div>
         </div>
         
-        <div class="features">
-            <div class="feature-card">
+       <!-- <div style="margin-top: 25px; font-size: 0.9em; color: #777;">
+            <span style="margin: 0 10px;">✓ Respostas encriptadas</span>
+            <span style="margin: 0 10px;">✓ 5 packs temáticos</span>
+            <span style="margin: 0 10px;">✓ Comparação automática</span>
+        </div>-->
+          <div class="features">            <div class="feature-card">
                 <div class="feature-icon">🔐</div>
                 <div class="feature-title" data-i18n="home.features.private.title">100% Privado</div>
-                <div class="feature-text" data-i18n-html="home.features.private.description">Respostas encriptadas localmente. Nada é partilhado sem permissão.</div>
-            </div>
-            
-            <div class="feature-card">
+                <div class="feature-text" data-i18n-html="home.features.private.description">As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking.</div>
+            </div><div class="feature-card">
                 <div class="feature-icon">🎯</div>
                 <div class="feature-title" data-i18n="home.packs.title">5 Packs Temáticos</div>
-                <div class="feature-text" data-i18n-html="home.packs.description">Romântico, Experiência, Pimentinha, Poliamor e Fetiches. 300 perguntas.</div>
+                <div class="feature-text" data-i18n-html="home.packs.description">💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong></div>
             </div>
             
             <div class="feature-card">
                 <div class="feature-icon">💖</div>
-                <div class="feature-title" data-i18n="home.features.compare.title">Match Instantâneo</div>
-                <div class="feature-text" data-i18n-html="home.features.compare.description">Sistema inteligente revela Super Matches, Matches e Possibilidades.</div>
+                <div class="feature-title" data-i18n="home.features.compare.title">Compatibilidade Instantânea</div>
+                <div class="feature-text" data-i18n-html="home.features.compare.description">Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal.</div>
             </div>
         </div>
     </div>
@@ -868,7 +796,7 @@
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
             <div class="modal-header">
-                <h2 data-i18n="auth.login.title">Entrar</h2>
+                <h2 data-i18n="auth.login.title">🔐 Entrar</h2>
                 <p data-i18n="auth.login.subtitle">Aceda à sua conta Quest4Couple</p>
             </div>
             <form onsubmit="handleLogin(event)">
@@ -891,22 +819,20 @@
     <!-- Register Modal -->
     <div class="modal-overlay" id="registerModal">
         <div class="modal-content">
-            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
-            <div class="modal-header">
-                <h2 data-i18n="auth.register.title">Criar Conta</h2>
-                <p data-i18n="auth.register.subtitle">Registe-se gratuitamente</p>
-            </div>
-            <form onsubmit="handleRegister(event)">
-                <div class="social-login" style="margin-bottom: 20px;">
-                    <button type="button" onclick="registerWithGoogle()" style="width: 100%; padding: 12px; margin-bottom: 8px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; font-size: 0.95em; color: #1a1a2e; transition: all 0.2s;">
-                        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                        <span data-i18n="auth.register.googleBtn">Continuar com Google</span>
+            <button class="modal-close" onclick="closeModal('registerModal')">✕</button>            <div class="modal-header">
+                <h2 data-i18n="auth.register.title">✨ Criar Conta</h2>
+                <p data-i18n="auth.register.subtitle">Registe-se gratuitamente e comece já!</p>
+            </div>            <form onsubmit="handleRegister(event)">
+                <div class="social-login" style="margin-bottom: 25px;">
+                    <button type="button" class="social-btn google-btn" onclick="registerWithGoogle()" style="width: 100%; padding: 12px; margin-bottom: 10px; background: white; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
+                        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        <span data-i18n="auth.register.googleBtn">Registar com Google</span>
                     </button>
-                    <div style="text-align: center; margin: 16px 0; color: #94a3b8; font-size: 0.85em; display: flex; align-items: center; gap: 12px;">
-                        <span style="flex: 1; height: 1px; background: #e2e8f0;"></span>
-                        <span data-i18n="auth.register.socialOptions">ou com email</span>
-                        <span style="flex: 1; height: 1px; background: #e2e8f0;"></span>
-                    </div>
+                    <button type="button" class="social-btn reddit-btn" onclick="registerWithReddit()" style="width: 100%; padding: 12px; background: #FF4500; color: white; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500; transition: all 0.3s;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+                        <span data-i18n="auth.register.redditBtn">Registar com Reddit</span>
+                    </button>
+                    <div style="text-align: center; margin: 15px 0; color: #999; font-size: 0.9em;" data-i18n="auth.register.socialOptions">ou com email</div>
                 </div>
                 <div class="form-group">
                     <label for="registerName" data-i18n="auth.register.name">Nome</label>
@@ -944,21 +870,17 @@
         </div>    </div>
 
     <!-- Support Banner -->
-    <div style="max-width: 1000px; margin: 0 auto; padding: 0 20px;">
-        <div id="supportBanner"></div>
-    </div>
-    
-    <footer>
-        <p data-i18n="footer.copyright">&copy; 2025 Quest4Couple</p>
-        <div style="margin-top: 12px;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div id="supportBanner"></div>    </div>      <footer>        <p data-i18n="footer.copyright">&copy; 2025 Quest4Couple - Todos os direitos reservados</p>
+        <div>
             <a href="pages/sobre.html" data-i18n="footer.links.about">Sobre</a>
             <a href="pages/faq.html" data-i18n="footer.links.faq">FAQ</a>
-            <a href="estatisticas.html" data-i18n="footer.links.statistics">Estatísticas</a>
-            <a href="pages/apoiar.html" data-i18n="footer.links.support">Apoiar</a>
+            <a href="estatisticas.html" data-i18n="footer.links.statistics">📊 Estatísticas</a>
+            <a href="pages/apoiar.html" data-i18n="footer.links.support">Apoiar o Projeto</a>
             <a href="pages/privacidade.html" data-i18n="footer.links.privacy">Privacidade</a>
             <a href="pages/termos.html" data-i18n="footer.links.terms">Termos</a>
-        </div>
-    </footer>
+            <a href="pages/admin.html" style="opacity: 0.5;" data-i18n="footer.links.admin">Admin</a>
+        </div>    </footer>
     
     <!-- Support Banner Script -->
     <script src="support-banner.js"></script>

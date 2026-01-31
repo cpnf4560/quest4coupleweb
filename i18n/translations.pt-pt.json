@@ -120,30 +120,30 @@
   
   "home": {
     "title": "Quest4Couple",
-    "subtitle": "Descubram-se juntos 💕",
-    "heroTitle": "Descubram-se juntos 💕",
-    "heroSubtitle": "Explorem <span class=\"highlight\">desejos</span>, <span class=\"highlight\">fantasias</span> e <span class=\"highlight\">afinidades</span> como casal.<br>De forma <strong>privada, segura</strong> e sem julgamentos.",
+    "subtitle": "Descubram-se juntos",
+    "heroTitle": "Descubram-se juntos",
+    "heroSubtitle": "Explorem <span class=\"highlight\">desejos</span>, <span class=\"highlight\">fantasias</span> e <span class=\"highlight\">afinidades</span> como casal.<br>De forma privada, segura e sem julgamentos.",
     "description": "Uma ferramenta interativa e <strong>100% gratuita</strong> para casais explorarem desejos, fantasias e afinidades de forma <strong>privada e segura</strong>.",
     "cta": {
-      "start": "🚀 Começar Agora",
-      "viewQuestions": "👀 Ver Questionários",
-      "login": "🔐 Já tenho conta"
+      "start": "Começar Agora",
+      "viewQuestions": "Ver Questionários",
+      "login": "Já tenho conta"
     },
     "badge": {
-      "free": "✨ 100% Gratuito • Veja sem login"
+      "free": "✓ 100% Gratuito • Sem registo obrigatório"
     },    "links": {
-      "howItWorks": "🎓 Como Funciona? • Tutorial",
-      "viewReport": "💑 Ver Relatório do Casal",
-      "statistics": "📊 Estatísticas Públicas"
+      "howItWorks": "Como Funciona",
+      "viewReport": "Ver Relatório",
+      "statistics": "Estatísticas"
     },
     "features": {
       "title": "Como Funciona?",      "private": {
         "title": "100% Privado",
-        "description": "As vossas respostas são <strong>encriptadas localmente</strong>. Nada é partilhado sem permissão. Zero tracking."
+        "description": "Respostas encriptadas localmente. Nada é partilhado sem permissão."
       },
       "compare": {
-        "title": "Compatibilidade Instantânea",
-        "description": "Sistema inteligente de comparação revela <strong>Super Matches, Matches e Possibilidades</strong> únicas do casal."
+        "title": "Match Instantâneo",
+        "description": "Sistema inteligente revela Super Matches, Matches e Possibilidades."
       },
       "free": {
         "title": "100% Gratuito",
@@ -151,7 +151,7 @@
       }
     },    "packs": {
       "title": "5 Packs Temáticos",
-      "description": "💝 Romântico, 🌍 Experiência, 🔥 Pimentinha, 💞 Poliamor e ⛓️ Fetiches. <strong>300 perguntas gratuitas!</strong>",
+      "description": "Romântico, Experiência, Pimentinha, Poliamor e Fetiches. 300 perguntas.",
       "romantic": "Pack Romântico",
       "exploration": "Exploração",
       "spicy": "Pimentinha",
@@ -208,6 +208,8 @@
       "male": "Masculino",
       "female": "Feminino",
       "other": "Outro",
+      "age": "Idade",
+      "agePlaceholder": "Ex: 25",
       "ageRange": "Faixa Etária",
       "selectAgeRange": "Seleciona a faixa etária",
       "country": "País",
@@ -976,7 +978,7 @@
       "home": "Início",
       "about": "Sobre",
       "faq": "FAQ",
-      "statistics": "📊 Estatísticas",
+      "statistics": "Estatísticas",
       "support": "Apoiar",
       "privacy": "Privacidade",
       "terms": "Termos",
@@ -984,7 +986,7 @@
       "links": {
         "about": "Sobre",
         "faq": "FAQ",
-        "statistics": "📊 Estatísticas",
+        "statistics": "Estatísticas",
         "support": "Apoiar o Projeto",
         "privacy": "Privacidade",
         "terms": "Termos",

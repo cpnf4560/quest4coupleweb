@@ -234,22 +234,6 @@ service cloud.firestore {
     }
     
     // ========================================
-    // ANALYTICS ANSWERS COLLECTION
-    // Respostas anónimas para analytics
-    // ========================================
-    match /analytics_answers/{answerId} {
-      // Qualquer pessoa pode criar (respostas anónimas)
-      allow create: if true;
-      
-      // Apenas admins podem ler
-      allow read: if request.auth != null && 
-                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-      
-      // Ninguém pode editar ou apagar
-      allow update, delete: if false;
-    }
-    
-    // ========================================
     // PUBLIC STATISTICS COLLECTION
     // Estatísticas públicas para a página de estatísticas
     // Atualização: 7h e 19h (pelo admin)
@@ -261,35 +245,6 @@ service cloud.firestore {
       // ESCRITA: Apenas admins podem publicar estatísticas
       allow write: if request.auth != null && 
                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
-    }
-    
-    // ========================================
-    // QUEST4YOU - USER PROFILES
-    // ========================================
-    match /quest4you_users/{userId} {
-      // Utilizador pode ler/escrever o seu próprio perfil
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // ========================================
-    // QUEST4YOU - QUIZ RESULTS
-    // ========================================
-    match /quest4you_results/{resultId} {
-      // Utilizador pode escrever os seus próprios resultados
-      allow create: if request.auth != null;
-      allow read, update, delete: if request.auth != null && 
-                                     resource.data.userId == request.auth.uid;
-    }
-    
-    // ========================================
-    // QUEST4YOU - PUBLIC PROFILES (Smart Match)
-    // ========================================
-    match /quest4you_public/{profileId} {
-      // Qualquer utilizador autenticado pode ler perfis públicos
-      allow read: if request.auth != null;
-      // Utilizador só pode criar/editar o seu próprio perfil público
-      allow create: if request.auth != null && request.auth.uid == profileId;
-      allow update, delete: if request.auth != null && request.auth.uid == profileId;
     }
     
     // ========================================

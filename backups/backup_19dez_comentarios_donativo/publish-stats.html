@@ -101,41 +101,25 @@
       logEl.scrollTop = logEl.scrollHeight;
       console.log(msg);
     }
-      // Verificar autenticação
+    
+    // Verificar autenticação
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         log(`✅ Utilizador autenticado: ${user.email}`);
         
-        // Verificar se é admin OU se é o email do admin principal
+        // Verificar se é admin
         const db = firebase.firestore();
-        const adminEmails = ['admin@quest4couple.pt', 'admin@quest4couple.com', 'quest4couple@gmail.com'];
-        const isAdminByEmail = adminEmails.includes(user.email.toLowerCase());
+        const userDoc = await db.collection('users').doc(user.uid).get();
         
-        try {
-          const userDoc = await db.collection('users').doc(user.uid).get();
-          const isAdminByFlag = userDoc.exists && userDoc.data().isAdmin;
-          
-          if (isAdminByFlag || isAdminByEmail) {
-            authStatusEl.className = 'status success';
-            authStatusEl.innerHTML = `✅ Autenticado como Admin: ${user.email}`;
-            buttonsEl.style.display = 'block';
-            log('✅ Permissões de admin confirmadas');
-          } else {
-            authStatusEl.className = 'status error';
-            authStatusEl.innerHTML = '❌ Utilizador não é admin';
-            log('❌ Este utilizador não tem permissões de admin');
-          }
-        } catch (e) {
-          // Se falhou a verificar, mas é email admin, permite na mesma
-          if (isAdminByEmail) {
-            authStatusEl.className = 'status success';
-            authStatusEl.innerHTML = `✅ Autenticado: ${user.email}`;
-            buttonsEl.style.display = 'block';
-            log('✅ Permissões confirmadas por email');
-          } else {
-            authStatusEl.className = 'status error';
-            authStatusEl.innerHTML = `❌ Erro: ${e.message}`;
-          }
+        if (userDoc.exists && userDoc.data().isAdmin) {
+          authStatusEl.className = 'status success';
+          authStatusEl.innerHTML = `✅ Autenticado como Admin: ${user.email}`;
+          buttonsEl.style.display = 'block';
+          log('✅ Permissões de admin confirmadas');
+        } else {
+          authStatusEl.className = 'status error';
+          authStatusEl.innerHTML = '❌ Utilizador não é admin';
+          log('❌ Este utilizador não tem permissões de admin');
         }
       } else {
         authStatusEl.className = 'status error';
@@ -187,24 +171,20 @@
         const db = firebase.firestore();
         const usersSnapshot = await db.collection('users').get();
         log(`📊 Total de utilizadores: ${usersSnapshot.size}`);
-        
-        // NOVO: Contar também respostas da coleção analytics_answers
-        log('📊 A buscar respostas da coleção analytics_answers...');
-        let analyticsAnswersCount = 0;
-        try {
-          const analyticsSnapshot = await db.collection('analytics_answers').get();
-          analyticsAnswersCount = analyticsSnapshot.size;
-          log(`📊 Respostas em analytics_answers: ${analyticsAnswersCount}`);
-        } catch (e) {
-          log(`⚠️ Não foi possível ler analytics_answers: ${e.message}`);
-        }
-        
-        const questionStats = {};
+          const questionStats = {};
         let totalAnswers = 0;
-        let totalAnswersAll = 0; // Conta TODAS as respostas (igual ao BackOffice)
         let usersWithAnswers = 0;
         
-        log('🔨 A processar respostas de utilizadores...');
+        // Limites de perguntas por pack (perguntas oficiais)
+        const packLimits = {
+          'romantico': 50,
+          'experiencia': 50,
+          'pimentinha': 50,
+          'poliamor': 60,
+          'kinks': 90
+        };
+        
+        log('🔨 A processar respostas...');
         
         for (const userDoc of usersSnapshot.docs) {
           const userData = userDoc.data();
@@ -212,19 +192,12 @@
           
           const answersDoc = await db.collection('users').doc(userId).collection('answers').doc('all').get();
           if (!answersDoc.exists) continue;
-            usersWithAnswers++;
+          
+          usersWithAnswers++;
           const answers = answersDoc.data();
           const userGender = userData.gender || null;
           const userAgeRange = userData.ageRange || null;
-          
-          // Contar TODAS as respostas do utilizador (igual ao BackOffice)
-          Object.values(answers).forEach(packAnswers => {
-            if (packAnswers && typeof packAnswers === 'object') {
-              totalAnswersAll += Object.keys(packAnswers).length;
-            }
-          });
-          
-          // Debug: mostrar estrutura das respostas do primeiro utilizador
+            // Debug: mostrar estrutura das respostas do primeiro utilizador
           if (usersWithAnswers === 1) {
             log(`🔍 Debug - Packs com respostas: ${JSON.stringify(Object.keys(answers))}`);
             const firstPack = Object.keys(answers)[0];
@@ -303,17 +276,10 @@
             });
           }
         }
-          log(`✅ Processados ${usersWithAnswers} utilizadores com respostas`);
+        
+        log(`✅ Processados ${usersWithAnswers} utilizadores com respostas`);
         log(`📊 Questões encontradas: ${Object.keys(questionStats).length}`);
-        log(`📊 Respostas oficiais (com texto): ${totalAnswers}`);
-        log(`📊 Respostas de utilizadores (users/*/answers): ${totalAnswersAll}`);
-        log(`📊 Respostas de analytics_answers: ${analyticsAnswersCount}`);
-        
-        // Total final = respostas de utilizadores + respostas anónimas de analytics
-        const grandTotal = totalAnswersAll + analyticsAnswersCount;
-        log(`📊 TOTAL GERAL (igual BackOffice): ${grandTotal}`);
-        
-        // Converter para array e calcular openRate
+          // Converter para array e calcular openRate
         // Nova fórmula: porfavor + yup = aceite (100%), talvez = meio aceite (50%), meh = não aceite (0%)
         const questionsArray = Object.values(questionStats).map(q => {
           const total = q.total || 1;
@@ -325,15 +291,13 @@
         
         // Publicar no Firestore
         log('📤 A publicar no Firestore...');
-          const publicData = {
+        
+        const publicData = {
           questions: questionsArray,
-          totalResponses: grandTotal, // Total = users + analytics_answers
-          totalResponsesUsers: totalAnswersAll, // Respostas de utilizadores registados
-          totalResponsesAnalytics: analyticsAnswersCount, // Respostas de analytics_answers
-          totalResponsesOfficial: totalAnswers, // Respostas com texto de questão
+          totalResponses: totalAnswers,
           totalQuestions: questionsArray.length,
           lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
-          version: 3
+          version: 1
         };
         
         await db.collection('publicStatistics').doc('questionAnalytics').set(publicData);
@@ -341,11 +305,11 @@
         log('✅ ========================================');
         log(`✅ PUBLICAÇÃO CONCLUÍDA COM SUCESSO!`);
         log(`📊 ${questionsArray.length} questões`);
-        log(`📈 ${grandTotal.toLocaleString('pt-PT')} respostas totais`);
+        log(`📈 ${totalAnswers.toLocaleString('pt-PT')} respostas`);
         log('✅ ========================================');
         
         authStatusEl.className = 'status success';
-        authStatusEl.innerHTML = `✅ Estatísticas publicadas! ${questionsArray.length} questões, ${grandTotal.toLocaleString('pt-PT')} respostas`;
+        authStatusEl.innerHTML = `✅ Estatísticas publicadas! ${questionsArray.length} questões, ${totalAnswers.toLocaleString('pt-PT')} respostas`;
         
         btn.textContent = '✅ Publicado!';
         btn.style.background = '#28a745';

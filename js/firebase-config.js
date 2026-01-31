@@ -13,19 +13,27 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Initialize services
-const auth = firebase.auth();
+// Initialize services (with safety checks)
+let auth = null;
+let googleProvider = null;
+
+// Auth is optional - some pages only need Firestore
+if (typeof firebase.auth === 'function') {
+  auth = firebase.auth();
+  
+  // Google Auth Provider
+  googleProvider = new firebase.auth.GoogleAuthProvider();
+  googleProvider.setCustomParameters({
+    prompt: 'select_account'
+  });
+  
+  window.firebaseAuth = auth;
+  window.googleProvider = googleProvider;
+  console.log('🔥 Firebase inicializado com Auth!');
+} else {
+  console.log('🔥 Firebase inicializado (sem Auth SDK)');
+}
+
+// Firestore is always required
 const db = firebase.firestore();
-
-// Google Auth Provider
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.setCustomParameters({
-  prompt: 'select_account'
-});
-
-// Export para usar noutros ficheiros
-window.firebaseAuth = auth;
 window.firebaseDb = db;
-window.googleProvider = googleProvider;
-
-console.log('🔥 Firebase inicializado!');

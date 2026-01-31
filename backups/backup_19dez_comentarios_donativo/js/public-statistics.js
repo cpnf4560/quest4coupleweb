@@ -177,11 +177,6 @@ async function loadFromPublicCache() {
   container.innerHTML = '<div class="loading"><div class="loading-spinner"></div><p>A carregar estatísticas...</p></div>';
   
   try {
-    // Check if Firebase is available
-    if (typeof firebase === 'undefined' || typeof firebase.firestore !== 'function') {
-      throw new Error('Firebase não disponível');
-    }
-    
     const db = firebase.firestore();
     const cacheDoc = await db.collection('publicStatistics').doc('questionAnalytics').get();
     
@@ -194,33 +189,11 @@ async function loadFromPublicCache() {
     } else {
       questionAnalyticsCache = [];
       totalResponses = 0;
-      container.innerHTML = '<div style="text-align:center;padding:40px;color:#6c757d;"><div style="font-size:3em;">⏳</div><p><strong>Estatísticas em preparação</strong></p><p>As estatísticas serão publicadas em breve pelo administrador.</p></div>';
+      container.innerHTML = '<div style="text-align:center;padding:40px;color:#6c757d;"><div style="font-size:3em;">⏳</div><p><strong>Estatísticas em preparação</strong></p><p>Atualizadas às 7h e 19h</p></div>';
     }
   } catch (error) {
     console.error('❌ Erro:', error);
-    
-    // Show friendly message based on error type
-    let errorMessage = 'Erro ao carregar estatísticas.';
-    let errorHint = '';
-    
-    if (error.code === 'permission-denied' || error.message?.includes('permission')) {
-      errorMessage = 'Estatísticas temporariamente indisponíveis';
-      errorHint = 'O administrador precisa publicar as estatísticas.';
-    } else if (error.message?.includes('Firebase')) {
-      errorMessage = 'Serviço de dados indisponível';
-      errorHint = 'Tente novamente mais tarde.';
-    }
-    
-    container.innerHTML = `
-      <div style="text-align:center;padding:60px 20px;color:#6c757d;">
-        <div style="font-size:3em;margin-bottom:16px;">📊</div>
-        <p style="font-size:1.2em;font-weight:600;color:#1a1a2e;margin-bottom:8px;">${errorMessage}</p>
-        <p style="font-size:0.95em;margin-bottom:24px;">${errorHint}</p>
-        <button onclick="loadStatistics()" style="padding:12px 24px;background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;border-radius:10px;cursor:pointer;font-weight:500;transition:transform 0.2s;">
-          🔄 Tentar novamente
-        </button>
-      </div>
-    `;
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;"><div style="font-size:3em;">⚠️</div><p>Erro ao carregar</p><button onclick="loadStatistics()" style="padding:10px 20px;background:#667eea;color:white;border:none;border-radius:8px;cursor:pointer;">🔄 Tentar</button></div>';
   }
 }
 
