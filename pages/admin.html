@@ -1184,6 +1184,7 @@
     // ===========================
     let allUsers = [];
     let allActivity = [];
+    let packQuestionsData = null; // Cache dos dados das perguntas (movido para cima)
     
     // ===========================
     // CACHE SYSTEM
@@ -2333,7 +2334,7 @@
     // RESPOSTAS INDIVIDUAIS
     // ===========================
     let allUserAnswers = []; // Cache de respostas individuais
-    let packQuestionsData = null; // Cache dos dados das perguntas
+    // packQuestionsData já está declarado nas variáveis globais
     
     async function loadIndividualAnswers() {
       const container = document.getElementById('partialReportsContainer');
