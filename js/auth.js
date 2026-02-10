@@ -283,9 +283,24 @@ async function createOrUpdateUserProfile(user, additionalData = {}) {
           }
         }
       }
-      
-      if (!success) {
+        if (!success) {
         throw lastError || new Error('Failed to create profile after 3 attempts');
+      }
+      
+      // 📧 ENVIAR NOTIFICAÇÃO DE NOVO REGISTO POR EMAIL
+      if (typeof sendNewUserNotification === 'function') {
+        console.log('📧 Enviando notificação de novo registo...');
+        sendNewUserNotification(profileData)
+          .then(result => {
+            if (result.success) {
+              console.log('✅ Notificação de email enviada com sucesso');
+            } else {
+              console.log('⚠️ Notificação de email não enviada:', result.reason || result.error);
+            }
+          })
+          .catch(err => {
+            console.warn('⚠️ Erro ao enviar notificação (não bloqueante):', err);
+          });
       }
       
     } else {
