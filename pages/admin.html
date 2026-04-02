@@ -4661,8 +4661,20 @@ Por favor:
       
       const config = typeConfig[activity.type] || { icon: '📝', label: activity.type, color: '#667eea' };
       
-      const timeStr = activity.timestamp.toLocaleDateString('pt-PT') + ' às ' + 
-                      activity.timestamp.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
+      // Converter timestamp corretamente (pode ser Firestore Timestamp, Date, ou string)
+      let timestamp;
+      if (activity.timestamp?.toDate) {
+        timestamp = activity.timestamp.toDate();
+      } else if (activity.timestamp instanceof Date) {
+        timestamp = activity.timestamp;
+      } else if (typeof activity.timestamp === 'string') {
+        timestamp = new Date(activity.timestamp);
+      } else {
+        timestamp = new Date();
+      }
+      
+      const timeStr = timestamp.toLocaleDateString('pt-PT') + ' às ' + 
+                      timestamp.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
       
       div.style.borderLeftColor = config.color;
       
