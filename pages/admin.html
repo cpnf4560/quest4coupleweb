@@ -2187,16 +2187,15 @@
             statusFilter === 'active' ? c.status === 'active' : c.status === 'pending'
           );
         }
-        
-        // Filtro de pesquisa
+          // Filtro de pesquisa
         if (searchFilter) {
           filteredConnections = filteredConnections.filter(c => {
-            const u1Match = (c.user1.name?.toLowerCase().includes(searchFilter)) || 
-                           (c.user1.email?.toLowerCase().includes(searchFilter)) ||
-                           (c.user1.username?.toLowerCase().includes(searchFilter));
-            const u2Match = (c.user2.name?.toLowerCase().includes(searchFilter)) || 
-                           (c.user2.email?.toLowerCase().includes(searchFilter)) ||
-                           (c.user2.username?.toLowerCase().includes(searchFilter));
+            const u1Match = (c.user1?.name?.toLowerCase().includes(searchFilter)) || 
+                           (c.user1?.email?.toLowerCase().includes(searchFilter)) ||
+                           (c.user1?.username?.toLowerCase().includes(searchFilter));
+            const u2Match = (c.user2?.name?.toLowerCase().includes(searchFilter)) || 
+                           (c.user2?.email?.toLowerCase().includes(searchFilter)) ||
+                           (c.user2?.username?.toLowerCase().includes(searchFilter));
             return u1Match || u2Match;
           });
         }
@@ -2245,11 +2244,11 @@
           
           <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
         `;
-        
-        // Renderizar cada conexão
+          // Renderizar cada conexão
         filteredConnections.forEach(conn => {
-          const u1 = conn.user1;
-          const u2 = conn.user2;
+          // Garantir que user1 e user2 existem com valores por defeito
+          const u1 = conn.user1 || { id: 'unknown', name: 'Utilizador Desconhecido', email: '-' };
+          const u2 = conn.user2 || { id: 'unknown', name: 'Utilizador Desconhecido', email: '-' };
           
           const photo1 = u1.photoURL 
             ? `<img src="${u1.photoURL}" alt="Foto" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea;">`
