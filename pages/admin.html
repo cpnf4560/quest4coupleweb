@@ -725,16 +725,23 @@
     <div id="dataLoadingStatus" style="display: none; background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
         <h3 style="color: #667eea; margin: 0;">⚙️ Carregamento de Dados</h3>
-        <span id="lastLoadTime" style="color: #6c757d; font-size: 0.9em;">Último carregamento: Nunca</span>
+        <div style="display: flex; align-items: center; gap: 15px;">
+          <span id="cacheStatus" style="color: #6c757d; font-size: 0.85em; padding: 4px 10px; background: #f8f9fa; border-radius: 15px;">📦 Cache: --</span>
+          <span id="lastLoadTime" style="color: #6c757d; font-size: 0.9em;">Último carregamento: Nunca</span>
+        </div>
       </div>
       <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <span style="font-weight: 600; color: #495057;">Carregamento Automático:</span>
           <span id="autoLoadStatus" style="color: #28a745; font-weight: 600;">✅ Ativo (7h00 e 19h00)</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <span style="font-weight: 600; color: #495057;">Próximo carregamento:</span>
           <span id="nextLoadTime" style="color: #667eea; font-weight: 600;">--:--</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-weight: 600; color: #495057;">Tempo de carregamento:</span>
+          <span id="loadTimeStats" style="color: #28a745; font-weight: 600;">-- ms</span>
         </div>
       </div>
       <div id="loadingProgressContainer" style="display: none;">
@@ -745,6 +752,18 @@
         <div style="background: #e9ecef; border-radius: 10px; height: 20px; overflow: hidden;">
           <div id="loadingProgressBar" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); height: 100%; width: 0%; transition: width 0.3s ease;"></div>
         </div>
+      </div>
+      <div style="margin-top: 15px; display: flex; gap: 10px;">
+        <button onclick="manualReloadAllData()" 
+                style="padding: 8px 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em;"
+                title="Forçar recarregamento de todos os dados">
+          🔄 Recarregar Agora
+        </button>
+        <button onclick="clearDataCache(); location.reload();" 
+                style="padding: 8px 16px; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.9em;"
+                title="Limpar cache e recarregar página">
+          🗑️ Limpar Cache
+        </button>
       </div>
     </div>
     
@@ -1162,15 +1181,15 @@
   <script src="../js/firebase-config.js"></script>
   <script src="../js/analytics.js"></script>
   <script src="../js/admin-analytics.js"></script>
-  
-  <script>
+    <script>
     // ===========================
     // ADMIN AUTHENTICATION
     // ===========================
     // ⚠️ IMPORTANTE: A autenticação é feita exclusivamente via Firebase Auth
     // O utilizador deve ter isAdmin=true no Firestore para aceder ao backoffice
     // NÃO armazenar credenciais em código!
-      // ===========================
+    
+    // ===========================
     // GLOBAL VARIABLES
     // ===========================
     let allUsers = [];
@@ -1178,8 +1197,21 @@
     let packQuestionsData = null; // Cache dos dados das perguntas (movido para cima)
     
     // ===========================
-    // CACHE SYSTEM
+    // 🚀 PERFORMANCE CONFIGURATION
     // ===========================
+    const BATCH_SIZE = 100; // Utilizadores por batch de carregamento
+    const INITIAL_LOAD_LIMIT = 200; // Limite inicial para carregamento rápido
+    let isLoadingMore = false;
+    let hasMoreUsers = true;
+    let lastUserDoc = null; // Para paginação Firestore
+    let loadStartTime = null; // Para medir performance
+    
+    // ===========================
+    // CACHE SYSTEM (MELHORADO COM LOCALSTORAGE)
+    // ===========================
+    const CACHE_KEY = 'quest4couple_admin_cache';
+    const CACHE_EXPIRY_MS = 15 * 60 * 1000; // 15 minutos
+    
     let dataCache = {
       loaded: false,
       lastLoadTime: null,
@@ -1188,21 +1220,99 @@
     };
     
     function isDataCacheValid() {
-      return dataCache.loaded && dataCache.lastLoadTime !== null;
+      // Verificar cache em memória primeiro
+      if (dataCache.loaded && dataCache.lastLoadTime !== null) {
+        const age = Date.now() - dataCache.lastLoadTime.getTime();
+        if (age < CACHE_EXPIRY_MS) {
+          return true;
+        }
+      }
+      
+      // Tentar recuperar do localStorage
+      return loadCacheFromStorage();
     }
     
     function saveDataToCache(users, activity) {
+      const now = new Date();
       dataCache = {
         loaded: true,
-        lastLoadTime: new Date(),
+        lastLoadTime: now,
         users: users || [],
         activity: activity || []
       };
+      
+      // Guardar em localStorage para persistência entre sessões
+      try {
+        const cacheData = {
+          timestamp: now.getTime(),
+          users: users.map(u => ({
+            id: u.id,
+            email: u.email,
+            name: u.name,
+            username: u.username,
+            gender: u.gender,
+            ageRange: u.ageRange,
+            country: u.country,
+            city: u.city,
+            photoURL: u.photoURL,
+            // Converter Timestamps para ISO strings
+            createdAt: u.createdAt?.toDate ? u.createdAt.toDate().toISOString() : u.createdAt,
+            lastLogin: u.lastLogin?.toDate ? u.lastLogin.toDate().toISOString() : u.lastLogin
+          })),
+          activity: activity || []
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+        console.log('💾 Cache guardado em localStorage:', {
+          users: users.length,
+          size: Math.round(JSON.stringify(cacheData).length / 1024) + 'KB'
+        });
+      } catch (e) {
+        console.warn('⚠️ Não foi possível guardar cache em localStorage:', e.message);
+      }
+      
       console.log('💾 Dados guardados em cache:', {
         users: dataCache.users.length,
         activity: dataCache.activity.length,
         timestamp: dataCache.lastLoadTime
       });
+    }
+    
+    function loadCacheFromStorage() {
+      try {
+        const stored = localStorage.getItem(CACHE_KEY);
+        if (!stored) return false;
+        
+        const cacheData = JSON.parse(stored);
+        const age = Date.now() - cacheData.timestamp;
+        
+        // Verificar se cache expirou
+        if (age > CACHE_EXPIRY_MS) {
+          console.log('⏰ Cache localStorage expirado, será recarregado');
+          localStorage.removeItem(CACHE_KEY);
+          return false;
+        }
+        
+        // Restaurar dados com datas convertidas
+        dataCache = {
+          loaded: true,
+          lastLoadTime: new Date(cacheData.timestamp),
+          users: cacheData.users.map(u => ({
+            ...u,
+            createdAt: u.createdAt ? { toDate: () => new Date(u.createdAt) } : null,
+            lastLogin: u.lastLogin ? { toDate: () => new Date(u.lastLogin) } : null
+          })),
+          activity: cacheData.activity || []
+        };
+        
+        console.log('📦 Cache restaurado do localStorage:', {
+          users: dataCache.users.length,
+          age: Math.round(age / 1000) + 's'
+        });
+        return true;
+      } catch (e) {
+        console.warn('⚠️ Erro ao carregar cache do localStorage:', e.message);
+        return false;
+      }
     }
     
     function loadDataFromCache() {
@@ -1230,6 +1340,9 @@
         users: [],
         activity: []
       };
+      try {
+        localStorage.removeItem(CACHE_KEY);
+      } catch (e) {}
       console.log('🗑️ Cache limpo');
     }
     
@@ -1600,23 +1713,50 @@
     
     function updateLastLoadTime() {
       const lastLoadSpan = document.getElementById('lastLoadTime');
-      if (!lastLoadSpan) return;
+      const cacheStatus = document.getElementById('cacheStatus');
+      const loadTimeStats = document.getElementById('loadTimeStats');
       
       const now = new Date();
       const timeStr = now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
       const dateStr = now.toLocaleDateString('pt-PT');
-      lastLoadSpan.textContent = `Último carregamento: ${dateStr} às ${timeStr}`;
+      
+      if (lastLoadSpan) {
+        lastLoadSpan.textContent = `Último carregamento: ${dateStr} às ${timeStr}`;
+      }
+      
+      // Atualizar status do cache
+      if (cacheStatus) {
+        const cacheSize = dataCache.users?.length || 0;
+        if (cacheSize > 0) {
+          cacheStatus.style.background = '#d4edda';
+          cacheStatus.style.color = '#155724';
+          cacheStatus.textContent = `📦 Cache: ${cacheSize} utilizadores`;
+        } else {
+          cacheStatus.style.background = '#f8f9fa';
+          cacheStatus.style.color = '#6c757d';
+          cacheStatus.textContent = '📦 Cache: vazio';
+        }
+      }
+      
+      // Mostrar tempo de carregamento
+      if (loadTimeStats && loadStartTime) {
+        const loadTime = Math.round(performance.now() - loadStartTime);
+        loadTimeStats.textContent = `${loadTime} ms`;
+        loadTimeStats.style.color = loadTime < 2000 ? '#28a745' : loadTime < 5000 ? '#ffc107' : '#dc3545';
+      }
     }
     
     // ===========================
     // MANUAL DATA RELOAD
     // ===========================
     async function manualReloadAllData() {
+      loadStartTime = performance.now();
+      
       try {
         console.log('🔄 Recarregamento manual de todos os dados...');
         
-        // 💡 NÃO limpar cache - apenas atualizar com novos dados
-        console.log('📊 Cache será atualizado após carregamento');
+        // Limpar cache para forçar recarregamento
+        clearDataCache();
         
         // Mostrar barra de progresso
         const progressContainer = document.getElementById('loadingProgressContainer');
@@ -3106,105 +3246,115 @@
     // LOAD DATA
     // ===========================
     async function loadAllData() {
+      loadStartTime = performance.now();
+      
       try {
-        console.log('🔄 A carregar dados do Firebase...');
-        console.log('📦 Firestore instance:', db);
+        console.log('🚀 A carregar dados do Firebase...');
+        
+        // 1️⃣ VERIFICAR CACHE PRIMEIRO
+        if (isDataCacheValid() && loadDataFromCache()) {
+          console.log('⚡ Dados carregados do cache em', Math.round(performance.now() - loadStartTime), 'ms');
+          
+          // Mostrar dados do cache imediatamente
+          updateProgressUI('📦 A usar dados em cache...', 50);
+          await updateDashboardStats();
+          updateProgressUI('📋 A renderizar tabela...', 75);
+          loadUsersTable();
+          updateProgressUI('✅ Carregamento do cache concluído!', 100);
+          
+          // Atualizar timestamp
+          updateLastLoadTime();
+          hideProgressAfterDelay();
+          
+          // Fazer refresh em background se cache > 5 minutos
+          const cacheAge = Date.now() - dataCache.lastLoadTime.getTime();
+          if (cacheAge > 5 * 60 * 1000) {
+            console.log('🔄 Cache > 5min, atualizando em background...');
+            setTimeout(() => refreshDataInBackground(), 1000);
+          }
+          
+          return;
+        }
+        
+        console.log('📡 Cache não disponível, carregando do Firebase...');
         
         // Mostrar barra de progresso
         const progressContainer = document.getElementById('loadingProgressContainer');
-        const progressBar = document.getElementById('loadingProgressBar');
-        const loadingStage = document.getElementById('loadingStage');
-        const loadingPercentage = document.getElementById('loadingPercentage');
-        
         if (progressContainer) {
           progressContainer.style.display = 'block';
         }
         
-        // Etapa 1: Carregar utilizadores (0-50%)
-        if (loadingStage) loadingStage.textContent = '👥 A carregar utilizadores...';
-        if (progressBar) progressBar.style.width = '10%';
-        if (loadingPercentage) loadingPercentage.textContent = '10%';
+        // 2️⃣ CARREGAMENTO OTIMIZADO EM PARALELO
+        updateProgressUI('👥 A carregar utilizadores...', 10);
         
-        console.log('👥 A buscar utilizadores...');
-        const usersSnapshot = await db.collection('users').get();
-        console.log('✅ Snapshot recebido:', usersSnapshot.size, 'utilizadores');
+        // Usar Promise.all para queries paralelas
+        const [usersSnapshot, activitySnapshot] = await Promise.all([
+          db.collection('users')
+            .orderBy('createdAt', 'desc')
+            .limit(INITIAL_LOAD_LIMIT)
+            .get(),
+          db.collection('activity')
+            .orderBy('timestamp', 'desc')
+            .limit(100)
+            .get()
+        ]);
         
-        if (progressBar) progressBar.style.width = '30%';
-        if (loadingPercentage) loadingPercentage.textContent = '30%';
+        console.log('✅ Snapshots recebidos:', usersSnapshot.size, 'utilizadores,', activitySnapshot.size, 'atividades');
+        updateProgressUI('📊 A processar dados...', 40);
         
+        // Processar utilizadores
         allUsers = [];
         usersSnapshot.forEach(doc => {
           allUsers.push({ id: doc.id, ...doc.data() });
         });
-        console.log('✅ Utilizadores carregados:', allUsers.length);
         
-        if (progressBar) progressBar.style.width = '50%';
-        if (loadingPercentage) loadingPercentage.textContent = '50%';
+        // Guardar último documento para paginação
+        if (usersSnapshot.docs.length > 0) {
+          lastUserDoc = usersSnapshot.docs[usersSnapshot.docs.length - 1];
+          hasMoreUsers = usersSnapshot.docs.length === INITIAL_LOAD_LIMIT;
+        }
         
-        // Ordenar por data de registo (mais recentes primeiro)
-        allUsers.sort((a, b) => {
-          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
-          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
-          return dateB - dateA; // Descendente (mais recentes primeiro)
+        // Processar atividades
+        allActivity = [];
+        activitySnapshot.forEach(doc => {
+          allActivity.push({ id: doc.id, ...doc.data() });
         });
         
-        // Etapa 2: Dashboard Stats (50-70%)
-        if (loadingStage) loadingStage.textContent = '📊 A atualizar estatísticas...';
-        if (progressBar) progressBar.style.width = '60%';
-        if (loadingPercentage) loadingPercentage.textContent = '60%';
+        console.log('✅ Dados processados em', Math.round(performance.now() - loadStartTime), 'ms');
+        updateProgressUI('📊 A atualizar estatísticas...', 60);
         
+        // 3️⃣ ATUALIZAR UI
         await updateDashboardStats();
-        
-        if (progressBar) progressBar.style.width = '70%';
-        if (loadingPercentage) loadingPercentage.textContent = '70%';
-        
-        // Etapa 3: Tabela de utilizadores (70-80%)
-        if (loadingStage) loadingStage.textContent = '📋 A renderizar tabela...';
-        if (progressBar) progressBar.style.width = '75%';
-        if (loadingPercentage) loadingPercentage.textContent = '75%';
-        
+        updateProgressUI('📋 A renderizar tabela...', 75);
         loadUsersTable();
+        updateProgressUI('🔍 A verificar dados...', 90);
         
-        if (progressBar) progressBar.style.width = '80%';
-        if (loadingPercentage) loadingPercentage.textContent = '80%';
+        await checkUsersWithoutUsername();
+        renderActivityLogFromData();
         
-        // Etapa 4: Verificações e logs (80-100%)
-        if (loadingStage) loadingStage.textContent = '🔍 A verificar dados...';
-        if (progressBar) progressBar.style.width = '90%';
-        if (loadingPercentage) loadingPercentage.textContent = '90%';
-          await checkUsersWithoutUsername();
-        loadActivityLog();
+        // 4️⃣ FINALIZAR
+        updateProgressUI('✅ Carregamento concluído!', 100);
         
-        // Concluído
-        if (loadingStage) loadingStage.textContent = '✅ Carregamento concluído!';
-        if (progressBar) progressBar.style.width = '100%';
-        if (loadingPercentage) loadingPercentage.textContent = '100%';
+        const totalTime = Math.round(performance.now() - loadStartTime);
+        console.log(`🎉 Carregamento completo em ${totalTime}ms (${allUsers.length} utilizadores)`);
         
-        // 💾 Guardar dados em cache
+        // Guardar em cache
         saveDataToCache(allUsers, allActivity);
-        
-        // Atualizar timestamp
         updateLastLoadTime();
+        hideProgressAfterDelay();
         
-        // Esconder barra após 2 segundos
-        setTimeout(() => {
-          if (progressContainer) {
-            progressContainer.style.display = 'none';
-            progressBar.style.width = '0%';
-          }
-        }, 2000);
+        // 5️⃣ CARREGAR RESTO DOS UTILIZADORES EM BACKGROUND
+        if (hasMoreUsers) {
+          console.log('📥 A carregar restantes utilizadores em background...');
+          setTimeout(() => loadRemainingUsersInBackground(), 500);
+        }
         
       } catch (error) {
         console.error('❌ ERRO CRÍTICO ao carregar dados:', error);
         console.error('📋 Stack trace:', error.stack);
         
-        // Esconder barra de progresso
-        const progressContainer = document.getElementById('loadingProgressContainer');
-        if (progressContainer) {
-          progressContainer.style.display = 'none';
-        }
+        hideProgressAfterDelay();
         
-        // Mostrar erro detalhado
         const errorDetails = `
 ❌ ERRO AO CARREGAR DADOS DO ADMIN
 
@@ -3215,16 +3365,112 @@ Por favor:
 1. Verifique a consola do browser (F12)
 2. Verifique se o Firebase está configurado
 3. Verifique a conexão à internet
-
-Detalhes técnicos:
-${error.stack || 'Sem stack trace'}
         `;
         
         alert(errorDetails);
-        
-        // Fazer logout para evitar problemas
         logout();
       }
+    }
+    
+    // 🔄 Carregar utilizadores restantes em background
+    async function loadRemainingUsersInBackground() {
+      if (!hasMoreUsers || isLoadingMore || !lastUserDoc) return;
+      
+      isLoadingMore = true;
+      console.log('📥 Background loading: continuando após doc', lastUserDoc.id);
+      
+      try {
+        const snapshot = await db.collection('users')
+          .orderBy('createdAt', 'desc')
+          .startAfter(lastUserDoc)
+          .get();
+        
+        if (snapshot.empty) {
+          hasMoreUsers = false;
+          console.log('✅ Todos os utilizadores carregados:', allUsers.length);
+        } else {
+          snapshot.forEach(doc => {
+            allUsers.push({ id: doc.id, ...doc.data() });
+          });
+          
+          lastUserDoc = snapshot.docs[snapshot.docs.length - 1];
+          console.log('📥 +', snapshot.size, 'utilizadores (total:', allUsers.length + ')');
+          
+          // Atualizar cache e stats
+          saveDataToCache(allUsers, allActivity);
+          updateDashboardStats();
+        }
+      } catch (error) {
+        console.error('❌ Erro no background loading:', error);
+      }
+      
+      isLoadingMore = false;
+    }
+    
+    // 🔄 Refresh em background (quando cache > 5min)
+    async function refreshDataInBackground() {
+      console.log('🔄 Atualizando dados em background...');
+      
+      try {
+        const usersSnapshot = await db.collection('users')
+          .orderBy('createdAt', 'desc')
+          .get();
+        
+        allUsers = [];
+        usersSnapshot.forEach(doc => {
+          allUsers.push({ id: doc.id, ...doc.data() });
+        });
+        
+        saveDataToCache(allUsers, allActivity);
+        console.log('✅ Background refresh completo:', allUsers.length, 'utilizadores');
+        
+        // Atualizar UI subtilmente
+        updateDashboardStats();
+        
+      } catch (error) {
+        console.error('❌ Erro no background refresh:', error);
+      }
+    }
+    
+    // Helper para UI de progresso
+    function updateProgressUI(message, percent) {
+      const progressContainer = document.getElementById('loadingProgressContainer');
+      const progressBar = document.getElementById('loadingProgressBar');
+      const loadingStage = document.getElementById('loadingStage');
+      const loadingPercentage = document.getElementById('loadingPercentage');
+      
+      if (progressContainer) progressContainer.style.display = 'block';
+      if (loadingStage) loadingStage.textContent = message;
+      if (progressBar) progressBar.style.width = percent + '%';
+      if (loadingPercentage) loadingPercentage.textContent = percent + '%';
+    }
+    
+    function hideProgressAfterDelay() {
+      setTimeout(() => {
+        const progressContainer = document.getElementById('loadingProgressContainer');
+        const progressBar = document.getElementById('loadingProgressBar');
+        if (progressContainer) {
+          progressContainer.style.display = 'none';
+          if (progressBar) progressBar.style.width = '0%';
+        }
+      }, 1500);
+    }
+    
+    // Renderizar activity log dos dados já carregados
+    function renderActivityLogFromData() {
+      const loadingActivity = document.getElementById('loadingActivity');
+      const activityLog = document.getElementById('activityLog');
+      
+      if (loadingActivity) loadingActivity.style.display = 'none';
+      if (!activityLog) return;
+      
+      activityLog.style.display = 'block';
+      activityLog.innerHTML = '';
+      
+      allActivity.slice(0, 100).forEach(activity => {
+        const item = createActivityItem(activity);
+        activityLog.appendChild(item);
+      });
     }
     
     // ===========================
@@ -3419,13 +3665,18 @@ ${error.stack || 'Sem stack trace'}
       const loadingUsers = document.getElementById('loadingUsers');
       const tableContainer = document.getElementById('usersTableContainer');
       
-      // Populate country filter
-      const countries = new Set(allUsers.filter(u => u.country).map(u => u.country));
+      // Populate country filter (usar Set para melhor performance)
+      const countries = new Set();
+      for (const u of allUsers) {
+        if (u.country) countries.add(u.country);
+      }
+      
       const countrySelect = document.getElementById('filterCountry');
-      countrySelect.innerHTML = '<option value="">Todos</option>';
+      const countryOptions = ['<option value="">Todos</option>'];
       Array.from(countries).sort().forEach(country => {
-        countrySelect.innerHTML += `<option value="${country}">${country}</option>`;
+        countryOptions.push(`<option value="${country}">${country}</option>`);
       });
+      countrySelect.innerHTML = countryOptions.join('');
       
       // Inicializar lista filtrada com todos os users
       filteredUsers = [...allUsers];
@@ -3439,7 +3690,6 @@ ${error.stack || 'Sem stack trace'}
     
     function renderUsersPage() {
       const tbody = document.getElementById('usersTableBody');
-      tbody.innerHTML = '';
       
       if (filteredUsers.length === 0) {
         tbody.innerHTML = '<tr><td colspan="11" style="text-align: center; color: #6c757d; padding: 40px;">Nenhum utilizador encontrado.</td></tr>';
@@ -3452,11 +3702,17 @@ ${error.stack || 'Sem stack trace'}
       const endIndex = Math.min(startIndex + usersPerPage, filteredUsers.length);
       const pageUsers = filteredUsers.slice(startIndex, endIndex);
       
-      // Renderizar apenas os users da página atual
-      pageUsers.forEach(user => {
+      // 🚀 OTIMIZAÇÃO: Usar DocumentFragment para batch DOM updates
+      const fragment = document.createDocumentFragment();
+      
+      for (const user of pageUsers) {
         const row = createUserRow(user);
-        tbody.appendChild(row);
-      });
+        fragment.appendChild(row);
+      }
+      
+      // Uma única operação DOM
+      tbody.innerHTML = '';
+      tbody.appendChild(fragment);
       
       // Atualizar info de paginação
       updatePaginationInfo(startIndex + 1, endIndex, filteredUsers.length);
@@ -3547,10 +3803,13 @@ ${error.stack || 'Sem stack trace'}
       // Mascarar apelido para privacidade
       const maskedName = maskName(user.name);
       
-      // Foto do utilizador (photoURL do Google ou placeholder)
+      // 🚀 Foto do utilizador com lazy loading
+      const userInitial = (user.name || user.email || '?').charAt(0).toUpperCase();
       const userPhoto = user.photoURL 
-        ? `<img src="${user.photoURL}" alt="Foto" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #667eea;">`
-        : `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${(user.name || user.email || '?').charAt(0).toUpperCase()}</div>`;
+        ? `<img src="${user.photoURL}" alt="Foto" loading="lazy" decoding="async" 
+             style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #667eea;"
+             onerror="this.outerHTML='<div style=\\'width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;\\'>${userInitial}</div>'">`
+        : `<div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">${userInitial}</div>`;
       
       tr.innerHTML = `
         <td style="text-align: center;">${userPhoto}</td>
@@ -3578,9 +3837,19 @@ ${error.stack || 'Sem stack trace'}
     }
     
     // ===========================
-    // FILTERS - Corrigido
+    // FILTERS - Otimizado
     // ===========================
+    let filterDebounceTimer = null;
+    
     function filterUsers() {
+      // Debounce para evitar múltiplas filtragens durante digitação
+      clearTimeout(filterDebounceTimer);
+      filterDebounceTimer = setTimeout(() => {
+        performFilter();
+      }, 150);
+    }
+    
+    function performFilter() {
       const searchTerm = document.getElementById('searchUser').value.toLowerCase().trim();
       const genderFilter = document.getElementById('filterGender').value;
       const countryFilter = document.getElementById('filterCountry').value;
