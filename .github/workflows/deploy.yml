@@ -1,0 +1,47 @@
+# GitHub Actions workflow para deploy no GitHub Pages
+# Quest4Couple - Site estático
+
+name: Deploy to GitHub Pages
+
+on:
+  # Executa em pushes para o branch main
+  push:
+    branches: ["main"]
+  
+  # Permite execução manual
+  workflow_dispatch:
+
+# Define permissões do GITHUB_TOKEN
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite apenas uma execução de deploy ao mesmo tempo
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Job de deploy
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload do diretório raiz
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

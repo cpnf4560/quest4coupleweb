@@ -1,21 +1,71 @@
 {
-  "name": "Quest4Couple",
-  "short_name": "Q4C",
-  "description": "Questionários para casais - Descubram-se juntos",
+  "name": "Quest4Couple - Questionário para Casais",
+  "short_name": "Quest4Couple",
+  "description": "Questionários interativos para casais descobrirem desejos, fantasias e afinidades. 100% gratuito e privado.",
   "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "theme_color": "#667eea",
   "background_color": "#ffffff",
   "display": "standalone",
-  "start_url": "/app.html"
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "start_url": "/",
+  "id": "quest4couple",
+  "lang": "pt-PT",
+  "dir": "ltr",
+  "categories": ["lifestyle", "entertainment"],
+  "screenshots": [
+    {
+      "src": "/assets/screenshot-wide.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/assets/screenshot-mobile.jpg",
+      "sizes": "750x1334",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Começar Questionário",
+      "short_name": "Questionário",
+      "description": "Iniciar novo questionário",
+      "url": "/app.html",
+      "icons": [{"src": "/assets/logo.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Ver Dashboard",
+      "short_name": "Dashboard",
+      "description": "Aceder ao dashboard pessoal",
+      "url": "/dashboard.html",
+      "icons": [{"src": "/assets/logo.png", "sizes": "192x192"}]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

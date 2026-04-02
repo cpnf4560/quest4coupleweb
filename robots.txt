@@ -4,27 +4,38 @@
 User-agent: *
 Allow: /
 Allow: /index.html
-Allow: /auth.html
 Allow: /tutorial.html
-Allow: /relatorio.html
-Allow: /pages/
+Allow: /estatisticas.html
+Allow: /pages/sobre.html
+Allow: /pages/faq.html
+Allow: /pages/testemunhos.html
+Allow: /pages/apoiar.html
+Allow: /pages/privacidade.html
+Allow: /pages/termos.html
 Allow: /assets/
 Allow: /css/
-Allow: /js/
 
-# Bloquear páginas privadas/sensíveis
+# Bloquear páginas privadas/aplicação
 Disallow: /app.html
+Disallow: /auth.html
 Disallow: /dashboard.html
+Disallow: /relatorio.html
+Disallow: /pages/admin.html
+Disallow: /pages/adicionar-username.html
+
+# Bloquear ficheiros sensíveis
 Disallow: /js/firebase-config.js
 Disallow: /js/firestore-sync.js
-
-# Bloquear crawling de arquivos do sistema
+Disallow: /data/
+Disallow: /i18n/
 Disallow: /*.json$
-Disallow: /node_modules/
-Disallow: /.git/
-Disallow: /.vscode/
+Disallow: /sw.js
 
-# Bloquear bots específicos indesejados
+# Bloquear pastas de sistema
+Disallow: /.git/
+Disallow: /.github/
+
+# Bloquear bots agressivos
 User-agent: AhrefsBot
 Disallow: /
 
@@ -34,15 +45,20 @@ Disallow: /
 User-agent: SemrushBot
 Disallow: /
 
-# Permitir GoogleBot e Bingbot (principais)
+User-agent: DotBot
+Disallow: /
+
+# Crawl-delay para bots permitidos
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Googlebot-Image
 Allow: /assets/
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 2
 
 # Sitemap
 Sitemap: https://quest4couple.pt/sitemap.xml
