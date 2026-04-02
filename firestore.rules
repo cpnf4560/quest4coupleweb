@@ -118,6 +118,19 @@ service cloud.firestore {
       allow write: if request.auth != null && 
                       get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
+    
+    // ========================================
+    // ACTIVITY COLLECTION (alias para activities)
+    // ========================================
+    match /activity/{activityId} {
+      // Qualquer utilizador autenticado pode ler
+      allow read: if request.auth != null;
+      
+      // Apenas admins podem escrever
+      allow write: if request.auth != null && 
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+    
       // ========================================
     // PARTNERS COLLECTION (Se existir)
     // ========================================
