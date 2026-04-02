@@ -1901,6 +1901,13 @@ async function checkAndAutoPublishStatistics() {
     if (needsUpdate) {
       console.log(`⏰ Auto-publicação necessária: ${reason}`);
       
+      // ✅ Verificar se utilizador está autenticado antes de publicar
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        console.log('⚠️ Auto-publicação ignorada: utilizador não autenticado');
+        return;
+      }
+      
       // Verificar se não foi publicado recentemente (evitar duplicados)
       const lastAutoKey = localStorage.getItem('lastAutoPublishStats');
       const currentKey = `${now.toDateString()}_${hour >= 19 ? 19 : (hour >= 7 ? 7 : 0)}`;
@@ -1922,10 +1929,22 @@ async function checkAndAutoPublishStatistics() {
 
 // Verificar auto-publicação ao carregar a página admin
 if (typeof window !== 'undefined') {
-  // Verificar a cada 5 minutos se precisa publicar
-  setInterval(checkAndAutoPublishStatistics, 300000);
+  // Verificar a cada 5 minutos se precisa publicar (apenas se autenticado)
+  setInterval(() => {
+    if (firebase.auth().currentUser) {
+      checkAndAutoPublishStatistics();
+    }
+  }, 300000);
+  
   // Verificar imediatamente ao carregar (após 5 segundos para Firebase inicializar)
-  setTimeout(checkAndAutoPublishStatistics, 5000);
+  // Mas apenas se houver utilizador autenticado
+  setTimeout(() => {
+    if (firebase.auth().currentUser) {
+      checkAndAutoPublishStatistics();
+    } else {
+      console.log('📊 Auto-publicação adiada: aguardando autenticação');
+    }
+  }, 5000);
 }
 
 // Exportar função para uso global

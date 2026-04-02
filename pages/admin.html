@@ -3298,6 +3298,15 @@
       loadStartTime = performance.now();
       
       try {
+        // ✅ Verificar autenticação antes de carregar dados
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          console.error('❌ Tentativa de carregar dados sem autenticação');
+          alert('Sessão expirada. Por favor faça login novamente.');
+          logout();
+          return;
+        }
+        
         console.log('🚀 A carregar dados do Firebase...');
         
         // 1️⃣ VERIFICAR CACHE PRIMEIRO
