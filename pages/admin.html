@@ -786,9 +786,11 @@
       </button>
       <button class="tab-btn" onclick="showTab('activity')">
         📜 Log de Atividade
-      </button>
-      <button class="tab-btn" onclick="showTab('statistics')">
+      </button>      <button class="tab-btn" onclick="showTab('statistics')">
         📈 Estatísticas
+      </button>
+      <button class="tab-btn" onclick="showTab('reports')">
+        📄 Relatórios
       </button>
     </div>
     
@@ -1228,6 +1230,116 @@
           <div id="chartContainer" style="display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
             <!-- Barras preenchidas por JS -->
           </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- TAB: REPORTS -->
+    <div id="tab-reports" class="tab-content">
+      <div class="content-card">
+        <h2>
+          📄 Análise de Relatórios
+          <button class="btn-export" onclick="exportReportsData()">
+            📥 Exportar CSV
+          </button>
+          <button class="btn-reset" onclick="loadReportsAnalysis()" style="margin-left: 10px;">
+            🔄 Atualizar
+          </button>
+        </h2>
+        
+        <!-- Filtros -->
+        <div class="filters" style="margin-bottom: 20px;">
+          <div class="filter-group">
+            <label for="reportsPeriod">📅 Período</label>
+            <select id="reportsPeriod" onchange="loadReportsAnalysis()">
+              <option value="all">Todos</option>
+              <option value="today">Hoje</option>
+              <option value="week">Última Semana</option>
+              <option value="month" selected>Último Mês</option>
+              <option value="quarter">Último Trimestre</option>
+              <option value="year">Último Ano</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="reportsGender">👤 Género</label>
+            <select id="reportsGender" onchange="loadReportsAnalysis()">
+              <option value="">Todos</option>
+              <option value="M-M">♂️ Homem + Homem</option>
+              <option value="F-F">♀️ Mulher + Mulher</option>
+              <option value="M-F">♂️♀️ Misto</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="reportsSort">🔃 Ordenar por</label>
+            <select id="reportsSort" onchange="loadReportsAnalysis()">
+              <option value="date-desc">Data (recente)</option>
+              <option value="date-asc">Data (antigo)</option>
+              <option value="compat-desc">Compatibilidade ↓</option>
+              <option value="compat-asc">Compatibilidade ↑</option>
+              <option value="questions-desc">Questões ↓</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Cards de resumo -->
+        <div id="reportsSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px;">
+          <!-- Preenchido por JS -->
+        </div>
+        
+        <!-- Insights e Sugestões de Melhoria -->
+        <div id="reportsInsights" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 16px; padding: 20px; margin-bottom: 25px;">
+          <h3 style="margin-bottom: 15px; color: #495057;">💡 Insights e Sugestões de Melhoria</h3>
+          <div id="insightsContent">
+            <!-- Preenchido por JS -->
+          </div>
+        </div>
+        
+        <!-- Distribuição de Compatibilidade -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+          <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h4 style="margin-bottom: 15px; color: #495057;">📊 Distribuição de Compatibilidade</h4>
+            <div id="compatDistribution">
+              <!-- Gráfico de barras horizontal -->
+            </div>
+          </div>
+          <div style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+            <h4 style="margin-bottom: 15px; color: #495057;">📦 Packs Mais Usados</h4>
+            <div id="packsDistribution">
+              <!-- Lista de packs -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tabela de relatórios -->
+        <div style="overflow-x: auto;">
+          <table id="reportsTable" class="users-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th>📅 Data</th>
+                <th>👫 Casal</th>
+                <th>📊 Compat.</th>
+                <th>🔥 Super</th>
+                <th>✅ Match</th>
+                <th>❌ Mismatch</th>
+                <th>🔄 Invert</th>
+                <th>📦 Packs</th>
+                <th>🔍 Ações</th>
+              </tr>
+            </thead>
+            <tbody id="reportsTableBody">
+              <tr>
+                <td colspan="9" style="text-align: center; padding: 40px; color: #6c757d;">
+                  <div style="font-size: 2em; margin-bottom: 10px;">📄</div>
+                  A carregar relatórios...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Paginação -->
+        <div id="reportsPagination" style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
+          <!-- Preenchido por JS -->
         </div>
       </div>
     </div>
@@ -2052,9 +2164,12 @@
             // Re-renderizar activity log do cache
             renderActivityLog();
             break;
-            
-          case 'statistics':
+              case 'statistics':
             loadStatisticsData();
+            break;
+            
+          case 'reports':
+            loadReportsAnalysis();
             break;
         }
       } else {
@@ -2080,6 +2195,10 @@
             
           case 'statistics':
             loadStatisticsData();
+            break;
+            
+          case 'reports':
+            loadReportsAnalysis();
             break;
         }
       }
@@ -5186,8 +5305,7 @@ Por favor:
       statisticsCache = null;
       loadStatisticsData();
     }
-    
-    function exportStatistics() {
+      function exportStatistics() {
       const table = document.getElementById('statisticsTable');
       if (!table) return;
       
@@ -5209,6 +5327,686 @@ Por favor:
       link.href = URL.createObjectURL(blob);
       link.download = `quest4couple_estatisticas_${new Date().toISOString().split('T')[0]}.csv`;
       link.click();
+    }
+    
+    // ===========================
+    // REPORTS ANALYSIS TAB
+    // ===========================
+    let reportsCache = null;
+    let reportsCurrentPage = 1;
+    const REPORTS_PER_PAGE = 20;
+    
+    async function loadReportsAnalysis() {
+      console.log('📄 A carregar análise de relatórios...');
+      
+      const summaryEl = document.getElementById('reportsSummary');
+      const insightsEl = document.getElementById('insightsContent');
+      const tableBody = document.getElementById('reportsTableBody');
+      const compatDistEl = document.getElementById('compatDistribution');
+      const packsDistEl = document.getElementById('packsDistribution');
+      
+      // Loading state
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 40px; color: #6c757d;">
+            <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+            A carregar relatórios...
+          </td>
+        </tr>
+      `;
+      
+      try {
+        // Obter filtros
+        const periodFilter = document.getElementById('reportsPeriod')?.value || 'month';
+        const genderFilter = document.getElementById('reportsGender')?.value || '';
+        const sortFilter = document.getElementById('reportsSort')?.value || 'date-desc';
+        
+        // Calcular data de início com base no filtro de período
+        let startDate = null;
+        const now = new Date();
+        
+        switch(periodFilter) {
+          case 'today':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            break;
+          case 'week':
+            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            break;
+          case 'month':
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            break;
+          case 'quarter':
+            startDate = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+            break;
+          case 'year':
+            startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+            break;
+        }
+        
+        // Buscar relatórios do Firebase
+        let query = db.collection('analytics_full_reports');
+        
+        if (startDate) {
+          query = query.where('timestamp', '>=', startDate);
+        }
+        
+        const snapshot = await query.orderBy('timestamp', 'desc').limit(500).get();
+        
+        let reports = [];
+        snapshot.forEach(doc => {
+          reports.push({ id: doc.id, ...doc.data() });
+        });
+        
+        console.log(`✅ ${reports.length} relatórios carregados`);
+        
+        // Filtrar por género se necessário
+        if (genderFilter) {
+          reports = reports.filter(r => {
+            const g1 = r.couple?.gender1 || '';
+            const g2 = r.couple?.gender2 || '';
+            const pair = [g1, g2].sort().join('-');
+            
+            if (genderFilter === 'M-M') return pair === 'M-M';
+            if (genderFilter === 'F-F') return pair === 'F-F';
+            if (genderFilter === 'M-F') return pair === 'F-M' || pair === 'M-F' || (g1 !== g2 && g1 && g2);
+            return true;
+          });
+        }
+        
+        // Ordenar
+        switch(sortFilter) {
+          case 'date-asc':
+            reports.sort((a, b) => {
+              const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(0);
+              const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(0);
+              return dateA - dateB;
+            });
+            break;
+          case 'compat-desc':
+            reports.sort((a, b) => {
+              const compatA = calculateReportCompatibility(a);
+              const compatB = calculateReportCompatibility(b);
+              return compatB - compatA;
+            });
+            break;
+          case 'compat-asc':
+            reports.sort((a, b) => {
+              const compatA = calculateReportCompatibility(a);
+              const compatB = calculateReportCompatibility(b);
+              return compatA - compatB;
+            });
+            break;
+          case 'questions-desc':
+            reports.sort((a, b) => (b.stats?.totalQuestions || 0) - (a.stats?.totalQuestions || 0));
+            break;
+          default: // date-desc
+            reports.sort((a, b) => {
+              const dateA = a.timestamp?.toDate ? a.timestamp.toDate() : new Date(0);
+              const dateB = b.timestamp?.toDate ? b.timestamp.toDate() : new Date(0);
+              return dateB - dateA;
+            });
+        }
+        
+        reportsCache = reports;
+        
+        // Calcular estatísticas
+        const stats = calculateReportsStats(reports);
+        
+        // Renderizar cards de resumo
+        renderReportsSummary(summaryEl, stats);
+        
+        // Renderizar insights e sugestões
+        renderReportsInsights(insightsEl, stats, reports);
+        
+        // Renderizar distribuição de compatibilidade
+        renderCompatDistribution(compatDistEl, reports);
+        
+        // Renderizar distribuição de packs
+        renderPacksDistribution(packsDistEl, reports);
+        
+        // Renderizar tabela
+        renderReportsTable(tableBody, reports.slice(0, REPORTS_PER_PAGE));
+        
+        // Renderizar paginação
+        renderReportsPagination(reports.length);
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar relatórios:', error);
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align: center; padding: 40px; color: #dc3545;">
+              <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+              Erro ao carregar relatórios: ${error.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+    
+    function calculateReportCompatibility(report) {
+      const stats = report.stats || {};
+      const total = (stats.superMatches || 0) + (stats.matches || 0) + (stats.mismatches || 0);
+      if (total === 0) return 0;
+      
+      const matchScore = ((stats.superMatches || 0) * 2 + (stats.matches || 0)) / (total * 2) * 100;
+      return Math.round(matchScore);
+    }
+    
+    function calculateReportsStats(reports) {
+      const stats = {
+        total: reports.length,
+        avgCompatibility: 0,
+        avgQuestions: 0,
+        avgSuperMatches: 0,
+        avgMatches: 0,
+        avgMismatches: 0,
+        avgInvertMatching: 0,
+        genderDistribution: { 'M-M': 0, 'F-F': 0, 'M-F': 0, 'unknown': 0 },
+        packUsage: {},
+        compatibilityRanges: { '0-25': 0, '26-50': 0, '51-75': 0, '76-100': 0 },
+        superMatchRate: 0,
+        mismatchRate: 0,
+        reportsWithInvert: 0
+      };
+      
+      if (reports.length === 0) return stats;
+      
+      let totalCompat = 0;
+      let totalQuestions = 0;
+      let totalSuperMatches = 0;
+      let totalMatches = 0;
+      let totalMismatches = 0;
+      let totalInvert = 0;
+      
+      reports.forEach(r => {
+        // Compatibilidade
+        const compat = calculateReportCompatibility(r);
+        totalCompat += compat;
+        
+        // Categorizar compatibilidade
+        if (compat <= 25) stats.compatibilityRanges['0-25']++;
+        else if (compat <= 50) stats.compatibilityRanges['26-50']++;
+        else if (compat <= 75) stats.compatibilityRanges['51-75']++;
+        else stats.compatibilityRanges['76-100']++;
+        
+        // Questões
+        const s = r.stats || {};
+        totalQuestions += s.totalQuestions || 0;
+        totalSuperMatches += s.superMatches || 0;
+        totalMatches += s.matches || 0;
+        totalMismatches += s.mismatches || 0;
+        totalInvert += s.invertMatchings || 0;
+        
+        if ((s.invertMatchings || 0) > 0) stats.reportsWithInvert++;
+        
+        // Género
+        const g1 = r.couple?.gender1 || '';
+        const g2 = r.couple?.gender2 || '';
+        if (g1 && g2) {
+          const pair = [g1, g2].sort().join('-');
+          if (pair === 'M-M') stats.genderDistribution['M-M']++;
+          else if (pair === 'F-F') stats.genderDistribution['F-F']++;
+          else stats.genderDistribution['M-F']++;
+        } else {
+          stats.genderDistribution['unknown']++;
+        }
+        
+        // Packs
+        const packs = s.packIds || [];
+        packs.forEach(packId => {
+          stats.packUsage[packId] = (stats.packUsage[packId] || 0) + 1;
+        });
+      });
+      
+      stats.avgCompatibility = Math.round(totalCompat / reports.length);
+      stats.avgQuestions = Math.round(totalQuestions / reports.length);
+      stats.avgSuperMatches = (totalSuperMatches / reports.length).toFixed(1);
+      stats.avgMatches = (totalMatches / reports.length).toFixed(1);
+      stats.avgMismatches = (totalMismatches / reports.length).toFixed(1);
+      stats.avgInvertMatching = (totalInvert / reports.length).toFixed(1);
+      
+      // Taxas
+      const totalAllQuestions = totalSuperMatches + totalMatches + totalMismatches;
+      if (totalAllQuestions > 0) {
+        stats.superMatchRate = Math.round((totalSuperMatches / totalAllQuestions) * 100);
+        stats.mismatchRate = Math.round((totalMismatches / totalAllQuestions) * 100);
+      }
+      
+      return stats;
+    }
+    
+    function renderReportsSummary(container, stats) {
+      const compatColor = stats.avgCompatibility >= 70 ? '#28a745' : stats.avgCompatibility >= 40 ? '#ffc107' : '#dc3545';
+      
+      container.innerHTML = `
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+          <div style="font-size: 2em; font-weight: 700;">${stats.total}</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">📄 Total Relatórios</div>
+        </div>
+        <div style="background: linear-gradient(135deg, ${compatColor} 0%, ${compatColor}dd 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+          <div style="font-size: 2em; font-weight: 700;">${stats.avgCompatibility}%</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">📊 Média Compatibilidade</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+          <div style="font-size: 2em; font-weight: 700;">${stats.superMatchRate}%</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">🔥 Taxa Super Match</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+          <div style="font-size: 2em; font-weight: 700;">${stats.mismatchRate}%</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">❌ Taxa Mismatch</div>
+        </div>
+        <div style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+          <div style="font-size: 2em; font-weight: 700;">${stats.avgQuestions}</div>
+          <div style="font-size: 0.85em; opacity: 0.9;">❓ Média Questões</div>
+        </div>
+      `;
+    }
+    
+    function renderReportsInsights(container, stats, reports) {
+      const insights = [];
+      
+      // Insight: Compatibilidade média
+      if (stats.avgCompatibility < 50) {
+        insights.push({
+          type: 'warning',
+          icon: '⚠️',
+          title: 'Compatibilidade média baixa',
+          description: `A média de compatibilidade é ${stats.avgCompatibility}%. Considere rever as perguntas ou o sistema de matching para melhorar a experiência.`,
+          suggestion: 'Analisar perguntas com alta taxa de mismatch e considerar reformulá-las.'
+        });
+      } else if (stats.avgCompatibility >= 70) {
+        insights.push({
+          type: 'success',
+          icon: '✅',
+          title: 'Boa compatibilidade média',
+          description: `A média de compatibilidade é ${stats.avgCompatibility}%, o que indica bom funcionamento do sistema de matching.`
+        });
+      }
+      
+      // Insight: Taxa de mismatch
+      if (stats.mismatchRate > 30) {
+        insights.push({
+          type: 'warning',
+          icon: '❌',
+          title: 'Taxa de mismatch elevada',
+          description: `${stats.mismatchRate}% das respostas resultam em mismatch. Isto pode indicar perguntas mal formuladas ou muito polarizantes.`,
+          suggestion: 'Identificar as perguntas com maior taxa de mismatch e considerar reformulá-las ou adicionar mais opções de resposta.'
+        });
+      }
+      
+      // Insight: Uso de Invert Matching
+      const invertUsageRate = Math.round((stats.reportsWithInvert / stats.total) * 100);
+      if (invertUsageRate < 20) {
+        insights.push({
+          type: 'info',
+          icon: '🔄',
+          title: 'Invert Matching pouco utilizado',
+          description: `Apenas ${invertUsageRate}% dos relatórios utilizam Invert Matching.`,
+          suggestion: 'Considere promover mais a funcionalidade de Invert Matching na interface.'
+        });
+      }
+      
+      // Insight: Packs mais/menos usados
+      const packEntries = Object.entries(stats.packUsage).sort((a, b) => b[1] - a[1]);
+      if (packEntries.length > 0) {
+        const mostUsed = packEntries[0];
+        const leastUsed = packEntries[packEntries.length - 1];
+        
+        const packNames = {
+          'romantico': '💕 Romântico',
+          'experiencia': '🌟 Experiência',
+          'pimentinha': '🌶️ Pimentinha',
+          'poliamor': '💜 Poliamor',
+          'kinks': '🔥 Kinks'
+        };
+        
+        insights.push({
+          type: 'info',
+          icon: '📦',
+          title: 'Distribuição de Packs',
+          description: `Pack mais usado: ${packNames[mostUsed[0]] || mostUsed[0]} (${mostUsed[1]} vezes). Pack menos usado: ${packNames[leastUsed[0]] || leastUsed[0]} (${leastUsed[1]} vezes).`,
+          suggestion: leastUsed[1] < mostUsed[1] * 0.2 ? `Considere promover ou melhorar o pack ${packNames[leastUsed[0]] || leastUsed[0]}.` : null
+        });
+      }
+      
+      // Insight: Distribuição de compatibilidade
+      const lowCompat = stats.compatibilityRanges['0-25'] + stats.compatibilityRanges['26-50'];
+      const highCompat = stats.compatibilityRanges['51-75'] + stats.compatibilityRanges['76-100'];
+      
+      if (lowCompat > highCompat) {
+        insights.push({
+          type: 'warning',
+          icon: '📊',
+          title: 'Maioria dos casais com baixa compatibilidade',
+          description: `${Math.round((lowCompat / stats.total) * 100)}% dos casais têm compatibilidade abaixo de 50%.`,
+          suggestion: 'Rever o algoritmo de matching ou a formulação das perguntas.'
+        });
+      }
+      
+      // Renderizar insights
+      if (insights.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d; text-align: center;">Sem insights disponíveis. Aguarde mais dados.</p>';
+        return;
+      }
+      
+      container.innerHTML = insights.map(insight => `
+        <div style="background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px; border-left: 4px solid ${insight.type === 'warning' ? '#ffc107' : insight.type === 'success' ? '#28a745' : '#667eea'};">
+          <div style="display: flex; align-items: flex-start; gap: 12px;">
+            <div style="font-size: 1.5em;">${insight.icon}</div>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 5px 0; color: #495057;">${insight.title}</h4>
+              <p style="margin: 0; color: #6c757d; font-size: 0.9em;">${insight.description}</p>
+              ${insight.suggestion ? `<p style="margin: 8px 0 0 0; color: #667eea; font-size: 0.85em; font-weight: 600;">💡 ${insight.suggestion}</p>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderCompatDistribution(container, reports) {
+      const ranges = { '0-25%': 0, '26-50%': 0, '51-75%': 0, '76-100%': 0 };
+      
+      reports.forEach(r => {
+        const compat = calculateReportCompatibility(r);
+        if (compat <= 25) ranges['0-25%']++;
+        else if (compat <= 50) ranges['26-50%']++;
+        else if (compat <= 75) ranges['51-75%']++;
+        else ranges['76-100%']++;
+      });
+      
+      const maxVal = Math.max(...Object.values(ranges), 1);
+      const colors = { '0-25%': '#dc3545', '26-50%': '#ffc107', '51-75%': '#28a745', '76-100%': '#667eea' };
+      
+      container.innerHTML = Object.entries(ranges).map(([range, count]) => `
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+          <div style="width: 70px; font-size: 0.85em; color: #495057;">${range}</div>
+          <div style="flex: 1; background: #e9ecef; border-radius: 10px; height: 24px; overflow: hidden;">
+            <div style="width: ${(count / maxVal) * 100}%; height: 100%; background: ${colors[range]}; border-radius: 10px; transition: width 0.5s;"></div>
+          </div>
+          <div style="width: 40px; text-align: right; font-weight: 600; color: #495057;">${count}</div>
+        </div>
+      `).join('');
+    }
+    
+    function renderPacksDistribution(container, reports) {
+      const packUsage = {};
+      
+      reports.forEach(r => {
+        const packs = r.stats?.packIds || [];
+        packs.forEach(packId => {
+          packUsage[packId] = (packUsage[packId] || 0) + 1;
+        });
+      });
+      
+      const packNames = {
+        'romantico': { name: '💕 Romântico', color: '#f093fb' },
+        'experiencia': { name: '🌟 Experiência', color: '#667eea' },
+        'pimentinha': { name: '🌶️ Pimentinha', color: '#fd7e14' },
+        'poliamor': { name: '💜 Poliamor', color: '#6f42c1' },
+        'kinks': { name: '🔥 Kinks', color: '#dc3545' }
+      };
+      
+      const sorted = Object.entries(packUsage).sort((a, b) => b[1] - a[1]);
+      const maxVal = sorted.length > 0 ? sorted[0][1] : 1;
+      
+      if (sorted.length === 0) {
+        container.innerHTML = '<p style="color: #6c757d; text-align: center;">Sem dados de packs.</p>';
+        return;
+      }
+      
+      container.innerHTML = sorted.map(([packId, count]) => {
+        const pack = packNames[packId] || { name: packId, color: '#6c757d' };
+        return `
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <div style="width: 120px; font-size: 0.85em; color: #495057;">${pack.name}</div>
+            <div style="flex: 1; background: #e9ecef; border-radius: 10px; height: 24px; overflow: hidden;">
+              <div style="width: ${(count / maxVal) * 100}%; height: 100%; background: ${pack.color}; border-radius: 10px; transition: width 0.5s;"></div>
+            </div>
+            <div style="width: 40px; text-align: right; font-weight: 600; color: #495057;">${count}</div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function renderReportsTable(tableBody, reports) {
+      if (reports.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align: center; padding: 40px; color: #6c757d;">
+              <div style="font-size: 2em; margin-bottom: 10px;">📄</div>
+              Nenhum relatório encontrado para os filtros selecionados.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      const packNames = {
+        'romantico': '💕',
+        'experiencia': '🌟',
+        'pimentinha': '🌶️',
+        'poliamor': '💜',
+        'kinks': '🔥'
+      };
+      
+      tableBody.innerHTML = reports.map(r => {
+        const date = r.timestamp?.toDate ? r.timestamp.toDate().toLocaleDateString('pt-PT') : '-';
+        const couple = `${r.couple?.name1 || '?'} & ${r.couple?.name2 || '?'}`;
+        const compat = calculateReportCompatibility(r);
+        const compatColor = compat >= 70 ? '#28a745' : compat >= 40 ? '#ffc107' : '#dc3545';
+        const stats = r.stats || {};
+        const packs = (stats.packIds || []).map(p => packNames[p] || '📦').join(' ');
+        
+        return `
+          <tr>
+            <td>${date}</td>
+            <td style="font-weight: 600;">${couple}</td>
+            <td><span style="background: ${compatColor}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.85em;">${compat}%</span></td>
+            <td style="color: #f093fb; font-weight: 600;">${stats.superMatches || 0}</td>
+            <td style="color: #28a745; font-weight: 600;">${stats.matches || 0}</td>
+            <td style="color: #dc3545; font-weight: 600;">${stats.mismatches || 0}</td>
+            <td style="color: #6f42c1; font-weight: 600;">${stats.invertMatchings || 0}</td>
+            <td>${packs || '-'}</td>
+            <td>
+              <button onclick="viewReportDetails('${r.id}')" 
+                      style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8em;">
+                🔍 Ver
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    function renderReportsPagination(totalReports) {
+      const container = document.getElementById('reportsPagination');
+      const totalPages = Math.ceil(totalReports / REPORTS_PER_PAGE);
+      
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+      
+      let html = '';
+      
+      // Botão anterior
+      html += `<button onclick="goToReportsPage(${reportsCurrentPage - 1})" 
+                       style="padding: 8px 16px; border: 1px solid #dee2e6; background: ${reportsCurrentPage === 1 ? '#e9ecef' : 'white'}; border-radius: 8px; cursor: ${reportsCurrentPage === 1 ? 'not-allowed' : 'pointer'};"
+                       ${reportsCurrentPage === 1 ? 'disabled' : ''}>← Anterior</button>`;
+      
+      // Páginas
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= reportsCurrentPage - 2 && i <= reportsCurrentPage + 2)) {
+          html += `<button onclick="goToReportsPage(${i})" 
+                           style="padding: 8px 16px; border: 1px solid ${i === reportsCurrentPage ? '#667eea' : '#dee2e6'}; background: ${i === reportsCurrentPage ? '#667eea' : 'white'}; color: ${i === reportsCurrentPage ? 'white' : '#495057'}; border-radius: 8px; cursor: pointer; font-weight: ${i === reportsCurrentPage ? '600' : '400'};">${i}</button>`;
+        } else if (i === reportsCurrentPage - 3 || i === reportsCurrentPage + 3) {
+          html += '<span style="padding: 8px;">...</span>';
+        }
+      }
+      
+      // Botão seguinte
+      html += `<button onclick="goToReportsPage(${reportsCurrentPage + 1})" 
+                       style="padding: 8px 16px; border: 1px solid #dee2e6; background: ${reportsCurrentPage === totalPages ? '#e9ecef' : 'white'}; border-radius: 8px; cursor: ${reportsCurrentPage === totalPages ? 'not-allowed' : 'pointer'};"
+                       ${reportsCurrentPage === totalPages ? 'disabled' : ''}>Seguinte →</button>`;
+      
+      container.innerHTML = html;
+    }
+    
+    function goToReportsPage(page) {
+      if (!reportsCache || page < 1) return;
+      
+      const totalPages = Math.ceil(reportsCache.length / REPORTS_PER_PAGE);
+      if (page > totalPages) return;
+      
+      reportsCurrentPage = page;
+      
+      const start = (page - 1) * REPORTS_PER_PAGE;
+      const end = start + REPORTS_PER_PAGE;
+      
+      const tableBody = document.getElementById('reportsTableBody');
+      renderReportsTable(tableBody, reportsCache.slice(start, end));
+      renderReportsPagination(reportsCache.length);
+      
+      // Scroll para o topo da tabela
+      document.getElementById('reportsTable')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    async function viewReportDetails(reportId) {
+      console.log('🔍 A ver detalhes do relatório:', reportId);
+      
+      try {
+        const doc = await db.collection('analytics_full_reports').doc(reportId).get();
+        
+        if (!doc.exists) {
+          alert('Relatório não encontrado.');
+          return;
+        }
+        
+        const report = doc.data();
+        const stats = report.stats || {};
+        const couple = report.couple || {};
+        const compat = calculateReportCompatibility(report);
+        
+        const genderEmoji = (g) => g === 'M' ? '♂️' : g === 'F' ? '♀️' : '⚧️';
+        
+        const packNames = {
+          'romantico': '💕 Romântico',
+          'experiencia': '🌟 Experiência',
+          'pimentinha': '🌶️ Pimentinha',
+          'poliamor': '💜 Poliamor',
+          'kinks': '🔥 Kinks'
+        };
+        
+        const date = report.timestamp?.toDate ? report.timestamp.toDate().toLocaleString('pt-PT') : '-';
+        
+        let html = `
+          <div style="color: white;">
+            <h3 style="margin-bottom: 20px; color: #667eea;">📄 Detalhes do Relatório</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;">
+                <h4 style="margin: 0 0 10px 0; color: #f093fb;">👤 ${couple.name1 || 'Utilizador 1'}</h4>
+                <p style="margin: 5px 0; font-size: 0.9em;">${genderEmoji(couple.gender1)} ${couple.gender1 || 'N/D'}</p>
+                <p style="margin: 5px 0; font-size: 0.9em;">📅 ${couple.ageRange1 || 'N/D'}</p>
+              </div>
+              <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px;">
+                <h4 style="margin: 0 0 10px 0; color: #667eea;">👤 ${couple.name2 || 'Utilizador 2'}</h4>
+                <p style="margin: 5px 0; font-size: 0.9em;">${genderEmoji(couple.gender2)} ${couple.gender2 || 'N/D'}</p>
+                <p style="margin: 5px 0; font-size: 0.9em;">📅 ${couple.ageRange2 || 'N/D'}</p>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center;">
+              <div style="font-size: 2.5em; font-weight: 700; color: ${compat >= 70 ? '#28a745' : compat >= 40 ? '#ffc107' : '#dc3545'};">${compat}%</div>
+              <div style="color: #adb5bd;">Compatibilidade</div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+              <div style="background: rgba(240,147,251,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: 700; color: #f093fb;">${stats.superMatches || 0}</div>
+                <div style="font-size: 0.8em; color: #adb5bd;">🔥 Super Match</div>
+              </div>
+              <div style="background: rgba(40,167,69,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: 700; color: #28a745;">${stats.matches || 0}</div>
+                <div style="font-size: 0.8em; color: #adb5bd;">✅ Match</div>
+              </div>
+              <div style="background: rgba(220,53,69,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: 700; color: #dc3545;">${stats.mismatches || 0}</div>
+                <div style="font-size: 0.8em; color: #adb5bd;">❌ Mismatch</div>
+              </div>
+              <div style="background: rgba(111,66,193,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                <div style="font-size: 1.5em; font-weight: 700; color: #6f42c1;">${stats.invertMatchings || 0}</div>
+                <div style="font-size: 0.8em; color: #adb5bd;">🔄 Invert</div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+              <h4 style="margin: 0 0 10px 0;">📦 Packs Utilizados</h4>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                ${(stats.packIds || []).map(p => `<span style="background: rgba(102,126,234,0.3); padding: 5px 12px; border-radius: 20px; font-size: 0.85em;">${packNames[p] || p}</span>`).join('')}
+              </div>
+            </div>
+            
+            <div style="font-size: 0.85em; color: #adb5bd; text-align: center;">
+              📅 Gerado em: ${date} | 🌍 País: ${couple.country || 'N/D'}
+            </div>
+          </div>
+        `;
+        
+        // Mostrar no modal existente
+        const modal = document.getElementById('reportModal');
+        const modalBody = document.getElementById('reportModalBody');
+        modalBody.innerHTML = html;
+        modal.style.display = 'flex';
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar detalhes:', error);
+        alert('Erro ao carregar detalhes do relatório.');
+      }
+    }
+    
+    function exportReportsData() {
+      if (!reportsCache || reportsCache.length === 0) {
+        alert('Sem dados para exportar. Carregue os relatórios primeiro.');
+        return;
+      }
+      
+      const headers = ['Data', 'Nome1', 'Nome2', 'Género1', 'Género2', 'Idade1', 'Idade2', 'País', 'Compatibilidade', 'SuperMatches', 'Matches', 'Mismatches', 'InvertMatching', 'TotalQuestões', 'Packs'];
+      
+      const rows = reportsCache.map(r => {
+        const date = r.timestamp?.toDate ? r.timestamp.toDate().toISOString() : '';
+        const c = r.couple || {};
+        const s = r.stats || {};
+        const compat = calculateReportCompatibility(r);
+        
+        return [
+          date,
+          c.name1 || '',
+          c.name2 || '',
+          c.gender1 || '',
+          c.gender2 || '',
+          c.ageRange1 || '',
+          c.ageRange2 || '',
+          c.country || '',
+          compat,
+          s.superMatches || 0,
+          s.matches || 0,
+          s.mismatches || 0,
+          s.invertMatchings || 0,
+          s.totalQuestions || 0,
+          (s.packIds || []).join(';')
+        ];
+      });
+      
+      const csv = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+      
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `quest4couple_relatorios_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+      
+      console.log(`✅ Exportados ${reportsCache.length} relatórios para CSV`);
     }
   </script>
 
