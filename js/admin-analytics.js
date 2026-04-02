@@ -1850,6 +1850,13 @@ async function publishPublicStatistics() {
  * Atualiza se: passou das 7h ou 19h desde a última atualização
  */
 async function checkAndAutoPublishStatistics() {
+  // ✅ Verificar autenticação PRIMEIRO, antes de qualquer chamada ao Firestore
+  const currentUser = firebase.auth().currentUser;
+  if (!currentUser) {
+    console.log('📊 Auto-publicação ignorada: utilizador não autenticado');
+    return;
+  }
+  
   const now = new Date();
   const hour = now.getHours();
   
@@ -1900,13 +1907,6 @@ async function checkAndAutoPublishStatistics() {
     
     if (needsUpdate) {
       console.log(`⏰ Auto-publicação necessária: ${reason}`);
-      
-      // ✅ Verificar se utilizador está autenticado antes de publicar
-      const currentUser = firebase.auth().currentUser;
-      if (!currentUser) {
-        console.log('⚠️ Auto-publicação ignorada: utilizador não autenticado');
-        return;
-      }
       
       // Verificar se não foi publicado recentemente (evitar duplicados)
       const lastAutoKey = localStorage.getItem('lastAutoPublishStats');
