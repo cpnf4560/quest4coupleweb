@@ -1,27 +1,37 @@
-﻿# Pastas temporárias
-deploy_temp/
-quest4couple_deploy/
+﻿# Quest4Couple - GitHub Pages
+
+# Dependências
 node_modules/
+
+# IDE/Editor
 .vscode/
+.idea/
+*.swp
+*.swo
 
 # Ficheiros temporários
 *.tmp
 *.log
 *.zip
-quest4couple_deploy.zip
+*.bak
+*.backup
 
-# Documentação excessiva (manter só os importantes)
-docs/CORRECAO_*.md
-docs/DEBUG_*.md
-docs/DIAGNOSTICO_*.md
-docs/MISSAO_*.md
+# Ficheiros de ambiente
+.env
+.env.local
+.env*.local
 
-# Old files
-old_files/
-
-# OS
+# Sistema operativo
 .DS_Store
 Thumbs.db
+desktop.ini
 
-.vercel
-.env*.local
+# Deploy específico (já não usamos)
+.vercel/
+.firebase/
+.netlify/
+
+# Pastas temporárias de desenvolvimento
+deploy_temp/
+old_files/
+backups/
