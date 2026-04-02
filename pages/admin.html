@@ -787,6 +787,9 @@
       <button class="tab-btn" onclick="showTab('activity')">
         📜 Log de Atividade
       </button>
+      <button class="tab-btn" onclick="showTab('statistics')">
+        📈 Estatísticas
+      </button>
     </div>
     
     <!-- TAB: DASHBOARD -->
@@ -1154,6 +1157,77 @@
         </div>
           <div id="activityLog" style="display: none;">
           <!-- Activity items will be loaded here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- TAB: STATISTICS -->
+    <div id="tab-statistics" class="tab-content">
+      <div class="content-card">
+        <h2>
+          📈 Estatísticas Detalhadas
+          <button class="btn-export" onclick="exportStatistics()">
+            📥 Exportar CSV
+          </button>
+          <button class="btn-reset" onclick="refreshStatistics()" style="margin-left: 10px;">
+            🔄 Atualizar
+          </button>
+        </h2>
+        
+        <!-- Filtros de período -->
+        <div class="filters" style="margin-bottom: 20px;">
+          <div class="filter-group">
+            <label for="statsYear">📅 Ano</label>
+            <select id="statsYear" onchange="loadStatisticsData()">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="statsView">📊 Visualização</label>
+            <select id="statsView" onchange="loadStatisticsData()">
+              <option value="monthly">Mensal</option>
+              <option value="weekly">Semanal</option>
+              <option value="daily">Diário</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Cards de resumo -->
+        <div id="statisticsSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+          <!-- Preenchido por JS -->
+        </div>
+        
+        <!-- Tabela de estatísticas -->
+        <div style="overflow-x: auto;">
+          <table id="statisticsTable" class="users-table" style="width: 100%;">
+            <thead>
+              <tr>
+                <th>📅 Período</th>
+                <th>👥 Registos</th>
+                <th>👨 Homens</th>
+                <th>👩 Mulheres</th>
+                <th>🏳️‍🌈 Outro</th>
+                <th>💑 Conexões</th>
+                <th>📊 Relatórios</th>
+              </tr>
+            </thead>
+            <tbody id="statisticsTableBody">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
+                  <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
+                  A carregar estatísticas...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Gráfico simples (barras em CSS) -->
+        <div id="statisticsChart" style="margin-top: 30px;">
+          <h3 style="margin-bottom: 15px;">📊 Evolução de Registos</h3>
+          <div id="chartContainer" style="display: flex; align-items: flex-end; gap: 8px; height: 200px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+            <!-- Barras preenchidas por JS -->
+          </div>
         </div>
       </div>
     </div>
@@ -1978,6 +2052,10 @@
             // Re-renderizar activity log do cache
             renderActivityLog();
             break;
+            
+          case 'statistics':
+            loadStatisticsData();
+            break;
         }
       } else {
         console.warn('⚠️ Cache não disponível, pode ser necessário recarregar dados');
@@ -1998,6 +2076,10 @@
             
           case 'activity':
             loadActivityLog();
+            break;
+            
+          case 'statistics':
+            loadStatisticsData();
             break;
         }
       }
@@ -2118,6 +2200,13 @@
             return u1Match || u2Match;
           });
         }
+        
+        // ✅ Ordenar por data (mais recentes primeiro)
+        filteredConnections.sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
         
         // Esconder loading
         if (loadingEl) loadingEl.style.display = 'none';
@@ -3520,6 +3609,7 @@ Por favor:
     }
     
     // Renderizar activity log dos dados já carregados
+    // Gera atividades a partir dos utilizadores (registos e logins)
     function renderActivityLogFromData() {
       const loadingActivity = document.getElementById('loadingActivity');
       const activityLog = document.getElementById('activityLog');
@@ -3527,8 +3617,48 @@ Por favor:
       if (loadingActivity) loadingActivity.style.display = 'none';
       if (!activityLog) return;
       
+      // Reconstruir allActivity a partir de allUsers se estiver vazio ou não processado
+      if (allActivity.length === 0 || !allActivity[0]?.type) {
+        console.log('📋 A reconstruir log de atividade a partir dos utilizadores...');
+        allActivity = [];
+        
+        // Adicionar registos e logins de users
+        allUsers.forEach(user => {
+          if (user.createdAt) {
+            const timestamp = user.createdAt?.toDate ? user.createdAt.toDate() : new Date(user.createdAt);
+            allActivity.push({
+              type: 'register',
+              user: user.email || 'Sem email',
+              userName: user.name || 'Sem nome',
+              timestamp: timestamp,
+              details: `Novo registo: ${user.name || 'Sem nome'}`
+            });
+          }
+          
+          if (user.lastLogin) {
+            const timestamp = user.lastLogin?.toDate ? user.lastLogin.toDate() : new Date(user.lastLogin);
+            allActivity.push({
+              type: 'login',
+              user: user.email || 'Sem email',
+              userName: user.name || 'Sem nome',
+              timestamp: timestamp,
+              details: `Login realizado`
+            });
+          }
+        });
+        
+        // Ordenar por data (mais recentes primeiro)
+        allActivity.sort((a, b) => b.timestamp - a.timestamp);
+        console.log('✅ Log reconstruído com', allActivity.length, 'atividades');
+      }
+      
       activityLog.style.display = 'block';
       activityLog.innerHTML = '';
+      
+      if (allActivity.length === 0) {
+        activityLog.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 40px;">Nenhuma atividade registada.</p>';
+        return;
+      }
       
       allActivity.slice(0, 100).forEach(activity => {
         const item = createActivityItem(activity);
@@ -4788,6 +4918,299 @@ Por favor:
         document.getElementById('answersModal').style.display = 'none';
       }
     });
+    
+    // ===========================
+    // STATISTICS TAB
+    // ===========================
+    let statisticsCache = null;
+    
+    async function loadStatisticsData() {
+      console.log('📈 A carregar estatísticas...');
+      
+      const tableBody = document.getElementById('statisticsTableBody');
+      const summaryContainer = document.getElementById('statisticsSummary');
+      const chartContainer = document.getElementById('chartContainer');
+      const yearSelect = document.getElementById('statsYear');
+      const viewSelect = document.getElementById('statsView');
+      
+      // Mostrar loading
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
+              <div style="font-size: 2em; margin-bottom: 10px;">⏳</div>
+              A carregar estatísticas...
+            </td>
+          </tr>
+        `;
+      }
+      
+      try {
+        // Usar dados já carregados (allUsers e allConnections)
+        if (allUsers.length === 0) {
+          console.log('⚠️ Aguardando carregamento de utilizadores...');
+          return;
+        }
+        
+        // Preencher anos disponíveis
+        const years = [...new Set(allUsers.map(u => {
+          const date = u.createdAt?.toDate ? u.createdAt.toDate() : new Date(u.createdAt || 0);
+          return date.getFullYear();
+        }))].sort((a, b) => b - a);
+        
+        if (yearSelect && yearSelect.options.length <= 1) {
+          years.forEach(year => {
+            if (year > 2000) {
+              const option = document.createElement('option');
+              option.value = year;
+              option.textContent = year;
+              yearSelect.appendChild(option);
+            }
+          });
+        }
+        
+        const selectedYear = yearSelect?.value ? parseInt(yearSelect.value) : null;
+        const viewType = viewSelect?.value || 'monthly';
+        
+        // Buscar conexões se necessário
+        if (allConnections.length === 0) {
+          const db = firebase.firestore();
+          const connectionsSnapshot = await db.collection('connections').get();
+          connectionsSnapshot.forEach(doc => {
+            allConnections.push({
+              id: doc.id,
+              ...doc.data()
+            });
+          });
+        }
+        
+        // Buscar relatórios
+        const db = firebase.firestore();
+        let reportsCount = 0;
+        try {
+          const reportsSnapshot = await db.collection('analytics_full_reports').get();
+          reportsCount = reportsSnapshot.size;
+        } catch (e) {
+          console.log('⚠️ Não foi possível contar relatórios');
+        }
+        
+        // Agrupar dados por período
+        const stats = {};
+        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        
+        allUsers.forEach(user => {
+          const createdAt = user.createdAt?.toDate ? user.createdAt.toDate() : new Date(user.createdAt || 0);
+          const year = createdAt.getFullYear();
+          const month = createdAt.getMonth();
+          
+          if (selectedYear && year !== selectedYear) return;
+          if (year < 2020) return;
+          
+          let periodKey;
+          let periodLabel;
+          
+          if (viewType === 'monthly') {
+            periodKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+            periodLabel = `${monthNames[month]} ${year}`;
+          } else if (viewType === 'weekly') {
+            const weekNum = getWeekNumber(createdAt);
+            periodKey = `${year}-W${String(weekNum).padStart(2, '0')}`;
+            periodLabel = `Semana ${weekNum}, ${year}`;
+          } else {
+            periodKey = createdAt.toISOString().split('T')[0];
+            periodLabel = createdAt.toLocaleDateString('pt-PT');
+          }
+          
+          if (!stats[periodKey]) {
+            stats[periodKey] = {
+              period: periodLabel,
+              sortKey: periodKey,
+              registos: 0,
+              homens: 0,
+              mulheres: 0,
+              outro: 0,
+              conexoes: 0
+            };
+          }
+          
+          stats[periodKey].registos++;
+          
+          if (user.gender === 'M') stats[periodKey].homens++;
+          else if (user.gender === 'F') stats[periodKey].mulheres++;
+          else stats[periodKey].outro++;
+        });
+        
+        // Contar conexões por período
+        allConnections.forEach(conn => {
+          const createdAt = conn.createdAt?.toDate ? conn.createdAt.toDate() : new Date(conn.createdAt || 0);
+          const year = createdAt.getFullYear();
+          const month = createdAt.getMonth();
+          
+          if (selectedYear && year !== selectedYear) return;
+          if (year < 2020) return;
+          
+          let periodKey;
+          if (viewType === 'monthly') {
+            periodKey = `${year}-${String(month + 1).padStart(2, '0')}`;
+          } else if (viewType === 'weekly') {
+            const weekNum = getWeekNumber(createdAt);
+            periodKey = `${year}-W${String(weekNum).padStart(2, '0')}`;
+          } else {
+            periodKey = createdAt.toISOString().split('T')[0];
+          }
+          
+          if (stats[periodKey]) {
+            stats[periodKey].conexoes++;
+          }
+        });
+        
+        // Ordenar por período (mais recentes primeiro)
+        const sortedStats = Object.values(stats).sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+        
+        // Calcular totais
+        const totals = {
+          registos: sortedStats.reduce((sum, s) => sum + s.registos, 0),
+          homens: sortedStats.reduce((sum, s) => sum + s.homens, 0),
+          mulheres: sortedStats.reduce((sum, s) => sum + s.mulheres, 0),
+          outro: sortedStats.reduce((sum, s) => sum + s.outro, 0),
+          conexoes: sortedStats.reduce((sum, s) => sum + s.conexoes, 0)
+        };
+        
+        // Renderizar resumo
+        if (summaryContainer) {
+          summaryContainer.innerHTML = `
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+              <div style="font-size: 2em; font-weight: 700;">${totals.registos}</div>
+              <div style="font-size: 0.9em; opacity: 0.9;">Total Registos</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+              <div style="font-size: 2em; font-weight: 700;">${totals.homens}</div>
+              <div style="font-size: 0.9em; opacity: 0.9;">👨 Homens</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #e83e8c 0%, #d63384 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+              <div style="font-size: 2em; font-weight: 700;">${totals.mulheres}</div>
+              <div style="font-size: 0.9em; opacity: 0.9;">👩 Mulheres</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+              <div style="font-size: 2em; font-weight: 700;">${totals.conexoes}</div>
+              <div style="font-size: 0.9em; opacity: 0.9;">💑 Conexões</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+              <div style="font-size: 2em; font-weight: 700;">${reportsCount}</div>
+              <div style="font-size: 0.9em; opacity: 0.9;">📊 Relatórios</div>
+            </div>
+          `;
+        }
+        
+        // Renderizar tabela
+        if (tableBody) {
+          if (sortedStats.length === 0) {
+            tableBody.innerHTML = `
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">
+                  <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
+                  Nenhum dado para o período selecionado
+                </td>
+              </tr>
+            `;
+          } else {
+            tableBody.innerHTML = sortedStats.map(s => `
+              <tr>
+                <td><strong>${s.period}</strong></td>
+                <td>${s.registos}</td>
+                <td>${s.homens}</td>
+                <td>${s.mulheres}</td>
+                <td>${s.outro}</td>
+                <td>${s.conexoes}</td>
+                <td>-</td>
+              </tr>
+            `).join('');
+            
+            // Adicionar linha de totais
+            tableBody.innerHTML += `
+              <tr style="background: #f8f9fa; font-weight: bold;">
+                <td>📊 TOTAL</td>
+                <td>${totals.registos}</td>
+                <td>${totals.homens}</td>
+                <td>${totals.mulheres}</td>
+                <td>${totals.outro}</td>
+                <td>${totals.conexoes}</td>
+                <td>${reportsCount}</td>
+              </tr>
+            `;
+          }
+        }
+        
+        // Renderizar gráfico de barras
+        if (chartContainer && sortedStats.length > 0) {
+          const chartData = sortedStats.slice(0, 12).reverse(); // Últimos 12 períodos
+          const maxValue = Math.max(...chartData.map(s => s.registos), 1);
+          
+          chartContainer.innerHTML = chartData.map(s => {
+            const height = Math.max((s.registos / maxValue) * 150, 5);
+            return `
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                <div style="font-size: 0.7em; font-weight: bold; color: #495057;">${s.registos}</div>
+                <div style="width: 100%; max-width: 40px; height: ${height}px; background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); border-radius: 4px 4px 0 0;" title="${s.period}: ${s.registos} registos"></div>
+                <div style="font-size: 0.6em; color: #6c757d; text-align: center; writing-mode: vertical-rl; transform: rotate(180deg); max-height: 60px; overflow: hidden;">${s.period.split(' ')[0]}</div>
+              </div>
+            `;
+          }).join('');
+        }
+        
+        console.log('✅ Estatísticas carregadas:', sortedStats.length, 'períodos');
+        
+      } catch (error) {
+        console.error('❌ Erro ao carregar estatísticas:', error);
+        if (tableBody) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: #dc3545;">
+                <div style="font-size: 2em; margin-bottom: 10px;">❌</div>
+                Erro ao carregar estatísticas: ${error.message}
+              </td>
+            </tr>
+          `;
+        }
+      }
+    }
+    
+    function getWeekNumber(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      const dayNum = d.getUTCDay() || 7;
+      d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+    
+    function refreshStatistics() {
+      statisticsCache = null;
+      loadStatisticsData();
+    }
+    
+    function exportStatistics() {
+      const table = document.getElementById('statisticsTable');
+      if (!table) return;
+      
+      let csv = [];
+      const rows = table.querySelectorAll('tr');
+      
+      rows.forEach(row => {
+        const cols = row.querySelectorAll('th, td');
+        const rowData = [];
+        cols.forEach(col => {
+          rowData.push('"' + col.innerText.replace(/"/g, '""') + '"');
+        });
+        csv.push(rowData.join(','));
+      });
+      
+      const csvContent = csv.join('\\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `quest4couple_estatisticas_${new Date().toISOString().split('T')[0]}.csv`;
+      link.click();
+    }
   </script>
 
   <!-- User Dashboard Modal - OUTSIDE of tabs for visibility -->
