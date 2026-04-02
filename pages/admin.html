@@ -1665,6 +1665,11 @@
       // Inicializar sistema de carregamento agendado
       initScheduledDataLoading();
       
+      // ✅ Verificar auto-publicação de estatísticas (só após admin autenticado)
+      if (typeof checkAndAutoPublishStatistics === 'function') {
+        checkAndAutoPublishStatistics();
+      }
+      
       loadAllData();
     }
     

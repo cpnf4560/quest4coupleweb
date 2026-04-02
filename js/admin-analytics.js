@@ -1927,45 +1927,11 @@ async function checkAndAutoPublishStatistics() {
   }
 }
 
-// Verificar auto-publicação ao carregar a página admin
-// ✅ IMPORTANTE: Usar onAuthStateChanged para garantir que só executa após Firebase Auth inicializar
-if (typeof window !== 'undefined' && typeof firebase !== 'undefined') {
-  let authInitialized = false;
-  let autoPublishInterval = null;
-  
-  // Aguardar até que o estado de autenticação seja determinado
-  firebase.auth().onAuthStateChanged((user) => {
-    if (!authInitialized) {
-      authInitialized = true;
-      console.log('📊 Auth state inicializado para auto-publicação:', user ? user.email : 'não autenticado');
-      
-      if (user) {
-        // Utilizador autenticado - verificar auto-publicação
-        checkAndAutoPublishStatistics();
-        
-        // Iniciar intervalo de verificação a cada 5 minutos
-        if (autoPublishInterval) clearInterval(autoPublishInterval);
-        autoPublishInterval = setInterval(() => {
-          if (firebase.auth().currentUser) {
-            checkAndAutoPublishStatistics();
-          }
-        }, 300000);
-      }
-    } else if (user && !autoPublishInterval) {
-      // Login posterior - iniciar verificação
-      checkAndAutoPublishStatistics();
-      autoPublishInterval = setInterval(() => {
-        if (firebase.auth().currentUser) {
-          checkAndAutoPublishStatistics();
-        }
-      }, 300000);
-    } else if (!user && autoPublishInterval) {
-      // Logout - parar intervalo
-      clearInterval(autoPublishInterval);
-      autoPublishInterval = null;
-    }
-  });
-}
+// ✅ REMOVIDA A AUTO-VERIFICAÇÃO AO CARREGAR
+// A verificação de auto-publicação agora só é feita quando chamada explicitamente
+// pelo showDashboard() após confirmar que o utilizador é admin autenticado.
+// Isto evita erros de permissão quando a página é acedida sem autenticação.
 
-// Exportar função para uso global
+// Exportar funções para uso global
 window.publishPublicStatistics = publishPublicStatistics;
+window.checkAndAutoPublishStatistics = checkAndAutoPublishStatistics;

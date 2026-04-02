@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug Auth - Quest4Couple</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 { color: #667eea; }
+    .log-entry {
+      background: #2a2a4e;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+    .log-entry.success { border-left-color: #28a745; }
+    .log-entry.error { border-left-color: #dc3545; }
+    .log-entry.warning { border-left-color: #ffc107; }
+    pre {
+      background: #1a1a2e;
+      padding: 10px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+    button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+    }
+    button:hover { opacity: 0.9; }
+    input {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      margin: 5px;
+      font-size: 16px;
+      width: 200px;
+    }
+    #logs { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>🔧 Debug Auth - Quest4Couple</h1>
+  
+  <div>
+    <h3>1. Estado Atual do Firebase Auth</h3>
+    <button onclick="checkCurrentState()">🔍 Verificar Estado</button>
+  </div>
+  
+  <div style="margin-top: 20px;">
+    <h3>2. Login de Teste</h3>
+    <input type="email" id="testEmail" placeholder="Email">
+    <input type="password" id="testPassword" placeholder="Password">
+    <button onclick="testLogin()">🔑 Login</button>
+    <button onclick="testLogout()">🚪 Logout</button>
+  </div>
+  
+  <div style="margin-top: 20px;">
+    <h3>3. Testar Permissões</h3>
+    <button onclick="testReadUsers()">📖 Ler Users</button>
+    <button onclick="testReadPublicStats()">📊 Ler PublicStats</button>
+    <button onclick="testCheckAdmin()">👑 Verificar Admin</button>
+  </div>
+  
+  <div id="logs"></div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  
+  <script>
+    const logsDiv = document.getElementById('logs');
+    
+    function log(message, type = 'info', data = null) {
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.innerHTML = `
+        <strong>${new Date().toLocaleTimeString()}</strong> - ${message}
+        ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ''}
+      `;
+      logsDiv.insertBefore(entry, logsDiv.firstChild);
+      console.log(message, data);
+    }
+    
+    // Monitorar estado de autenticação
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        log(`✅ onAuthStateChanged: Utilizador autenticado - ${user.email}`, 'success', {
+          uid: user.uid,
+          email: user.email,
+          emailVerified: user.emailVerified
+        });
+      } else {
+        log('⚠️ onAuthStateChanged: Nenhum utilizador autenticado', 'warning');
+      }
+    });
+    
+    function checkCurrentState() {
+      log('🔍 Verificando estado atual...');
+      
+      const currentUser = firebase.auth().currentUser;
+      if (currentUser) {
+        log('✅ currentUser existe', 'success', {
+          uid: currentUser.uid,
+          email: currentUser.email
+        });
+      } else {
+        log('⚠️ currentUser é null - Firebase Auth ainda não inicializou ou não há sessão', 'warning');
+      }
+      
+      // Verificar se Firebase está disponível
+      log('📦 Firebase disponível', 'info', {
+        firebase: typeof firebase !== 'undefined',
+        auth: typeof firebase.auth === 'function',
+        firestore: typeof firebase.firestore === 'function'
+      });
+    }
+    
+    async function testLogin() {
+      const email = document.getElementById('testEmail').value;
+      const password = document.getElementById('testPassword').value;
+      
+      if (!email || !password) {
+        log('❌ Preenche email e password', 'error');
+        return;
+      }
+      
+      try {
+        log(`🔑 A tentar login com ${email}...`);
+        const result = await firebase.auth().signInWithEmailAndPassword(email, password);
+        log('✅ Login bem sucedido!', 'success', {
+          uid: result.user.uid,
+          email: result.user.email
+        });
+      } catch (error) {
+        log(`❌ Erro no login: ${error.message}`, 'error', { code: error.code });
+      }
+    }
+    
+    async function testLogout() {
+      try {
+        await firebase.auth().signOut();
+        log('✅ Logout bem sucedido!', 'success');
+      } catch (error) {
+        log(`❌ Erro no logout: ${error.message}`, 'error');
+      }
+    }
+    
+    async function testReadUsers() {
+      log('📖 A tentar ler coleção users...');
+      
+      try {
+        const db = firebase.firestore();
+        const snapshot = await db.collection('users').limit(1).get();
+        log(`✅ Leitura de users OK! Encontrados: ${snapshot.size} docs`, 'success');
+      } catch (error) {
+        log(`❌ Erro ao ler users: ${error.message}`, 'error', { code: error.code });
+      }
+    }
+    
+    async function testReadPublicStats() {
+      log('📊 A tentar ler publicStatistics...');
+      
+      try {
+        const db = firebase.firestore();
+        const doc = await db.collection('publicStatistics').doc('questionAnalytics').get();
+        if (doc.exists) {
+          const data = doc.data();
+          log('✅ Leitura de publicStatistics OK!', 'success', {
+            totalResponses: data.totalResponses,
+            questionsCount: data.questions?.length || 0,
+            lastUpdate: data.lastUpdate?.toDate?.()?.toISOString()
+          });
+        } else {
+          log('⚠️ Documento publicStatistics não existe', 'warning');
+        }
+      } catch (error) {
+        log(`❌ Erro ao ler publicStatistics: ${error.message}`, 'error', { code: error.code });
+      }
+    }
+    
+    async function testCheckAdmin() {
+      log('👑 A verificar se utilizador é admin...');
+      
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        log('⚠️ Nenhum utilizador autenticado - não é possível verificar admin', 'warning');
+        return;
+      }
+      
+      try {
+        const db = firebase.firestore();
+        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          log('📄 Dados do utilizador:', 'info', {
+            uid: currentUser.uid,
+            email: userData.email,
+            name: userData.name,
+            username: userData.username,
+            isAdmin: userData.isAdmin,
+            hasIsAdminField: 'isAdmin' in userData
+          });
+          
+          if (userData.isAdmin === true) {
+            log('✅ UTILIZADOR É ADMIN!', 'success');
+          } else {
+            log('⚠️ Utilizador NÃO é admin (isAdmin !== true)', 'warning');
+          }
+        } else {
+          log('❌ Documento do utilizador não existe no Firestore!', 'error', {
+            uid: currentUser.uid
+          });
+        }
+      } catch (error) {
+        log(`❌ Erro ao verificar admin: ${error.message}`, 'error', { code: error.code });
+      }
+    }
+    
+    // Log inicial
+    log('🚀 Debug Auth inicializado - aguardando Firebase Auth...');
+  </script>
+</body>
+</html>
