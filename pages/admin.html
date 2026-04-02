@@ -1507,12 +1507,47 @@
     const adminDashboard = document.getElementById('adminDashboard');
     const errorMessage = document.getElementById('errorMessage');
     const adminLoginForm = document.getElementById('adminLoginForm');
-      // Check if already logged in
-    const isAdminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
-    if (isAdminLoggedIn) {
-      // Use setTimeout to allow async execution
-      setTimeout(() => showDashboard(), 0);
-    }    // Login form handler
+    
+    // ===========================
+    // AUTH STATE OBSERVER
+    // ===========================
+    // Usar onAuthStateChanged para verificar autenticação real do Firebase
+    auth.onAuthStateChanged(async (user) => {
+      console.log('🔐 Auth state changed:', user ? user.email : 'não autenticado');
+      
+      if (user) {
+        try {
+          // Verificar se é admin no Firestore
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          
+          if (userDoc.exists && userDoc.data().isAdmin === true) {
+            console.log('✅ Admin autenticado via Firebase Auth');
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            sessionStorage.setItem('adminUsername', user.email);
+            showDashboard();
+          } else {
+            console.log('⚠️ Utilizador autenticado mas não é admin');
+            sessionStorage.removeItem('adminLoggedIn');
+            // Mostrar formulário de login
+            loginContainer.style.display = 'block';
+            adminDashboard.style.display = 'none';
+          }
+        } catch (error) {
+          console.error('❌ Erro ao verificar admin:', error);
+          sessionStorage.removeItem('adminLoggedIn');
+          loginContainer.style.display = 'block';
+          adminDashboard.style.display = 'none';
+        }
+      } else {
+        console.log('⚠️ Utilizador não autenticado no Firebase');
+        sessionStorage.removeItem('adminLoggedIn');
+        // Mostrar formulário de login
+        loginContainer.style.display = 'block';
+        adminDashboard.style.display = 'none';
+      }
+    });
+
+    // Login form handler
     adminLoginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -1846,9 +1881,23 @@
         return dateB - dateA;
       });
     }
-      function logout() {
-      sessionStorage.removeItem('adminLoggedIn');
-      sessionStorage.removeItem('adminUsername');
+    
+    async function logout() {
+      console.log('🚪 A fazer logout do admin...');
+      
+      try {
+        // Limpar sessão local
+        sessionStorage.removeItem('adminLoggedIn');
+        sessionStorage.removeItem('adminUsername');
+        
+        // Fazer logout do Firebase Auth
+        await auth.signOut();
+        console.log('✅ Logout do Firebase Auth completo');
+      } catch (error) {
+        console.error('❌ Erro no logout:', error);
+      }
+      
+      // Recarregar página
       window.location.reload();
     }
     
