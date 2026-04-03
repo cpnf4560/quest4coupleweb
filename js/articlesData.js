@@ -4990,7 +4990,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "saude",
     categoryLabel: "Saúde",
     icon: "🧠",
-    image: "",
+    image: "../assets/blog/parafilias.png",
     readTime: 18,
     discussionPrompt: "Acham que a sociedade é demasiado rápida a julgar interesses sexuais diferentes? Onde está a linha entre 'diferente' e 'problemático'?",
     content: `
