@@ -497,7 +497,8 @@ assets/blog/
 ├── dogging-guia.jpg         (NOVO)
 ├── pegging-guia.jpg         (NOVO)
 ├── glossario-fetiches.jpg   (NOVO)
-└── parafilias-guia.jpg      (NOVO)
+├── parafilias-guia.jpg      (NOVO)
+└── menage-a-trois.jpg       (NOVO)
 ```
 
 Depois, atualiza o `articlesData.js` com os novos caminhos:
@@ -509,7 +510,7 @@ image: "./assets/blog/nome-do-artigo.jpg"
 
 ## ✅ Checklist
 
-- [ ] Gerar todas as 23 ilustrações
+- [ ] Gerar todas as 24 ilustrações
 - [ ] Verificar consistência de estilo
 - [ ] Otimizar tamanho dos ficheiros (< 200KB cada)
 - [ ] Criar pasta `assets/blog/`
@@ -519,7 +520,7 @@ image: "./assets/blog/nome-do-artigo.jpg"
 
 ---
 
-## 🆕 NOVOS ARTIGOS (4)
+## 🆕 NOVOS ARTIGOS (5)
 
 ---
 
@@ -612,6 +613,30 @@ scale balancing "healthy expression" vs "disorder",
 therapy/support symbols (couch, heart, helping hands), 
 clinical but compassionate aesthetic, 
 educational mental health design, 600x400
+```
+
+---
+
+### 24. 👥 Ménage à Trois: O Guia Completo para Casais
+**Categoria:** Dinâmicas | **ID:** `menage-a-trois`
+
+**Prompt Safe:**
+```
+Elegant minimalist illustration of three abstract silhouettes, 
+intertwined in harmonious connection, soft pink purple and gold gradient, 
+romantic threesome concept, tasteful and artistic representation, 
+warm intimate lighting, modern flat design style, 600x400
+```
+
+**Prompt Detalhado:**
+```
+Artistic illustration of three figures in intimate embrace, 
+elegant silhouettes suggesting threesome dynamic, 
+warm bedroom atmosphere with soft candlelight, 
+pink, purple and gold color palette, 
+sensual but tasteful representation, 
+couple with third person concept, trust and connection theme, 
+modern romantic illustration style, 600x400
 ```
 
 ---

@@ -5152,5 +5152,294 @@ const articlesData = [  {    id: "cuckold-dinamicas",
       <p>Se estás preocupado com os teus impulsos ou comportamentos, procurar ajuda não é fraqueza - é responsabilidade e coragem.</p>
       </div>
     `
+  },
+  {
+    id: "menage-a-trois",
+    title: "Ménage à Trois: O Guia Completo para Casais",
+    excerpt: "Tudo o que precisas saber sobre threesomes: comunicação, preparação, escolha do terceiro elemento e como lidar com as emoções.",
+    category: "dinamicas",
+    categoryLabel: "Dinâmicas",
+    icon: "👥",
+    image: "",
+    readTime: 18,
+    content: \`
+      <div style="text-align: left;">
+      <h3>O que é um Ménage à Trois?</h3>
+      <p>O <strong>ménage à trois</strong> (do francês "casa de três") refere-se a uma experiência sexual envolvendo três pessoas. É uma das fantasias mais comuns entre casais - estudos indicam que cerca de 82% dos homens e 31% das mulheres já fantasiaram com isto. No entanto, passar da fantasia à realidade requer preparação, comunicação e respeito mútuo.</p>
+      
+      <p>Este guia aborda todos os aspectos práticos e emocionais de uma experiência a três, desde a decisão inicial até ao aftercare.</p>
+      
+      <h3>🤔 Antes de Tudo: Reflexão Honesta</h3>
+      <p>Antes de avançar, ambos os parceiros devem refletir honestamente:</p>
+      
+      <h4>Perguntas Importantes</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Porquê?</strong> Qual é a motivação real? Curiosidade mútua? Reacender a chama? Satisfazer uma fantasia?</li>
+        <li><strong>A relação está sólida?</strong> Um threesome não resolve problemas - pode agravá-los</li>
+        <li><strong>Conseguem lidar com ciúmes?</strong> Ver o parceiro com outra pessoa pode ser intenso</li>
+        <li><strong>Há pressão?</strong> Se um está a ceder só para agradar o outro, não façam</li>
+        <li><strong>Estão preparados para qualquer resultado?</strong> Pode ser incrível, mediano ou complicado</li>
+      </ul>
+      
+      <h4>🚫 Red Flags - NÃO Avancem Se:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>A relação tem problemas sérios de confiança ou comunicação</li>
+        <li>Um dos dois está a ser pressionado ou manipulado</li>
+        <li>É uma tentativa de "salvar" uma relação em crise</li>
+        <li>Há ciúmes tóxicos ou possessividade extrema</li>
+        <li>Não conseguem falar abertamente sobre sexo entre vocês</li>
+        <li>Um quer "testar" a lealdade do outro</li>
+      </ul>
+      
+      <h3>💬 Comunicação: A Base de Tudo</h3>
+      <p>A comunicação antes, durante e depois é absolutamente essencial. Não há atalhos.</p>
+      
+      <h4>Conversas Antes da Experiência</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Fantasias específicas:</strong> O que cada um imagina? O que gostariam de experimentar?</li>
+        <li><strong>Limites claros:</strong> O que está absolutamente off-limits? (Ex: beijar na boca, penetração sem preservativo, posições específicas)</li>
+        <li><strong>Tipo de terceiro:</strong> Homem (MHM ou HMH)? Mulher (HMM ou MHH)? Depende de quê?</li>
+        <li><strong>Níveis de envolvimento:</strong> Todos participam igualmente? Alguém prefere observar mais?</li>
+        <li><strong>Cenários hipotéticos:</strong> "E se sentires ciúmes?" "E se ele/ela quiser repetir?"</li>
+        <li><strong>Safeword:</strong> Definam uma palavra que significa PARAR TUDO, sem perguntas</li>
+      </ul>
+      
+      <h4>Definir Regras Claras</h4>
+      <p>Algumas regras comuns que casais estabelecem:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Preservativo obrigatório para qualquer penetração</li>
+        <li>✅ Check-ins visuais/verbais durante o ato</li>
+        <li>✅ O terceiro vai embora no final (não dorme lá)</li>
+        <li>✅ Nenhum contacto posterior com o terceiro (ou regras para contacto)</li>
+        <li>✅ O que acontece fica entre os três (discrição)</li>
+        <li>✅ Qualquer um pode parar a qualquer momento, sem culpa</li>
+      </ul>
+      
+      <h3>👤 Escolher o Terceiro Elemento</h3>
+      <p>Esta é frequentemente a parte mais desafiante. Há várias opções:</p>
+      
+      <h4>Opção 1: Pessoa Conhecida</h4>
+      <p><strong>Prós:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Já existe algum nível de confiança</li>
+        <li>Sabem como a pessoa é</li>
+        <li>Pode haver química natural</li>
+      </ul>
+      <p><strong>Contras:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Pode complicar a amizade</li>
+        <li>Risco de desenvolver sentimentos</li>
+        <li>Constrangimento posterior</li>
+        <li>Fofocas se a discrição falhar</li>
+      </ul>
+      
+      <h4>Opção 2: Desconhecido (Apps/Sites)</h4>
+      <p><strong>Prós:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Separação clara da vida pessoal</li>
+        <li>Sem compromissos emocionais</li>
+        <li>Podem ser seletivos</li>
+      </ul>
+      <p><strong>Contras:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Não conhecem a pessoa</li>
+        <li>Pode haver "catfishing"</li>
+        <li>Requer mais cuidados de segurança</li>
+      </ul>
+      
+      <h4>Opção 3: Profissional (Escort)</h4>
+      <p><strong>Prós:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Experiência e profissionalismo</li>
+        <li>Sem riscos emocionais</li>
+        <li>Limites claros e respeitados</li>
+        <li>Discrição garantida</li>
+      </ul>
+      <p><strong>Contras:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Custo financeiro</li>
+        <li>Pode parecer menos "autêntico"</li>
+        <li>Considerações legais variam por país</li>
+      </ul>
+      
+      <h4>Apps e Sites Populares</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Feeld:</strong> Específico para casais e pessoas não-monogâmicas</li>
+        <li><strong>3Fun:</strong> App dedicada a threesomes</li>
+        <li><strong>SDC:</strong> Swingers Date Club - comunidade estabelecida</li>
+        <li><strong>Tinder/Bumble:</strong> Deixar claro no perfil que são casal</li>
+        <li><strong>Fetlife:</strong> Comunidade kink, bom para encontrar pessoas experientes</li>
+      </ul>
+      
+      <h4>Dicas para Escolher Bem</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Conheçam a pessoa antes (encontro casual, videochamada)</li>
+        <li>Certifiquem-se de que compreende a dinâmica do casal</li>
+        <li>Verifiquem se respeita limites e usa proteção</li>
+        <li>Confiem na vossa intuição - se algo não parece certo, abortem</li>
+        <li>O terceiro deve estar genuinamente interessado em AMBOS, não só num</li>
+      </ul>
+      
+      <h3>🛠️ Preparação Prática</h3>
+      
+      <h4>Antes do Dia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Testes de ISTs:</strong> Todos os três devem apresentar testes recentes</li>
+        <li><strong>Contraceptivos:</strong> Preservativos suficientes (vários tamanhos), lubrificante</li>
+        <li><strong>Higiene:</strong> Duche, depilação conforme preferência, roupa interior nova</li>
+        <li><strong>Ambiente:</strong> Quarto limpo, lençóis frescos, iluminação suave, música de fundo</li>
+        <li><strong>Bebidas/snacks:</strong> Água, vinho (sem exageros), fruta</li>
+        <li><strong>Toalhas extra:</strong> Para higiene e conforto</li>
+      </ul>
+      
+      <h4>No Dia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Relaxem - nervosismo é normal</li>
+        <li>Não bebam álcool em excesso (afeta performance e julgamento)</li>
+        <li>Revejam as regras com o terceiro</li>
+        <li>Combinem sinais não-verbais entre o casal</li>
+        <li>Tenham um plano B se alguém quiser parar</li>
+      </ul>
+      
+      <h3>🔥 Durante a Experiência</h3>
+      
+      <h4>Começar Devagar</h4>
+      <p>Não apressem. Comecem com:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Conversa e bebida para quebrar o gelo</li>
+        <li>Massagens sensuais</li>
+        <li>Beijos e carícias graduais</li>
+        <li>Despir-se lentamente</li>
+      </ul>
+      
+      <h4>Dinâmicas Comuns</h4>
+      <p><strong>MHM (Homem + Mulher + Homem):</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>A mulher é frequentemente o "centro das atenções"</li>
+        <li>DVP (Double Vaginal Penetration) - apenas com experiência</li>
+        <li>Um em cada "lado" - oral + penetração</li>
+        <li>Spitroasting - oral de um, penetração do outro</li>
+      </ul>
+      
+      <p><strong>HMM (Mulher + Mulher + Homem):</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>O homem pode observar as duas mulheres inicialmente</li>
+        <li>Participação rotativa</li>
+        <li>Uma mulher pode "guiar" a outra</li>
+        <li>Face sitting combinado com penetração</li>
+      </ul>
+      
+      <p><strong>HHM ou MMH (Mesmo sexo + um diferente):</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Flexibilidade nas posições</li>
+        <li>Foco no prazer de todos</li>
+        <li>Comunicação ainda mais importante</li>
+      </ul>
+      
+      <h4>Manter a Conexão com o Parceiro</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Contacto visual regular</li>
+        <li>Toques de reassurance (mão no ombro, beijo)</li>
+        <li>Incluir sempre o parceiro - não ignorar</li>
+        <li>Check-ins verbais: "Estás bem?" "Gostas?"</li>
+        <li>Se perceberem desconforto, PAREM e conversem</li>
+      </ul>
+      
+      <h4>O que Fazer se Algo Correr Mal</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Alguém quer parar:</strong> Respeitar imediatamente, sem pressão ou culpa</li>
+        <li><strong>Ciúmes intensos:</strong> Pausar, respirar, reconectar com o parceiro</li>
+        <li><strong>Problemas de "performance":</strong> Normal com nervosismo - não dramatizar</li>
+        <li><strong>O terceiro cruza limites:</strong> Terminar a experiência, ser assertivo</li>
+        <li><strong>Discussão entre o casal:</strong> Parar tudo, pedir ao terceiro que saia</li>
+      </ul>
+      
+      <h3>💆 Depois: Aftercare e Processamento</h3>
+      <p>O aftercare é CRUCIAL. Não subestimem esta fase.</p>
+      
+      <h4>Imediatamente Após</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Agradecer ao terceiro, despedir com cordialidade</li>
+        <li>Tempo a sós para o casal - abraços, carinho</li>
+        <li>Hidratação e snack leve</li>
+        <li>Duche juntos (reconexão íntima)</li>
+        <li>NÃO analisar tudo de imediato - deixem assentar</li>
+      </ul>
+      
+      <h4>Nos Dias Seguintes</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Conversa honesta:</strong> Como se sentiram realmente? O que gostaram? O que não?</li>
+        <li><strong>Validar emoções:</strong> É normal ter sentimentos contraditórios</li>
+        <li><strong>Reconexão:</strong> Sexo a dois, datas românticas, reafirmar o vínculo</li>
+        <li><strong>Sem comparações:</strong> Não comparar o parceiro com o terceiro</li>
+        <li><strong>Decisão sobre repetir:</strong> Só discutir após processarem a primeira vez</li>
+      </ul>
+      
+      <h4>Emoções Comuns Pós-Threesome</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Euforia:</strong> "Foi incrível! Quando repetimos?"</li>
+        <li><strong>Insegurança:</strong> "E se ele/ela gostou mais do terceiro?"</li>
+        <li><strong>Ciúmes tardios:</strong> Podem surgir dias depois</li>
+        <li><strong>Culpa:</strong> Especialmente se houver background religioso/conservador</li>
+        <li><strong>Aumento de intimidade:</strong> Muitos casais sentem-se mais conectados</li>
+        <li><strong>Vergonha:</strong> "O que é que nós fizemos?"</li>
+      </ul>
+      
+      <p>TODAS estas emoções são válidas. O importante é comunicá-las ao parceiro.</p>
+      
+      <h3>❓ Perguntas Frequentes</h3>
+      
+      <h4>"E se um de nós se apaixonar pelo terceiro?"</h4>
+      <p>É um risco real. Mitigar com: escolher desconhecidos, não repetir com a mesma pessoa muitas vezes, manter distância emocional, focar na experiência física.</p>
+      
+      <h4>"Threesome salva relações?"</h4>
+      <p>NÃO. Quase sempre piora problemas existentes. Só funciona para casais já sólidos que querem ADICIONAR algo, não RESOLVER algo.</p>
+      
+      <h4>"Devo contar a amigos/família?"</h4>
+      <p>Isso é muito pessoal. Considerem: as pessoas vão reagir bem? Podem guardar segredo? Querem ser julgados? Muitos casais mantêm privado.</p>
+      
+      <h4>"Quantos threesomes são demais?"</h4>
+      <p>Não há número. O problema é quando se torna a ÚNICA forma de ter prazer ou começa a substituir a intimidade a dois.</p>
+      
+      <h4>"E se o terceiro quiser namorar connosco?"</h4>
+      <p>Aí entram no território do poliamor. É uma conversa completamente diferente que requer reflexão séria. Se não é o que querem, sejam claros desde o início.</p>
+      
+      <h3>📖 Tipos de Threesome</h3>
+      
+      <h4>One-Time Experience</h4>
+      <p>Uma única experiência para satisfazer curiosidade. Mais comum entre casais iniciantes.</p>
+      
+      <h4>Ocasional</h4>
+      <p>De vez em quando, quando surge oportunidade ou vontade. Pode ser com o mesmo terceiro ou diferentes.</p>
+      
+      <h4>Regular (Throuple)</h4>
+      <p>Três pessoas em relacionamento contínuo. Requer skills de poliamor e comunicação avançada.</p>
+      
+      <h4>No Contexto de Swing</h4>
+      <p>Threesomes com outros casais ou em festas/clubes. Ambiente mais controlado e experiente.</p>
+      
+      <h3>✨ Dicas Finais</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>A primeira vez raramente é perfeita - é uma aprendizagem</li>
+        <li>O foco deve ser no PRAZER e CONEXÃO, não na performance</li>
+        <li>Humor ajuda - se algo sair errado, riam juntos</li>
+        <li>Comparem expectativas vs realidade - pode ser diferente da fantasia</li>
+        <li>Não há obrigação de repetir se não gostaram</li>
+        <li>A saúde mental e emocional vem primeiro</li>
+        <li>Não façam nada que sintam que não é para vocês</li>
+      </ul>
+      
+      <h3>🔗 Recursos Úteis</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Livro:</strong> "The Ethical Slut" - Janet W. Hardy</li>
+        <li><strong>Livro:</strong> "Opening Up" - Tristan Taormino</li>
+        <li><strong>Podcast:</strong> "Multiamory" - temas de não-monogamia</li>
+        <li><strong>Reddit:</strong> r/Threesome, r/nonmonogamy</li>
+        <li><strong>Clubes de Swing:</strong> Ambiente seguro para primeiras experiências</li>
+      </ul>
+      
+      <p><strong>Lembrete final:</strong> Um ménage à trois bem-sucedido é aquele em que TODOS os envolvidos se sentem respeitados, satisfeitos e seguros. Não é sobre performance ou cumprir expectativas sociais - é sobre explorar a sexualidade juntos, com amor e confiança.</p>
+      </div>
+    \`
   }
 ];
