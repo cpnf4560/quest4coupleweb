@@ -3026,5 +3026,1407 @@ const articlesData = [  {
       <p><strong>Mensagem final:</strong> O swing pode ser uma adição incrível à vida de um casal - MAS apenas se ambos o desejarem genuinamente, se fizerem o trabalho de preparação e comunicação, e se mantiverem a relação como prioridade número 1. Feito bem, fortalece laços. Feito mal, pode destruí-los. Façam a vossa pesquisa, falem honestamente e, acima de tudo, divirtam-se juntos!</p>
       </div>
     `
+  },
+  {
+    id: "sexo-anal-guia",
+    title: "Sexo Anal: Guia Completo para Casais",
+    excerpt: "Preparação, técnicas, posições e cuidados para uma experiência prazerosa e segura com penetração anal.",
+    category: "dicas",
+    categoryLabel: "Dicas",
+    icon: "🍑",
+    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    readTime: 18,
+    content: `
+      <div style="text-align: left;">
+      <h3>Introdução ao Sexo Anal</h3>
+      <p>O sexo anal é uma prática que tem ganhado cada vez mais interesse entre casais. Quando realizado com preparação adequada, comunicação aberta e respeito pelos limites de ambos, pode ser uma experiência extremamente prazerosa. Este guia aborda tudo o que precisas saber para explorar esta prática de forma segura e satisfatória.</p>
+      
+      <h3>🧠 Desmistificando Tabus</h3>
+      <p>Antes de mais, é importante desconstruir alguns mitos:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Não é só para casais heterossexuais:</strong> Pessoas de todas as orientações podem desfrutar</li>
+        <li><strong>Não determina orientação sexual:</strong> Prazer anal não define quem és</li>
+        <li><strong>Não deve doer:</strong> Se dói, é sinal de que algo não está bem</li>
+        <li><strong>Pode dar muito prazer:</strong> A zona anal tem muitas terminações nervosas</li>
+        <li><strong>A próstata (ponto P):</strong> Nos homens, pode proporcionar orgasmos intensíssimos</li>
+      </ul>
+      
+      <h3>✅ Preparação é Fundamental</h3>
+      
+      <h4>Higiene</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Banho normal:</strong> Na maioria dos casos, um banho com lavagem externa é suficiente</li>
+        <li><strong>Duche anal (opcional):</strong> Alguns preferem usar uma ducha íntima com água morna</li>
+        <li><strong>Não exagerar:</strong> Duches muito frequentes podem irritar a mucosa</li>
+        <li><strong>Alimentação:</strong> Fibras ajudam a manter o intestino regular</li>
+        <li><strong>Timing:</strong> Evitar imediatamente após refeições pesadas</li>
+      </ul>
+      
+      <h4>Relaxamento</h4>
+      <p>O esfíncter anal é um músculo que precisa de estar relaxado:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ambiente confortável e sem pressas</li>
+        <li>Banho quente antes ajuda a relaxar</li>
+        <li>Massagem nas nádegas e zona lombar</li>
+        <li>Comunicação constante com o parceiro</li>
+        <li>Respiração profunda e consciente</li>
+      </ul>
+      
+      <h3>🧴 Lubrificação: A Chave do Sucesso</h3>
+      <p>O ânus não tem lubrificação natural como a vagina. Lubrificante é <strong>OBRIGATÓRIO</strong>.</p>
+      
+      <h4>Tipos de Lubrificante:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>À base de água:</strong> Compatível com preservativos e toys, mas seca mais rápido</li>
+        <li><strong>À base de silicone:</strong> Dura mais, ideal para anal, mas não usar com toys de silicone</li>
+        <li><strong>Híbridos:</strong> Combinam o melhor dos dois mundos</li>
+        <li><strong>Específicos para anal:</strong> Mais espessos, maior duração</li>
+      </ul>
+      
+      <p><strong>⚠️ EVITAR:</strong> Lubrificantes com efeito anestésico - mascaram a dor que é um sinal importante</p>
+      
+      <h3>📈 Progressão Gradual</h3>
+      <p>Nunca ir diretamente para a penetração peniana. A progressão deve ser:</p>
+      
+      <h4>Fase 1: Estimulação Externa</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Massagem na zona perineal</li>
+        <li>Toques leves no exterior do ânus</li>
+        <li>Movimentos circulares com o dedo lubrificado</li>
+        <li>Deixar o corpo habituar-se às sensações</li>
+      </ul>
+      
+      <h4>Fase 2: Penetração Digital</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Um dedo (bem lubrificado!) lentamente</li>
+        <li>Esperar que o músculo relaxe naturalmente</li>
+        <li>Movimentos suaves para dentro e fora</li>
+        <li>Quando confortável, experimentar dois dedos</li>
+      </ul>
+      
+      <h4>Fase 3: Toys Pequenos (Opcional mas Recomendado)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Plugs anais de tamanho progressivo</li>
+        <li>Usar durante a masturbação ou sexo vaginal</li>
+        <li>Ajuda a treinar o músculo</li>
+        <li>Sempre com base larga para segurança!</li>
+      </ul>
+      
+      <h4>Fase 4: Penetração Peniana</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Só quando houver conforto total nas fases anteriores</li>
+        <li>Quem recebe controla a velocidade e profundidade</li>
+        <li>Entrada muito lenta, centímetro a centímetro</li>
+        <li>Pausas sempre que necessário</li>
+      </ul>
+      
+      <h3>🛏️ Melhores Posições para Iniciantes</h3>
+      
+      <h4>1. Colher (Spooning)</h4>
+      <p>Ambos deitados de lado, quem penetra por trás. Permite controlo suave e intimidade.</p>
+      
+      <h4>2. Cowgirl/Cowboy Anal</h4>
+      <p>Quem recebe por cima, controlando totalmente a penetração. Excelente para iniciantes.</p>
+      
+      <h4>3. Missionário Modificado</h4>
+      <p>Quem recebe de costas com almofada sob as ancas. Ângulo mais confortável.</p>
+      
+      <h4>4. De Quatro (Doggy Style)</h4>
+      <p>Mais avançada - só quando já houver experiência e confiança.</p>
+      
+      <h3>⚠️ Segurança e Saúde</h3>
+      
+      <h4>Preservativo: SEMPRE</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>O reto tem alta capacidade de absorção</li>
+        <li>Risco de ISTs é maior no sexo anal</li>
+        <li>Trocar de preservativo se mudar de anal para vaginal</li>
+      </ul>
+      
+      <h4>Sinais de Alerta:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Dor persistente:</strong> Parar imediatamente</li>
+        <li><strong>Sangramento:</strong> Pequenas quantidades podem acontecer, mas se persistir, consultar médico</li>
+        <li><strong>Desconforto nos dias seguintes:</strong> Normal alguma sensibilidade, mas dor não</li>
+      </ul>
+      
+      <h3>💬 Comunicação Durante o Ato</h3>
+      <p>Frases úteis:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>"Mais devagar"</li>
+        <li>"Espera um momento"</li>
+        <li>"Mais lubrificante"</li>
+        <li>"Isso está bom"</li>
+        <li>"Para" - respeitar imediatamente!</li>
+      </ul>
+      
+      <h3>🌟 Prazer Anal Feminino vs Masculino</h3>
+      
+      <h4>Nas Mulheres:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Terminações nervosas partilhadas com o clítoris</li>
+        <li>Combinação anal + estimulação clitoriana = orgasmos intensos</li>
+        <li>Sensação de "preenchimento" duplo se combinado com vaginal</li>
+      </ul>
+      
+      <h4>Nos Homens:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Próstata (ponto P) a cerca de 5-7cm</li>
+        <li>Massagem prostática pode causar orgasmos muito intensos</li>
+        <li>Pode ser combinado com masturbação ou sexo oral</li>
+      </ul>
+      
+      <h3>❌ Erros Comuns a Evitar</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ir com pressa</li>
+        <li>Pouco lubrificante</li>
+        <li>Ignorar sinais de desconforto</li>
+        <li>Não comunicar</li>
+        <li>Usar lubrificantes anestésicos</li>
+        <li>Passar de anal para vaginal sem trocar preservativo</li>
+        <li>Usar toys sem base larga</li>
+      </ul>
+      
+      <p><strong>Conclusão:</strong> O sexo anal pode ser uma experiência incrível quando feito corretamente. A chave está na preparação, comunicação, paciência e muito lubrificante. Respeitem sempre os limites um do outro e lembrem-se: se não está a ser prazeroso, parem e reavaliem.</p>
+      </div>
+    `
+  },
+  {
+    id: "pompoarismo-guia",
+    title: "Pompoarismo: A Arte do Prazer Feminino",
+    excerpt: "Técnicas milenares para fortalecer o pavimento pélvico e intensificar o prazer sexual para ambos.",
+    category: "dicas",
+    categoryLabel: "Dicas",
+    icon: "💪",
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=400&fit=crop&q=80",
+    readTime: 14,
+    content: `
+      <div style="text-align: left;">
+      <h3>O que é Pompoarismo?</h3>
+      <p>O pompoarismo é uma técnica milenar originária da Índia e Tailândia que consiste em exercícios de contração e relaxamento da musculatura do pavimento pélvico. Embora seja frequentemente associado às mulheres, os benefícios aplicam-se a pessoas de todos os géneros.</p>
+      
+      <p>Com prática regular, esta técnica permite um controlo extraordinário dos músculos vaginais, proporcionando orgasmos mais intensos e prolongados, além de benefícios para a saúde.</p>
+      
+      <h3>🌟 Benefícios do Pompoarismo</h3>
+      
+      <h4>Para a Saúde:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Fortalecimento do pavimento pélvico</li>
+        <li>Prevenção e tratamento de incontinência urinária</li>
+        <li>Recuperação pós-parto</li>
+        <li>Melhoria da circulação na região pélvica</li>
+        <li>Redução de cólicas menstruais</li>
+        <li>Preparação para o parto</li>
+      </ul>
+      
+      <h4>Para o Prazer Sexual:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Orgasmos mais intensos e frequentes</li>
+        <li>Maior sensibilidade durante a penetração</li>
+        <li>Capacidade de "massajar" o pénis durante o sexo</li>
+        <li>Controlo sobre a intensidade do aperto vaginal</li>
+        <li>Aumento da lubrificação natural</li>
+        <li>Maior consciência corporal e conexão com a sexualidade</li>
+      </ul>
+      
+      <h4>Para o Parceiro:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Sensação de aperto variável durante a penetração</li>
+        <li>Estimulação adicional através das contrações</li>
+        <li>Experiência sexual mais dinâmica e interativa</li>
+      </ul>
+      
+      <h3>📍 Identificar os Músculos Certos</h3>
+      <p>Antes de começar, é essencial identificar os músculos do pavimento pélvico:</p>
+      
+      <h4>Técnica 1: Durante a Micção</h4>
+      <p>Tenta parar o fluxo de urina a meio. Os músculos que usas são os do pavimento pélvico. <strong>Nota:</strong> Faz isto apenas para identificar os músculos, não como exercício regular.</p>
+      
+      <h4>Técnica 2: Inserção do Dedo</h4>
+      <p>Insere um dedo limpo na vagina e tenta apertar à volta dele. Deves sentir pressão se estiveres a contrair os músculos certos.</p>
+      
+      <h4>Técnica 3: Visualização</h4>
+      <p>Imagina que estás a segurar uma bola de ténis com a vagina. Ou a impedir que um tampão escape.</p>
+      
+      <h3>🏋️ Exercícios Básicos (Kegels)</h3>
+      
+      <h4>Nível 1: Contrações Simples</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Deita-te confortavelmente ou senta-te</li>
+        <li>Contrai os músculos do pavimento pélvico</li>
+        <li>Mantém a contração por 3-5 segundos</li>
+        <li>Relaxa completamente por 3-5 segundos</li>
+        <li>Repete 10-15 vezes</li>
+        <li>Faz 3 séries por dia</li>
+      </ol>
+      
+      <h4>Nível 2: Contrações Rápidas</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Contrai e relaxa rapidamente</li>
+        <li>1 segundo contração, 1 segundo relaxamento</li>
+        <li>20-30 repetições</li>
+        <li>Excelente para controlo muscular rápido</li>
+      </ol>
+      
+      <h4>Nível 3: Elevador</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Imagina um elevador com 4 andares</li>
+        <li>Contrai gradualmente, parando em cada "andar"</li>
+        <li>Mantém no topo por 3-5 segundos</li>
+        <li>Desce andar a andar até relaxar completamente</li>
+      </ol>
+      
+      <h3>🔮 Exercícios com Acessórios</h3>
+      
+      <h4>Bolas de Ben-Wa / Bolas Chinesas</h4>
+      <p>Esferas de diferentes tamanhos e pesos para treino progressivo:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Iniciante:</strong> Bolas maiores e mais leves</li>
+        <li><strong>Intermédio:</strong> Bolas médias com peso moderado</li>
+        <li><strong>Avançado:</strong> Bolas pequenas e mais pesadas</li>
+      </ul>
+      
+      <h4>Como Usar:</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Aplica lubrificante à base de água</li>
+        <li>Insere lentamente enquanto relaxas</li>
+        <li>Usa enquanto fazes tarefas domésticas ou caminhadas</li>
+        <li>Começa com 15-30 minutos e aumenta gradualmente</li>
+        <li>Os músculos trabalham automaticamente para manter as bolas no lugar</li>
+      </ol>
+      
+      <h4>Cones Vaginais</h4>
+      <p>Pesos em forma de cone com diferentes gramas para treino progressivo de força.</p>
+      
+      <h3>🌺 Técnicas Avançadas de Pompoarismo</h3>
+      
+      <h4>A Sucção</h4>
+      <p>Técnica para "sugar" o pénis durante a penetração:</p>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Relaxa completamente a musculatura</li>
+        <li>Contrai criando uma pressão negativa</li>
+        <li>Imagina que estás a puxar algo para dentro</li>
+        <li>Requer prática mas os resultados são impressionantes</li>
+      </ol>
+      
+      <h4>A Expulsão</h4>
+      <p>Movimento oposto - empurrar gentilmente:</p>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Contrai como se estivesses a fazer força para evacuar</li>
+        <li>Movimento suave, não forçado</li>
+        <li>Cria sensação de "ordenha" no pénis</li>
+      </ol>
+      
+      <h4>A Onda</h4>
+      <p>Combina sucção e expulsão em movimento contínuo:</p>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Suga, mantém, expulsa, relaxa</li>
+        <li>Cria sensação ondulatória</li>
+        <li>Extremamente prazeroso para o parceiro</li>
+      </ol>
+      
+      <h4>O Trava</h4>
+      <p>Aperto forte e sustentado:</p>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Contrai com força máxima</li>
+        <li>Mantém enquanto o parceiro tenta mover-se</li>
+        <li>Pode impedir temporariamente o movimento do pénis</li>
+        <li>Muito excitante para ambos</li>
+      </ol>
+      
+      <h3>💑 Aplicação Durante o Sexo</h3>
+      
+      <h4>Na Penetração:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Contrair quando o pénis entra</li>
+        <li>Relaxar quando sai</li>
+        <li>Alternar ritmos com as contrações</li>
+        <li>Surpreender o parceiro com apertos inesperados</li>
+      </ul>
+      
+      <h4>Para Retardar a Ejaculação:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Quando sentires que ele está próximo</li>
+        <li>Contrai firmemente e mantém</li>
+        <li>Pausa o movimento</li>
+        <li>Permite que a excitação diminua ligeiramente</li>
+      </ul>
+      
+      <h4>Para Intensificar o Orgasmo Masculino:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Durante a ejaculação, faz contrações rápidas</li>
+        <li>A estimulação adicional intensifica a sensação</li>
+      </ul>
+      
+      <h3>📅 Programa de Treino</h3>
+      
+      <h4>Semanas 1-2:</h4>
+      <p>3 séries de 10 contrações simples por dia. Foco em identificar e isolar os músculos.</p>
+      
+      <h4>Semanas 3-4:</h4>
+      <p>Adicionar contrações rápidas. Aumentar tempo de retenção para 5-8 segundos.</p>
+      
+      <h4>Semanas 5-6:</h4>
+      <p>Introduzir exercício do elevador. Começar a usar bolas chinesas leves.</p>
+      
+      <h4>Semanas 7-8:</h4>
+      <p>Praticar técnicas avançadas. Aplicar durante o sexo.</p>
+      
+      <h4>Manutenção:</h4>
+      <p>Continuar exercícios 3-4x por semana para manter os resultados.</p>
+      
+      <h3>⚠️ Precauções</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Não fazer exercícios com bexiga cheia</li>
+        <li>Não usar durante infeções urinárias ou vaginais</li>
+        <li>Consultar médico se tiveres prolapso ou outras condições</li>
+        <li>Não exagerar - músculos também precisam de descanso</li>
+        <li>Se sentires dor, para e consulta um profissional</li>
+      </ul>
+      
+      <p><strong>Conclusão:</strong> O pompoarismo é uma prática que beneficia a saúde e a vida sexual. Com dedicação e prática regular, os resultados são extraordinários. Começa hoje e em poucas semanas notarás diferenças significativas!</p>
+      </div>
+    `
+  },
+  {
+    id: "bdsm-avancado",
+    title: "BDSM: Para Além do Básico",
+    excerpt: "Técnicas, equipamentos, negociação de cenas e práticas avançadas para quem quer aprofundar o BDSM.",
+    category: "dinamicas",
+    categoryLabel: "Dinâmicas",
+    icon: "⛓️",
+    image: "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?w=600&h=400&fit=crop&q=80",
+    readTime: 20,
+    content: `
+      <div style="text-align: left;">
+      <h3>BDSM: Uma Visão Mais Profunda</h3>
+      <p>Se já leste o nosso guia para iniciantes, este artigo leva-te mais longe. O BDSM (Bondage/Disciplina, Dominação/Submissão, Sadismo/Masoquismo) é um universo vasto com inúmeras práticas e dinâmicas a explorar.</p>
+      
+      <h3>📚 Os Pilares Fundamentais</h3>
+      
+      <h4>SSC vs RACK vs PRICK</h4>
+      <p>Diferentes filosofias de consentimento:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>SSC (Safe, Sane, Consensual):</strong> Seguro, são, consensual - o básico</li>
+        <li><strong>RACK (Risk-Aware Consensual Kink):</strong> Reconhece que algumas práticas têm risco, mas são feitas com consciência</li>
+        <li><strong>PRICK (Personal Responsibility Informed Consensual Kink):</strong> Enfatiza responsabilidade pessoal e decisões informadas</li>
+      </ul>
+      
+      <h3>⛓️ Bondage Avançado</h3>
+      
+      <h4>Shibari / Kinbaku</h4>
+      <p>A arte japonesa da amarração com corda:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Materiais:</strong> Corda de juta (6-8mm), cânhamo ou algodão</li>
+        <li><strong>Comprimento padrão:</strong> 7-8 metros por corda</li>
+        <li><strong>Nós essenciais:</strong> Single column tie, double column tie, friction hitch</li>
+        <li><strong>Patterns básicos:</strong> Takate Kote (box tie), Futomomo (leg tie)</li>
+      </ul>
+      
+      <h4>Segurança em Bondage:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Tesoura de emergência:</strong> Sempre à mão, EMT shears recomendadas</li>
+        <li><strong>Verificar circulação:</strong> Dedos não devem ficar azuis ou dormentes</li>
+        <li><strong>Nunca no pescoço:</strong> Risco de asfixia ou lesão</li>
+        <li><strong>Evitar articulações:</strong> Ombros, cotovelos, joelhos são vulneráveis</li>
+        <li><strong>Tempo máximo:</strong> Não exceder 30-45 minutos em posições restritivas</li>
+      </ul>
+      
+      <h4>Suspensão</h4>
+      <p>⚠️ <strong>AVISO:</strong> Requer formação presencial com rigger experiente. Nunca aprender apenas por vídeos.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Pontos de ancoragem devem suportar 10x o peso da pessoa</li>
+        <li>Conhecimento anatómico é obrigatório</li>
+        <li>Ter sempre spotter presente</li>
+        <li>Suspensões parciais antes de totais</li>
+      </ul>
+      
+      <h3>👑 Dinâmicas D/s Estruturadas</h3>
+      
+      <h4>Contratos e Acordos</h4>
+      <p>Em dinâmicas mais sérias, muitos casais formalizam expectativas:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Limites hard:</strong> Absolutamente não negociáveis</li>
+        <li><strong>Limites soft:</strong> Podem ser explorados com cuidado</li>
+        <li><strong>Protocolos:</strong> Regras de comportamento acordadas</li>
+        <li><strong>Títulos:</strong> Como se tratam (Sir, Master, Mistress, pet, etc.)</li>
+        <li><strong>Revisão regular:</strong> Contratos devem ser revisitados e atualizados</li>
+      </ul>
+      
+      <h4>24/7 e TPE (Total Power Exchange)</h4>
+      <p>Dinâmicas que se estendem para fora do quarto:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>24/7:</strong> A dinâmica está sempre "ligada" mas com intensidade variável</li>
+        <li><strong>TPE:</strong> O Dominante tem controlo sobre a maioria das decisões</li>
+        <li><strong>High Protocol:</strong> Regras rígidas de comportamento</li>
+        <li><strong>Low Protocol:</strong> Regras mais relaxadas no dia-a-dia</li>
+      </ul>
+      <p><strong>Nota:</strong> Estas dinâmicas requerem maturidade emocional, comunicação exemplar e revisões regulares.</p>
+      
+      <h3>🔥 Impact Play Avançado</h3>
+      
+      <h4>Hierarquia de Instrumentos (do mais leve ao mais intenso):</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li><strong>Mão:</strong> O básico, permite sentir o impacto</li>
+        <li><strong>Paddle de couro macio:</strong> Thud, distribuição ampla</li>
+        <li><strong>Flogger de couro:</strong> Várias tiras, sensação variável</li>
+        <li><strong>Riding crop:</strong> Preciso, sting focado</li>
+        <li><strong>Paddle de madeira:</strong> Thud intenso</li>
+        <li><strong>Cane (cana):</strong> Sting intenso, requer treino</li>
+        <li><strong>Single tail (chicote):</strong> Avançado, pode cortar pele se mal usado</li>
+      </ol>
+      
+      <h4>Zonas Seguras:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Nádegas (zona mais segura)</li>
+        <li>✅ Parte superior das coxas</li>
+        <li>⚠️ Costas (evitar coluna e rins)</li>
+        <li>❌ Nunca: pescoço, cara, articulações, órgãos internos</li>
+      </ul>
+      
+      <h3>🌡️ Temperature Play</h3>
+      
+      <h4>Gelo:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Passar cubos de gelo pelo corpo</li>
+        <li>Inserção (com cuidados - não deixar "colar" a mucosas)</li>
+        <li>Contraste com calor para intensificar sensações</li>
+      </ul>
+      
+      <h4>Cera:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Usar apenas:</strong> Velas de parafina/soja sem aditivos</li>
+        <li><strong>Nunca:</strong> Velas de cera de abelha (ponto de fusão muito alto)</li>
+        <li><strong>Altura:</strong> Começar a 45-60cm, ajustar conforme tolerância</li>
+        <li><strong>Testar:</strong> No interior do pulso primeiro</li>
+        <li><strong>Preparação:</strong> Oleificar pele para facilitar remoção</li>
+      </ul>
+      
+      <h3>💨 Breath Play</h3>
+      <p>⚠️ <strong>AVISO IMPORTANTE:</strong> Esta é uma das práticas mais perigosas do BDSM. Mortes ocorrem mesmo entre praticantes experientes.</p>
+      
+      <p><strong>Se insistirem em explorar:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Nunca usar ligaduras ou objetos à volta do pescoço</li>
+        <li>Nunca obstruir vias aéreas completamente</li>
+        <li>Conhecer sinais de hipóxia</li>
+        <li>Saber RCP (reanimação cardiopulmonar)</li>
+        <li>Nunca fazer sozinho</li>
+      </ul>
+      
+      <h3>🎭 Negociação de Cenas</h3>
+      
+      <h4>Checklist Pré-Cena:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Limites hard e soft</strong> de ambos</li>
+        <li><strong>Safewords:</strong> Vermelho (para), amarelo (abranda), verde (continua)</li>
+        <li><strong>Condições físicas:</strong> Lesões, medicação, condições médicas</li>
+        <li><strong>Estado emocional:</strong> Stress, traumas recentes, triggers</li>
+        <li><strong>Expectativas:</strong> O que cada um espera da cena</li>
+        <li><strong>Duração aproximada</strong></li>
+        <li><strong>Aftercare necessário</strong></li>
+      </ul>
+      
+      <h4>Durante a Cena:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Check-ins regulares (especialmente com novos parceiros)</li>
+        <li>Observar linguagem corporal</li>
+        <li>Ajustar intensidade conforme resposta</li>
+        <li>O Dominante é responsável pelo bem-estar do submisso</li>
+      </ul>
+      
+      <h3>💝 Aftercare Profundo</h3>
+      <p>O aftercare é tão importante quanto a cena em si:</p>
+      
+      <h4>Físico:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Cobertores (a temperatura corporal baixa)</li>
+        <li>Água e snacks (açúcar ajuda)</li>
+        <li>Tratamento de marcas (arnica, gel calmante)</li>
+        <li>Verificar por lesões</li>
+      </ul>
+      
+      <h4>Emocional:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Abraços e carinho</li>
+        <li>Palavras de reafirmação</li>
+        <li>Espaço para processar</li>
+        <li>Check-in no dia seguinte (sub drop pode ocorrer 24-48h depois)</li>
+      </ul>
+      
+      <h4>Dom Drop:</h4>
+      <p>Os Dominantes também podem experienciar queda emocional pós-cena. Auto-cuidado é essencial.</p>
+      
+      <h3>📖 Recursos e Comunidade</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>FetLife:</strong> Rede social para a comunidade kink</li>
+        <li><strong>Munches:</strong> Encontros sociais locais (não sexuais)</li>
+        <li><strong>Workshops:</strong> Aprender técnicas presencialmente</li>
+        <li><strong>Livros:</strong> "The New Topping Book" e "The New Bottoming Book" de Dossie Easton</li>
+      </ul>
+      
+      <p><strong>Lembra-te:</strong> BDSM é um caminho de aprendizagem contínua. Não tenhas pressa, respeita os teus limites e os do teu parceiro, e mantém sempre a comunicação aberta.</p>
+      </div>
+    `
+  },
+  {
+    id: "sexo-oral-tecnicas",
+    title: "Técnicas de Sexo Oral: Guia Definitivo",
+    excerpt: "Técnicas detalhadas de cunnilingus e felação para proporcionar prazer máximo ao parceiro.",
+    category: "dicas",
+    categoryLabel: "Dicas",
+    icon: "👅",
+    image: "https://images.unsplash.com/photo-1517456215183-9a2c3a182f24?w=600&h=400&fit=crop&q=80",
+    readTime: 16,
+    content: `
+      <div style="text-align: left;">
+      <h3>A Arte do Sexo Oral</h3>
+      <p>O sexo oral é uma das formas mais íntimas de prazer entre casais. Quando feito com técnica, atenção e comunicação, pode proporcionar orgasmos intensíssimos. Este guia abrange técnicas para todos os corpos.</p>
+      
+      <h3>🌸 Cunnilingus: Prazer para a Vulva</h3>
+      
+      <h4>Anatomia Básica</h4>
+      <p>Conhecer a anatomia é fundamental:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Clítoris:</strong> O centro de prazer com 8.000+ terminações nervosas. A glande (parte visível) é apenas a ponta!</li>
+        <li><strong>Capuz do clítoris:</strong> Protege a glande, pode ser gentilmente recolhido</li>
+        <li><strong>Lábios internos e externos:</strong> Também sensíveis ao toque</li>
+        <li><strong>Entrada vaginal:</strong> Sensível, especialmente na zona do ponto G (interior)</li>
+        <li><strong>Períneo:</strong> Zona entre vagina e ânus, muito sensível</li>
+      </ul>
+      
+      <h4>Preparação</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ambiente confortável e relaxado</li>
+        <li>Almofada sob as ancas para melhor ângulo</li>
+        <li>Unhas curtas e limadas!</li>
+        <li>Barba bem cuidada (barba por fazer pode irritar)</li>
+        <li>Não ir diretamente ao clítoris</li>
+      </ul>
+      
+      <h4>Técnicas de Aquecimento</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li><strong>Beijos nas coxas:</strong> Aproximar-se lentamente, criando antecipação</li>
+        <li><strong>Respiração:</strong> Soprar suavemente sobre a zona</li>
+        <li><strong>Beijos nos lábios externos:</strong> Suaves, sem pressa</li>
+        <li><strong>Lábios ao longo da vulva:</strong> De baixo para cima, sem usar língua ainda</li>
+      </ol>
+      
+      <h4>Técnicas Principais</h4>
+      
+      <p><strong>1. O Alfabeto</strong></p>
+      <p>Desenha letras do alfabeto com a língua sobre o clítoris. Variação de movimentos natural.</p>
+      
+      <p><strong>2. Círculos</strong></p>
+      <p>Movimentos circulares à volta do clítoris. Experimenta diferentes direções, velocidades e pressões.</p>
+      
+      <p><strong>3. Cima-Baixo</strong></p>
+      <p>Lamber de baixo (entrada vaginal) até cima (clítoris) com movimentos longos e lentos.</p>
+      
+      <p><strong>4. Sucção Suave</strong></p>
+      <p>Sugar gentilmente o clítoris com os lábios. Começa muito suave! Aumenta conforme ela reagir positivamente.</p>
+      
+      <p><strong>5. Vibração</strong></p>
+      <p>Faz vibrar a língua enquanto pressiona o clítoris. Requer prática mas os resultados são excelentes.</p>
+      
+      <p><strong>6. Flattening</strong></p>
+      <p>Usa a língua toda, plana e larga, para cobrir mais área. Alterna com ponta da língua para variar.</p>
+      
+      <h4>Combinação com Dedos</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Inserir 1-2 dedos enquanto lambes o clítoris</li>
+        <li>Movimento "vem cá" para estimular ponto G</li>
+        <li>Pressão no períneo com o polegar</li>
+        <li>Ritmo sincronizado entre língua e dedos</li>
+      </ul>
+      
+      <h4>Sinais de que Está a Resultar</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ela agarra a tua cabeça ou cabelo</li>
+        <li>Pressiona contra a tua boca</li>
+        <li>Respiração acelera</li>
+        <li>Gemidos aumentam</li>
+        <li>Músculos das coxas contraem</li>
+      </ul>
+      
+      <p><strong>⚠️ Regra de Ouro:</strong> Quando ela está perto do orgasmo, NÃO mudes o que estás a fazer! Mantém o mesmo ritmo, pressão e movimento.</p>
+      
+      <h3>🍆 Felação: Prazer para o Pénis</h3>
+      
+      <h4>Anatomia Básica</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Glande:</strong> A cabeça, zona mais sensível</li>
+        <li><strong>Frénulo:</strong> Zona inferior da glande, extremamente sensível</li>
+        <li><strong>Corpo:</strong> O eixo principal</li>
+        <li><strong>Base:</strong> Ponto de encontro com os testículos</li>
+        <li><strong>Testículos:</strong> Sensíveis ao toque suave</li>
+        <li><strong>Períneo:</strong> Zona entre testículos e ânus</li>
+      </ul>
+      
+      <h4>Preparação</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Lábios húmidos, boca bem salivada</li>
+        <li>Dentes cobertos pelos lábios (SEMPRE)</li>
+        <li>Posição confortável para o pescoço</li>
+        <li>Cabelo preso se necessário</li>
+        <li>Comunicação sobre ejaculação (dentro, fora, avisar?)</li>
+      </ul>
+      
+      <h4>Técnicas de Aquecimento</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li>Beijos suaves por todo o corpo, aproximando-se</li>
+        <li>Lamber as coxas internas</li>
+        <li>Beijos no baixo abdómen</li>
+        <li>Respirar sobre o pénis (provocação)</li>
+        <li>Beijos leves no eixo, sem ainda usar língua</li>
+      </ol>
+      
+      <h4>Técnicas Principais</h4>
+      
+      <p><strong>1. O Básico Bem Feito</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Envolve a glande com os lábios</li>
+        <li>Língua circula a glande enquanto sugues suavemente</li>
+        <li>Desce gradualmente, vai só até onde for confortável</li>
+        <li>Subida lenta com sucção suave</li>
+        <li>Repete com ritmo constante</li>
+      </ul>
+      
+      <p><strong>2. Twist (Torção)</strong></p>
+      <p>Enquanto a boca sobe e desce, a mão na base faz movimento de rotação. Dupla estimulação.</p>
+      
+      <p><strong>3. Foco no Frénulo</strong></p>
+      <p>Língua concentrada no frénulo (V na parte inferior da glande). Movimentos rápidos e leves.</p>
+      
+      <p><strong>4. Deep Throat (Garganta Profunda)</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Técnica avançada, não obrigatória!</li>
+        <li>Relaxar a garganta, respirar pelo nariz</li>
+        <li>Engolir enquanto o pénis está na garganta ajuda a suprimir reflexo</li>
+        <li>Praticar gradualmente, sem forçar</li>
+        <li>Ângulo: cabeça inclinada para trás alinha melhor a garganta</li>
+      </ul>
+      
+      <p><strong>5. Ball Play</strong></p>
+      <p>Enquanto uma mão ou boca trabalha o pénis, a outra acaricia os testículos suavemente. Podem também ser gentilmente chupados.</p>
+      
+      <p><strong>6. Edging Oral</strong></p>
+      <p>Levar ao limite do orgasmo e parar. Repetir várias vezes. Orgasmo final é muito mais intenso.</p>
+      
+      <h4>Uso das Mãos</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Mão na base para complementar a boca</li>
+        <li>Movimento sincronizado com a boca</li>
+        <li>Permite controlo da profundidade</li>
+        <li>Pode usar lubrificante ou saliva</li>
+      </ul>
+      
+      <h4>Sinais de que Está a Resultar</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Pénis endurece mais</li>
+        <li>Respiração acelera</li>
+        <li>Movimentos da anca</li>
+        <li>Testículos sobem (sinal de ejaculação próxima)</li>
+        <li>Verbalizações aumentam</li>
+      </ul>
+      
+      <h3>🏳️‍🌈 Sexo Oral para Todos os Corpos</h3>
+      <p>As técnicas adaptam-se a corpos trans e não-binários. O importante é:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Comunicar sobre terminologia preferida</li>
+        <li>Perguntar o que dá prazer</li>
+        <li>Adaptar técnicas à anatomia individual</li>
+        <li>Respeitar limites e preferências</li>
+      </ul>
+      
+      <h3>🛡️ Segurança</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Dental dams:</strong> Para cunnilingus se houver preocupação com ISTs</li>
+        <li><strong>Preservativos:</strong> Para felação se necessário</li>
+        <li><strong>Evitar se tiver feridas:</strong> Na boca ou nos genitais</li>
+        <li><strong>HPV:</strong> Considerar vacinação</li>
+      </ul>
+      
+      <h3>💬 Comunicação</h3>
+      <p>O melhor "truque" é perguntar e ouvir:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>"Gostas mais assim ou assim?"</li>
+        <li>"Mais rápido ou mais devagar?"</li>
+        <li>"Mais pressão?"</li>
+        <li>"Diz-me o que sentes bem"</li>
+      </ul>
+      
+      <p><strong>Conclusão:</strong> O sexo oral é uma habilidade que melhora com prática e comunicação. Cada pessoa é diferente - o que funciona para um pode não funcionar para outro. A melhor técnica é prestar atenção ao parceiro e adaptar-te ao que lhe dá mais prazer.</p>
+      </div>
+    `
+  },
+  {
+    id: "guia-posicoes",
+    title: "Guia de Posições Sexuais: 30+ Posições Explicadas",
+    excerpt: "Desde clássicas a avançadas: descrição, dicas e para quem são recomendadas cada posição.",
+    category: "dicas",
+    categoryLabel: "Dicas",
+    icon: "🛏️",
+    image: "https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=600&h=400&fit=crop&q=80",
+    readTime: 22,
+    content: `
+      <div style="text-align: left;">
+      <h3>Guia Completo de Posições Sexuais</h3>
+      <p>Variar posições não é só sobre novidade - diferentes posições oferecem diferentes ângulos de penetração, níveis de intimidade, controlo e estimulação. Este guia organiza 30+ posições por categoria com dicas práticas.</p>
+      
+      <h3>🔰 Clássicas e Ideais para Iniciantes</h3>
+      
+      <h4>1. Missionário</h4>
+      <p><strong>Como:</strong> Parceiro recetor deitado de costas, quem penetra por cima, face a face.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Intimidade máxima (contacto visual, beijos)</li>
+        <li>✅ Controlo fácil de ritmo e profundidade</li>
+        <li>💡 Almofada sob as ancas muda o ângulo</li>
+        <li>💡 Pernas dela sobre os ombros dele = penetração mais profunda</li>
+      </ul>
+      
+      <h4>2. Missionário com Pernas Elevadas</h4>
+      <p><strong>Como:</strong> Missionário, mas ela coloca as pernas nos ombros dele ou agarra os joelhos ao peito.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Penetração mais profunda</li>
+        <li>✅ Melhor estimulação do ponto G</li>
+        <li>⚠️ Pode ser intenso, comunicar conforto</li>
+      </ul>
+      
+      <h4>3. Cowgirl (Por Cima)</h4>
+      <p><strong>Como:</strong> Quem penetra deitado, parceiro recetor sentado por cima, de frente.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Ela controla ritmo, ângulo e profundidade</li>
+        <li>✅ Mãos livres para estimulação clitoriana</li>
+        <li>✅ Visual excitante para quem está deitado</li>
+        <li>💡 Pode inclinar-se para frente ou trás para variar ângulo</li>
+      </ul>
+      
+      <h4>4. Reverse Cowgirl (Por Cima Invertido)</h4>
+      <p><strong>Como:</strong> Como cowgirl, mas ela virada de costas para ele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Visual diferente, ele vê as nádegas</li>
+        <li>✅ Ela pode estimular os testículos dele</li>
+        <li>⚠️ Cuidado com ângulo do pénis ao mover</li>
+      </ul>
+      
+      <h4>5. Doggy Style (De Quatro)</h4>
+      <p><strong>Como:</strong> Ela de quatro, ele ajoelhado por trás.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Penetração profunda</li>
+        <li>✅ Acesso visual às nádegas</li>
+        <li>✅ Ele pode estimular clítoris com a mão</li>
+        <li>💡 Ela pode baixar a cabeça ao colchão para variar ângulo</li>
+      </ul>
+      
+      <h4>6. Colher (Spooning)</h4>
+      <p><strong>Como:</strong> Ambos deitados de lado, ele por trás dela.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Íntimo, romântico e relaxado</li>
+        <li>✅ Excelente para sexo matinal preguiçoso</li>
+        <li>✅ Bom para grávidas ou pessoas com mobilidade reduzida</li>
+        <li>✅ Acesso fácil ao clítoris</li>
+      </ul>
+      
+      <h3>💪 Intermédias</h3>
+      
+      <h4>7. Face a Face de Lado</h4>
+      <p><strong>Como:</strong> Ambos deitados de lado, face a face, pernas entrelaçadas.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Máxima intimidade, beijos e abraços fáceis</li>
+        <li>✅ Ritmo mais lento, conexão emocional</li>
+        <li>💡 Ela pode pôr uma perna sobre ele para facilitar entrada</li>
+      </ul>
+      
+      <h4>8. Pretzel</h4>
+      <p><strong>Como:</strong> Ela deitada de lado, ele ajoelhado, ela envolve uma perna à volta dele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Penetração profunda com ângulo único</li>
+        <li>✅ Contacto visual possível</li>
+        <li>✅ Acesso ao clítoris</li>
+      </ul>
+      
+      <h4>9. Cadeira</h4>
+      <p><strong>Como:</strong> Ele sentado numa cadeira (sem braços), ela sentada no colo de frente ou costas.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Sair do quarto, explorar outros espaços</li>
+        <li>✅ Pés dela no chão dão-lhe controlo</li>
+        <li>💡 Cadeira firme sem rodas!</li>
+      </ul>
+      
+      <h4>10. Bridge</h4>
+      <p><strong>Como:</strong> Ele deitado, ela por cima mas inclinada para trás, apoiada nas mãos.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Visual impressionante</li>
+        <li>✅ Ângulo de penetração diferente</li>
+        <li>⚠️ Requer alguma força nos braços</li>
+      </ul>
+      
+      <h4>11. Legs Up</h4>
+      <p><strong>Como:</strong> Missionário, mas as pernas dela estão retas para cima, pés para o teto.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Penetração muito profunda</li>
+        <li>✅ Sensação de "apertado"</li>
+        <li>⚠️ Requer flexibilidade</li>
+      </ul>
+      
+      <h4>12. Flatten Doggy</h4>
+      <p><strong>Como:</strong> Ela completamente deitada de barriga para baixo, ele por cima.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Sensação diferente, mais apertado</li>
+        <li>✅ Ele pode sussurrar ao ouvido dela</li>
+        <li>💡 Almofada sob as ancas dela ajuda</li>
+      </ul>
+      
+      <h3>🔥 Avançadas</h3>
+      
+      <h4>13. Standing (De Pé)</h4>
+      <p><strong>Como:</strong> Ambos de pé, ela de costas para ele, inclinada sobre uma superfície.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Espontâneo, pode acontecer em qualquer lugar</li>
+        <li>⚠️ Diferença de altura pode ser desafio</li>
+        <li>💡 Ela em cima de algo (degrau, banquinho) pode ajudar</li>
+      </ul>
+      
+      <h4>14. Standing Face a Face</h4>
+      <p><strong>Como:</strong> Ambos de pé, face a face, ela envolve uma perna à volta dele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Apaixonado e urgente</li>
+        <li>✅ Bom contra uma parede</li>
+        <li>⚠️ Requer força e equilíbrio</li>
+      </ul>
+      
+      <h4>15. Lift (Levantada)</h4>
+      <p><strong>Como:</strong> Ele segura-a, ela envolve pernas à volta dele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Muito intenso e apaixonado</li>
+        <li>⚠️ Requer força considerável</li>
+        <li>💡 Apoiar costas dela contra parede ajuda</li>
+      </ul>
+      
+      <h4>16. Wheelbarrow (Carrinho de Mão)</h4>
+      <p><strong>Como:</strong> Ela em posição de prancha, ele segura-lhe as ancas, de pé.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Aventureira e física</li>
+        <li>⚠️ Requer força de braços dela e força dele</li>
+      </ul>
+      
+      <h4>17. Amazon</h4>
+      <p><strong>Como:</strong> Ele deitado com joelhos ao peito, ela agachada sobre ele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Ela no controlo total</li>
+        <li>✅ Inversão de papéis tradicional</li>
+        <li>⚠️ Cuidado com o ângulo do pénis</li>
+      </ul>
+      
+      <h3>🔁 Posições 69</h3>
+      
+      <h4>18. 69 Clássico</h4>
+      <p><strong>Como:</strong> Um por cima do outro, cabeças nos genitais opostos.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Prazer mútuo simultâneo</li>
+        <li>⚠️ Pode ser difícil concentrar-se enquanto recebe prazer</li>
+        <li>💡 Quem está por cima controla o ritmo</li>
+      </ul>
+      
+      <h4>19. 69 de Lado</h4>
+      <p><strong>Como:</strong> Ambos deitados de lado, cabeças nos genitais.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Mais confortável para sessões longas</li>
+        <li>✅ Ninguém suporta peso</li>
+      </ul>
+      
+      <h3>🪑 Mobiliário e Superfícies</h3>
+      
+      <h4>20. Edge of Bed (Beira da Cama)</h4>
+      <p><strong>Como:</strong> Ela deitada na beira da cama, ele de pé.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Altura perfeita para muitos casais</li>
+        <li>✅ Ele pode usar as mãos livremente</li>
+        <li>💡 Funciona também com sofá, mesa, etc.</li>
+      </ul>
+      
+      <h4>21. Countertop (Bancada)</h4>
+      <p><strong>Como:</strong> Ela sentada numa bancada/mesa, ele de pé entre as pernas dela.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Face a face, altura ajustada</li>
+        <li>✅ Excitante por ser fora do quarto</li>
+        <li>⚠️ Verificar se a superfície aguenta!</li>
+      </ul>
+      
+      <h4>22. Shower Standing</h4>
+      <p><strong>Como:</strong> No duche, ela de costas, inclinada, ele por trás.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Sensual com água a correr</li>
+        <li>⚠️ CUIDADO com escorregar!</li>
+        <li>💡 Tapete antiderrapante essencial</li>
+        <li>⚠️ Água remove lubrificação natural</li>
+      </ul>
+      
+      <h3>🔄 Para Estimulação Específica</h3>
+      
+      <h4>23. CAT (Coital Alignment Technique)</h4>
+      <p><strong>Como:</strong> Missionário, mas ele desliza o corpo para cima, osso púbico dele pressiona o clítoris dela.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Excelente para orgasmo feminino</li>
+        <li>✅ Movimento de "rock" em vez de in-out</li>
+        <li>💡 90% das mulheres precisam de estimulação clitoriana para orgasmo</li>
+      </ul>
+      
+      <h4>24. G-Spot Position</h4>
+      <p><strong>Como:</strong> Ela de costas, ancas elevadas (almofada), pernas nos ombros dele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Ângulo perfeito para ponto G</li>
+        <li>✅ Penetração profunda controlada</li>
+      </ul>
+      
+      <h4>25. P-Spot Position</h4>
+      <p><strong>Como:</strong> Ele de costas, joelhos ao peito, ela/ele usa dedos ou toy.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Acesso ideal à próstata</li>
+        <li>✅ Pode combinar com masturbação</li>
+      </ul>
+      
+      <h3>🧘 Para Conexão e Tantra</h3>
+      
+      <h4>26. Lotus (Yab-Yum)</h4>
+      <p><strong>Como:</strong> Ele sentado de pernas cruzadas, ela no colo com pernas à volta dele.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Conexão máxima, olhos nos olhos</li>
+        <li>✅ Movimento lento, foco em sensações</li>
+        <li>✅ Ideal para práticas tântricas</li>
+        <li>💡 Sincronizar respirações</li>
+      </ul>
+      
+      <h4>27. Abraço Íntimo</h4>
+      <p><strong>Como:</strong> Ambos sentados face a face, pernas entrelaçadas, abraçados.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Intimidade emocional profunda</li>
+        <li>✅ Movimentos subtis</li>
+        <li>✅ Foco em conexão mais que orgasmo</li>
+      </ul>
+      
+      <h3>📊 Tabela Resumo</h3>
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr style="background: #f8f9fa;">
+          <th style="padding: 10px; border: 1px solid #ddd;">Posição</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Intimidade</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Estimulação G</th>
+          <th style="padding: 10px; border: 1px solid #ddd;">Dificuldade</th>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Missionário</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Fácil</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Cowgirl</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Fácil</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Doggy</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Fácil</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Lotus</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Médio</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Standing</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">⭐⭐</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Difícil</td>
+        </tr>
+      </table>
+      
+      <p><strong>Dica Final:</strong> Não existe a posição "perfeita" - a melhor é aquela que dá prazer a ambos naquele momento. Experimentem, comuniquem e divirtam-se!</p>
+      </div>
+    `
+  },
+  {
+    id: "cruising-gloryholes",
+    title: "Cruising, Gloryholes e Cabines: Guia de Segurança",
+    excerpt: "Entende estas práticas, onde acontecem, protocolos não-ditos e como te proteger.",
+    category: "lifestyle",
+    categoryLabel: "Lifestyle",
+    icon: "🚪",
+    image: "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?w=600&h=400&fit=crop&q=80",
+    readTime: 14,
+    content: `
+      <div style="text-align: left;">
+      <h3>O Que São Estas Práticas?</h3>
+      <p>Cruising, gloryholes e cabines são práticas de sexo anónimo que existem há décadas. Embora controversas, são parte da realidade sexual de muitas pessoas. Este guia não faz juízos morais - o objetivo é informar para redução de riscos.</p>
+      
+      <h3>🚶 Cruising</h3>
+      <p><strong>O que é:</strong> Procura de parceiros sexuais anónimos em espaços públicos ou semi-públicos.</p>
+      
+      <h4>Locais Típicos:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Parques (especialmente à noite)</li>
+        <li>Praias isoladas</li>
+        <li>Casas de banho públicas</li>
+        <li>Áreas de descanso em autoestradas</li>
+        <li>Saunas e balneários</li>
+        <li>Algumas zonas urbanas conhecidas</li>
+      </ul>
+      
+      <h4>Linguagem Corporal e Códigos:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Contacto visual prolongado:</strong> Interesse mútuo</li>
+        <li><strong>Seguir a distância:</strong> Sinal de interesse</li>
+        <li><strong>Tocar nos genitais:</strong> Demonstração de disponibilidade</li>
+        <li><strong>Desviar o olhar ou afastar-se:</strong> Não interessado</li>
+      </ul>
+      
+      <h4>Regras Não-Ditas:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Não significa não - respeitar sempre</li>
+        <li>Discrição absoluta</li>
+        <li>Não incomodar quem não participa</li>
+        <li>Não fotografar ou filmar</li>
+        <li>Cuidado com menores e famílias no local</li>
+      </ul>
+      
+      <h3>🕳️ Gloryholes</h3>
+      <p><strong>O que é:</strong> Buracos em divisórias através dos quais ocorrem atos sexuais anónimos, tipicamente felação.</p>
+      
+      <h4>Onde Existem:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Sex shops com cabines</li>
+        <li>Clubes de sexo</li>
+        <li>Algumas saunas</li>
+        <li>Casas de banho públicas (ilegais)</li>
+        <li>Eventos/festas específicas</li>
+      </ul>
+      
+      <h4>O Apelo:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Anonimato total</li>
+        <li>Foco na sensação, não na pessoa</li>
+        <li>Fantasia de "usar e ser usado"</li>
+        <li>Para alguns, a despersonalização é excitante</li>
+      </ul>
+      
+      <h3>🚪 Cabines de Sex Shop</h3>
+      <p><strong>O que são:</strong> Pequenas cabines individuais em sex shops, originalmente para ver filmes pornográficos, mas frequentemente usadas para encontros.</p>
+      
+      <h4>Como Funcionam:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Paga-se por tempo (moedas/fichas)</li>
+        <li>Cabines individuais ou duplas</li>
+        <li>Algumas têm gloryholes entre si</li>
+        <li>Outras têm janelas para voyeurismo</li>
+        <li>Funcionários geralmente "fazem vista grossa"</li>
+      </ul>
+      
+      <h3>🏳️‍🌈 Contexto Histórico</h3>
+      <p>Estas práticas têm raízes profundas na cultura gay, especialmente em épocas onde a homossexualidade era criminalizada ou fortemente estigmatizada. Eram (e para alguns ainda são) as únicas formas de expressão sexual disponíveis.</p>
+      
+      <p>Hoje, com apps de encontros e maior aceitação social, diminuíram mas não desapareceram. Continuam a atrair pessoas de todas as orientações por diversas razões.</p>
+      
+      <h3>⚠️ Riscos e Como Minimizá-los</h3>
+      
+      <h4>Riscos Legais:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Exposição indecente é crime</li>
+        <li>Atos sexuais em público são ilegais</li>
+        <li>Rusgas policiais acontecem</li>
+        <li>Registo criminal pode ter consequências sérias</li>
+      </ul>
+      <p><strong>Redução de risco:</strong> Preferir locais privados/legais (clubes, saunas com licença).</p>
+      
+      <h4>Riscos de Saúde:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>ISTs:</strong> Risco muito elevado com múltiplos parceiros anónimos</li>
+        <li><strong>HIV:</strong> Risco significativo sem proteção</li>
+        <li><strong>Outras infeções:</strong> Hepatite, sífilis, gonorreia, clamídia, HPV</li>
+      </ul>
+      
+      <p><strong>Redução de risco:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Preservativo SEMPRE (levar os teus próprios)</li>
+        <li>Considerar PrEP se prática frequente</li>
+        <li>Testes regulares (a cada 3 meses se ativo)</li>
+        <li>Evitar práticas de alto risco (penetração anal sem proteção)</li>
+        <li>Dental dams para sexo oral</li>
+      </ul>
+      
+      <h4>Riscos de Segurança Pessoal:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Assaltos</li>
+        <li>Violência homofóbica</li>
+        <li>Chantagem</li>
+        <li>Gravações sem consentimento</li>
+      </ul>
+      
+      <p><strong>Redução de risco:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Não levar objetos de valor</li>
+        <li>Informar alguém de confiança (sem detalhes se preferir)</li>
+        <li>Confiar nos instintos - se algo parecer mal, sair</li>
+        <li>Não aceitar bebidas de estranhos</li>
+        <li>Evitar zonas completamente isoladas</li>
+      </ul>
+      
+      <h3>👥 Para Casais</h3>
+      <p>Alguns casais exploram estas práticas juntos como forma de fetiche ou fantasia:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Voyeurismo:</strong> Um observa o outro</li>
+        <li><strong>Partilha:</strong> Dinâmicas hotwife/cuckold</li>
+        <li><strong>Festas organizadas:</strong> Ambientes mais controlados</li>
+      </ul>
+      
+      <h4>Regras Importantes para Casais:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Acordar TUDO antes</li>
+        <li>Definir limites claros</li>
+        <li>Sistema de sinais para "vamos embora"</li>
+        <li>Não separar-se no local</li>
+        <li>Debriefing depois - processar emoções</li>
+      </ul>
+      
+      <h3>🌐 Alternativas Mais Seguras</h3>
+      <p>Se a fantasia do anonimato atrai mas os riscos preocupam:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Clubes de swing:</strong> Ambiente controlado, regras claras</li>
+        <li><strong>Festas privadas:</strong> Convidados verificados</li>
+        <li><strong>Apps de encontros:</strong> Permite algum screening</li>
+        <li><strong>Role-play:</strong> Simular a situação com parceiro de confiança</li>
+        <li><strong>Gloryholes caseiros:</strong> Fantasiar com parceiro fixo</li>
+      </ul>
+      
+      <h3>🧠 Reflexões Finais</h3>
+      <p>O sexo anónimo não é inerentemente "mau" ou "bom" - é uma escolha pessoal que adultos informados podem fazer. O importante é:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Conhecer os riscos reais</li>
+        <li>Tomar precauções adequadas</li>
+        <li>Respeitar sempre os outros</li>
+        <li>Não colocar em risco quem não consente</li>
+        <li>Cuidar da saúde sexual com testes regulares</li>
+      </ul>
+      
+      <p><strong>Se praticas:</strong> Faz testes regularmente, usa proteção sempre, e não tenhas vergonha de falar com profissionais de saúde - eles não estão lá para julgar, mas para ajudar.</p>
+      </div>
+    `
+  },
+  {
+    id: "ist-preservativo",
+    title: "ISTs e Preservativo: Guia de Saúde Sexual",
+    excerpt: "Conhece as infeções sexualmente transmissíveis, como te proteger e a importância crucial do preservativo.",
+    category: "saude",
+    categoryLabel: "Saúde",
+    icon: "🛡️",
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=400&fit=crop&q=80",
+    readTime: 18,
+    content: `
+      <div style="text-align: left;">
+      <h3>Saúde Sexual: Um Guia Essencial</h3>
+      <p>Falar de sexo sem falar de saúde sexual é incompleto. Este guia aborda ISTs (Infeções Sexualmente Transmissíveis), como funcionam, como prevenir e porque o preservativo continua a ser a ferramenta mais importante da tua vida sexual.</p>
+      
+      <h3>🔬 Principais ISTs</h3>
+      
+      <h4>HIV/SIDA</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Vírus que ataca o sistema imunitário</li>
+        <li><strong>Transmissão:</strong> Sangue, sémen, fluidos vaginais, leite materno</li>
+        <li><strong>Sintomas iniciais:</strong> Muitas vezes nenhuns (ou tipo gripe)</li>
+        <li><strong>Tratamento:</strong> Antirretrovirais (controlam mas não curam)</li>
+        <li><strong>Prevenção:</strong> Preservativo, PrEP, não partilhar agulhas</li>
+        <li><strong>Nota:</strong> Pessoa com carga viral indetectável não transmite (I=I)</li>
+      </ul>
+      
+      <h4>Clamídia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Infeção bacteriana, a mais comum</li>
+        <li><strong>Transmissão:</strong> Sexo vaginal, anal, oral; parto</li>
+        <li><strong>Sintomas:</strong> Frequentemente nenhuns! Quando há: corrimento, dor ao urinar</li>
+        <li><strong>Tratamento:</strong> Antibióticos (cura total)</li>
+        <li><strong>Complicações se não tratada:</strong> Infertilidade, DIP</li>
+      </ul>
+      
+      <h4>Gonorreia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Infeção bacteriana</li>
+        <li><strong>Transmissão:</strong> Sexo vaginal, anal, oral</li>
+        <li><strong>Sintomas:</strong> Corrimento amarelo/verde, dor ao urinar, dor testicular</li>
+        <li><strong>Tratamento:</strong> Antibióticos (atenção: resistência crescente)</li>
+        <li><strong>Nota:</strong> Pode infetar garganta e reto também</li>
+      </ul>
+      
+      <h4>Sífilis</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Infeção bacteriana em estágios</li>
+        <li><strong>Transmissão:</strong> Contacto com feridas sifilíticas</li>
+        <li><strong>Estágios:</strong>
+          <ul style="padding-left: 20px;">
+            <li>Primário: Ferida indolor (cancro duro)</li>
+            <li>Secundário: Erupções, febre, mal-estar</li>
+            <li>Latente: Sem sintomas (anos)</li>
+            <li>Terciário: Danos graves em órgãos</li>
+          </ul>
+        </li>
+        <li><strong>Tratamento:</strong> Penicilina (muito eficaz nos estágios iniciais)</li>
+      </ul>
+      
+      <h4>Herpes (HSV-1 e HSV-2)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Vírus que causa feridas/bolhas</li>
+        <li><strong>Transmissão:</strong> Contacto pele com pele, especialmente durante surtos</li>
+        <li><strong>Sintomas:</strong> Bolhas dolorosas que rebentam e formam crostas</li>
+        <li><strong>Tratamento:</strong> Antivirais (controlam surtos, não curam)</li>
+        <li><strong>Nota:</strong> Muito comum, estigma exagerado, muitos têm sem saber</li>
+      </ul>
+      
+      <h4>HPV (Vírus do Papiloma Humano)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Família de vírus (200+ tipos)</li>
+        <li><strong>Transmissão:</strong> Contacto pele com pele genital</li>
+        <li><strong>Sintomas:</strong> Muitas vezes nenhuns; alguns tipos causam verrugas</li>
+        <li><strong>Riscos:</strong> Alguns tipos causam cancro (colo do útero, ânus, garganta)</li>
+        <li><strong>Prevenção:</strong> VACINA (eficaz e segura), preservativo (proteção parcial)</li>
+        <li><strong>Nota:</strong> A maioria dos sexualmente ativos terá HPV em algum momento</li>
+      </ul>
+      
+      <h4>Hepatite B e C</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Vírus que afetam o fígado</li>
+        <li><strong>Transmissão:</strong> Sangue, sémen, fluidos vaginais (B mais que C)</li>
+        <li><strong>Prevenção:</strong> Vacina para Hep B, preservativo, não partilhar agulhas</li>
+        <li><strong>Tratamento:</strong> Hep C tem cura; Hep B tem tratamento crónico</li>
+      </ul>
+      
+      <h4>Tricomoníase</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Parasita</li>
+        <li><strong>Sintomas:</strong> Corrimento com odor, ardor, comichão</li>
+        <li><strong>Tratamento:</strong> Antibiótico (dose única)</li>
+        <li><strong>Nota:</strong> Muito comum, fácil de tratar</li>
+      </ul>
+      
+      <h3>🛡️ O Preservativo: O Teu Melhor Amigo</h3>
+      
+      <h4>Eficácia</h4>
+      <p>Quando usado corretamente e consistentemente:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>HIV:</strong> ~98% eficaz</li>
+        <li><strong>Gonorreia/Clamídia:</strong> ~98% eficaz</li>
+        <li><strong>Sífilis:</strong> Alta proteção</li>
+        <li><strong>Herpes/HPV:</strong> Proteção parcial (não cobre toda a área)</li>
+        <li><strong>Gravidez:</strong> ~98% com uso perfeito, ~85% uso típico</li>
+      </ul>
+      
+      <h4>Como Usar Corretamente</h4>
+      <ol style="text-align: left; padding-left: 20px;">
+        <li><strong>Verificar validade</strong> e integridade da embalagem</li>
+        <li><strong>Abrir com cuidado</strong> (não usar dentes ou tesouras)</li>
+        <li><strong>Verificar o lado certo</strong> (deve desenrolar facilmente)</li>
+        <li><strong>Apertar a ponta</strong> para deixar espaço para o sémen</li>
+        <li><strong>Desenrolar até à base</strong> do pénis ereto</li>
+        <li><strong>Usar desde o início</strong> (pré-ejaculação pode transmitir ISTs)</li>
+        <li><strong>Após ejaculação:</strong> Segurar a base ao retirar</li>
+        <li><strong>Descartar:</strong> Dar um nó e deitar no lixo (não sanita)</li>
+        <li><strong>Um preservativo = um uso</strong></li>
+      </ol>
+      
+      <h4>Erros Comuns</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ Usar lubrificante à base de óleo (destrói látex)</li>
+        <li>❌ Guardar na carteira (calor e fricção danificam)</li>
+        <li>❌ Usar dois ao mesmo tempo (fricção causa rotura)</li>
+        <li>❌ Colocar ao contrário e virar (pré-ejaculação no exterior)</li>
+        <li>❌ Usar tamanho errado (muito apertado rebenta, muito largo escorrega)</li>
+      </ul>
+      
+      <h4>Tipos de Preservativo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Látex:</strong> O standard, muito eficaz</li>
+        <li><strong>Poliuretano:</strong> Para alérgicos a látex</li>
+        <li><strong>Poliisopreno:</strong> Alternativa ao látex, mais elástico</li>
+        <li><strong>Pele de cordeiro:</strong> NÃO protege contra ISTs (só gravidez)</li>
+        <li><strong>Preservativo feminino/interno:</strong> Alternativa, ela controla</li>
+      </ul>
+      
+      <h3>💊 PrEP e PEP</h3>
+      
+      <h4>PrEP (Profilaxia Pré-Exposição)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Medicamento diário que previne HIV</li>
+        <li><strong>Eficácia:</strong> ~99% quando tomado corretamente</li>
+        <li><strong>Para quem:</strong> Pessoas com risco elevado de HIV</li>
+        <li><strong>Em Portugal:</strong> Disponível no SNS para grupos de risco</li>
+        <li><strong>Não substitui preservativo:</strong> Não protege contra outras ISTs</li>
+      </ul>
+      
+      <h4>PEP (Profilaxia Pós-Exposição)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>O que é:</strong> Tratamento de emergência após possível exposição ao HIV</li>
+        <li><strong>Quando:</strong> Idealmente dentro de 2h, até 72h máximo</li>
+        <li><strong>Duração:</strong> 28 dias de medicação</li>
+        <li><strong>Onde obter:</strong> Urgências hospitalares</li>
+      </ul>
+      
+      <h3>🩺 Testes: Quando e Como</h3>
+      
+      <h4>Com Que Frequência?</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Novo parceiro:</strong> Antes de sexo sem proteção</li>
+        <li><strong>Múltiplos parceiros:</strong> A cada 3-6 meses</li>
+        <li><strong>Parceiro fixo, monogâmico:</strong> Anualmente como rotina</li>
+        <li><strong>Após exposição de risco:</strong> Imediatamente + follow-up</li>
+      </ul>
+      
+      <h4>Janela Imunológica</h4>
+      <p>Tempo entre infeção e teste detetar:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>HIV:</strong> 2-12 semanas (depende do tipo de teste)</li>
+        <li><strong>Clamídia/Gonorreia:</strong> 1-2 semanas</li>
+        <li><strong>Sífilis:</strong> 3-6 semanas</li>
+        <li><strong>Hepatite B:</strong> 6 semanas - 6 meses</li>
+      </ul>
+      
+      <h4>Onde Fazer Testes em Portugal</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Centro de Saúde (médico de família)</li>
+        <li>CAD (Centro de Aconselhamento e Deteção) - anónimo e gratuito</li>
+        <li>CheckpointLX (Lisboa) - comunidade LGBTQ+</li>
+        <li>Abraço, GAT e outras ONGs</li>
+        <li>Laboratórios privados</li>
+      </ul>
+      
+      <h3>💬 Falar com Parceiros</h3>
+      <p>Conversas sobre ISTs são importantes mas desconfortáveis. Dicas:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ter a conversa ANTES de ir para a cama</li>
+        <li>Normalizar: "Quando foi o teu último teste?"</li>
+        <li>Partilhar primeiro: "Eu fiz testes há X meses"</li>
+        <li>Sem julgamentos</li>
+        <li>Se tiveres uma IST, informar parceiros anteriores</li>
+      </ul>
+      
+      <h3>⚠️ Mitos Perigosos</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ "Consigo ver se alguém tem IST" - Muitas são assintomáticas</li>
+        <li>❌ "Só homossexuais apanham HIV" - Qualquer pessoa pode</li>
+        <li>❌ "Sexo oral é seguro" - Pode transmitir várias ISTs</li>
+        <li>❌ "Lavar depois previne" - Não é eficaz</li>
+        <li>❌ "Só preciso de testar se tiver sintomas" - Maioria não tem sintomas</li>
+        <li>❌ "Uma vez curado, estou imune" - Podes reinfetar</li>
+      </ul>
+      
+      <h3>🌟 Conclusão</h3>
+      <p>Saúde sexual é responsabilidade de todos os envolvidos. Usar preservativo, fazer testes regularmente e ter conversas honestas são atos de cuidado - contigo e com os outros.</p>
+      
+      <p><strong>Lembra-te:</strong> Ter uma IST não é vergonha nem significa que fizeste algo "errado". São infeções como outras - o importante é diagnosticar, tratar e proteger-se e aos outros.</p>
+      
+      <p><strong>Sexo seguro é sexo bom.</strong> Cuida-te. 💜</p>
+      </div>
+    `
   }
 ];
