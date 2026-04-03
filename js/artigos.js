@@ -43,8 +43,11 @@ function loadArticles() {
   if (!grid) return;
   
   var filtered = currentArticleCategory === 'all' 
-    ? articlesData 
+    ? articlesData.slice() 
     : articlesData.filter(function(a) { return a.category === currentArticleCategory; });
+  
+  // Ordenar por campo 'order' (menor primeiro)
+  filtered.sort(function(a, b) { return (a.order || 999) - (b.order || 999); });
   
   if (filtered.length === 0) {
     grid.innerHTML = '<div class="no-articles"><p>Nenhum post encontrado nesta categoria.</p></div>';
