@@ -233,6 +233,8 @@ body {
 
 /* Article Card */
 .article-card {
+  display: block;
+  text-decoration: none;
   background: white;
   border-radius: 16px;
   overflow: hidden;
