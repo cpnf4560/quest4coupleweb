@@ -90,8 +90,11 @@ function displayArticle(article) {
   }
   document.getElementById('articleIcon').textContent = article.icon;
   
-  // Conteúdo principal
+  // Conteúdo principal - inserir primeiro sem curiosidades
   document.getElementById('articleContent').innerHTML = article.content;
+  
+  // Carregar estatísticas e inserir curiosidades (async)
+  loadAndInsertCuriosities(article.id);
   
   // Discussão e Comentários
   var discussionSection = '';
@@ -103,6 +106,126 @@ function displayArticle(article) {
   
   // Artigos relacionados
   loadRelatedArticles(article);
+}
+
+/**
+ * Carrega estatísticas do Firebase e insere curiosidades no artigo
+ */
+async function loadAndInsertCuriosities(articleId) {
+  // Verificar se o sistema de estatísticas está disponível
+  if (!window.articleStatistics) {
+    console.log('📊 Sistema de estatísticas não disponível');
+    return;
+  }
+  
+  // Verificar se há mapeamento para este artigo
+  if (!window.articleStatistics.articleQuestionMapping[articleId]) {
+    console.log('📊 Artigo sem mapeamento de estatísticas:', articleId);
+    return;
+  }
+  
+  try {
+    // Tentar carregar do cache público do Firebase
+    let analyticsData = [];
+    
+    if (typeof firebase !== 'undefined' && firebase.firestore) {
+      const db = firebase.firestore();
+      const cacheDoc = await db.collection('publicStatistics').doc('questionAnalytics').get();
+      
+      if (cacheDoc.exists) {
+        const data = cacheDoc.data();
+        analyticsData = data.questions || [];
+        console.log('📊 Estatísticas carregadas:', analyticsData.length, 'questões');
+      }
+    }
+    
+    if (analyticsData.length === 0) {
+      console.log('📊 Sem dados de estatísticas disponíveis');
+      return;
+    }
+    
+    // Gerar curiosidades
+    const curiosities = window.articleStatistics.generateArticleCuriosities(articleId, analyticsData);
+    
+    if (curiosities.length === 0) {
+      console.log('📊 Nenhuma curiosidade gerada para:', articleId);
+      return;
+    }
+    
+    console.log('📊 Curiosidades geradas:', curiosities.length);
+    
+    // Inserir curiosidades no conteúdo
+    insertCuriositiesIntoDOM(curiosities);
+    
+  } catch (error) {
+    console.error('📊 Erro ao carregar estatísticas:', error);
+  }
+}
+
+/**
+ * Insere curiosidades no DOM do artigo
+ */
+function insertCuriositiesIntoDOM(curiosities) {
+  const contentEl = document.getElementById('articleContent');
+  if (!contentEl || curiosities.length === 0) return;
+  
+  // Encontrar pontos de inserção (após h3 ou h4 seguidos de parágrafos)
+  const headings = contentEl.querySelectorAll('h3, h4');
+  
+  if (headings.length === 0) {
+    // Sem headings, adicionar no final
+    curiosities.forEach(c => {
+      const div = document.createElement('div');
+      div.innerHTML = c.html;
+      contentEl.appendChild(div.firstElementChild || div);
+    });
+    return;
+  }
+  
+  // Distribuir curiosidades pelo artigo
+  const insertionPoints = Math.min(curiosities.length, Math.floor(headings.length / 2));
+  const step = Math.max(2, Math.floor(headings.length / (insertionPoints + 1)));
+  
+  let curiosityIndex = 0;
+  
+  for (let i = step; i < headings.length && curiosityIndex < curiosities.length; i += step) {
+    const heading = headings[i];
+    
+    // Encontrar o próximo elemento após o heading para inserir depois
+    let insertAfter = heading.nextElementSibling;
+    
+    // Pular até encontrar um parágrafo, lista ou div
+    let attempts = 0;
+    while (insertAfter && !['P', 'DIV', 'UL', 'OL'].includes(insertAfter.tagName) && attempts < 5) {
+      insertAfter = insertAfter.nextElementSibling;
+      attempts++;
+    }
+    
+    if (insertAfter) {
+      const div = document.createElement('div');
+      div.innerHTML = curiosities[curiosityIndex].html;
+      const curiosityEl = div.firstElementChild || div;
+      
+      // Inserir após o elemento encontrado
+      if (insertAfter.nextSibling) {
+        insertAfter.parentNode.insertBefore(curiosityEl, insertAfter.nextSibling);
+      } else {
+        insertAfter.parentNode.appendChild(curiosityEl);
+      }
+      
+      curiosityIndex++;
+    }
+  }
+  
+  // Se ainda há curiosidades, adicionar no final
+  while (curiosityIndex < curiosities.length) {
+    const div = document.createElement('div');
+    div.innerHTML = curiosities[curiosityIndex].html;
+    contentEl.appendChild(div.firstElementChild || div);
+    curiosityIndex++;
+  }
+  
+  console.log('📊 Curiosidades inseridas no DOM');
 }
 
 function updateMetaTags(article) {

@@ -6,6 +6,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "👀",
     image: "../assets/blog/cuckhold-dinamicas.png",
     readTime: 15,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O que são as dinâmicas de Cuckold/Cuckquean?</h3>
@@ -154,6 +155,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🎲",
     image: "../assets/blog/brinquedos-casais.png",
     readTime: 12,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Porque usar brinquedos sexuais?</h3>
@@ -354,6 +356,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "📋",
     image: "../assets/blog/tasklists-sexuais.png",
     readTime: 14,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que São Tasklists Sexuais?</h3>
@@ -598,6 +601,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "✈️",
     image: "../assets/blog/turismo-adulto.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que É Turismo Adulto?</h3>
@@ -855,6 +859,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🏖️",
     image: "../assets/blog/praias-nudistas-portugal.png",
     readTime: 14,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Naturismo em Portugal: Uma Tradição Discreta</h3>
@@ -1098,6 +1103,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "💆",
     image: "../assets/blog/massagem-tantrica.png",
     readTime: 20,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que É a Massagem Tântrica?</h3>
@@ -1388,6 +1394,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🩺",
     image: "../assets/blog/anorgasmia.png",
     readTime: 16,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que É Anorgasmia?</h3>
@@ -1671,6 +1678,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "👶",
     image: "../assets/blog/sexo-pos-filhos.png",
     readTime: 14,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>A Realidade da Sexualidade Pós-Filhos</h3>
@@ -1854,6 +1862,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "💬",
     image: "../assets/blog/comunicacao-casal.png",
     readTime: 12,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Elefante no Quarto (ou na Cama)</h3>
@@ -2083,6 +2092,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "⛓️",
     image: "../assets/blog/bdsm-iniciantes.jpg",
     readTime: 16,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Desmistificar o BDSM</h3>
@@ -2449,6 +2459,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "💕",
     image: "../assets/blog/poliamor.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que É Poliamor?</h3>
@@ -2721,6 +2732,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🔄",
     image: "../assets/blog/swing-iniciantes.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que É o Swing?</h3>
@@ -3035,6 +3047,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🍑",
     image: "../assets/blog/sexo-anal-guia.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Introdução ao Sexo Anal</h3>
@@ -3199,6 +3212,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "💪",
     image: "../assets/blog/pompoarismo-guia.png",
     readTime: 14,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O que é Pompoarismo?</h3>
@@ -3396,6 +3410,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "⛓️",
     image: "../assets/blog/bdsm-avancado.png",
     readTime: 20,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>BDSM: Uma Visão Mais Profunda</h3>
@@ -3577,6 +3592,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "👅",
     image: "../assets/blog/sexo-oral-tecnicas.png",
     readTime: 16,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>A Arte do Sexo Oral</h3>
@@ -3768,6 +3784,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🛏️",
     image: "../assets/blog/guia-posicoes.jpg",
     readTime: 22,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Guia Completo de Posições Sexuais</h3>
@@ -4058,6 +4075,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🚪",
     image: "../assets/blog/cruising.jpg",
     readTime: 14,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O Que São Estas Práticas?</h3>
@@ -4224,6 +4242,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🛡️",
     image: "../assets/blog/ist-preservativo.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>Saúde Sexual: Um Guia Essencial</h3>
@@ -4439,6 +4458,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🚗",
     image: "../assets/blog/dogging-guia.png",
     readTime: 14,
+    publishDate: "2026-04-03",
     discussionPrompt: "Já experimentaram ou têm curiosidade sobre dogging? O que vos atrai ou afasta nesta prática?",
     content: `
       <div style="text-align: left;">
@@ -4551,6 +4571,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🔄",
     image: "../assets/blog/pegging-guia.png",
     readTime: 16,
+    publishDate: "2026-04-03",
     discussionPrompt: "O pegging ainda é tabu para muitos casais heterossexuais. Acham que a masculinidade está ligada a quem penetra? Partilhem as vossas reflexões!",
     content: `
       <div style="text-align: left;">
@@ -4726,6 +4747,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "📖",
     image: "../assets/blog/glossario-fetiches.jpg",
     readTime: 25,
+    publishDate: "2026-04-03",
     discussionPrompt: "Descobriram algum fetiche novo nesta lista que vos despertou curiosidade? Ou algum que já praticam? Partilhem (anonimamente se preferirem)!",
     content: `
       <div style="text-align: left;">
@@ -4991,6 +5013,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "🧠",
     image: "../assets/blog/parafilias.png",
     readTime: 18,
+    publishDate: "2026-04-03",
     discussionPrompt: "Acham que a sociedade é demasiado rápida a julgar interesses sexuais diferentes? Onde está a linha entre 'diferente' e 'problemático'?",
     content: `
       <div style="text-align: left;">
@@ -5161,6 +5184,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "👥",
     image: "../assets/blog/menage.jpg",
     readTime: 18,
+    publishDate: "2026-04-03",
     content: `
       <div style="text-align: left;">
       <h3>O que é um Ménage à Trois?</h3>
