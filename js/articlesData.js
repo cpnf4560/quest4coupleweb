@@ -5160,7 +5160,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "👥",
-    image: "",
+    image: "../assets/blog/menage.jpg",
     readTime: 18,
     content: `
       <div style="text-align: left;">
