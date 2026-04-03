@@ -38,7 +38,7 @@ function loadArticles() {
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div class="no-articles">
-        <p>Nenhum artigo encontrado nesta categoria.</p>
+        <p>Nenhum post encontrado nesta categoria.</p>
       </div>
     `;
     return;
