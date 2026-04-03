@@ -100,9 +100,12 @@ function displayArticle(article) {
   var discussionSection = '';
   if (article.discussionPrompt) {
     discussionSection = buildDiscussionSection(article);
-  }
+  }  
   discussionSection += buildCommentsSection(article.id);
   document.getElementById('discussionCommentsSection').innerHTML = discussionSection;
+  
+  // Carregar comentários do Firebase (async)
+  loadFirebaseComments(article.id);
   
   // Artigos relacionados
   loadRelatedArticles(article);
@@ -371,32 +374,25 @@ function buildDiscussionSection(article) {
 }
 
 function buildCommentsSection(articleId) {
-  var comments = getComments(articleId);
-  
-  var commentsHtml = '';
-  if (comments.length > 0) {
-    commentsHtml = comments.map(function(c) {
-      return renderComment(c, articleId);
-    }).join('');
-  } else {
-    commentsHtml = '<div class="no-comments"><p>Ainda não há comentários. Sê o primeiro a partilhar!</p></div>';
-  }
-  
   return '<div class="comments-section">' +
-    '<h3 class="comments-title">💬 Comentários (' + comments.length + ')</h3>' +
+    '<h3 class="comments-title">💬 Comentários <span id="commentsCount"></span></h3>' +
     
     '<div class="comment-form">' +
       '<div class="comment-form-header">' +
         '<input type="text" id="commentAuthor" placeholder="Nome (ou deixa vazio para anónimo)" maxlength="30">' +
       '</div>' +
-      '<textarea id="commentText" placeholder="Partilha a tua experiência ou opinião... Os comentários são guardados localmente no teu dispositivo." maxlength="1000" rows="4"></textarea>' +
+      '<textarea id="commentText" placeholder="Partilha a tua experiência ou opinião..." maxlength="1000" rows="4"></textarea>' +
       '<div class="comment-form-footer">' +
-        '<span class="comment-privacy">🔒 Os comentários ficam apenas no teu dispositivo</span>' +
+        '<span class="comment-privacy">🌐 Os comentários são públicos e visíveis por todos</span>' +
         '<button onclick="submitComment(\'' + articleId + '\')" class="btn-comment">Publicar Comentário</button>' +
       '</div>' +
     '</div>' +
     
-    '<div class="comments-list" id="commentsList">' + commentsHtml + '</div>' +
+    '<div class="comments-list" id="commentsList">' +
+      '<div class="comments-loading" style="text-align:center; padding:20px; color:#6c757d;">' +
+        '<p>A carregar comentários...</p>' +
+      '</div>' +
+    '</div>' +
   '</div>';
 }
 
@@ -460,10 +456,10 @@ function renderReply(reply, articleId, parentId) {
 }
 
 // ================================
-// COMMENT ACTIONS
+// COMMENT ACTIONS (FIREBASE PUBLIC)
 // ================================
 
-function submitComment(articleId) {
+async function submitComment(articleId) {
   var authorInput = document.getElementById('commentAuthor');
   var textInput = document.getElementById('commentText');
   
@@ -474,40 +470,65 @@ function submitComment(articleId) {
   }
   
   var comment = {
-    id: generateId(),
-    author: authorInput.value.trim() || '',
+    author: authorInput.value.trim() || 'Anónimo',
     text: text,
-    timestamp: Date.now(),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     likes: 0,
-    liked: false,
+    likedBy: [],
     replies: []
   };
   
-  saveComment(articleId, comment);
-  
-  // Limpar form
-  textInput.value = '';
-  
-  // Refresh comments
-  refreshComments(articleId);
-  
-  showToast('Comentário publicado! 💬');
+  try {
+    var db = firebase.firestore();
+    await db.collection('blog_comments').doc(articleId).collection('comments').add(comment);
+    
+    // Limpar form
+    textInput.value = '';
+    
+    // Refresh comments
+    loadFirebaseComments(articleId);
+    
+    showToast('Comentário publicado! 💬');
+  } catch (error) {
+    console.error('Erro ao publicar comentário:', error);
+    // Fallback para localStorage
+    comment.id = generateId();
+    comment.timestamp = Date.now();
+    saveComment(articleId, comment);
+    refreshCommentsFromLocal(articleId);
+    showToast('Comentário guardado localmente 💬');
+  }
 }
 
-function likeComment(articleId, commentId) {
-  var comments = getComments(articleId);
-  var comment = comments.find(function(c) { return c.id === commentId; });
-  
-  if (comment) {
-    if (comment.liked) {
-      comment.likes = Math.max(0, (comment.likes || 0) - 1);
-      comment.liked = false;
-    } else {
-      comment.likes = (comment.likes || 0) + 1;
-      comment.liked = true;
+async function likeComment(articleId, commentId) {
+  try {
+    var db = firebase.firestore();
+    var docRef = db.collection('blog_comments').doc(articleId).collection('comments').doc(commentId);
+    var doc = await docRef.get();
+    
+    if (doc.exists) {
+      var data = doc.data();
+      var visitorId = getVisitorId();
+      var likedBy = data.likedBy || [];
+      
+      if (likedBy.includes(visitorId)) {
+        // Unlike
+        await docRef.update({
+          likes: firebase.firestore.FieldValue.increment(-1),
+          likedBy: firebase.firestore.FieldValue.arrayRemove(visitorId)
+        });
+      } else {
+        // Like
+        await docRef.update({
+          likes: firebase.firestore.FieldValue.increment(1),
+          likedBy: firebase.firestore.FieldValue.arrayUnion(visitorId)
+        });
+      }
+      
+      loadFirebaseComments(articleId);
     }
-    saveComments(articleId, comments);
-    refreshComments(articleId);
+  } catch (error) {
+    console.error('Erro ao dar like:', error);
   }
 }
 
@@ -542,7 +563,7 @@ function cancelReply(btn) {
   if (form) form.remove();
 }
 
-function submitReply(commentId, btn) {
+async function submitReply(commentId, btn) {
   var form = btn.closest('.reply-form');
   var authorInput = form.querySelector('.reply-author');
   var textInput = form.querySelector('.reply-text');
@@ -554,59 +575,245 @@ function submitReply(commentId, btn) {
   }
   
   var articleId = currentArticle.id;
-  var comments = getComments(articleId);
-  var comment = comments.find(function(c) { return c.id === commentId; });
   
-  if (comment) {
-    if (!comment.replies) comment.replies = [];
+  try {
+    var db = firebase.firestore();
+    var docRef = db.collection('blog_comments').doc(articleId).collection('comments').doc(commentId);
     
-    comment.replies.push({
+    var reply = {
       id: generateId(),
-      author: authorInput.value.trim() || '',
+      author: authorInput.value.trim() || 'Anónimo',
       text: text,
       timestamp: Date.now()
+    };
+    
+    await docRef.update({
+      replies: firebase.firestore.FieldValue.arrayUnion(reply)
     });
     
-    saveComments(articleId, comments);
-    refreshComments(articleId);
+    loadFirebaseComments(articleId);
     showToast('Resposta publicada! 💬');
+  } catch (error) {
+    console.error('Erro ao responder:', error);
+    showToast('Erro ao publicar resposta ❌');
   }
 }
 
-function deleteComment(articleId, commentId) {
+async function deleteComment(articleId, commentId) {
   if (!confirm('Tens a certeza que queres eliminar este comentário?')) return;
   
-  var comments = getComments(articleId);
-  comments = comments.filter(function(c) { return c.id !== commentId; });
-  saveComments(articleId, comments);
-  refreshComments(articleId);
-  showToast('Comentário eliminado 🗑️');
+  try {
+    var db = firebase.firestore();
+    await db.collection('blog_comments').doc(articleId).collection('comments').doc(commentId).delete();
+    loadFirebaseComments(articleId);
+    showToast('Comentário eliminado 🗑️');
+  } catch (error) {
+    console.error('Erro ao eliminar:', error);
+    showToast('Sem permissão para eliminar ❌');
+  }
 }
 
-function deleteReply(articleId, commentId, replyId) {
+async function deleteReply(articleId, commentId, replyId) {
   if (!confirm('Tens a certeza que queres eliminar esta resposta?')) return;
   
-  var comments = getComments(articleId);
-  var comment = comments.find(function(c) { return c.id === commentId; });
-  
-  if (comment && comment.replies) {
-    comment.replies = comment.replies.filter(function(r) { return r.id !== replyId; });
-    saveComments(articleId, comments);
-    refreshComments(articleId);
-    showToast('Resposta eliminada 🗑️');
+  try {
+    var db = firebase.firestore();
+    var docRef = db.collection('blog_comments').doc(articleId).collection('comments').doc(commentId);
+    var doc = await docRef.get();
+    
+    if (doc.exists) {
+      var data = doc.data();
+      var updatedReplies = (data.replies || []).filter(function(r) { return r.id !== replyId; });
+      await docRef.update({ replies: updatedReplies });
+      loadFirebaseComments(articleId);
+      showToast('Resposta eliminada 🗑️');
+    }
+  } catch (error) {
+    console.error('Erro ao eliminar resposta:', error);
+    showToast('Sem permissão para eliminar ❌');
   }
+}
+
+// ================================
+// LOAD FIREBASE COMMENTS
+// ================================
+
+async function loadFirebaseComments(articleId) {
+  var listEl = document.getElementById('commentsList');
+  var countEl = document.getElementById('commentsCount');
+  if (!listEl) return;
+  
+  try {
+    var db = firebase.firestore();
+    var snapshot = await db.collection('blog_comments').doc(articleId)
+      .collection('comments')
+      .orderBy('timestamp', 'desc')
+      .limit(100)
+      .get();
+    
+    var comments = [];
+    snapshot.forEach(function(doc) {
+      comments.push({ id: doc.id, ...doc.data() });
+    });
+    
+    // Also merge localStorage comments (migrate)
+    var localComments = getComments(articleId);
+    if (localComments.length > 0) {
+      // Migrate local comments to Firebase (one time)
+      for (var lc of localComments) {
+        try {
+          await db.collection('blog_comments').doc(articleId).collection('comments').add({
+            author: lc.author || 'Anónimo',
+            text: lc.text,
+            timestamp: firebase.firestore.Timestamp.fromMillis(lc.timestamp),
+            likes: lc.likes || 0,
+            likedBy: [],
+            replies: (lc.replies || []).map(function(r) {
+              return { id: r.id, author: r.author || 'Anónimo', text: r.text, timestamp: r.timestamp };
+            })
+          });
+        } catch(e) { /* ignore migration errors */ }
+      }
+      // Clear local storage after migration
+      localStorage.removeItem('q4c_comments_' + articleId);
+      
+      // Reload from Firebase
+      var freshSnapshot = await db.collection('blog_comments').doc(articleId)
+        .collection('comments')
+        .orderBy('timestamp', 'desc')
+        .limit(100)
+        .get();
+      comments = [];
+      freshSnapshot.forEach(function(doc) {
+        comments.push({ id: doc.id, ...doc.data() });
+      });
+    }
+    
+    // Count total
+    var totalCount = comments.length;
+    comments.forEach(function(c) {
+      totalCount += (c.replies || []).length;
+    });
+    
+    if (countEl) countEl.textContent = '(' + totalCount + ')';
+    
+    if (comments.length === 0) {
+      listEl.innerHTML = '<div class="no-comments"><p>Ainda não há comentários. Sê o primeiro a partilhar!</p></div>';
+      return;
+    }
+    
+    var visitorId = getVisitorId();
+    listEl.innerHTML = comments.map(function(c) {
+      return renderFirebaseComment(c, articleId, visitorId);
+    }).join('');
+    
+  } catch (error) {
+    console.error('Erro ao carregar comentários:', error);
+    // Fallback to localStorage
+    refreshCommentsFromLocal(articleId);
+  }
+}
+
+function renderFirebaseComment(comment, articleId, visitorId) {
+  var timestamp = comment.timestamp;
+  var date;
+  if (timestamp && timestamp.toDate) {
+    date = timestamp.toDate();
+  } else if (typeof timestamp === 'number') {
+    date = new Date(timestamp);
+  } else {
+    date = new Date();
+  }
+  
+  var timeAgo = getTimeAgo(date);
+  var authorDisplay = comment.author || 'Anónimo';
+  var authorInitial = authorDisplay.charAt(0).toUpperCase();
+  var likedBy = comment.likedBy || [];
+  var isLiked = likedBy.includes(visitorId);
+  var likedClass = isLiked ? 'liked' : '';
+  var heartIcon = isLiked ? '❤️' : '🤍';
+  var likesCount = comment.likes || 0;
+  
+  var repliesHtml = '';
+  if (comment.replies && comment.replies.length > 0) {
+    repliesHtml = '<div class="comment-replies">' +
+      comment.replies.map(function(r) {
+        return renderFirebaseReply(r, articleId, comment.id);
+      }).join('') +
+    '</div>';
+  }
+  
+  return '<div class="comment" data-id="' + comment.id + '">' +
+    '<div class="comment-avatar">' + authorInitial + '</div>' +
+    '<div class="comment-content">' +
+      '<div class="comment-header">' +
+        '<span class="comment-author">' + escapeHtml(authorDisplay) + '</span>' +
+        '<span class="comment-time">' + timeAgo + '</span>' +
+      '</div>' +
+      '<p class="comment-text">' + escapeHtml(comment.text) + '</p>' +
+      '<div class="comment-actions">' +
+        '<button onclick="likeComment(\'' + articleId + '\', \'' + comment.id + '\')" class="btn-like ' + likedClass + '">' +
+          heartIcon + ' ' + likesCount +
+        '</button>' +
+        '<button onclick="replyToComment(\'' + comment.id + '\')" class="btn-reply">↩️ Responder</button>' +
+      '</div>' +
+      repliesHtml +
+    '</div>' +
+  '</div>';
+}
+
+function renderFirebaseReply(reply, articleId, parentId) {
+  var date = typeof reply.timestamp === 'number' ? new Date(reply.timestamp) : new Date();
+  var timeAgo = getTimeAgo(date);
+  var authorDisplay = reply.author || 'Anónimo';
+  var authorInitial = authorDisplay.charAt(0).toUpperCase();
+  
+  return '<div class="comment reply" data-id="' + reply.id + '">' +
+    '<div class="comment-avatar small">' + authorInitial + '</div>' +
+    '<div class="comment-content">' +
+      '<div class="comment-header">' +
+        '<span class="comment-author">' + escapeHtml(authorDisplay) + '</span>' +
+        '<span class="comment-time">' + timeAgo + '</span>' +
+      '</div>' +
+      '<p class="comment-text">' + escapeHtml(reply.text) + '</p>' +
+    '</div>' +
+  '</div>';
+}
+
+function refreshCommentsFromLocal(articleId) {
+  var listEl = document.getElementById('commentsList');
+  var countEl = document.getElementById('commentsCount');
+  if (!listEl) return;
+  
+  var comments = getComments(articleId);
+  
+  if (countEl) countEl.textContent = '(' + comments.length + ')';
+  
+  if (comments.length === 0) {
+    listEl.innerHTML = '<div class="no-comments"><p>Ainda não há comentários. Sê o primeiro a partilhar!</p></div>';
+    return;
+  }
+  
+  listEl.innerHTML = comments.map(function(c) {
+    return renderComment(c, articleId);
+  }).join('');
 }
 
 function refreshComments(articleId) {
-  var container = document.getElementById('discussionCommentsSection');
-  if (!container || !currentArticle) return;
-  
-  var discussionSection = '';
-  if (currentArticle.discussionPrompt) {
-    discussionSection = buildDiscussionSection(currentArticle);
+  loadFirebaseComments(articleId);
+}
+
+// ================================
+// VISITOR ID (anónimo mas persistente)
+// ================================
+
+function getVisitorId() {
+  var id = localStorage.getItem('q4c_visitor_id');
+  if (!id) {
+    id = 'v_' + generateId();
+    localStorage.setItem('q4c_visitor_id', id);
   }
-  discussionSection += buildCommentsSection(articleId);
-  container.innerHTML = discussionSection;
+  return id;
 }
 
 // ================================

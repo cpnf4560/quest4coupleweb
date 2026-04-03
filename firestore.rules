@@ -305,6 +305,31 @@ service cloud.firestore {
       allow create: if request.auth != null && request.auth.uid == profileId;
       allow update, delete: if request.auth != null && request.auth.uid == profileId;
     }
+      // ========================================
+    // BLOG COMMENTS COLLECTION
+    // Comentários públicos dos artigos do blog
+    // ========================================
+    match /blog_comments/{articleId} {
+      // Qualquer pessoa pode ler o documento do artigo
+      allow read: if true;
+      // Permitir criação implícita do documento do artigo
+      allow create: if true;
+      
+      match /comments/{commentId} {
+        // LEITURA: Qualquer pessoa pode ler comentários (público)
+        allow read: if true;
+        
+        // CRIAÇÃO: Qualquer pessoa pode criar comentários
+        allow create: if true;
+        
+        // ATUALIZAÇÃO: Qualquer pessoa pode dar like (atualizar likes/likedBy/replies)
+        allow update: if true;
+        
+        // ELIMINAÇÃO: Apenas admins podem eliminar comentários
+        allow delete: if request.auth != null && 
+                         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      }
+    }
     
     // ========================================
     // BLOQUEAR TUDO O RESTO
