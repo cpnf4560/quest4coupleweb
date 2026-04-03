@@ -1,4 +1,4 @@
-﻿const articlesData = [  {    id: "cuckold-dinamicas",
+const articlesData = [  {    id: "cuckold-dinamicas",
     title: "DinÃ¢micas Cuckold/Cuckquean: Guia Completo",
     excerpt: "Entende as diferentes dinÃ¢micas de voyeurismo e partilha: Cuckold, Hotwife, Stag, Bull, Vixen e mais.",
     category: "dinamicas",
