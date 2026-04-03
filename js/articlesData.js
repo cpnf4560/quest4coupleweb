@@ -5162,7 +5162,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     icon: "👥",
     image: "",
     readTime: 18,
-    content: \`
+    content: `
       <div style="text-align: left;">
       <h3>O que é um Ménage à Trois?</h3>
       <p>O <strong>ménage à trois</strong> (do francês "casa de três") refere-se a uma experiência sexual envolvendo três pessoas. É uma das fantasias mais comuns entre casais - estudos indicam que cerca de 82% dos homens e 31% das mulheres já fantasiaram com isto. No entanto, passar da fantasia à realidade requer preparação, comunicação e respeito mútuo.</p>
@@ -5440,6 +5440,6 @@ const articlesData = [  {    id: "cuckold-dinamicas",
       
       <p><strong>Lembrete final:</strong> Um ménage à trois bem-sucedido é aquele em que TODOS os envolvidos se sentem respeitados, satisfeitos e seguros. Não é sobre performance ou cumprir expectativas sociais - é sobre explorar a sexualidade juntos, com amor e confiança.</p>
       </div>
-    \`
+    `
   }
 ];
