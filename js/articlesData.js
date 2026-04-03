@@ -1,11 +1,10 @@
-const articlesData = [  {
-    id: "cuckold-dinamicas",
+const articlesData = [  {    id: "cuckold-dinamicas",
     title: "Dinâmicas Cuckold/Cuckquean: Guia Completo",
     excerpt: "Entende as diferentes dinâmicas de voyeurismo e partilha: Cuckold, Hotwife, Stag, Bull, Vixen e mais.",
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "👀",
-    image: "https://images.unsplash.com/photo-1445633883498-7f9922d37a3f?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/cuckhold-dinamicas.png",
     readTime: 15,
     content: `
       <div style="text-align: left;">
@@ -153,7 +152,7 @@ const articlesData = [  {
     category: "brinquedos",
     categoryLabel: "Brinquedos",
     icon: "🎲",
-    image: "https://images.unsplash.com/photo-1522442439760-36f5d83b81c3?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/brinquedos-casais.png",
     readTime: 12,
     content: `
       <div style="text-align: left;">
@@ -353,7 +352,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "📋",
-    image: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/tasklists-sexuais.png",
     readTime: 14,
     content: `
       <div style="text-align: left;">
@@ -597,7 +596,7 @@ const articlesData = [  {
     category: "viagens",
     categoryLabel: "Viagens",
     icon: "✈️",
-    image: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/turismo-adulto.png",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -854,7 +853,7 @@ const articlesData = [  {
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "🏖️",
-    image: "https://images.unsplash.com/photo-1520454974749-611b7248ffdb?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/praias-nudistas-portugal.png",
     readTime: 14,
     content: `
       <div style="text-align: left;">
@@ -1097,7 +1096,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "💆",
-    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/massagem-tantrica.png",
     readTime: 20,
     content: `
       <div style="text-align: left;">
@@ -1387,7 +1386,7 @@ const articlesData = [  {
     category: "saude",
     categoryLabel: "Saúde",
     icon: "🩺",
-    image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/anorgasmia.png",
     readTime: 16,
     content: `
       <div style="text-align: left;">
@@ -1670,7 +1669,7 @@ const articlesData = [  {
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "👶",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/sexo-pos-filhos.png",
     readTime: 14,
     content: `
       <div style="text-align: left;">
@@ -1853,7 +1852,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "💬",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/comunicacao-casal.png",
     readTime: 12,
     content: `
       <div style="text-align: left;">
@@ -2082,7 +2081,7 @@ const articlesData = [  {
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "⛓️",
-    image: "https://images.unsplash.com/photo-1565461497552-0e35e7c21ae1?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/bdsm-iniciantes.jpg",
     readTime: 16,
     content: `
       <div style="text-align: left;">
@@ -2448,7 +2447,7 @@ const articlesData = [  {
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "💕",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/poliamor.png",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -2720,7 +2719,7 @@ const articlesData = [  {
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "🔄",
-    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/swing-iniciantes.png",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -3034,7 +3033,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "🍑",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/sexo-anal-guia.png",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -3198,7 +3197,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "💪",
-    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/pompoarismo-guia.png",
     readTime: 14,
     content: `
       <div style="text-align: left;">
@@ -3395,7 +3394,7 @@ const articlesData = [  {
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "⛓️",
-    image: "https://images.unsplash.com/photo-1506869640319-fe1a24fd76dc?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/bdsm-avancado.png",
     readTime: 20,
     content: `
       <div style="text-align: left;">
@@ -3576,7 +3575,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "👅",
-    image: "https://images.unsplash.com/photo-1517456215183-9a2c3a182f24?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/sexo-oral-tecnicas.png",
     readTime: 16,
     content: `
       <div style="text-align: left;">
@@ -3767,7 +3766,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "🛏️",
-    image: "https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 22,
     content: `
       <div style="text-align: left;">
@@ -4057,7 +4056,7 @@ const articlesData = [  {
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "🚪",
-    image: "https://images.unsplash.com/photo-1496449903678-68ddcb189a24?w=600&h=400&fit=crop&q=80",
+    image: "../assets/blog/cruising.jpg",
     readTime: 14,
     content: `
       <div style="text-align: left;">
@@ -4223,7 +4222,7 @@ const articlesData = [  {
     category: "saude",
     categoryLabel: "Saúde",
     icon: "🛡️",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -4438,7 +4437,7 @@ const articlesData = [  {
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "🚗",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 14,
     discussionPrompt: "Já experimentaram ou têm curiosidade sobre dogging? O que vos atrai ou afasta nesta prática?",
     content: `
@@ -4550,7 +4549,7 @@ const articlesData = [  {
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "🔄",
-    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 16,
     discussionPrompt: "O pegging ainda é tabu para muitos casais heterossexuais. Acham que a masculinidade está ligada a quem penetra? Partilhem as vossas reflexões!",
     content: `
@@ -4726,7 +4725,7 @@ const articlesData = [  {
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "📖",
-    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 25,
     discussionPrompt: "Descobriram algum fetiche novo nesta lista que vos despertou curiosidade? Ou algum que já praticam? Partilhem (anonimamente se preferirem)!",
     content: `
@@ -4991,7 +4990,7 @@ const articlesData = [  {
     category: "saude",
     categoryLabel: "Saúde",
     icon: "🧠",
-    image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&h=400&fit=crop&q=80",
+    image: "",
     readTime: 18,
     discussionPrompt: "Acham que a sociedade é demasiado rápida a julgar interesses sexuais diferentes? Onde está a linha entre 'diferente' e 'problemático'?",
     content: `

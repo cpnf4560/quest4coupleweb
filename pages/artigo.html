@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Meta tags dinâmicas - serão atualizadas pelo JS -->
+  <title>Blog - Quest4Couple</title>
+  <meta name="description" content="Guias educativos sobre intimidade, fantasias e relacionamentos para casais">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="">
+  <meta property="og:title" content="Blog - Quest4Couple">
+  <meta property="og:description" content="Guias educativos sobre intimidade, fantasias e relacionamentos para casais">
+  <meta property="og:image" content="">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="">
+  <meta property="twitter:title" content="Blog - Quest4Couple">
+  <meta property="twitter:description" content="Guias educativos sobre intimidade, fantasias e relacionamentos para casais">
+  <meta property="twitter:image" content="">
+  
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/artigos.css">
+  <link rel="stylesheet" href="../css/artigo-single.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-content">
+      <a href="../index.html" class="logo">
+        <img src="../assets/logo.png" alt="Quest4Couple Logo" class="logo-img" onerror="this.src='../logo.png'; this.onerror=null;">
+        <span class="logo-text">Quest4Couple</span>
+      </a>
+      <nav class="nav">
+        <a href="../index.html" class="nav-link">🏠 Início</a>
+        <a href="quizzes.html" class="nav-link">💕 Questionários</a>
+        <a href="artigos.html" class="nav-link active">📚 Blog</a>
+      </nav>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <div class="container">
+        <a href="../index.html">Início</a>
+        <span class="separator">›</span>
+        <a href="artigos.html">Blog</a>
+        <span class="separator">›</span>
+        <span class="current" id="breadcrumbTitle">A carregar...</span>
+      </div>
+    </nav>
+
+    <!-- Article Container -->
+    <article class="article-single" id="articleContainer">
+      <!-- Loading State -->
+      <div class="loading-spinner" id="articleLoading">
+        <div class="spinner"></div>
+        <p>A carregar artigo...</p>
+      </div>
+      
+      <!-- Error State (hidden by default) -->
+      <div class="article-error" id="articleError" style="display: none;">
+        <div class="error-icon">😕</div>
+        <h2>Artigo não encontrado</h2>
+        <p>O artigo que procuras não existe ou foi removido.</p>
+        <a href="artigos.html" class="btn-primary">← Voltar ao Blog</a>
+      </div>
+      
+      <!-- Article Content (hidden until loaded) -->
+      <div class="article-wrapper" id="articleWrapper" style="display: none;">
+        <!-- Article Header -->
+        <header class="article-header">
+          <div class="article-meta-top">
+            <span class="article-category-label" id="articleCategory"></span>
+            <span class="article-read-time" id="articleReadTime"></span>
+          </div>
+          <h1 class="article-title-main" id="articleTitle"></h1>
+          <p class="article-excerpt-main" id="articleExcerpt"></p>
+          
+          <!-- Share Buttons -->
+          <div class="share-buttons">
+            <span class="share-label">Partilhar:</span>
+            <button onclick="shareArticle('whatsapp')" class="share-btn whatsapp" title="Partilhar no WhatsApp">
+              📱 WhatsApp
+            </button>
+            <button onclick="shareArticle('facebook')" class="share-btn facebook" title="Partilhar no Facebook">
+              📘 Facebook
+            </button>
+            <button onclick="shareArticle('twitter')" class="share-btn twitter" title="Partilhar no X/Twitter">
+              🐦 Twitter
+            </button>
+            <button onclick="shareArticle('copy')" class="share-btn copy" title="Copiar link">
+              🔗 Copiar Link
+            </button>
+          </div>
+        </header>
+        
+        <!-- Article Image -->
+        <div class="article-image-main" id="articleImage">
+          <span class="article-icon-overlay" id="articleIcon"></span>
+        </div>
+        
+        <!-- Article Body -->
+        <div class="article-content-main" id="articleContent">
+          <!-- Conteúdo carregado dinamicamente -->
+        </div>
+        
+        <!-- Discussion & Comments Section -->
+        <div id="discussionCommentsSection">
+          <!-- Carregado dinamicamente -->
+        </div>
+        
+        <!-- Related Articles -->
+        <section class="related-articles" id="relatedArticles">
+          <h3>📚 Artigos Relacionados</h3>
+          <div class="related-grid" id="relatedGrid">
+            <!-- Carregado dinamicamente -->
+          </div>
+        </section>
+        
+        <!-- Back to Blog -->
+        <div class="back-to-blog">
+          <a href="artigos.html" class="btn-back">← Voltar ao Blog</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="../assets/logo.png" alt="Quest4Couple Logo" class="footer-logo" onerror="this.src='../logo.png'; this.onerror=null;">
+        <span>Quest4Couple</span>
+      </div>
+      <div class="footer-links">
+        <a href="privacidade.html">Privacidade</a>
+        <a href="termos.html">Termos</a>
+      </div>
+      <div class="footer-copy">
+        <p>&copy; 2025 Quest4Couple. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/articlesData.js"></script>
+  <script src="../js/artigo-single.js"></script>
+</body>
+</html>
