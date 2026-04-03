@@ -61,6 +61,14 @@
 
 <!-- Header -->
 <div class="header">
+  <!-- Navegação Principal -->
+  <nav class="main-nav">
+    <a href="index.html" class="nav-link">🏠 Início</a>
+    <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+    <a href="pages/artigos.html" class="nav-link">📚 Blog</a>
+    <a href="pages/admin.html" class="nav-link nav-admin" id="adminLink" style="display: none;" title="Backoffice">⚙️</a>
+  </nav>
+  
   <!-- Logo e Título (Centro) -->
   <div class="logo-section">
     <a href="index.html">
@@ -604,21 +612,29 @@
         currentUserName.textContent = user.displayName || user.email.split('@')[0];
       }
       
-      // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO
-      if (window.profileCompletion) {
-        try {
-          const userDoc = await db.collection('users').doc(user.uid).get();
-          const userProfile = userDoc.exists ? userDoc.data() : {};
-          
-          if (!window.profileCompletion.isProfileComplete(userProfile)) {
-            console.log('⚠️ Perfil incompleto - solicitando dados em falta');
-            await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
-              console.log('✅ Perfil completado:', updatedData);
-            });
+      // ⭐ VERIFICAR SE PERFIL ESTÁ COMPLETO E SE É ADMIN
+      try {
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const userProfile = userDoc.exists ? userDoc.data() : {};
+        
+        // Verificar se é admin e mostrar link
+        if (userProfile.isAdmin === true) {
+          const adminLink = document.getElementById('adminLink');
+          if (adminLink) {
+            adminLink.style.display = 'inline-flex';
+            console.log('🔧 Admin link visível');
           }
-        } catch (profileError) {
-          console.warn('⚠️ Erro ao verificar perfil:', profileError);
         }
+        
+        // Verificar perfil completo
+        if (window.profileCompletion && !window.profileCompletion.isProfileComplete(userProfile)) {
+          console.log('⚠️ Perfil incompleto - solicitando dados em falta');
+          await window.profileCompletion.checkAndRequestProfileCompletion(userProfile, (updatedData) => {
+            console.log('✅ Perfil completado:', updatedData);
+          });
+        }
+      } catch (profileError) {
+        console.warn('⚠️ Erro ao verificar perfil:', profileError);
       }
       
       // Habilitar inputs de resposta

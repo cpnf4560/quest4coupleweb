@@ -49,6 +49,47 @@ body {
   pointer-events: none;
 }
 
+/* === MAIN NAV (App Header) === */
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.main-nav .nav-link {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #555;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(214, 51, 132, 0.2);
+}
+
+.main-nav .nav-link:hover {
+  background: linear-gradient(135deg, rgba(214, 51, 132, 0.15), rgba(111, 66, 193, 0.15));
+  color: #d63384;
+  border-color: rgba(214, 51, 132, 0.4);
+  transform: translateY(-2px);
+}
+
+.main-nav .nav-link.active {
+  background: linear-gradient(135deg, #d63384 0%, #6f42c1 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.main-nav .nav-admin {
+  padding: 0.5rem 0.75rem;
+  font-size: 1.1rem;
+}
+
 /* === FREE BADGE === */
 .free-badge {
   text-align: center;
