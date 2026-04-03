@@ -230,6 +230,7 @@
    ========================================== */
 .article-image-main {
     width: 100%;
+    min-height: 300px;
     margin-bottom: 2rem;
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -238,6 +239,14 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.article-image-main.has-image {
+    min-height: 400px;
+    background-color: var(--bg-light);
 }
 
 .article-image-main img {
@@ -251,6 +260,10 @@
     font-size: 5rem;
     position: absolute;
     opacity: 0.3;
+}
+
+.article-image-main.has-image .article-icon-overlay {
+    display: none;
 }
 
 /* ==========================================
