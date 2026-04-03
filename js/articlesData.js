@@ -4424,8 +4424,733 @@ const articlesData = [  {
       <p>Saúde sexual é responsabilidade de todos os envolvidos. Usar preservativo, fazer testes regularmente e ter conversas honestas são atos de cuidado - contigo e com os outros.</p>
       
       <p><strong>Lembra-te:</strong> Ter uma IST não é vergonha nem significa que fizeste algo "errado". São infeções como outras - o importante é diagnosticar, tratar e proteger-se e aos outros.</p>
+        <p><strong>Sexo seguro é sexo bom.</strong> Cuida-te. 💜</p>
+      </div>
+    `
+  },
+  
+  // ===== NOVOS ARTIGOS =====
+  
+  {
+    id: "dogging-guia",
+    title: "Dogging: Sexo ao Ar Livre e Voyeurismo",
+    excerpt: "O que é dogging, onde acontece em Portugal, regras de etiqueta e como praticar com segurança.",
+    category: "lifestyle",
+    categoryLabel: "Lifestyle",
+    icon: "🚗",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop&q=80",
+    readTime: 14,
+    discussionPrompt: "Já experimentaram ou têm curiosidade sobre dogging? O que vos atrai ou afasta nesta prática?",
+    content: `
+      <div style="text-align: left;">
+      <h3>🚗 O que é Dogging?</h3>
+      <p>Dogging é a prática de ter relações sexuais em locais públicos (geralmente carros estacionados em zonas remotas) enquanto outras pessoas observam ou participam. O termo vem do Reino Unido, onde "walking the dog" era a desculpa usada para sair à noite.</p>
       
-      <p><strong>Sexo seguro é sexo bom.</strong> Cuida-te. 💜</p>
+      <p>Esta prática combina vários elementos excitantes: <strong>exibicionismo</strong> (ser visto), <strong>voyeurismo</strong> (ver outros), e a adrenalina do "proibido" e do risco de ser apanhado.</p>
+      
+      <h3>📍 Onde Acontece o Dogging?</h3>
+      <p>Os locais típicos incluem:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Parques de estacionamento</strong> isolados à noite</li>
+        <li><strong>Miradouros</strong> e zonas panorâmicas</li>
+        <li><strong>Áreas de descanso</strong> em autoestradas</li>
+        <li><strong>Praias</strong> e zonas costeiras remotas</li>
+        <li><strong>Parques</strong> e zonas florestais</li>
+      </ul>
+      
+      <p>Em Portugal, existem locais conhecidos em várias cidades, frequentemente partilhados em fóruns online dedicados. A comunidade usa sinais discretos para comunicar disponibilidade.</p>
+      
+      <h3>🚦 Sinais e Códigos</h3>
+      <p>A comunicação no dogging é subtil e codificada:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Luzes interiores acesas:</strong> "Podem aproximar-se e ver"</li>
+        <li><strong>Janela ligeiramente aberta:</strong> "Podem tocar/participar"</li>
+        <li><strong>Piscar faróis:</strong> "Estamos interessados"</li>
+        <li><strong>Janelas fechadas + cortinas:</strong> "Apenas para ver, não se aproximem"</li>
+        <li><strong>Arrancar o carro:</strong> "Não estamos interessados"</li>
+      </ul>
+      
+      <h3>📜 Regras de Etiqueta</h3>
+      <p>O dogging tem um código de conduta rigoroso:</p>
+      
+      <h4>Para Observadores:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Mantém distância até receberes sinal claro</li>
+        <li>✅ Respeita um "não" - verbal ou físico</li>
+        <li>✅ Não fotografes nem filmes sem consentimento explícito</li>
+        <li>✅ Sê discreto - não chames atenção desnecessária</li>
+        <li>✅ Leva preservativos se houver possibilidade de participação</li>
+        <li>❌ Nunca toques sem permissão clara</li>
+        <li>❌ Não insistas se não fores convidado</li>
+        <li>❌ Não estejas nu em zonas públicas</li>
+      </ul>
+      
+      <h4>Para Casais/Exibicionistas:</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Comunica claramente o que querem (só ver / participação OK)</li>
+        <li>✅ Combina sinais e limites com o teu parceiro antes</li>
+        <li>✅ Tem sempre forma de sair rapidamente se desconfortáveis</li>
+        <li>✅ Partilha localização com alguém de confiança</li>
+        <li>❌ Não exponham crianças ou não-participantes</li>
+      </ul>
+      
+      <h3>⚖️ Questões Legais em Portugal</h3>
+      <p><strong>Atenção:</strong> O dogging situa-se numa zona legal cinzenta.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Atos sexuais em público:</strong> Podem constituir crime de importunação sexual se houver quem se sinta ofendido</li>
+        <li><strong>Exibicionismo:</strong> Artigo 170º do Código Penal - punível se perante não-consentidores</li>
+        <li><strong>Atentado ao pudor:</strong> Contraordenação em muitas câmaras municipais</li>
+      </ul>
+      
+      <p>A chave é <strong>discrição</strong> e garantir que apenas adultos consentidores estão envolvidos ou presentes.</p>
+      
+      <h3>🔒 Segurança</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Nunca vão sozinhos</strong> na primeira vez</li>
+        <li><strong>Confiem no instinto</strong> - se algo parecer errado, saiam</li>
+        <li><strong>Mantenham o carro destrancado</strong> para saída rápida</li>
+        <li><strong>Não deixem objetos de valor visíveis</strong></li>
+        <li><strong>Evitem álcool/drogas</strong> que comprometam o julgamento</li>
+        <li><strong>Preservativos sempre</strong> para qualquer contacto sexual</li>
+        <li><strong>Telemóvel carregado</strong> e com rede</li>
+      </ul>
+      
+      <h3>💬 Comunicação no Casal</h3>
+      <p>Antes de experimentar:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Discutam fantasias vs. realidade - fantasiar é diferente de fazer</li>
+        <li>Definam limites claros: só exibição? Participação de terceiros?</li>
+        <li>Criem safe word para parar imediatamente</li>
+        <li>Falem sobre ciúmes e como gerir emoções</li>
+        <li>Combinem que qualquer um pode cancelar a qualquer momento</li>
+      </ul>
+      
+      <h3>🌟 Alternativas Mais Seguras</h3>
+      <p>Se a ideia excita mas o risco parece demasiado:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Clubes de swing com zona de exibição</strong> - ambiente controlado</li>
+        <li><strong>Praias nudistas/liberais</strong> - mais aceite socialmente</li>
+        <li><strong>Role-play em casa</strong> - simular o cenário em segurança</li>
+        <li><strong>Sexo em varandas/janelas</strong> - exibicionismo light</li>
+        <li><strong>Hotéis com janelas grandes</strong> - anonimato + exibição</li>
+      </ul>
+      
+      <h3>🔥 Conclusão</h3>
+      <p>O dogging pode ser extremamente excitante para quem aprecia exibicionismo e voyeurismo. A chave está na <strong>comunicação prévia</strong> com o parceiro, <strong>respeito pelas regras</strong> da comunidade, e priorizar sempre a <strong>segurança</strong>.</p>
+      
+      <p>Se decidirem experimentar, comecem devagar - talvez apenas a observar - e avaliem como se sentem antes de dar o próximo passo.</p>
+      </div>
+    `
+  },
+  
+  {
+    id: "pegging-guia",
+    title: "Pegging: O Guia Completo para Casais",
+    excerpt: "Tudo sobre pegging - o que é, como começar, escolher equipamento, técnicas e como comunicar com o parceiro.",
+    category: "dicas",
+    categoryLabel: "Dicas",
+    icon: "🔄",
+    image: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600&h=400&fit=crop&q=80",
+    readTime: 16,
+    discussionPrompt: "O pegging ainda é tabu para muitos casais heterossexuais. Acham que a masculinidade está ligada a quem penetra? Partilhem as vossas reflexões!",
+    content: `
+      <div style="text-align: left;">
+      <h3>🔄 O que é Pegging?</h3>
+      <p><strong>Pegging</strong> é quando uma mulher penetra um homem analmente usando um dildo com arnês (strap-on). O termo foi popularizado pelo colunista Dan Savage em 2001, após um concurso para nomear a prática.</p>
+      
+      <p>Embora seja praticado há séculos, o pegging ganhou visibilidade nos últimos anos à medida que casais heterossexuais exploram mais abertamente o prazer masculino para além do convencional.</p>
+      
+      <h3>💜 Porque é Prazeroso para Ele?</h3>
+      <p>A resposta está na <strong>anatomia</strong>:</p>
+      
+      <h4>A Próstata - O "Ponto P"</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Localizada a ~5-7cm dentro do ânus, direção do umbigo</li>
+        <li>Rica em terminações nervosas</li>
+        <li>Estimulação pode produzir orgasmos intensos e prolongados</li>
+        <li>Alguns homens descrevem orgasmos prostáticos como "full body"</li>
+        <li>Possibilidade de orgasmos múltiplos (sem período refratário)</li>
+      </ul>
+      
+      <h4>Terminações Nervosas Anais</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>O ânus tem milhares de terminações nervosas</li>
+        <li>Conectado ao nervo pudendo (mesmo do pénis)</li>
+        <li>Prazer não depende de orientação sexual</li>
+      </ul>
+      
+      <h3>💪 Porque é Prazeroso para Ela?</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Poder e controlo:</strong> Inversão de papéis pode ser excitante</li>
+        <li><strong>Visualização:</strong> Ver o parceiro em prazer e vulnerável</li>
+        <li><strong>Estimulação física:</strong> Muitos arneses têm componentes que estimulam o clítoris</li>
+        <li><strong>Intimidade:</strong> Nível de confiança necessário cria conexão profunda</li>
+        <li><strong>Quebrar rotinas:</strong> Dinâmica completamente diferente</li>
+      </ul>
+      
+      <h3>🛒 Equipamento Necessário</h3>
+      
+      <h4>O Arnês (Harness)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Estilo tanga:</strong> Mais estável, cobre mais</li>
+        <li><strong>Estilo jockstrap:</strong> Mais liberdade, acesso traseiro</li>
+        <li><strong>Strapless:</strong> Dildo duplo que se segura internamente</li>
+        <li><strong>Materiais:</strong> Nylon ajustável, couro (mais durável), ou silicone</li>
+      </ul>
+      
+      <h4>O Dildo</h4>
+      <p><strong>Para iniciantes:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Tamanho: 12-15cm comprimento, 2.5-3cm diâmetro</li>
+        <li>Material: Silicone médico (hipoalergénico, fácil limpar)</li>
+        <li>Forma: Ligeiramente curvado para atingir próstata</li>
+        <li>Base: Deve ser compatível com o arnês</li>
+      </ul>
+      
+      <p><strong>Evitar:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ Materiais porosos (impossíveis de esterilizar)</li>
+        <li>❌ Demasiado grande para começar</li>
+        <li>❌ Texturas muito pronunciadas inicialmente</li>
+      </ul>
+      
+      <h4>Lubrificante</h4>
+      <p><strong>ESSENCIAL!</strong> O ânus não lubrifica naturalmente.</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Base água:</strong> Compatível com silicone, precisa reaplicar</li>
+        <li><strong>Base silicone:</strong> Dura mais, não usar com brinquedos de silicone</li>
+        <li><strong>Híbridos:</strong> Melhor dos dois mundos</li>
+        <li><strong>Quantidade:</strong> Mais do que achas necessário!</li>
+      </ul>
+      
+      <h3>📝 Preparação</h3>
+      
+      <h4>Higiene</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Banho/duche antes</li>
+        <li>Opcional: enema/ducha anal (água morna, não exagerar)</li>
+        <li>Ir à casa de banho 1-2 horas antes</li>
+        <li>Dieta com fibras ajuda regularidade</li>
+      </ul>
+      
+      <h4>Relaxamento</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Ambiente confortável e aquecido</li>
+        <li>Sem pressa - reservem tempo</li>
+        <li>Massagem prévia ajuda a relaxar</li>
+        <li>Ele pode "treinar" sozinho com plugs antes</li>
+      </ul>
+      
+      <h3>🎯 Técnica Passo a Passo</h3>
+      
+      <h4>1. Aquecimento (15-20 min)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Massagem nas nádegas e períneo</li>
+        <li>Estimulação externa do ânus (circular)</li>
+        <li>Um dedo bem lubrificado, devagar</li>
+        <li>Ele deve "empurrar para fora" levemente - relaxa o esfíncter</li>
+      </ul>
+      
+      <h4>2. Progressão</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Dois dedos quando confortável</li>
+        <li>Encontrar a próstata (zona mais firme, direção umbigo)</li>
+        <li>Plug anal pequeno se desejado</li>
+        <li>Comunicação constante: "Mais?" "Parar?" "Tudo bem?"</li>
+      </ul>
+      
+      <h4>3. Penetração</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Muito lubrificante no dildo E nele</li>
+        <li>Ele controla a velocidade inicial - pode "sentar-se"</li>
+        <li>Entrar devagar, pausar quando dentro</li>
+        <li>Dar tempo para adaptação (30seg-1min)</li>
+        <li>Movimentos lentos e curtos inicialmente</li>
+      </ul>
+      
+      <h4>4. Posições para Começar</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Ele por cima:</strong> Controla profundidade e ritmo</li>
+        <li><strong>Doggy style:</strong> Bom ângulo para próstata</li>
+        <li><strong>Deitado de lado (conchinha):</strong> Íntimo e relaxado</li>
+        <li><strong>Missionário (ele de costas):</strong> Contacto visual, íntimo</li>
+      </ul>
+      
+      <h3>❌ Erros Comuns</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ Apressar a preparação</li>
+        <li>❌ Pouco lubrificante</li>
+        <li>❌ Dildo demasiado grande para começar</li>
+        <li>❌ Movimentos bruscos</li>
+        <li>❌ Ignorar desconforto do parceiro</li>
+        <li>❌ Expectativas irrealistas na primeira vez</li>
+      </ul>
+      
+      <h3>💬 Como Abordar o Tema</h3>
+      <p>Muitos homens sentem vergonha de pedir. Se és tu a querer:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>"Tenho curiosidade em explorar mais o meu corpo..."</li>
+        <li>"Li sobre estimulação prostática e parece interessante..."</li>
+        <li>"Gostava de experimentar algo diferente contigo..."</li>
+      </ul>
+      
+      <p>Se ela sugerir e ele hesitar:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Não forçar - respeitar limites</li>
+        <li>Oferecer começar devagar (só massagem, só dedo)</li>
+        <li>Explicar que não define orientação sexual</li>
+        <li>Partilhar artigos/vídeos educativos</li>
+      </ul>
+      
+      <h3>🧠 Quebrando Tabus</h3>
+      <p>Mitos a desconstruir:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ "Gostar de pegging significa ser gay" → Orientação é sobre por quem te atrais, não o que fazes</li>
+        <li>❌ "Homens não devem ser penetrados" → Anatomia não tem género</li>
+        <li>❌ "É submisso/feminilizante" → Pode ser, mas não tem de ser</li>
+        <li>❌ "É anti-natural" → A próstata existe especificamente para dar prazer</li>
+      </ul>
+      
+      <h3>🌟 Conclusão</h3>
+      <p>O pegging pode abrir uma nova dimensão de prazer e intimidade para casais. A chave está na <strong>comunicação aberta</strong>, <strong>preparação adequada</strong>, e <strong>ir ao ritmo do mais hesitante</strong>.</p>
+      
+      <p>Se ambos estão curiosos, experimentem sem pressão. Se não resultar ou não gostarem, não há problema - pelo menos exploraram juntos!</p>
+      </div>
+    `
+  },
+  
+  {
+    id: "glossario-fetiches",
+    title: "Glossário de Fetiches: De A a Z",
+    excerpt: "Dicionário completo com mais de 100 fetiches explicados - descobre novos termos e explora curiosidades.",
+    category: "dinamicas",
+    categoryLabel: "Dinâmicas",
+    icon: "📖",
+    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&h=400&fit=crop&q=80",
+    readTime: 25,
+    discussionPrompt: "Descobriram algum fetiche novo nesta lista que vos despertou curiosidade? Ou algum que já praticam? Partilhem (anonimamente se preferirem)!",
+    content: `
+      <div style="text-align: left;">
+      <h3>📖 O Que é um Fetiche?</h3>
+      <p>Um <strong>fetiche</strong> é uma atração sexual intensa por um objeto, parte do corpo, material ou situação específica. Difere de uma "preferência" pela intensidade - para alguns, o fetiche é necessário para excitação ou orgasmo.</p>
+      
+      <p>Esta lista é <strong>educativa</strong> - conhecer não significa praticar. Muitos fetiches são inofensivos entre adultos consentidores, outros requerem mais cuidado.</p>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+      
+      <h3>🅰️ A</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Abasiofilia:</strong> Atração por pessoas com mobilidade reduzida ou cadeiras de rodas</li>
+        <li><strong>Acrotomofilia:</strong> Atração por pessoas amputadas</li>
+        <li><strong>Agorafilia:</strong> Excitação por sexo em locais públicos</li>
+        <li><strong>Algolagnia:</strong> Prazer derivado da dor (dar ou receber)</li>
+        <li><strong>Altocalcifilia:</strong> Fetiche por saltos altos</li>
+        <li><strong>Amaurofilia:</strong> Preferência por sexo no escuro ou com olhos vendados</li>
+        <li><strong>Anasteemafilia:</strong> Atração por pessoas muito mais altas ou baixas</li>
+        <li><strong>Andromimetofilia:</strong> Atração por mulheres trans ou travestis</li>
+        <li><strong>Asfixiofilia:</strong> Excitação por restrição de respiração (PERIGOSO - requer conhecimento)</li>
+        <li><strong>Autonepiofilia:</strong> Fetiche por usar fraldas/agir como bebé (Adult Baby)</li>
+      </ul>
+      
+      <h3>🅱️ B</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Barebacking:</strong> Preferência por sexo sem preservativo (atenção às ISTs)</li>
+        <li><strong>BDSM:</strong> Bondage, Disciplina, Dominação, Submissão, Sadismo, Masoquismo</li>
+        <li><strong>Belonefilia:</strong> Atração por agulhas e piercings</li>
+        <li><strong>Body worship:</strong> Adoração intensa de partes do corpo do parceiro</li>
+        <li><strong>Bondage:</strong> Prazer em amarrar ou ser amarrado</li>
+        <li><strong>Breeding:</strong> Fetiche por ejacular dentro com intenção de engravidar (real ou fantasia)</li>
+        <li><strong>Bukkake:</strong> Múltiplas pessoas ejaculando sobre uma pessoa</li>
+      </ul>
+      
+      <h3>©️ C</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Capnolagnia:</strong> Excitação ao ver alguém fumar</li>
+        <li><strong>Castidade:</strong> Prazer na negação de orgasmo/uso de dispositivos de castidade</li>
+        <li><strong>CBT (Cock and Ball Torture):</strong> Tortura genital masculina consensual</li>
+        <li><strong>Choking:</strong> Excitação por estrangulamento leve (RISCO - requer cuidado extremo)</li>
+        <li><strong>Claustrofilia:</strong> Prazer em espaços confinados</li>
+        <li><strong>Coprofilia:</strong> Envolvimento de fezes (considerado extremo)</li>
+        <li><strong>Crossdressing:</strong> Prazer em vestir roupa do género oposto</li>
+        <li><strong>Crurofilia:</strong> Fetiche por pernas</li>
+        <li><strong>Cuckold/Cuckquean:</strong> Prazer em ver parceiro com outros</li>
+        <li><strong>Cum fetish:</strong> Obsessão com esperma - ver, sentir, engolir</li>
+      </ul>
+      
+      <h3>🇩 D</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Dacryfilia:</strong> Excitação ao ver lágrimas</li>
+        <li><strong>Degradação:</strong> Prazer em humilhar ou ser humilhado verbalmente</li>
+        <li><strong>Dendrofilia:</strong> Atração por árvores</li>
+        <li><strong>Diaper fetish:</strong> Fetiche por fraldas</li>
+        <li><strong>Dogging:</strong> Sexo em público com observadores</li>
+        <li><strong>Dominação/Submissão (D/s):</strong> Dinâmica de poder consensual</li>
+        <li><strong>Double penetration:</strong> Penetração vaginal e anal simultânea</li>
+      </ul>
+      
+      <h3>🇪 E</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Edging:</strong> Levar ao limite do orgasmo repetidamente sem permitir</li>
+        <li><strong>Electrostimulation:</strong> Uso de eletricidade para prazer (requer equipamento próprio)</li>
+        <li><strong>Emetofilia:</strong> Envolvimento de vómito (extremo)</li>
+        <li><strong>Erotic asphyxiation:</strong> Ver Asfixiofilia</li>
+        <li><strong>Exhibitionism:</strong> Prazer em ser visto nu ou em atos sexuais</li>
+      </ul>
+      
+      <h3>🇫 F</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Face-sitting:</strong> Sentar no rosto do parceiro</li>
+        <li><strong>Feederism:</strong> Fetiche por alimentar ou ser alimentado para ganhar peso</li>
+        <li><strong>Figging:</strong> Inserção de gengibre para sensação de queimadura</li>
+        <li><strong>Financial domination (Findom):</strong> Prazer em controlar/dar dinheiro</li>
+        <li><strong>Fisting:</strong> Inserção de mão inteira (vaginal ou anal)</li>
+        <li><strong>Foot fetish (Podofilia):</strong> Atração por pés</li>
+        <li><strong>Formicofilia:</strong> Prazer com insetos no corpo (extremo/raro)</li>
+        <li><strong>Fornifilia:</strong> Usar pessoas como mobília</li>
+        <li><strong>Frotteurism:</strong> Prazer em roçar em pessoas (não consensual é crime)</li>
+        <li><strong>Furry:</strong> Atração por personagens animais antropomórficos</li>
+      </ul>
+      
+      <h3>🇬 G</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Gangbang:</strong> Uma pessoa com múltiplos parceiros simultaneamente</li>
+        <li><strong>Glory hole:</strong> Buraco para sexo anónimo</li>
+        <li><strong>Golden shower:</strong> Ver Urofilia</li>
+        <li><strong>Gravidez (pregnancy fetish):</strong> Atração por mulheres grávidas</li>
+        <li><strong>Gynemimetofilia:</strong> Atração por homens trans ou travestis</li>
+      </ul>
+      
+      <h3>🇭 H</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Hair fetish (Tricofilia):</strong> Atração por cabelo</li>
+        <li><strong>Hematolagnia:</strong> Excitação por sangue</li>
+        <li><strong>Hierofilia:</strong> Fetiche por objetos religiosos</li>
+        <li><strong>Hotwife:</strong> Esposa que tem relações com outros com conhecimento do marido</li>
+        <li><strong>Humiliation:</strong> Prazer em humilhar ou ser humilhado</li>
+        <li><strong>Hybristofilia:</strong> Atração por criminosos</li>
+        <li><strong>Hypnofetish:</strong> Fetiche por hipnose</li>
+      </ul>
+      
+      <h3>🇮 I-J-K</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Impact play:</strong> Spanking, chicotes, paddles</li>
+        <li><strong>Infantilism:</strong> Role-play como bebé/criança (controverso, entre adultos)</li>
+        <li><strong>Japanese bondage (Shibari):</strong> Arte de amarrar com cordas</li>
+        <li><strong>Katoptronofilia:</strong> Excitação por espelhos/ver-se</li>
+        <li><strong>Kink:</strong> Termo geral para práticas sexuais não-convencionais</li>
+        <li><strong>Klismafilia:</strong> Prazer com enemas</li>
+        <li><strong>Knismolagnia:</strong> Fetiche por cócegas</li>
+      </ul>
+      
+      <h3>🇱 L</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Lactofilia:</strong> Fetiche por amamentação/leite materno</li>
+        <li><strong>Latex/Rubber:</strong> Fetiche por roupa de latex ou borracha</li>
+        <li><strong>Leather:</strong> Fetiche por couro</li>
+        <li><strong>Lingerie fetish:</strong> Atração por lingerie específica</li>
+        <li><strong>Liquidofilia:</strong> Excitação por imersão de genitais em líquidos</li>
+        <li><strong>Looning:</strong> Fetiche por balões</li>
+      </ul>
+      
+      <h3>🇲 M</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Macrofilia:</strong> Atração por gigantes (fantasia)</li>
+        <li><strong>Masochism:</strong> Prazer em receber dor</li>
+        <li><strong>Master/slave:</strong> Dinâmica D/s intensa e total</li>
+        <li><strong>Mazofilia:</strong> Fetiche por seios</li>
+        <li><strong>Mechanofilia:</strong> Atração por máquinas</li>
+        <li><strong>Medical play:</strong> Role-play médico/paciente</li>
+        <li><strong>Microfilia:</strong> Atração por miniaturas</li>
+        <li><strong>MILF/DILF:</strong> Atração por mães/pais mais velhos</li>
+        <li><strong>Mommy/Daddy kink:</strong> Role-play parental (entre adultos)</li>
+        <li><strong>Mummification:</strong> Ser completamente envolto</li>
+        <li><strong>Mysofilia:</strong> Atração por sujidade ou odores</li>
+      </ul>
+      
+      <h3>🇳 N-O</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Narratofilia:</strong> Excitação por histórias/palavras obscenas</li>
+        <li><strong>Nasofilia:</strong> Fetiche por narizes</li>
+        <li><strong>Needle play:</strong> Uso de agulhas (BDSM avançado)</li>
+        <li><strong>Nyctofilia:</strong> Preferência por sexo no escuro</li>
+        <li><strong>Objectofilia:</strong> Atração por objetos inanimados</li>
+        <li><strong>Oculofilia:</strong> Fetiche por olhos</li>
+        <li><strong>Olfactofilia:</strong> Excitação por cheiros corporais</li>
+        <li><strong>Orgasm control:</strong> Controlo sobre quando o parceiro pode ter orgasmo</li>
+        <li><strong>Orgy:</strong> Sexo grupal</li>
+      </ul>
+      
+      <h3>🇵 P</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Parafilia:</strong> Termo clínico para interesses sexuais atípicos</li>
+        <li><strong>Pegging:</strong> Mulher penetra homem com strap-on</li>
+        <li><strong>Pet play:</strong> Role-play como animal (puppy, kitten, pony)</li>
+        <li><strong>Podofilia:</strong> Fetiche por pés</li>
+        <li><strong>Pony play:</strong> Role-play como cavalo</li>
+        <li><strong>Power exchange:</strong> Transferência consensual de poder</li>
+        <li><strong>Primal play:</strong> Sexo instintivo/animalesco</li>
+        <li><strong>Proxy:</strong> Prazer vicário através de outro</li>
+        <li><strong>Psychrofilia:</strong> Excitação pelo frio</li>
+        <li><strong>Puppy play:</strong> Role-play como cão</li>
+        <li><strong>Pygmalionismo:</strong> Atração por estátuas/manequins</li>
+        <li><strong>Pyrofilia:</strong> Excitação por fogo (PERIGOSO)</li>
+      </ul>
+      
+      <h3>🇶 Q-R</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Queening:</strong> Outro termo para face-sitting</li>
+        <li><strong>Quirofilia:</strong> Fetiche por mãos</li>
+        <li><strong>Race play:</strong> Role-play envolvendo raça (controverso)</li>
+        <li><strong>Rape fantasy (CNC):</strong> Fantasia de não-consentimento consensual</li>
+        <li><strong>Retifismo:</strong> Fetiche por sapatos</li>
+        <li><strong>Rimming:</strong> Estimulação oral do ânus</li>
+        <li><strong>Role-play:</strong> Encenação de cenários</li>
+        <li><strong>Rope bondage:</strong> Bondage com cordas</li>
+        <li><strong>Rubber:</strong> Ver Latex</li>
+      </ul>
+      
+      <h3>🇸 S</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Sadism:</strong> Prazer em causar dor</li>
+        <li><strong>Sensory deprivation:</strong> Privação de sentidos</li>
+        <li><strong>Shibari:</strong> Arte japonesa de bondage com cordas</li>
+        <li><strong>Shoe fetish:</strong> Fetiche por sapatos</li>
+        <li><strong>Size queen:</strong> Preferência por pénis grandes</li>
+        <li><strong>Smoking fetish:</strong> Ver Capnolagnia</li>
+        <li><strong>Somnofilia:</strong> Atração por pessoas a dormir (requer consentimento prévio!)</li>
+        <li><strong>Sounding:</strong> Inserção de objetos na uretra</li>
+        <li><strong>Spanking:</strong> Palmadas eróticas</li>
+        <li><strong>Spectrofilia:</strong> Atração por fantasmas (fantasia)</li>
+        <li><strong>Sploshing:</strong> Fetiche por comida no corpo</li>
+        <li><strong>Squirting:</strong> Ejaculação feminina</li>
+        <li><strong>Stigmatofilia:</strong> Atração por tatuagens/piercings</li>
+        <li><strong>Stocking fetish:</strong> Fetiche por meias</li>
+        <li><strong>Strap-on:</strong> Dildo com arnês</li>
+        <li><strong>Swinging:</strong> Troca de parceiros entre casais</li>
+        <li><strong>Switch:</strong> Alguém que alterna entre dominante e submisso</li>
+      </ul>
+      
+      <h3>🇹 T</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Tantofilia:</strong> Fetiche por tatuagens</li>
+        <li><strong>Technosexuality:</strong> Atração por robots/IA</li>
+        <li><strong>Teledildonics:</strong> Brinquedos sexuais controlados remotamente</li>
+        <li><strong>Tentacle fetish:</strong> Fantasia com tentáculos</li>
+        <li><strong>Tickling:</strong> Ver Knismolagnia</li>
+        <li><strong>Transformation:</strong> Fantasia de transformar-se em algo diferente</li>
+        <li><strong>Tribadism:</strong> Esfregar genitais entre mulheres</li>
+        <li><strong>Trichofilia:</strong> Fetiche por cabelo</li>
+        <li><strong>Troilism:</strong> Ver o parceiro com outro</li>
+      </ul>
+      
+      <h3>🇺 U-V-W</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Uniform fetish:</strong> Atração por uniformes</li>
+        <li><strong>Urofilia (Golden shower):</strong> Envolvimento de urina</li>
+        <li><strong>Vacuum bed:</strong> Cama de vácuo que imobiliza</li>
+        <li><strong>Vampirism:</strong> Fantasia com sangue/mordidas</li>
+        <li><strong>Vanilla:</strong> Sexo "convencional" (não-kink)</li>
+        <li><strong>Vicarofilia:</strong> Prazer através das experiências de outros</li>
+        <li><strong>Vorarephilia (Vore):</strong> Fantasia de ser engolido (apenas fantasia)</li>
+        <li><strong>Voyeurism:</strong> Prazer em observar</li>
+        <li><strong>WAM (Wet and Messy):</strong> Fetiche por ficar molhado/sujo</li>
+        <li><strong>Wax play:</strong> Uso de cera quente</li>
+        <li><strong>Wrestling:</strong> Luta erótica</li>
+      </ul>
+      
+      <h3>🇽 X-Y-Z</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Xenofilia:</strong> Atração pelo estrangeiro/desconhecido</li>
+        <li><strong>Zelofilia:</strong> Excitação por ciúmes</li>
+        <li><strong>Zentai:</strong> Fetiche por fatos que cobrem todo o corpo</li>
+        <li><strong>Zoofilia:</strong> Atração por animais (ILEGAL e antiético)</li>
+      </ul>
+      
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #e2e8f0;">
+      
+      <h3>⚠️ Nota Importante</h3>
+      <p>Muitos fetiches são completamente saudáveis entre adultos consentidores. Alguns requerem conhecimento técnico para segurança. Outros são apenas fantasias que não devem ser realizadas.</p>
+      
+      <p><strong>Regras de ouro:</strong></p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Consentimento informado sempre</li>
+        <li>✅ Safe words em práticas de risco</li>
+        <li>✅ Pesquisar antes de praticar</li>
+        <li>✅ Comunicar limites claramente</li>
+        <li>❌ Nunca envolver não-consentidores</li>
+        <li>❌ Nunca envolver menores ou animais</li>
+      </ul>
+      </div>
+    `
+  },
+  
+  {
+    id: "parafilias-guia",
+    title: "Parafilias: Entre o Normal e o Patológico",
+    excerpt: "Entende a diferença entre fetiches saudáveis e parafilias problemáticas. Quando procurar ajuda?",
+    category: "saude",
+    categoryLabel: "Saúde",
+    icon: "🧠",
+    image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&h=400&fit=crop&q=80",
+    readTime: 18,
+    discussionPrompt: "Acham que a sociedade é demasiado rápida a julgar interesses sexuais diferentes? Onde está a linha entre 'diferente' e 'problemático'?",
+    content: `
+      <div style="text-align: left;">
+      <h3>🧠 O Que São Parafilias?</h3>
+      <p>O termo <strong>parafilia</strong> (do grego: para = "ao lado de", filia = "amor") refere-se a padrões de excitação sexual que envolvem objetos, situações, ou alvos atípicos.</p>
+      
+      <p><strong>Importante:</strong> Ter uma parafilia não significa ter uma perturbação mental. A distinção crucial está no <strong>sofrimento</strong> que causa e se envolve <strong>não-consentidores</strong>.</p>
+      
+      <h3>📊 Parafilia vs. Perturbação Parafílica</h3>
+      <p>O DSM-5 (Manual de Diagnóstico) distingue:</p>
+      
+      <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+        <tr style="background: #f8f9fa;">
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Parafilia</th>
+          <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Perturbação Parafílica</th>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Interesse sexual atípico</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Causa sofrimento significativo</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Não necessariamente problemático</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Prejudica funcionamento social/profissional</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Entre adultos consentidores</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Envolve não-consentidores ou dano</td>
+        </tr>
+        <tr>
+          <td style="padding: 10px; border: 1px solid #ddd;">Parte da diversidade sexual</td>
+          <td style="padding: 10px; border: 1px solid #ddd;">Requer intervenção clínica</td>
+        </tr>
+      </table>
+      
+      <h3>📋 Parafilias Reconhecidas (DSM-5)</h3>
+      <p>O manual diagnóstico lista 8 parafilias específicas:</p>
+      
+      <h4>1. Voyeurismo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao observar pessoas nuas ou em atos sexuais sem o seu conhecimento</li>
+        <li><strong>Quando é perturbação:</strong> Se envolve observar não-consentidores</li>
+        <li><strong>Versão saudável:</strong> Ver pornografia, observar em clubes de swing (consentido)</li>
+      </ul>
+      
+      <h4>2. Exibicionismo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao expor genitais a desconhecidos</li>
+        <li><strong>Quando é perturbação:</strong> Se feito a não-consentidores</li>
+        <li><strong>Versão saudável:</strong> Exibição em contextos adultos (praias nudistas, clubes)</li>
+      </ul>
+      
+      <h4>3. Frotteurismo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao tocar/roçar em pessoa não-consentidora</li>
+        <li><strong>Quando é perturbação:</strong> Sempre que envolve não-consentidores (é crime)</li>
+        <li><strong>Versão saudável:</strong> Dança erótica consensual, "grinding" em festas com consentimento</li>
+      </ul>
+      
+      <h4>4. Masoquismo Sexual</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao ser humilhado, amarrado, ou sofrer</li>
+        <li><strong>Quando é perturbação:</strong> Se causa sofrimento ou envolve práticas perigosas não-controladas</li>
+        <li><strong>Versão saudável:</strong> BDSM consensual com safe words e limites</li>
+      </ul>
+      
+      <h4>5. Sadismo Sexual</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao causar sofrimento físico ou psicológico</li>
+        <li><strong>Quando é perturbação:</strong> Se praticado com não-consentidores</li>
+        <li><strong>Versão saudável:</strong> Ser dominante em BDSM consensual</li>
+      </ul>
+      
+      <h4>6. Pedofilia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Atração sexual por crianças pré-púberes</li>
+        <li><strong>É SEMPRE perturbação:</strong> Crianças não podem consentir</li>
+        <li><strong>Nota:</strong> Ter a atração não é crime; agir sobre ela é</li>
+      </ul>
+      
+      <h4>7. Fetichismo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação intensa por objetos não-genitais ou partes do corpo específicas</li>
+        <li><strong>Quando é perturbação:</strong> Se é o ÚNICO meio de obter excitação e causa sofrimento</li>
+        <li><strong>Versão saudável:</strong> Maioria dos fetiches (pés, couro, etc.) são inofensivos</li>
+      </ul>
+      
+      <h4>8. Travestismo</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Definição:</strong> Excitação ao vestir roupa do género oposto</li>
+        <li><strong>Quando é perturbação:</strong> Apenas se causa sofrimento significativo</li>
+        <li><strong>Nota:</strong> Diferente de identidade de género</li>
+      </ul>
+      
+      <h3>🔴 Sinais de Alerta</h3>
+      <p>Procura ajuda profissional se:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>❌ Os impulsos envolvem não-consentidores (especialmente menores)</li>
+        <li>❌ Sentes que estás a perder controlo sobre os impulsos</li>
+        <li>❌ A parafilia é a ÚNICA forma de sentir excitação</li>
+        <li>❌ Interfere significativamente com relações ou trabalho</li>
+        <li>❌ Causa-te vergonha, ansiedade ou depressão intensas</li>
+        <li>❌ Estás a escalar para práticas cada vez mais extremas</li>
+        <li>❌ Já prejudicaste ou tens medo de prejudicar alguém</li>
+      </ul>
+      
+      <h3>🟢 Sinais de que é Saudável</h3>
+      <p>A tua sexualidade provavelmente é saudável se:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>✅ Praticas apenas com adultos consentidores</li>
+        <li>✅ Consegues sentir excitação de outras formas também</li>
+        <li>✅ Não causa sofrimento a ti nem a outros</li>
+        <li>✅ Consegues manter relações satisfatórias</li>
+        <li>✅ Tens controlo sobre quando e como praticas</li>
+        <li>✅ Respeitas limites - teus e dos outros</li>
+      </ul>
+      
+      <h3>💊 Tratamento</h3>
+      <p>Para parafilias problemáticas, existem abordagens:</p>
+      
+      <h4>Psicoterapia</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Cognitivo-comportamental:</strong> Identificar e modificar padrões de pensamento</li>
+        <li><strong>Condicionamento aversivo:</strong> Associar estímulos a consequências negativas</li>
+        <li><strong>Treino de empatia:</strong> Compreender impacto nos outros</li>
+        <li><strong>Prevenção de recaída:</strong> Identificar gatilhos e desenvolver estratégias</li>
+      </ul>
+      
+      <h4>Medicação (casos graves)</h4>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li>Antidepressivos (reduzem compulsividade)</li>
+        <li>Anti-androgénios (reduzem desejo sexual - casos extremos)</li>
+        <li>Sempre supervisionada por psiquiatra</li>
+      </ul>
+      
+      <h3>🇵🇹 Recursos em Portugal</h3>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>SNS 24:</strong> 808 24 24 24 (linha de saúde)</li>
+        <li><strong>Consultas de Sexologia:</strong> Disponíveis em hospitais públicos</li>
+        <li><strong>APF:</strong> Associação para o Planeamento da Família</li>
+        <li><strong>Psicólogos privados:</strong> Procurar especialização em sexologia</li>
+      </ul>
+      
+      <h3>📚 Evolução Histórica</h3>
+      <p>O que é considerado "normal" muda com o tempo:</p>
+      <ul style="text-align: left; padding-left: 20px;">
+        <li><strong>Até 1973:</strong> Homossexualidade era "perturbação mental"</li>
+        <li><strong>Até 2013:</strong> BDSM era automaticamente patológico</li>
+        <li><strong>Atualmente:</strong> Foco no consentimento e sofrimento, não no ato em si</li>
+      </ul>
+      
+      <p>A tendência é <strong>despatologizar</strong> comportamentos consensuais entre adultos que não causam dano.</p>
+      
+      <h3>🤔 Reflexão Final</h3>
+      <p>A diversidade sexual humana é vasta. A maioria das pessoas com interesses atípicos são indivíduos perfeitamente saudáveis que encontraram formas seguras e consensuais de expressar a sua sexualidade.</p>
+      
+      <p>O problema não está no "diferente" - está no <strong>dano</strong>. Se não prejudicas ninguém (incluindo ti próprio) e tens controlo sobre os teus impulsos, a tua sexualidade é provavelmente apenas isso: <em>tua</em>.</p>
+      
+      <p>Se estás preocupado com os teus impulsos ou comportamentos, procurar ajuda não é fraqueza - é responsabilidade e coragem.</p>
       </div>
     `
   }
