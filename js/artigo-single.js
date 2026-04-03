@@ -194,6 +194,11 @@ function shareArticle(platform) {
     case 'twitter':
       window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url), '_blank');
       break;
+    case 'instagram':
+      // Instagram não permite partilha direta via URL, copia o link e avisa o utilizador
+      copyToClipboard(url);
+      showToast('Link copiado! Cola nos Stories ou DM do Instagram 📸');
+      break;
     case 'copy':
       copyToClipboard(url);
       break;
