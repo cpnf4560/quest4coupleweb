@@ -3766,7 +3766,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "🛏️",
-    image: "",
+    image: "../assets/blog/guia-posicoes.jpg",
     readTime: 22,
     content: `
       <div style="text-align: left;">
@@ -4222,7 +4222,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "saude",
     categoryLabel: "Saúde",
     icon: "🛡️",
-    image: "",
+    image: "../assets/blog/ist-preservativo.png",
     readTime: 18,
     content: `
       <div style="text-align: left;">
@@ -4437,7 +4437,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "lifestyle",
     categoryLabel: "Lifestyle",
     icon: "🚗",
-    image: "",
+    image: "../assets/blog/dogging-guia.png",
     readTime: 14,
     discussionPrompt: "Já experimentaram ou têm curiosidade sobre dogging? O que vos atrai ou afasta nesta prática?",
     content: `
@@ -4549,7 +4549,7 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     category: "dicas",
     categoryLabel: "Dicas",
     icon: "🔄",
-    image: "",
+    image: "../assets/blog/pegging-guia.png",
     readTime: 16,
     discussionPrompt: "O pegging ainda é tabu para muitos casais heterossexuais. Acham que a masculinidade está ligada a quem penetra? Partilhem as vossas reflexões!",
     content: `
@@ -4718,14 +4718,13 @@ const articlesData = [  {    id: "cuckold-dinamicas",
     `
   },
   
-  {
-    id: "glossario-fetiches",
+  {    id: "glossario-fetiches",
     title: "Glossário de Fetiches: De A a Z",
     excerpt: "Dicionário completo com mais de 100 fetiches explicados - descobre novos termos e explora curiosidades.",
     category: "dinamicas",
     categoryLabel: "Dinâmicas",
     icon: "📖",
-    image: "",
+    image: "../assets/blog/glossario-fetiches.jpg",
     readTime: 25,
     discussionPrompt: "Descobriram algum fetiche novo nesta lista que vos despertou curiosidade? Ou algum que já praticam? Partilhem (anonimamente se preferirem)!",
     content: `
