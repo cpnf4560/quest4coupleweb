@@ -235,9 +235,13 @@ async function continueInitDashboard(user) {
     renderStats();
     renderPacks();
     renderConnections();
-    
-    // Update username display in modal (if it exists)
+      // Update username display in modal (if it exists)
     updateMyUsernameDisplay();
+    
+    // 💬 Verificar mensagens de suporte pendentes
+    if (typeof checkAndShowSupportMessage === 'function') {
+      checkAndShowSupportMessage(user.uid);
+    }
 
     console.log('✅ Dashboard inicializado com sucesso!');
     hideLoading();
@@ -662,19 +666,21 @@ async function searchUser(searchText) {
       } else if (alreadyConnected) {
         if (searchResults) {
           searchResults.innerHTML = '<p style="text-align: center; color: #999;">Já estás conectado com este utilizador ✅</p>';
-        }
-      } else {
-        // Check if there's already a pending request
-        const pendingRequest = await db.collection('connection_requests')
+        }      } else {
+        // Check if there's already a pending request FROM ME to this user
+        // Query simplificada para cumprir regras do Firestore
+        // (só filtramos por fromUserId, depois verificamos toUserId localmente)
+        const myPendingRequests = await db.collection('connection_requests')
           .where('fromUserId', '==', auth.currentUser.uid)
-          .where('toUserId', '==', userId)
           .where('status', '==', 'pending')
-          .limit(1)
           .get();
+        
+        // Verificar localmente se já existe pedido para este utilizador
+        const pendingToThisUser = myPendingRequests.docs.find(doc => doc.data().toUserId === userId);
         
         const initials = userData.name ? userData.name.substring(0, 2).toUpperCase() : '??';
         
-        if (!pendingRequest.empty) {
+        if (pendingToThisUser) {
           if (searchResults) {
             searchResults.innerHTML = `
               <div class="user-result">

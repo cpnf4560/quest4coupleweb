@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview - Mensagem de Suporte</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .preview-info {
+      background: white;
+      border-radius: 15px;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    .preview-info h1 {
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    
+    .preview-info p {
+      color: #666;
+      margin-bottom: 15px;
+    }
+    
+    .preview-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .preview-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    /* ========================================
+       ESTILOS DO POPUP (cópia do support-messages.js)
+       ======================================== */
+    .support-message-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.3s ease;
+      backdrop-filter: blur(4px);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .support-message-popup {
+      background: white;
+      border-radius: 20px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      animation: slideIn 0.4s ease;
+    }
+    
+    .support-message-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 4px solid #28a745;
+    }
+    
+    .support-message-icon {
+      font-size: 28px;
+      background: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .support-message-header h3 {
+      margin: 0;
+      font-size: 1.3em;
+      font-weight: 600;
+    }
+    
+    .support-message-body {
+      padding: 25px;
+      font-size: 1.05em;
+      line-height: 1.7;
+      color: #333;
+    }
+    
+    .support-message-body p {
+      margin: 0;
+    }
+    
+    .support-message-body strong {
+      color: #667eea;
+    }
+    
+    .support-message-footer {
+      padding: 15px 25px 25px;
+      text-align: center;
+    }
+    
+    .support-message-btn {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 30px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .support-message-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    }
+    
+    @media (max-width: 480px) {
+      .support-message-popup {
+        width: 95%;
+        margin: 10px;
+      }
+      
+      .support-message-header {
+        padding: 15px 20px;
+      }
+      
+      .support-message-body {
+        padding: 20px;
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="preview-info">
+    <h1>🔍 Preview da Mensagem</h1>
+    <p>Esta é uma pré-visualização do popup que os utilizadores @jpn91 e @vnl94 irão ver no primeiro login.</p>
+    <button class="preview-btn" onclick="showPreview()">👁️ Ver Preview</button>
+  </div>
+
+  <!-- PREVIEW DO POPUP -->
+  <div class="support-message-overlay" id="previewOverlay" style="position: relative; background: transparent; backdrop-filter: none;">
+    <div class="support-message-popup">
+      <div class="support-message-header" style="border-bottom-color: #28a745">
+        <span class="support-message-icon" style="color: #28a745">✉️</span>
+        <h3>💬 Mensagem da Equipa</h3>
+      </div>
+      <div class="support-message-body">
+        <p>Olá! 👋<br><br>Obrigado por reportarem o problema! 🙏<br><br>Já está resolvido - criámos a vossa conexão manualmente. <br><br>Divirtam-se a explorar os packs juntos! 💕<br><br>Qualquer coisa, estamos cá!<br><br><strong>Equipa Quest4Couple</strong></p>
+      </div>
+      <div class="support-message-footer">
+        <button class="support-message-btn" onclick="closePreview()">
+          ✓ Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showPreview() {
+      const overlay = document.getElementById('previewOverlay');
+      overlay.style.position = 'fixed';
+      overlay.style.background = 'rgba(0, 0, 0, 0.6)';
+      overlay.style.backdropFilter = 'blur(4px)';
+    }
+    
+    function closePreview() {
+      const overlay = document.getElementById('previewOverlay');
+      overlay.style.position = 'relative';
+      overlay.style.background = 'transparent';
+      overlay.style.backdropFilter = 'none';
+    }
+    
+    // Clicar fora fecha
+    document.getElementById('previewOverlay').addEventListener('click', function(e) {
+      if (e.target === this && this.style.position === 'fixed') {
+        closePreview();
+      }
+    });
+  </script>
+</body>
+</html>

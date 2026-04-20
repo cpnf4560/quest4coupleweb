@@ -1260,15 +1260,15 @@
         resultsDiv.innerHTML = `<p style="color: #ffc107; font-weight: 600;">${t('report.modal.alreadyConnected')}</p>`;
         return;
       }
-      
-      // Verificar se já existe pedido pendente
-      const existingRequest = await db.collection('connection_requests')
+        // Verificar se já existe pedido pendente (query simplificada)
+      const myPendingRequests = await db.collection('connection_requests')
         .where('fromUserId', '==', user.uid)
-        .where('toUserId', '==', toUserId)
         .where('status', '==', 'pending')
         .get();
       
-      if (!existingRequest.empty) {
+      const pendingToThisUser = myPendingRequests.docs.find(doc => doc.data().toUserId === toUserId);
+      
+      if (pendingToThisUser) {
         resultsDiv.innerHTML = `<p style="color: #ffc107; font-weight: 600;">${t('report.modal.alreadyConnected')}</p>`;
         return;
       }
