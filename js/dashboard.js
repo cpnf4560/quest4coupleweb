@@ -662,11 +662,11 @@ async function searchUser(searchText) {
       if (userId === auth.currentUser.uid) {
         if (searchResults) {
           searchResults.innerHTML = '<p style="text-align: center; color: #999;">Não podes conectar contigo próprio 😅</p>';
-        }
-      } else if (alreadyConnected) {
+        }      } else if (alreadyConnected) {
         if (searchResults) {
           searchResults.innerHTML = '<p style="text-align: center; color: #999;">Já estás conectado com este utilizador ✅</p>';
-        }      } else {
+        }
+      } else {
         // Check if there's already a pending request FROM ME to this user
         // Query simplificada para cumprir regras do Firestore
         // (só filtramos por fromUserId, depois verificamos toUserId localmente)
@@ -691,10 +691,10 @@ async function searchUser(searchText) {
                     <p style="color: #666; font-size: 14px;">@${userData.username}</p>
                   </div>
                 </div>
-                <span style="color: #f59e0b; font-weight: 600;">⏳ Pedido enviado</span>
-              </div>
+                <span style="color: #f59e0b; font-weight: 600;">⏳ Pedido enviado</span>              </div>
             `;
-          }        } else {
+          }
+        } else {
           if (searchResults) {
             const safeName = (userData.name || 'Utilizador').replace(/'/g, "\\'");
             searchResults.innerHTML = `

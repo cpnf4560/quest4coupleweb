@@ -199,15 +199,15 @@ const SupportBanner = {
                 }
                 .share-btn.whatsapp:hover svg path { 
                     fill: white; 
-                }
-
-                .share-btn.facebook:hover { 
+                }                .share-btn.facebook:hover { 
                     background: #1877f2; 
                     border-color: #1877f2; 
                 }
                 .share-btn.facebook:hover svg path { 
                     fill: white; 
-                }                .share-btn.instagram:hover { 
+                }
+
+                .share-btn.instagram:hover { 
                     background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
                     border-color: #bc1888; 
                 }

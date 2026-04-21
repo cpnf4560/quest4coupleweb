@@ -153,9 +153,11 @@ service cloud.firestore {
     // CONNECTIONS COLLECTION (Coleção raiz)
     // ========================================
     match /connections/{connectionId} {
-      // Utilizador pode criar conexões se estiver autenticado e for um dos users
-      allow create: if request.auth != null && 
-                       request.auth.uid in request.resource.data.users;
+      // Utilizador pode criar conexões se estiver autenticado e for um dos users OU admin
+      allow create: if request.auth != null && (
+                       isAdmin() ||
+                       request.auth.uid in request.resource.data.users
+                     );
       
       // Leitura: Admin pode ler TODAS (para queries), users normais só as suas
       allow read: if request.auth != null && (
@@ -165,18 +167,17 @@ service cloud.firestore {
       
       // Utilizador pode atualizar conexões onde participa OU admin
       allow update: if request.auth != null && (
-                       request.auth.uid in resource.data.users ||
-                       isAdmin()
+                       isAdmin() ||
+                       request.auth.uid in resource.data.users
                      );
       
       // Utilizador pode apagar conexões onde participa OU admin
       allow delete: if request.auth != null && (
-                       request.auth.uid in resource.data.users ||
-                       isAdmin()
+                       isAdmin() ||
+                       request.auth.uid in resource.data.users
                      );
     }
-    
-    // ========================================
+      // ========================================
     // CONNECTION REQUESTS (Convites de parceiros)
     // ========================================
     match /connection_requests/{requestId} {
@@ -184,19 +185,25 @@ service cloud.firestore {
       allow create: if request.auth != null && 
                        request.auth.uid == request.resource.data.fromUserId;
       
-      // Utilizador pode ler pedidos onde é remetente ou destinatário
-      allow read: if request.auth != null && 
-                     (request.auth.uid == resource.data.fromUserId || 
-                      request.auth.uid == resource.data.toUserId);
+      // Utilizador pode ler pedidos onde é remetente ou destinatário OU admin pode ler todos
+      allow read: if request.auth != null && (
+                     isAdmin() ||
+                     request.auth.uid == resource.data.fromUserId || 
+                     request.auth.uid == resource.data.toUserId
+                   );
       
-      // Destinatário pode atualizar (aceitar/recusar)
-      allow update: if request.auth != null && 
-                       request.auth.uid == resource.data.toUserId;
+      // Destinatário pode atualizar (aceitar/recusar) OU admin
+      allow update: if request.auth != null && (
+                       isAdmin() ||
+                       request.auth.uid == resource.data.toUserId
+                     );
       
-      // Remetente ou destinatário pode apagar
-      allow delete: if request.auth != null && 
-                       (request.auth.uid == resource.data.fromUserId || 
-                        request.auth.uid == resource.data.toUserId);
+      // Remetente ou destinatário pode apagar OU admin
+      allow delete: if request.auth != null && (
+                       isAdmin() ||
+                       request.auth.uid == resource.data.fromUserId || 
+                       request.auth.uid == resource.data.toUserId
+                     );
     }
       // ========================================
     // ANALYTICS FULL REPORTS (Para BackOffice)
