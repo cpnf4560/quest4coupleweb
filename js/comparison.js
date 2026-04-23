@@ -697,15 +697,25 @@ async function checkCloudAuthentication() {
  * Carrega lista de parceiros conectados do Firebase
  */
 async function loadConnectedPartners(userId) {
+  console.log('🔍 loadConnectedPartners - Iniciando para userId:', userId);
   const partnerSelect = document.getElementById('partnerSelect');
+  
+  if (!partnerSelect) {
+    console.error('❌ Element partnerSelect não encontrado!');
+    return;
+  }
   
   try {
     // Buscar conexões onde o utilizador participa
     const db = firebase.firestore();
+    console.log('📊 Buscando conexões em Firestore...');
     const connectionsRef = db.collection('connections').where('users', 'array-contains', userId);
     const snapshot = await connectionsRef.get();
     
+    console.log(`✅ Query executada. Conexões encontradas: ${snapshot.size}`);
+    
     if (snapshot.empty) {
+      console.log('⚠️ Nenhuma conexão encontrada');
       partnerSelect.innerHTML = '<option value="">Nenhum parceiro conectado ainda</option>';
       return;
     }
@@ -739,10 +749,22 @@ async function loadConnectedPartners(userId) {
     if (partnerSelect.options.length <= 1) {
       partnerSelect.innerHTML = '<option value="">Nenhum parceiro conectado ainda</option>';
     }
+      } catch (error) {
+    console.error('❌ Erro ao carregar parceiros:', error);
+    console.error('Código do erro:', error.code);
+    console.error('Mensagem:', error.message);
+    console.error('Stack:', error.stack);
     
-  } catch (error) {
-    console.error('Erro ao carregar parceiros:', error);
-    partnerSelect.innerHTML = '<option value="">Erro ao carregar parceiros</option>';
+    // Mensagem de erro mais específica
+    let errorMsg = 'Erro ao carregar parceiros';
+    if (error.code === 'permission-denied') {
+      errorMsg = 'Sem permissão para carregar conexões';
+      console.error('💡 Verifica se tens conexões aceites');
+    } else if (error.message && error.message.includes('network')) {
+      errorMsg = 'Erro de conexão à internet';
+    }
+    
+    partnerSelect.innerHTML = `<option value="">${errorMsg}</option>`;
   }
 }
 
