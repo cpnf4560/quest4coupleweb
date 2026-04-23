@@ -11,6 +11,16 @@ service cloud.firestore {
              exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
+
+    // Verifica se existe conexão entre utilizador autenticado e outro utilizador
+    function hasConnectionWith(otherUserId) {
+      return request.auth != null && (
+        (request.auth.uid < otherUserId &&
+         exists(/databases/$(database)/documents/connections/$(request.auth.uid + '_' + otherUserId))) ||
+        (otherUserId < request.auth.uid &&
+         exists(/databases/$(database)/documents/connections/$(otherUserId + '_' + request.auth.uid)))
+      );
+    }
     
     // ========================================
     // USERS COLLECTION
@@ -21,9 +31,9 @@ service cloud.firestore {
       // 2. O UID do documento coincide com o UID do utilizador autenticado
       allow create: if request.auth != null && request.auth.uid == userId;
       
-      // Permitir leitura: próprio perfil OU admin pode ler todos
+      // Permitir leitura: próprio perfil OU admin OU parceiro conectado
       allow read: if request.auth != null && (
-        request.auth.uid == userId || isAdmin()
+        request.auth.uid == userId || isAdmin() || hasConnectionWith(userId)
       );
       
       // Permitir atualização do próprio perfil OU por admin

@@ -725,19 +725,36 @@ async function loadConnectedPartners(userId) {
     
     // Para cada conexão, buscar os dados do parceiro
     for (const doc of snapshot.docs) {
-      const connection = doc.data();
+      const connection = doc.data() || {};
+
+      // Ignorar documentos malformados para não quebrar todo o carregamento
+      if (!Array.isArray(connection.users)) {
+        console.warn('⚠️ Conexão sem campo users válido:', doc.id, connection);
+        continue;
+      }
+
       // O parceiro é o outro utilizador no array users
       const partnerId = connection.users.find(id => id !== userId);
       
       if (partnerId) {
-        // Buscar dados do parceiro
-        const partnerDoc = await db.collection('users').doc(partnerId).get();
-        const partnerData = partnerDoc.exists ? partnerDoc.data() : {};
+        // Buscar dados do parceiro (sem quebrar fluxo se não houver permissão no perfil)
+        let partnerData = {};
+        try {
+          const partnerDoc = await db.collection('users').doc(partnerId).get();
+          partnerData = partnerDoc.exists ? partnerDoc.data() : {};
+        } catch (partnerError) {
+          console.warn('⚠️ Não foi possível carregar perfil do parceiro, usando fallback:', {
+            partnerId,
+            code: partnerError.code,
+            message: partnerError.message
+          });
+        }
         
         const option = document.createElement('option');
         option.value = partnerId;
         option.dataset.connectionId = doc.id; // Guardar ID da conexão para referência
-        option.textContent = partnerData.name || partnerData.email || 'Parceiro';
+        const fallbackName = `Parceiro (${partnerId.substring(0, 6)}...)`;
+        option.textContent = partnerData.name || partnerData.displayName || partnerData.email || fallbackName;
         if (partnerData.username) {
           option.textContent += ` (@${partnerData.username})`;
         }
@@ -873,15 +890,24 @@ async function loadAnswersFromFirebase(userId) {
     
     // Buscar dados do utilizador (nome)
     console.log(`📄 Buscando perfil do utilizador...`);
-    const userDoc = await db.collection('users').doc(userId).get();
     let userName = 'Utilizador';
-    
-    if (userDoc.exists) {
-      const userData = userDoc.data();
-      userName = userData.name || userData.displayName || userData.email?.split('@')[0] || 'Utilizador';
-      console.log(`✅ Perfil encontrado: ${userName}`);
-    } else {
-      console.log(`⚠️ Perfil não encontrado para ${userId}`);
+
+    try {
+      const userDoc = await db.collection('users').doc(userId).get();
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        userName = userData.name || userData.displayName || userData.email?.split('@')[0] || 'Utilizador';
+        console.log(`✅ Perfil encontrado: ${userName}`);
+      } else {
+        console.log(`⚠️ Perfil não encontrado para ${userId}`);
+      }
+    } catch (profileError) {
+      // O relatório pode ser gerado sem nome de perfil, desde que respostas estejam acessíveis.
+      console.warn('⚠️ Não foi possível ler perfil, a continuar com nome fallback:', {
+        userId,
+        code: profileError.code,
+        message: profileError.message
+      });
     }
     
     // Buscar respostas: users/{userId}/answers/all
