@@ -1,6 +1,7 @@
-{  "lang": "pt-pt",
+{
+  "lang": "pt-pt",
   "pageTitle": "Quest4Couple - Descubram juntos 💑",
-    "header": {
+  "header": {
     "login": "Login",
     "logout": "Sair",
     "dashboard": "Dashboard",
@@ -9,7 +10,6 @@
     "tutorial": "Tutorial",
     "support": "Apoiar"
   },
-  
   "app": {
     "saved": "Guardado",
     "ageModal": {
@@ -117,7 +117,6 @@
       }
     }
   },
-  
   "home": {
     "title": "Quest4Couple",
     "subtitle": "Descubram-se juntos",
@@ -131,13 +130,15 @@
     },
     "badge": {
       "free": "✓ 100% Gratuito • Sem registo obrigatório"
-    },    "links": {
+    },
+    "links": {
       "howItWorks": "Como Funciona",
       "viewReport": "Ver Relatório",
       "statistics": "Estatísticas"
     },
     "features": {
-      "title": "Como Funciona?",      "private": {
+      "title": "Como Funciona?",
+      "private": {
         "title": "100% Privado",
         "description": "Respostas encriptadas localmente. Nada é partilhado sem permissão."
       },
@@ -149,7 +150,8 @@
         "title": "100% Gratuito",
         "description": "Sem custos escondidos. Tudo incluído!"
       }
-    },    "packs": {
+    },
+    "packs": {
       "title": "5 Packs Temáticos",
       "description": "Romântico, Experiência, Pimentinha, Poliamor e Fetiches. 300 perguntas.",
       "romantic": "Pack Romântico",
@@ -167,7 +169,7 @@
       "users": "Utilizadores Ativos"
     }
   },
-    "auth": {
+  "auth": {
     "pageTitle": "Login - Quest4Couple",
     "tagline": "Autenticação 🔐",
     "taglineHeart": "Descubram-se juntos ❤️",
@@ -242,7 +244,6 @@
       "userNotFound": "Utilizador não encontrado"
     }
   },
-  
   "dashboard": {
     "pageTitle": "Dashboard - Quest4Couple",
     "tagline": "Dashboard 📊",
@@ -322,7 +323,7 @@
       "selectCountry": "Selecione o país"
     }
   },
-    "tutorial": {
+  "tutorial": {
     "title": "Como Funciona o Quest4Couple",
     "subtitle": "Guia completo para descobrirem-se juntos",
     "nav": {
@@ -335,7 +336,8 @@
       "connections": "Conexões",
       "compare": "Comparar",
       "code": "Código"
-    },    "navigation": {
+    },
+    "navigation": {
       "intro": "Introdução",
       "register": "Registo",
       "answers": "Respostas",
@@ -384,7 +386,8 @@
         "benefit3Title": "Backup Automático",
         "benefit3Desc": "Nunca percas as tuas respostas - tudo guardado na cloud!",
         "benefit4Title": "Relatórios Detalhados",
-        "benefit4Desc": "Análises completas da compatibilidade do casal.",        "howToTitle": "Como Criar Conta?",
+        "benefit4Desc": "Análises completas da compatibilidade do casal.",
+        "howToTitle": "Como Criar Conta?",
         "step1": "Clicar em 'Criar Conta'",
         "step1Desc": "Clica em 'Login' no topo",
         "step2": "Preencher Formulário",
@@ -620,7 +623,6 @@
       }
     }
   },
-  
   "support": {
     "title": "Apoiar o Projeto",
     "intro": "O Quest4Couple é um projeto de paixão criado para ajudar casais a descobrirem-se mutuamente de forma segura e sem julgamentos. Neste momento, <strong>todo o conteúdo é gratuito</strong>.",
@@ -653,7 +655,6 @@
       }
     }
   },
-  
   "banner": {
     "title": "Ajuda-nos a crescer!",
     "description": "O Quest4Couple é <strong>100% gratuito</strong>, mas desenvolvê-lo e mantê-lo requer tempo e custos. Se gostaste, considera apoiar-nos de uma destas formas:",
@@ -661,7 +662,7 @@
     "feedback": "Deixa Feedback",
     "share": "Partilha"
   },
-    "footer": {
+  "footer": {
     "copyright": "© 2025 Quest4Couple - Todos os direitos reservados",
     "links": {
       "home": "Início",
@@ -673,14 +674,12 @@
       "admin": "Admin"
     }
   },
-  
   "beta": {
     "icon": "🚀",
     "title": "Versão Beta • Em Desenvolvimento",
     "description": "Estamos em fase de testes! Se encontrares bugs ou tiveres sugestões, <a href='pages/apoiar.html#feedback'>envia-nos feedback</a> e ajuda a melhorar 💪",
     "close": "×"
   },
-  
   "report": {
     "pageTitle": "Relatório de Compatibilidade - Quest4Couple 💕",
     "tagline": "Relatório de Compatibilidade 💕",
@@ -773,7 +772,6 @@
       "daysAgo": "há {n}d"
     }
   },
-  
   "common": {
     "loading": "A carregar...",
     "processing": "A processar...",
@@ -800,7 +798,6 @@
     "visitor": "Visitante",
     "selectLanguage": "Escolhe o idioma"
   },
-
   "answers": {
     "porfavor": "Por favor!",
     "yup": "Yup",
@@ -808,7 +805,6 @@
     "talvez": "Talvez",
     "commentPlaceholder": "Comentários (opcional)"
   },
-
   "pages": {
     "about": {
       "pageTitle": "Sobre - Quest4Couple",
@@ -817,7 +813,7 @@
       "missionTitle": "A Nossa Missão",
       "missionText": "Queremos que todos os casais se sintam livres para explorar a sua intimidade sem medo, vergonha ou desconforto. Através de questionários cuidadosamente elaborados, facilitamos conversas que muitos acham difíceis de iniciar.",
       "privacyTitle": "Privacidade em Primeiro Lugar",
-      "privacyText": "A vossa privacidade é sagrada. Não vendemos dados, não partilhamos informações, e tudo o que respondem fica entre vocês. Simples assim.",
+      "privacyText": "A vossa privacidade é sagrada. Não vendemos dados, não os partilhamos para publicidade, e as vossas respostas só são mostradas ao vosso parceiro/a quando coincidem. Simples assim.",
       "howItWorksTitle": "Como Funciona",
       "howItWorks1": "Escolhem um dos 5 packs temáticos (ou fazem todos!)",
       "howItWorks2": "Cada um responde às perguntas individualmente",
@@ -835,16 +831,16 @@
       "q1": "É realmente gratuito?",
       "a1": "Sim! Neste momento, todo o conteúdo do Quest4Couple é gratuito. No futuro, poderemos adicionar funcionalidades premium opcionais, mas o core do serviço continuará acessível a todos.",
       "q2": "As minhas respostas são privadas?",
-      "a2": "Absolutamente! As vossas respostas são armazenadas localmente no vosso navegador. Não vendemos dados, não partilhamos informações com terceiros, e não temos acesso ao que respondem. A vossa privacidade é a nossa prioridade #1.",
+      "a2": "Sim! As vossas respostas ficam associadas à vossa conta, protegidas por regras de acesso, e o vosso parceiro/a só vê o que têm em comum. Não vendemos dados nem os usamos para publicidade. Podem ainda exportar as respostas para um ficheiro .q4c encriptado.",
       "q3": "Como funciona o matching?",
       "a3": "Cada pessoa responde ao questionário individualmente. No final, apenas veem o que têm em comum - as respostas em que ambos disseram \"sim\". Se um disser \"não\", essa pergunta não aparece no resultado final.",
       "q4": "Quantos packs existem?",
       "a4": "Temos 5 packs temáticos:",
-      "a4Pack1": "<strong>Pack Romântico</strong> - 40 perguntas sobre sensualidade e conexão",
-      "a4Pack2": "<strong>Exploração e Aventura a Dois</strong> - 30 perguntas sobre experimentar coisas novas",
-      "a4Pack3": "<strong>Pimentinha</strong> - 32 perguntas para apimentar a relação",
-      "a4Pack4": "<strong>Poliamor</strong> - 50 perguntas sobre abertura e não-monogamia",
-      "a4Pack5": "<strong>Fetiches</strong> - 100 perguntas sobre kinks e práticas avançadas",
+      "a4Pack1": "<strong>Pack Romântico</strong> - 50 perguntas sobre sensualidade e conexão",
+      "a4Pack2": "<strong>Exploração e Aventura a Dois</strong> - 50 perguntas sobre experimentar coisas novas",
+      "a4Pack3": "<strong>Pimentinha</strong> - 50 perguntas para apimentar a relação",
+      "a4Pack4": "<strong>Poliamor</strong> - 60 perguntas sobre abertura e não-monogamia",
+      "a4Pack5": "<strong>Fetiches</strong> - 90 perguntas sobre kinks e práticas avançadas",
       "q5": "Preciso de criar conta?",
       "a5": "Neste momento, sim. Criar conta permite-vos guardar as respostas, comparar resultados com o vosso parceiro/a, e aceder ao histórico. Mas não se preocupem - só pedimos o essencial (email e password).",
       "q6": "Posso fazer os questionários sozinho/a?",
@@ -895,52 +891,40 @@
     "privacy": {
       "pageTitle": "Política de Privacidade - Quest4Couple",
       "title": "Política de Privacidade",
-      "lastUpdate": "Última atualização: 17 de novembro de 2025",
+      "lastUpdate": "Última atualização: 31 de outubro de 2026",
       "s1Title": "1. Introdução",
-      "s1Text": "A privacidade dos nossos utilizadores é absolutamente fundamental. Esta política explica como tratamos (ou melhor, como NÃO tratamos) os vossos dados.",
+      "s1Text": "A vossa privacidade é a nossa prioridade. Esta política explica de forma transparente que dados tratamos, para que servem e quem lhes pode aceder.",
       "s2Title": "2. Dados que Recolhemos",
-      "s2Text": "Recolhemos o mínimo absoluto necessário para o serviço funcionar:",
-      "s2Item1": "<strong>Email:</strong> Para criar conta e recuperar password",
-      "s2Item2": "<strong>Respostas aos questionários:</strong> Armazenadas localmente no vosso navegador",
-      "s2Item3": "<strong>Dados de navegação básicos:</strong> Para melhorar a experiência do site",
+      "s2Text": "Recolhemos apenas o necessário para o serviço funcionar:",
+      "s2Item1": "Email, nome de utilizador e palavra-passe (guardada de forma encriptada pelo Firebase Authentication)",
+      "s2Item2": "As vossas respostas aos questionários, associadas à vossa conta, para sincronizar entre dispositivos e comparar com o vosso parceiro/a",
+      "s2Item3": "A ligação entre os dois parceiros (quem está ligado a quem)",
+      "s2Item4": "Preferências como o idioma",
+      "s2Item5": "Estatísticas de utilização anónimas e agregadas (Microsoft Clarity)",
       "s3Title": "3. Como Usamos os Dados",
-      "s3Text": "Os vossos dados são usados APENAS para:",
-      "s3Item1": "Permitir que façam login",
-      "s3Item2": "Guardar as vossas respostas (no vosso dispositivo)",
-      "s3Item3": "Mostrar os resultados do matching",
-      "s3Item4": "Melhorar o serviço (análise anónima agregada)",
-      "s4Title": "4. O Que NÃO Fazemos",
-      "s4Text": "<strong>NUNCA fazemos isto:</strong>",
-      "s4Item1": "Vender ou partilhar os vossos dados com terceiros",
-      "s4Item2": "Usar os vossos dados para publicidade direcionada",
-      "s4Item3": "Ler as vossas respostas individuais",
-      "s4Item4": "Associar respostas a perfis identificáveis",
-      "s4Item5": "Partilhar informação sem consentimento explícito",
-      "s5Title": "5. Armazenamento de Dados",
-      "s5Text": "As vossas respostas aos questionários são armazenadas <strong>localmente no vosso navegador</strong> usando localStorage. Isto significa que:",
-      "s5Item1": "Nós não temos acesso direto às vossas respostas",
-      "s5Item2": "Os dados ficam no vosso dispositivo",
-      "s5Item3": "Se limparem o histórico do navegador, as respostas são apagadas",
-      "s6Title": "6. Segurança",
-      "s6Text": "Usamos encriptação HTTPS para todas as comunicações. As passwords são encriptadas e nunca são armazenadas em texto simples.",
-      "s7Title": "7. Os Vossos Direitos (RGPD)",
-      "s7Text": "De acordo com o RGPD, têm direito a:",
-      "s7Item1": "Aceder aos vossos dados",
-      "s7Item2": "Corrigir dados incorretos",
-      "s7Item3": "Eliminar a vossa conta e todos os dados",
-      "s7Item4": "Exportar os vossos dados",
-      "s7Item5": "Opor-se ao processamento dos dados",
-      "s8Title": "8. Cookies",
-      "s8Text": "Usamos cookies essenciais para o funcionamento do site (ex: manter sessão ativa). Não usamos cookies de tracking ou publicidade.",
-      "s9Title": "9. Alterações a Esta Política",
-      "s9Text": "Podemos atualizar esta política ocasionalmente. Notificaremos sempre sobre mudanças significativas através do email registado.",
+      "s3Text": "Os dados são usados apenas para permitir o login, guardar e sincronizar as vossas respostas, mostrar os resultados em comum com o vosso parceiro/a e melhorar o serviço. Nunca usamos os dados para publicidade.",
+      "s4Title": "4. Onde os Dados São Guardados",
+      "s4Text": "Os dados da conta e as respostas são guardados nos serviços Firebase (Google), protegidos por regras de acesso: cada utilizador só acede aos seus dados e, no caso das respostas, o parceiro/a ligado apenas vê o que têm em comum. O acesso de administração é restrito e limitado a manutenção e suporte. Sem sessão iniciada, as respostas ficam apenas no vosso navegador (localStorage).",
+      "s5Title": "5. Ficheiros .q4c",
+      "s5Text": "Os ficheiros de respostas que geram são encriptados localmente. A palavra-passe (se definirem) nunca sai do vosso dispositivo. Não podemos recuperar ficheiros perdidos ou palavras-passe esquecidas.",
+      "s6Title": "6. Partilha de Dados",
+      "s6Text": "Não vendemos nem cedemos os vossos dados. Recorremos apenas a prestadores essenciais: Google Firebase (alojamento, autenticação e base de dados), Microsoft Clarity (estatísticas anónimas) e Formspree (envio de feedback, quando usarem o formulário).",
+      "s7Title": "7. Cookies",
+      "s7Text": "Usamos apenas armazenamento essencial para:",
+      "s7Item1": "Lembrar a vossa preferência de idioma",
+      "s7Item2": "Manter a sessão ativa (se tiverem iniciado sessão)",
+      "s7Item3": "Lembrar a confirmação de idade",
+      "s8Title": "8. Segurança",
+      "s8Text": "Toda a comunicação é feita por HTTPS, as palavras-passe são geridas pelo Firebase Authentication e o acesso aos dados é controlado por regras de segurança. Nenhum sistema é 100% infalível, por isso não partilhem a vossa palavra-passe.",
+      "s9Title": "9. Os Vossos Direitos",
+      "s9Text": "Nos termos do RGPD, podem aceder, corrigir, exportar ou pedir a eliminação da vossa conta e dos dados associados, bem como opor-se ao seu tratamento, contactando-nos por email.",
       "s10Title": "10. Contacto",
-      "s10Text": "Dúvidas sobre privacidade?"
+      "s10Text": "Para questões sobre privacidade, contactem-nos: quest4couple@gmail.com"
     },
     "terms": {
       "pageTitle": "Termos de Serviço - Quest4Couple",
       "title": "Termos de Serviço",
-      "lastUpdate": "Última atualização: 17 de novembro de 2025",
+      "lastUpdate": "Última atualização: 31 de outubro de 2026",
       "s1Title": "1. Aceitação dos Termos",
       "s1Text": "Ao usar o Quest4Couple, concordam com estes termos. Se não concordarem, por favor não usem o serviço.",
       "s2Title": "2. Elegibilidade",
@@ -972,9 +956,11 @@
       "s10Text": "Podem eliminar a vossa conta a qualquer momento. Reservamo-nos o direito de suspender ou terminar contas que violem estes termos.",
       "s11Title": "11. Lei Aplicável",
       "s11Text": "Estes termos são regidos pelas leis de Portugal. Qualquer disputa será resolvida nos tribunais portugueses.",
-      "s12Title": "12. Contacto",      "s12Text": "Dúvidas sobre estes termos?"
-    },    "footer": {
-      "copyright": "© 2025 Quest4Couple",
+      "s12Title": "12. Contacto",
+      "s12Text": "Dúvidas sobre estes termos?"
+    },
+    "footer": {
+      "copyright": "© 2026 Quest4Couple",
       "home": "Início",
       "about": "Sobre",
       "faq": "FAQ",
@@ -991,7 +977,8 @@
         "privacy": "Privacidade",
         "terms": "Termos",
         "admin": "Admin"
-      }
+      },
+      "testimonials": "Testemunhos"
     }
   }
 }

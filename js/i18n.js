@@ -104,6 +104,8 @@ const I18n = {
                     element.placeholder = translation;
                 } else if (element.hasAttribute('title')) {
                     element.title = translation;
+                } else if (/<[a-z][\s\S]*>/i.test(translation)) {
+                    element.innerHTML = translation;
                 } else {
                     element.textContent = translation;
                 }

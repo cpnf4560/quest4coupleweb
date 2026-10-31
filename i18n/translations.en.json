@@ -1,6 +1,7 @@
-{  "lang": "en",
+{
+  "lang": "en",
   "pageTitle": "Quest4Couple - Discover Together 💑",
-    "header": {
+  "header": {
     "login": "Login",
     "logout": "Sign Out",
     "dashboard": "Dashboard",
@@ -9,7 +10,6 @@
     "tutorial": "Tutorial",
     "support": "Support"
   },
-  
   "app": {
     "saved": "Saved",
     "ageModal": {
@@ -117,7 +117,6 @@
       }
     }
   },
-  
   "home": {
     "title": "Quest4Couple",
     "subtitle": "Discover Together 💕",
@@ -137,7 +136,8 @@
       "viewReport": "💑 View Couple Report"
     },
     "features": {
-      "title": "How Does It Work?",      "private": {
+      "title": "How Does It Work?",
+      "private": {
         "title": "100% Private",
         "description": "Your answers are <strong>locally encrypted</strong>. Nothing is shared without permission. Zero tracking."
       },
@@ -149,7 +149,8 @@
         "title": "100% Free",
         "description": "No hidden costs. Everything included!"
       }
-    },    "packs": {
+    },
+    "packs": {
       "title": "5 Thematic Packs",
       "description": "💝 Romantic, 🌍 Experience, 🔥 Spicy, 💞 Polyamory and ⛓️ Fetishes. <strong>300 free questions!</strong>",
       "romantic": "Romantic Pack",
@@ -167,7 +168,7 @@
       "users": "Active Users"
     }
   },
-    "auth": {
+  "auth": {
     "pageTitle": "Login - Quest4Couple",
     "tagline": "Authentication 🔐",
     "taglineHeart": "Discover each other ❤️",
@@ -240,7 +241,6 @@
       "userNotFound": "User not found"
     }
   },
-  
   "dashboard": {
     "pageTitle": "Dashboard - Quest4Couple",
     "tagline": "Dashboard 📊",
@@ -320,7 +320,7 @@
       "selectCountry": "Select country"
     }
   },
-    "tutorial": {
+  "tutorial": {
     "title": "How Quest4Couple Works",
     "subtitle": "Complete guide to discover each other",
     "nav": {
@@ -333,7 +333,8 @@
       "connections": "Connections",
       "compare": "Compare",
       "code": "Code"
-    },    "navigation": {
+    },
+    "navigation": {
       "intro": "Introduction",
       "register": "Register",
       "answers": "Answers",
@@ -382,7 +383,8 @@
         "benefit3Title": "Automatic Backup",
         "benefit3Desc": "Never lose your answers - everything saved in the cloud!",
         "benefit4Title": "Detailed Reports",
-        "benefit4Desc": "Complete compatibility analyses for couples.",        "howToTitle": "How to Create an Account?",
+        "benefit4Desc": "Complete compatibility analyses for couples.",
+        "howToTitle": "How to Create an Account?",
         "step1": "Click 'Create Account'",
         "step1Desc": "Click 'Login' at the top",
         "step2": "Fill in the Form",
@@ -618,7 +620,6 @@
       }
     }
   },
-  
   "support": {
     "title": "Support the Project",
     "intro": "Quest4Couple is a passion project created to help couples discover each other safely and without judgment. Currently, <strong>all content is free</strong>.",
@@ -651,7 +652,6 @@
       }
     }
   },
-  
   "banner": {
     "title": "Help us grow!",
     "description": "Quest4Couple is <strong>100% free</strong>, but developing and maintaining it requires time and costs. If you liked it, consider supporting us in one of these ways:",
@@ -659,25 +659,24 @@
     "feedback": "Leave Feedback",
     "share": "Share"
   },
-    "footer": {
+  "footer": {
     "copyright": "© 2025 Quest4Couple - All rights reserved",
     "links": {
       "home": "Home",
-      "about": "About",      "faq": "FAQ",
+      "about": "About",
+      "faq": "FAQ",
       "privacy": "Privacy",
       "terms": "Terms",
       "support": "Support the Project",
       "admin": "Admin"
     }
   },
-  
   "beta": {
     "icon": "🚀",
     "title": "Beta Version • Under Development",
     "description": "We're in testing phase! If you find bugs or have suggestions, <a href='pages/apoiar.html#feedback'>send us feedback</a> and help improve 💪",
     "close": "×"
   },
-  
   "report": {
     "pageTitle": "Compatibility Report - Quest4Couple 💕",
     "tagline": "Compatibility Report 💕",
@@ -770,7 +769,6 @@
       "daysAgo": "{n}d ago"
     }
   },
-  
   "common": {
     "loading": "Loading...",
     "processing": "Processing...",
@@ -797,7 +795,6 @@
     "visitor": "Visitor",
     "selectLanguage": "Choose your language"
   },
-
   "answers": {
     "porfavor": "Please!",
     "yup": "Yup",
@@ -805,7 +802,6 @@
     "talvez": "Maybe",
     "commentPlaceholder": "Comments (optional)"
   },
-
   "pages": {
     "about": {
       "pageTitle": "About - Quest4Couple",
@@ -814,7 +810,7 @@
       "missionTitle": "Our Mission",
       "missionText": "We want all couples to feel free to explore their intimacy without fear, shame, or discomfort. Through carefully crafted questionnaires, we facilitate conversations that many find difficult to start.",
       "privacyTitle": "Privacy First",
-      "privacyText": "Your privacy is sacred. We don't sell data, we don't share information, and everything you answer stays between you. Simple as that.",
+      "privacyText": "Your privacy is sacred. We do not sell data, we do not share it for advertising, and your answers are only shown to your partner when they match. Simple as that.",
       "howItWorksTitle": "How It Works",
       "howItWorks1": "Choose one of the 5 thematic packs (or do them all!)",
       "howItWorks2": "Each person answers the questions individually",
@@ -832,16 +828,16 @@
       "q1": "Is it really free?",
       "a1": "Yes! Currently, all Quest4Couple content is free. In the future, we may add optional premium features, but the core service will remain accessible to everyone.",
       "q2": "Are my answers private?",
-      "a2": "Absolutely! Your answers are stored locally in your browser. We don't sell data, we don't share information with third parties, and we have no access to what you answer. Your privacy is our #1 priority.",
+      "a2": "Yes! Your answers are linked to your account, protected by access rules, and your partner only sees what you have in common. We do not sell data or use it for advertising. You can also export your answers to an encrypted .q4c file.",
       "q3": "How does the matching work?",
       "a3": "Each person answers the questionnaire individually. In the end, you only see what you have in common - answers where both said \"yes\". If one says \"no\", that question doesn't appear in the final result.",
       "q4": "How many packs are there?",
       "a4": "We have 5 thematic packs:",
-      "a4Pack1": "<strong>Romantic Pack</strong> - 40 questions about sensuality and connection",
-      "a4Pack2": "<strong>Exploration & Adventure</strong> - 30 questions about trying new things",
-      "a4Pack3": "<strong>Spicy</strong> - 32 questions to spice up the relationship",
-      "a4Pack4": "<strong>Polyamory</strong> - 50 questions about openness and non-monogamy",
-      "a4Pack5": "<strong>Fetishes</strong> - 100 questions about kinks and advanced practices",
+      "a4Pack1": "<strong>Romantic Pack</strong> - 50 questions about sensuality and connection",
+      "a4Pack2": "<strong>Exploration & Adventure</strong> - 50 questions about trying new things",
+      "a4Pack3": "<strong>Spicy</strong> - 50 questions to spice up the relationship",
+      "a4Pack4": "<strong>Polyamory</strong> - 60 questions about openness and non-monogamy",
+      "a4Pack5": "<strong>Fetishes</strong> - 90 questions about kinks and advanced practices",
       "q5": "Do I need to create an account?",
       "a5": "Currently, yes. Creating an account lets you save your answers, compare results with your partner, and access history. But don't worry - we only ask for the essentials (email and password).",
       "q6": "Can I do the questionnaires alone?",
@@ -892,52 +888,40 @@
     "privacy": {
       "pageTitle": "Privacy Policy - Quest4Couple",
       "title": "Privacy Policy",
-      "lastUpdate": "Last updated: November 17, 2025",
+      "lastUpdate": "Last updated: October 31, 2026",
       "s1Title": "1. Introduction",
-      "s1Text": "Our users' privacy is absolutely fundamental. This policy explains how we handle (or rather, how we DON'T handle) your data.",
+      "s1Text": "Your privacy is our priority. This policy transparently explains what data we process, what it is used for and who can access it.",
       "s2Title": "2. Data We Collect",
-      "s2Text": "We collect the absolute minimum necessary for the service to work:",
-      "s2Item1": "<strong>Email:</strong> To create an account and recover password",
-      "s2Item2": "<strong>Questionnaire answers:</strong> Stored locally in your browser",
-      "s2Item3": "<strong>Basic browsing data:</strong> To improve site experience",
+      "s2Text": "We only collect what is needed for the service to work:",
+      "s2Item1": "Email, username and password (stored encrypted by Firebase Authentication)",
+      "s2Item2": "Your questionnaire answers, linked to your account, to sync across devices and compare with your partner",
+      "s2Item3": "The connection between the two partners (who is connected to whom)",
+      "s2Item4": "Preferences such as language",
+      "s2Item5": "Anonymous, aggregated usage statistics (Microsoft Clarity)",
       "s3Title": "3. How We Use Data",
-      "s3Text": "Your data is used ONLY for:",
-      "s3Item1": "Allowing you to log in",
-      "s3Item2": "Saving your answers (on your device)",
-      "s3Item3": "Showing matching results",
-      "s3Item4": "Improving the service (anonymous aggregated analysis)",
-      "s4Title": "4. What We DON'T Do",
-      "s4Text": "<strong>We NEVER do this:</strong>",
-      "s4Item1": "Sell or share your data with third parties",
-      "s4Item2": "Use your data for targeted advertising",
-      "s4Item3": "Read your individual answers",
-      "s4Item4": "Associate answers with identifiable profiles",
-      "s4Item5": "Share information without explicit consent",
-      "s5Title": "5. Data Storage",
-      "s5Text": "Your questionnaire answers are stored <strong>locally in your browser</strong> using localStorage. This means:",
-      "s5Item1": "We don't have direct access to your answers",
-      "s5Item2": "Data stays on your device",
-      "s5Item3": "If you clear browser history, answers are deleted",
-      "s6Title": "6. Security",
-      "s6Text": "We use HTTPS encryption for all communications. Passwords are encrypted and never stored in plain text.",
-      "s7Title": "7. Your Rights (GDPR)",
-      "s7Text": "According to GDPR, you have the right to:",
-      "s7Item1": "Access your data",
-      "s7Item2": "Correct incorrect data",
-      "s7Item3": "Delete your account and all data",
-      "s7Item4": "Export your data",
-      "s7Item5": "Object to data processing",
-      "s8Title": "8. Cookies",
-      "s8Text": "We use essential cookies for site functionality (e.g., keeping session active). We don't use tracking or advertising cookies.",
-      "s9Title": "9. Changes to This Policy",
-      "s9Text": "We may update this policy occasionally. We'll always notify about significant changes through registered email.",
+      "s3Text": "Data is used only to let you log in, save and sync your answers, show the results you have in common with your partner and improve the service. We never use data for advertising.",
+      "s4Title": "4. Where Data Is Stored",
+      "s4Text": "Account data and answers are stored in Firebase services (Google), protected by access rules: each user can only access their own data and, for answers, the connected partner only sees what you have in common. Administrative access is restricted and limited to maintenance and support. When not logged in, answers stay only in your browser (localStorage).",
+      "s5Title": "5. .q4c Files",
+      "s5Text": "The answer files you generate are encrypted locally. The password (if you set one) never leaves your device. We cannot recover lost files or forgotten passwords.",
+      "s6Title": "6. Data Sharing",
+      "s6Text": "We do not sell or hand over your data. We only rely on essential providers: Google Firebase (hosting, authentication and database), Microsoft Clarity (anonymous statistics) and Formspree (sending feedback, when you use the form).",
+      "s7Title": "7. Cookies",
+      "s7Text": "We only use essential storage to:",
+      "s7Item1": "Remember your language preference",
+      "s7Item2": "Keep your session active (if you are logged in)",
+      "s7Item3": "Remember your age confirmation",
+      "s8Title": "8. Security",
+      "s8Text": "All communication uses HTTPS, passwords are managed by Firebase Authentication and data access is controlled by security rules. No system is 100% foolproof, so never share your password.",
+      "s9Title": "9. Your Rights",
+      "s9Text": "Under the GDPR you may access, correct, export or request deletion of your account and associated data, and object to its processing, by contacting us by email.",
       "s10Title": "10. Contact",
-      "s10Text": "Questions about privacy?"
+      "s10Text": "For privacy questions, contact us: quest4couple@gmail.com"
     },
     "terms": {
       "pageTitle": "Terms of Service - Quest4Couple",
       "title": "Terms of Service",
-      "lastUpdate": "Last updated: November 17, 2025",
+      "lastUpdate": "Last updated: October 31, 2026",
       "s1Title": "1. Acceptance of Terms",
       "s1Text": "By using Quest4Couple, you agree to these terms. If you don't agree, please don't use the service.",
       "s2Title": "2. Eligibility",
@@ -968,17 +952,19 @@
       "s10Title": "10. Termination",
       "s10Text": "You may delete your account at any time. We reserve the right to suspend or terminate accounts that violate these terms.",
       "s11Title": "11. Applicable Law",
-      "s11Text": "These terms are governed by the laws of Portugal. Any dispute will be resolved in Portuguese courts.",      "s12Title": "12. Contact",
+      "s11Text": "These terms are governed by the laws of Portugal. Any dispute will be resolved in Portuguese courts.",
+      "s12Title": "12. Contact",
       "s12Text": "Questions about these terms?"
     },
     "footer": {
-      "copyright": "© 2025 Quest4Couple",
+      "copyright": "© 2026 Quest4Couple",
       "home": "Home",
       "about": "About",
       "faq": "FAQ",
       "support": "Support",
       "privacy": "Privacy",
-      "terms": "Terms"
+      "terms": "Terms",
+      "testimonials": "Testimonials"
     }
   }
 }
