@@ -78,9 +78,9 @@ async function sendEmailNotification(recipientEmail, partnerName, reportCount = 
       to_email: recipientEmail,
       partner_name: partnerName,
       report_count: reportCount,
-      link: `https://quest4couple.com/relatorio.html`,
+      link: `https://quest4couple.web.app/relatorio.html`,
       from_name: 'Quest4Couple',
-      reply_to: 'info@quest4couple.com'
+      reply_to: 'quest4couple@gmail.com'
     };
 
     console.log('📧 Enviando e-mail para:', recipientEmail);
@@ -196,7 +196,7 @@ async function notifyPartnerByEmail(connectionId) {
    
    1. Configurar um servidor Node.js com Express
    2. Usar Nodemailer para enviar e-mails via SMTP
-   3. Configurar conta info@quest4couple.com no servidor de e-mail
+   3. Configurar conta quest4couple@gmail.com no servidor de e-mail
    4. Usar a função abaixo:
 */
 
@@ -267,8 +267,8 @@ const EMAIL_TEMPLATE = `
     <div class="footer">
       <p>© 2024 Quest4Couple - Descobre a vossa compatibilidade</p>
       <p>
-        <a href="https://quest4couple.com">Website</a> | 
-        <a href="mailto:info@quest4couple.com">Contacto</a>
+        <a href="https://quest4couple.web.app">Website</a> | 
+        <a href="mailto:quest4couple@gmail.com">Contacto</a>
       </p>
     </div>
   </div>

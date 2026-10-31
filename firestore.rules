@@ -2,272 +2,121 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // ========================================
-    // FUNÇÃO HELPER: Verificar se é Admin
-    // ========================================
+
     function isAdmin() {
-      return request.auth != null && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
     }
 
-    // Verifica se existe conexão entre utilizador autenticado e outro utilizador
-    function hasConnectionWith(otherUserId) {
-      return request.auth != null && (
-        (request.auth.uid < otherUserId &&
-         exists(/databases/$(database)/documents/connections/$(request.auth.uid + '_' + otherUserId))) ||
-        (otherUserId < request.auth.uid &&
-         exists(/databases/$(database)/documents/connections/$(otherUserId + '_' + request.auth.uid)))
-      );
-    }
-    
-    // ========================================
-    // USERS COLLECTION
-    // ========================================
     match /users/{userId} {
-      // Permitir criação apenas se:
-      // 1. Utilizador está autenticado (request.auth != null)
-      // 2. O UID do documento coincide com o UID do utilizador autenticado
       allow create: if request.auth != null && request.auth.uid == userId;
-      
-      // Permitir leitura: próprio perfil OU admin OU parceiro conectado
-      allow read: if request.auth != null && (
-        request.auth.uid == userId || isAdmin() || hasConnectionWith(userId)
-      );
-      
-      // Permitir atualização do próprio perfil OU por admin
-      allow update: if request.auth != null && (
-        request.auth.uid == userId || isAdmin()
-      );
-        // Permitir eliminação apenas por admins
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow update: if request.auth != null && (request.auth.uid == userId || isAdmin());
       allow delete: if isAdmin();
-      
-      // ========================================
-      // SUBCOLEÇÃO: answers
-      // ========================================
+
       match /answers/{answerId} {
-        // Utilizador pode escrever suas próprias respostas
         allow write: if request.auth != null && request.auth.uid == userId;
-        
-        // Leitura: próprias respostas OU admin OU parceiros com conexão ACEITE
         allow read: if request.auth != null && (
-          // Próprias respostas
           request.auth.uid == userId ||
-          // Admin pode ler todas as respostas para analytics
           isAdmin() ||
-          // Parceiro com conexão aceite - verifica se existe documento de conexão
-          // Testa as duas ordenações possíveis dos IDs
-          (request.auth.uid < userId && 
-           exists(/databases/$(database)/documents/connections/$(request.auth.uid + '_' + userId))) ||
-          (userId < request.auth.uid && 
-           exists(/databases/$(database)/documents/connections/$(userId + '_' + request.auth.uid)))
+          (request.auth.uid < userId && exists(/databases/$(database)/documents/connections/$(request.auth.uid + '_' + userId))) ||
+          (userId < request.auth.uid && exists(/databases/$(database)/documents/connections/$(userId + '_' + request.auth.uid)))
         );
       }
-      
-      // ========================================
-      // SUBCOLEÇÃO: customQuestions
-      // ========================================
+
       match /customQuestions/{packId} {
-        // Utilizador pode criar, ler, atualizar suas próprias perguntas custom
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
-      
-      // ========================================
-      // SUBCOLEÇÃO: progress
-      // ========================================
+
       match /progress/{progressId} {
-        // Utilizador pode criar, ler, atualizar seu próprio progresso
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
-      
-      // ========================================
-      // SUBCOLEÇÃO: connections
-      // ========================================
+
       match /connections/{connectionId} {
-        // Utilizador pode gerenciar suas próprias conexões
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
-    
-    // ========================================
-    // RESPONSES COLLECTION
-    // ========================================
+
     match /responses/{responseId} {
-      // Utilizador pode criar as suas próprias respostas
       allow create: if request.auth != null;
-      
-      // Utilizador pode ler/atualizar apenas as suas respostas
-      allow read, update: if request.auth != null && 
-                             resource.data.userId == request.auth.uid;
-      
-      // Prevenir deleção
+      allow read, update: if request.auth != null && resource.data.userId == request.auth.uid;
       allow delete: if false;
     }
-    
-    // ========================================
-    // MATCHES COLLECTION
-    // ========================================
+
     match /matches/{matchId} {
-      // Utilizador pode ver matches onde participa
-      allow read: if request.auth != null && 
-                     (resource.data.user1Id == request.auth.uid || 
-                      resource.data.user2Id == request.auth.uid);
-      
-      // Sistema cria matches automaticamente
+      allow read: if request.auth != null &&
+        (resource.data.user1Id == request.auth.uid || resource.data.user2Id == request.auth.uid);
       allow create: if request.auth != null;
-      
-      // Apenas utilizadores envolvidos podem atualizar
-      allow update: if request.auth != null && 
-                       (resource.data.user1Id == request.auth.uid || 
-                        resource.data.user2Id == request.auth.uid);
-      
-      // Prevenir deleção
+      allow update: if request.auth != null &&
+        (resource.data.user1Id == request.auth.uid || resource.data.user2Id == request.auth.uid);
       allow delete: if false;
     }
-      // ========================================
-    // ACTIVITIES COLLECTION
-    // ========================================
+
     match /activities/{activityId} {
-      // Qualquer utilizador autenticado pode ler activities
-      allow read: if request.auth != null;
-      
-      // Apenas admins podem escrever
+      allow read: if request.auth != null && isAdmin();
       allow write: if isAdmin();
     }
-    
-    // ========================================
-    // ACTIVITY COLLECTION (alias para activities)
-    // ========================================
+
     match /activity/{activityId} {
-      // Qualquer utilizador autenticado pode ler
-      allow read: if request.auth != null;
-      
-      // Apenas admins podem escrever
+      allow read: if request.auth != null && isAdmin();
       allow write: if isAdmin();
     }
-    
-    // ========================================
-    // PARTNERS COLLECTION (Se existir)
-    // ========================================
+
     match /partners/{partnerId} {
-      // Utilizador pode criar/ler/atualizar seus próprios partners
-      allow create, read, update: if request.auth != null && 
-                                     request.auth.uid == resource.data.userId;
-      
-      // Prevenir deleção
+      allow create, read, update: if request.auth != null && request.auth.uid == resource.data.userId;
       allow delete: if false;
     }
-    
-    // ========================================
-    // CONNECTIONS COLLECTION (Coleção raiz)
-    // ========================================
+
     match /connections/{connectionId} {
-      // Utilizador pode criar conexões se estiver autenticado e for um dos users OU admin
-      allow create: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid in request.resource.data.users
-                     );
-      
-      // Leitura: Admin pode ler TODAS (para queries), users normais só as suas
-      allow read: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid in resource.data.users
-                     );
-      
-      // Utilizador pode atualizar conexões onde participa OU admin
-      allow update: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid in resource.data.users
-                     );
-      
-      // Utilizador pode apagar conexões onde participa OU admin
-      allow delete: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid in resource.data.users
-                     );
+      allow create: if request.auth != null && (isAdmin() || request.auth.uid in request.resource.data.users);
+      allow read: if request.auth != null && (isAdmin() || request.auth.uid in resource.data.users);
+      allow update: if request.auth != null && (isAdmin() || request.auth.uid in resource.data.users);
+      allow delete: if request.auth != null && (isAdmin() || request.auth.uid in resource.data.users);
     }
-      // ========================================
-    // CONNECTION REQUESTS (Convites de parceiros)
-    // ========================================
+
     match /connection_requests/{requestId} {
-      // Utilizador pode criar pedidos de conexão (é o remetente)
-      allow create: if request.auth != null && 
-                       request.auth.uid == request.resource.data.fromUserId;
-      
-      // Utilizador pode ler pedidos onde é remetente ou destinatário OU admin pode ler todos
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.fromUserId;
       allow read: if request.auth != null && (
-                     isAdmin() ||
-                     request.auth.uid == resource.data.fromUserId || 
-                     request.auth.uid == resource.data.toUserId
-                   );
-      
-      // Destinatário pode atualizar (aceitar/recusar) OU admin
+        isAdmin() ||
+        request.auth.uid == resource.data.fromUserId ||
+        request.auth.uid == resource.data.toUserId
+      );
       allow update: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid == resource.data.toUserId
-                     );
-      
-      // Remetente ou destinatário pode apagar OU admin
+        isAdmin() ||
+        request.auth.uid == resource.data.toUserId
+      );
       allow delete: if request.auth != null && (
-                       isAdmin() ||
-                       request.auth.uid == resource.data.fromUserId || 
-                       request.auth.uid == resource.data.toUserId
-                     );
+        isAdmin() ||
+        request.auth.uid == resource.data.fromUserId ||
+        request.auth.uid == resource.data.toUserId
+      );
     }
-      // ========================================
-    // ANALYTICS FULL REPORTS (Para BackOffice)
-    // ========================================
+
     match /analytics_full_reports/{reportId} {
-      // Qualquer utilizador autenticado pode criar relatórios
-      allow create: if request.auth != null;
-      
-      // Apenas admins podem ler relatórios
+      allow create: if request.auth != null && isAdmin();
       allow read: if isAdmin();
-      
-      // Ninguém pode editar ou apagar relatórios
       allow update, delete: if false;
     }
-    
-    // ========================================
-    // USER ANSWERS (Respostas dos utilizadores)
-    // ========================================
+
     match /userAnswers/{docId} {
-      // Utilizador pode ler/escrever suas próprias respostas
-      allow read, write: if request.auth != null && request.auth.uid == docId;
-      
-      // Admins podem ler todas as respostas (para analytics)
-      allow read: if isAdmin();
+      allow read, write: if request.auth != null && (request.auth.uid == docId || isAdmin());
     }
-    
-    // ========================================
-    // PARTNER CONNECTIONS (Conexões de parceiros)
-    // ========================================
+
     match /partnerConnections/{connectionId} {
-      // Utilizador pode criar conexões
       allow create: if request.auth != null;
-      
-      // Utilizador pode ler/atualizar conexões OU admin pode ler todas
       allow read, update: if request.auth != null || isAdmin();
-      
-      // Utilizador pode apagar suas conexões
       allow delete: if request.auth != null;
     }
-    
-    // ========================================
-    // AUDIT LOG COLLECTION
-    // ========================================
+
     match /audit_log/{logId} {
-      // Qualquer utilizador autenticado pode criar logs
-      allow create: if request.auth != null;
-      
-      // Apenas admins podem ler logs
+      allow create: if request.auth != null && isAdmin();
       allow read: if isAdmin();
-      
-      // Ninguém pode editar ou apagar logs
       allow update, delete: if false;
     }
-    
+  }
+}
+
     // ========================================
     // ANALYTICS ANSWERS COLLECTION
     // Respostas anónimas para analytics

@@ -142,7 +142,7 @@ Ver: `firestore.rules`
 ## 📞 Suporte
 
 - 🌐 Website: https://quest4couple.pt
-- 📧 Email: suporte@quest4couple.pt
+- 📧 Email: quest4couple@gmail.com
 
 ---
 

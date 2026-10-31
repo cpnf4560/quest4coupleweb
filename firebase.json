@@ -8,9 +8,20 @@
     "ignore": [
       "firebase.json",
       "**/.*",
+      ".git/**",
+      ".github/**",
+      ".firebase/**",
+      ".tmp-firebase-validate/**",
       "**/node_modules/**",
       "README.md",
-      "docs/**"
+      "docs/**",
+      "tmp-firebase-validate/**",
+      ".tmp-firebase-validate/**",
+      "update-rules.js",
+      "temp-add-dates.js",
+      "verify_encoding.*",
+      "check_encoding.ps1",
+      "firestore.rules.backup"
     ],
     "rewrites": [
       {

@@ -676,11 +676,11 @@
     
     <form id="adminLoginForm">
       <div class="form-group">
-        <label for="adminUsername">👤 Username</label>
+        <label for="adminUsername">� Email</label>
         <input 
-          type="text" 
+          type="email" 
           id="adminUsername" 
-          placeholder="user admin" 
+          placeholder="email do admin" 
           required 
           autocomplete="username"
         >
@@ -1743,54 +1743,34 @@
       const password = document.getElementById('adminPassword').value;
         console.log('👤 Username/Email inserido:', username);
       
-      // Construir email se necessário (permitir login com username ou email)
-      const email = username.includes('@') ? username : `${username}@quest4couple.com`;
+      // Login apenas com email completo
+      const uniqueEmails = [username.trim().toLowerCase()];
+      console.log('📧 Emails possíveis para autenticação:', uniqueEmails);
       
-      console.log('📧 Email para autenticação:', email);
+      let lastError = null;
+      let user = null;
       
-      try {
-        console.log('🔑 Autenticando com Firebase Auth...');
-        
-        // ✅ Login com Firebase Auth
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        const user = userCredential.user;
-        
-        console.log('✅ Utilizador autenticado:', user.email);
-        console.log('🔍 Verificando se é admin...');
-        
-        // Verificar se é admin no Firestore
-        const userDoc = await db.collection('users').doc(user.uid).get();
-        
-        if (userDoc.exists && userDoc.data().isAdmin === true) {
-          console.log('✅ Admin confirmado!');
-          console.log('👤 Admin data:', userDoc.data());
-          
-          sessionStorage.setItem('adminLoggedIn', 'true');
-          sessionStorage.setItem('adminUsername', user.email);
-          errorMessage.classList.remove('show');
-          showDashboard();
-        } else {
-          console.error('❌ Utilizador não é administrador');
-          console.log('📄 User data:', userDoc.exists ? userDoc.data() : 'Document não existe');
-          
-          errorMessage.textContent = 'Acesso negado. Não é administrador.';
-          errorMessage.classList.add('show');
-          
-          await auth.signOut(); // Logout
-          document.getElementById('adminPassword').value = '';
-          setTimeout(() => {
-            errorMessage.classList.remove('show');
-            errorMessage.textContent = 'Credenciais inválidas';
-          }, 3000);
+      for (const email of uniqueEmails) {
+        try {
+          console.log('🔑 Tentando autenticar com:', email);
+          const userCredential = await auth.signInWithEmailAndPassword(email, password);
+          user = userCredential.user;
+          console.log('✅ Utilizador autenticado:', user.email);
+          break;
+        } catch (error) {
+          lastError = error;
+          console.warn(`⚠️ Falha com ${email}:`, error.code, error.message);
         }
-      } catch (error) {
-        console.error('❌ Erro no login admin:', error);
-        console.error('❌ Error code:', error.code);
-        console.error('❌ Error message:', error.message);
+      }
+      
+      if (!user) {
+        console.error('❌ Erro no login admin:', lastError);
+        console.error('❌ Error code:', lastError?.code);
+        console.error('❌ Error message:', lastError?.message);
         
         let errorMsg = 'Erro no login';
         
-        switch(error.code) {
+        switch(lastError?.code) {
           case 'auth/user-not-found':
             errorMsg = 'Utilizador não encontrado';
             break;
@@ -1804,11 +1784,40 @@
             errorMsg = 'Demasiadas tentativas. Aguarde alguns minutos.';
             break;
           default:
-            errorMsg = error.message;
+            errorMsg = lastError?.message || 'Credenciais inválidas';
         }
         
         errorMessage.textContent = errorMsg;
         errorMessage.classList.add('show');
+        document.getElementById('adminPassword').value = '';
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+          errorMessage.textContent = 'Credenciais inválidas';
+        }, 3000);
+        return;
+      }
+      
+      console.log('🔍 Verificando se é admin...');
+      
+      // Verificar se é admin no Firestore
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      
+      if (userDoc.exists && userDoc.data().isAdmin === true) {
+        console.log('✅ Admin confirmado!');
+        console.log('👤 Admin data:', userDoc.data());
+        
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        sessionStorage.setItem('adminUsername', user.email);
+        errorMessage.classList.remove('show');
+        showDashboard();
+      } else {
+        console.error('❌ Utilizador não é administrador');
+        console.log('📄 User data:', userDoc.exists ? userDoc.data() : 'Document não existe');
+        
+        errorMessage.textContent = 'Acesso negado. Não é administrador.';
+        errorMessage.classList.add('show');
+        
+        await auth.signOut(); // Logout
         document.getElementById('adminPassword').value = '';
         setTimeout(() => {
           errorMessage.classList.remove('show');

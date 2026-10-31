@@ -61,4 +61,4 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap
-Sitemap: https://quest4couple.pt/sitemap.xml
+Sitemap: https://quest4couple.web.app/sitemap.xml

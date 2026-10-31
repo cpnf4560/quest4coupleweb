@@ -203,7 +203,7 @@ Scripts BAT para diagnóstico (Windows):
 
 ## 📞 Suporte & Contacto
 
-- 📧 **Email:** suporte@quest4couple.pt
+- 📧 **Email:** quest4couple@gmail.com
 - 🌐 **Website:** https://quest4couple.pt
 - 📱 **GitHub:** [Quest4Couple Repository](https://github.com/seu-usuario/quest4couple-v2)
 - 💬 **Issues:** [GitHub Issues](https://github.com/seu-usuario/quest4couple-v2/issues)
